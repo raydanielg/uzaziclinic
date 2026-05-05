@@ -243,8 +243,7 @@
     <!-- Sidebar -->
     <div id="sidebar" class="animate__animated animate__slideInLeft">
         <div class="sidebar-brand">
-            Malkia
-            <span>Admin Panel</span>
+            Admin Panel
         </div>
         
         <div class="sidebar-content">
@@ -259,7 +258,7 @@
                     </a>
                     <ul class="sidebar-dropdown">
                         <li><a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">Main Dashboard</a></li>
-                        <li><a href="#" class="nav-link">Analytics Dashboard</a></li>
+                        <li><a href="{{ route('admin.analytics') }}" class="nav-link {{ request()->routeIs('admin.analytics') ? 'active' : '' }}">Analytics Dashboard</a></li>
                     </ul>
                 </div>
 
@@ -273,10 +272,10 @@
                         <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
                     </a>
                     <ul class="sidebar-dropdown">
-                        <li><a href="#" class="nav-link">All Users</a></li>
-                        <li><a href="#" class="nav-link">Add New User</a></li>
-                        <li><a href="#" class="nav-link">Roles & Permissions</a></li>
-                        <li><a href="#" class="nav-link">Activity Logs</a></li>
+                        <li><a href="{{ route('admin.users.index') }}" class="nav-link">All Users</a></li>
+                        <li><a href="{{ route('admin.users.create') }}" class="nav-link">Add New User</a></li>
+                        <li><a href="{{ route('admin.users.roles') }}" class="nav-link">Roles & Permissions</a></li>
+                        <li><a href="{{ route('admin.users.logs') }}" class="nav-link">Activity Logs</a></li>
                     </ul>
                 </div>
 
@@ -290,10 +289,10 @@
                         <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
                     </a>
                     <ul class="sidebar-dropdown">
-                        <li><a href="#" class="nav-link">All Patients</a></li>
-                        <li><a href="#" class="nav-link">Add New Patient</a></li>
-                        <li><a href="#" class="nav-link">Patient Categories</a></li>
-                        <li><a href="#" class="nav-link">Medical History Archive</a></li>
+                        <li><a href="{{ route('admin.patients.index') }}" class="nav-link">All Patients</a></li>
+                        <li><a href="{{ route('admin.patients.create') }}" class="nav-link">Add New Patient</a></li>
+                        <li><a href="{{ route('admin.patients.categories') }}" class="nav-link">Patient Categories</a></li>
+                        <li><a href="{{ route('admin.patients.history') }}" class="nav-link">Medical History Archive</a></li>
                     </ul>
                 </div>
 
@@ -306,10 +305,10 @@
                         <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
                     </a>
                     <ul class="sidebar-dropdown">
-                        <li><a href="#" class="nav-link">All Doctors</a></li>
-                        <li><a href="#" class="nav-link">Add New Doctor</a></li>
-                        <li><a href="#" class="nav-link">Doctor Schedules</a></li>
-                        <li><a href="#" class="nav-link">Doctor Specializations</a></li>
+                        <li><a href="{{ route('admin.doctors.index') }}" class="nav-link">All Doctors</a></li>
+                        <li><a href="{{ route('admin.doctors.create') }}" class="nav-link">Add New Doctor</a></li>
+                        <li><a href="{{ route('admin.doctors.schedules') }}" class="nav-link">Doctor Schedules</a></li>
+                        <li><a href="{{ route('admin.doctors.specializations') }}" class="nav-link">Doctor Specializations</a></li>
                     </ul>
                 </div>
 
@@ -322,10 +321,10 @@
                         <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
                     </a>
                     <ul class="sidebar-dropdown">
-                        <li><a href="#" class="nav-link">All Appointments</a></li>
-                        <li><a href="#" class="nav-link">Today's Appointments</a></li>
-                        <li><a href="#" class="nav-link">Upcoming Appointments</a></li>
-                        <li><a href="#" class="nav-link">Cancelled Appointments</a></li>
+                        <li><a href="{{ route('admin.appointments.index') }}" class="nav-link">All Appointments</a></li>
+                        <li><a href="{{ route('admin.appointments.today') }}" class="nav-link">Today's Appointments</a></li>
+                        <li><a href="{{ route('admin.appointments.upcoming') }}" class="nav-link">Upcoming Appointments</a></li>
+                        <li><a href="{{ route('admin.appointments.cancelled') }}" class="nav-link">Cancelled Appointments</a></li>
                     </ul>
                 </div>
 
@@ -339,12 +338,12 @@
                         <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
                     </a>
                     <ul class="sidebar-dropdown">
-                        <li><a href="#" class="nav-link">Medicines Stock</a></li>
-                        <li><a href="#" class="nav-link">Add New Medicine</a></li>
-                        <li><a href="#" class="nav-link">Stock Alerts</a></li>
-                        <li><a href="#" class="nav-link">Suppliers List</a></li>
-                        <li><a href="#" class="nav-link">Purchase Orders</a></li>
-                        <li><a href="#" class="nav-link">Expiry Tracking</a></li>
+                        <li><a href="{{ route('admin.pharmacy.stock') }}" class="nav-link">Medicines Stock</a></li>
+                        <li><a href="{{ route('admin.pharmacy.create') }}" class="nav-link">Add New Medicine</a></li>
+                        <li><a href="{{ route('admin.pharmacy.alerts') }}" class="nav-link">Stock Alerts</a></li>
+                        <li><a href="{{ route('admin.pharmacy.suppliers') }}" class="nav-link">Suppliers List</a></li>
+                        <li><a href="{{ route('admin.pharmacy.orders') }}" class="nav-link">Purchase Orders</a></li>
+                        <li><a href="{{ route('admin.pharmacy.expiry') }}" class="nav-link">Expiry Tracking</a></li>
                     </ul>
                 </div>
 
@@ -357,10 +356,10 @@
                         <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
                     </a>
                     <ul class="sidebar-dropdown">
-                        <li><a href="#" class="nav-link">Lab Tests Catalog</a></li>
-                        <li><a href="#" class="nav-link">Test Results</a></li>
-                        <li><a href="#" class="nav-link">Lab Equipment</a></li>
-                        <li><a href="#" class="nav-link">Lab Reports</a></li>
+                        <li><a href="{{ route('admin.lab.catalog') }}" class="nav-link">Lab Tests Catalog</a></li>
+                        <li><a href="{{ route('admin.lab.results') }}" class="nav-link">Test Results</a></li>
+                        <li><a href="{{ route('admin.lab.equipment') }}" class="nav-link">Lab Equipment</a></li>
+                        <li><a href="{{ route('admin.lab.reports') }}" class="nav-link">Lab Reports</a></li>
                     </ul>
                 </div>
 
@@ -373,11 +372,11 @@
                         <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
                     </a>
                     <ul class="sidebar-dropdown">
-                        <li><a href="#" class="nav-link">All Products</a></li>
-                        <li><a href="#" class="nav-link">Add New Product</a></li>
-                        <li><a href="#" class="nav-link">Product Categories</a></li>
-                        <li><a href="#" class="nav-link">Orders List</a></li>
-                        <li><a href="#" class="nav-link">Product Reviews</a></li>
+                        <li><a href="{{ route('admin.store.index') }}" class="nav-link">All Products</a></li>
+                        <li><a href="{{ route('admin.store.create') }}" class="nav-link">Add New Product</a></li>
+                        <li><a href="{{ route('admin.store.categories') }}" class="nav-link">Product Categories</a></li>
+                        <li><a href="{{ route('admin.store.orders') }}" class="nav-link">Orders List</a></li>
+                        <li><a href="{{ route('admin.store.reviews') }}" class="nav-link">Product Reviews</a></li>
                     </ul>
                 </div>
 
@@ -391,11 +390,11 @@
                         <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
                     </a>
                     <ul class="sidebar-dropdown">
-                        <li><a href="#" class="nav-link">All Invoices</a></li>
-                        <li><a href="#" class="nav-link">Generate Receipt</a></li>
-                        <li><a href="#" class="nav-link">Payment History</a></li>
-                        <li><a href="#" class="nav-link">Insurance Claims</a></li>
-                        <li><a href="#" class="nav-link">Tax Settings</a></li>
+                        <li><a href="{{ route('admin.finance.invoices') }}" class="nav-link">All Invoices</a></li>
+                        <li><a href="{{ route('admin.finance.receipt') }}" class="nav-link">Generate Receipt</a></li>
+                        <li><a href="{{ route('admin.finance.payments') }}" class="nav-link">Payment History</a></li>
+                        <li><a href="{{ route('admin.finance.insurance') }}" class="nav-link">Insurance Claims</a></li>
+                        <li><a href="{{ route('admin.finance.tax') }}" class="nav-link">Tax Settings</a></li>
                     </ul>
                 </div>
 
@@ -408,12 +407,12 @@
                         <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
                     </a>
                     <ul class="sidebar-dropdown">
-                        <li><a href="#" class="nav-link">Sales Report</a></li>
-                        <li><a href="#" class="nav-link">Patient Report</a></li>
-                        <li><a href="#" class="nav-link">Doctor Performance</a></li>
-                        <li><a href="#" class="nav-link">Stock Report</a></li>
-                        <li><a href="#" class="nav-link">Revenue Report</a></li>
-                        <li><a href="#" class="nav-link">Appointment Report</a></li>
+                        <li><a href="{{ route('admin.reports.sales') }}" class="nav-link">Sales Report</a></li>
+                        <li><a href="{{ route('admin.reports.patients') }}" class="nav-link">Patient Report</a></li>
+                        <li><a href="{{ route('admin.reports.doctors') }}" class="nav-link">Doctor Performance</a></li>
+                        <li><a href="{{ route('admin.reports.stock') }}" class="nav-link">Stock Report</a></li>
+                        <li><a href="{{ route('admin.reports.revenue') }}" class="nav-link">Revenue Report</a></li>
+                        <li><a href="{{ route('admin.reports.appointments') }}" class="nav-link">Appointment Report</a></li>
                     </ul>
                 </div>
 
@@ -427,11 +426,11 @@
                         <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
                     </a>
                     <ul class="sidebar-dropdown">
-                        <li><a href="#" class="nav-link">General Settings</a></li>
-                        <li><a href="#" class="nav-link">Email Configuration</a></li>
-                        <li><a href="#" class="nav-link">SMS Configuration</a></li>
-                        <li><a href="#" class="nav-link">Payment Gateways</a></li>
-                        <li><a href="#" class="nav-link">Backup & Restore</a></li>
+                        <li><a href="{{ route('admin.settings.general') }}" class="nav-link">General Settings</a></li>
+                        <li><a href="{{ route('admin.settings.email') }}" class="nav-link">Email Configuration</a></li>
+                        <li><a href="{{ route('admin.settings.sms') }}" class="nav-link">SMS Configuration</a></li>
+                        <li><a href="{{ route('admin.settings.gateways') }}" class="nav-link">Payment Gateways</a></li>
+                        <li><a href="{{ route('admin.settings.backup') }}" class="nav-link">Backup & Restore</a></li>
                     </ul>
                 </div>
 
@@ -443,10 +442,10 @@
                         <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
                     </a>
                     <ul class="sidebar-dropdown">
-                        <li><a href="#" class="nav-link">Send Notification</a></li>
-                        <li><a href="#" class="nav-link">Notification History</a></li>
-                        <li><a href="#" class="nav-link">Email Templates</a></li>
-                        <li><a href="#" class="nav-link">SMS Templates</a></li>
+                        <li><a href="{{ route('admin.notifications.send') }}" class="nav-link">Send Notification</a></li>
+                        <li><a href="{{ route('admin.notifications.history') }}" class="nav-link">Notification History</a></li>
+                        <li><a href="{{ route('admin.notifications.emailTemplates') }}" class="nav-link">Email Templates</a></li>
+                        <li><a href="{{ route('admin.notifications.smsTemplates') }}" class="nav-link">SMS Templates</a></li>
                     </ul>
                 </div>
             </div>
@@ -470,14 +469,27 @@
                 <button class="btn btn-light position-relative me-3 rounded-circle">
                     <i class="fa-regular fa-bell"></i>
                 </button>
-                <div class="d-flex align-items-center bg-light px-3 py-1 rounded-pill">
-                    <div class="avatar me-2 bg-secondary rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px;">
-                        {{ substr(auth()->user()->name, 0, 1) }}
+                <div class="dropdown">
+                    <div class="d-flex align-items-center bg-light px-3 py-1 rounded-pill cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+                        <div class="avatar me-2 bg-secondary rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px;">
+                            {{ substr(auth()->user()->name, 0, 1) }}
+                        </div>
+                        <div class="me-2">
+                            <div class="small fw-bold">{{ auth()->user()->name }}</div>
+                            <div class="text-muted" style="font-size: 0.65rem;">Administrator</div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down small text-muted"></i>
                     </div>
-                    <div>
-                        <div class="small fw-bold">{{ auth()->user()->name }}</div>
-                        <div class="text-muted" style="font-size: 0.65rem;">Administrator</div>
-                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                        <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user me-2"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-gears me-2"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fa-solid fa-right-from-bracket me-2"></i> Sign Out
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
