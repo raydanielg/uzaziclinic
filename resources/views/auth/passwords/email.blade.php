@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="auth-page" style="--auth-bg: url('{{ asset('african-american-young-patient-with-protective-face-mask-against-covid-resting-bed_482257-26825.jpg') }}');">
+<div class="auth-page" style="--auth-bg: url('{{ asset('Untitled design (2).png') }}');">
     <div class="auth-card animate__animated animate__fadeInDown">
         <div class="auth-header">
             <div class="auth-logo">
