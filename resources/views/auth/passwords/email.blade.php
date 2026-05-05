@@ -33,8 +33,9 @@
                 @enderror
             </div>
 
-            <button type="submit" class="btn auth-btn">
-                {{ __('Send Reset Link') }}
+            <button type="submit" class="btn auth-btn" id="submitBtn">
+                <span class="spinner"></span>
+                <span class="btn-text">{{ __('Send Reset Link') }}</span>
             </button>
 
             <div class="auth-footer">
@@ -43,4 +44,18 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('.auth-form');
+        const btn = document.getElementById('submitBtn');
+        
+        if (form && btn) {
+            form.addEventListener('submit', function() {
+                btn.classList.add('loading');
+                btn.disabled = true;
+            });
+        }
+    });
+</script>
 @endsection

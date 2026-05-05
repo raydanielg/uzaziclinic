@@ -1,4 +1,15 @@
 <!doctype html>
+@php
+    $isAuthPage = request()->routeIs(
+        'login',
+        'register',
+        'password.request',
+        'password.email',
+        'password.reset',
+        'password.confirm',
+        'verification.notice'
+    );
+@endphp
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -11,6 +22,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -20,19 +32,9 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @if ($isAuthPage)
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     @endif
 </head>
-@php
-    $isAuthPage = request()->routeIs(
-        'login',
-        'register',
-        'password.request',
-        'password.email',
-        'password.reset',
-        'password.confirm',
-        'verification.notice'
-    );
-@endphp
 <body class="{{ $isAuthPage ? 'auth-body' : '' }}">
     <div id="app">
         @unless ($isAuthPage)
@@ -95,5 +97,62 @@
             @yield('content')
         </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+
+            @if (session('status'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: "{{ session('status') }}",
+                    confirmButtonColor: '#166534',
+                });
+            @endif
+
+            @if (session('success'))
+                Toast.fire({
+                    icon: 'success',
+                    title: "{{ session('success') }}"
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: "{{ session('error') }}",
+                    confirmButtonColor: '#166534',
+                });
+            @endif
+
+            @if ($errors->any())
+                @php
+                    $errorList = "<ul>";
+                    foreach ($errors->all() as $error) {
+                        $errorList .= "<li>$error</li>";
+                    }
+                    $errorList .= "</ul>";
+                @endphp
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    html: '{!! $errorList !!}',
+                    confirmButtonColor: '#166534',
+                });
+            @endif
+        });
+    </script>
 </body>
 </html>

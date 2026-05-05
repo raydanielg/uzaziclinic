@@ -27,8 +27,9 @@
 
         <form method="POST" action="{{ route('verification.resend') }}" class="auth-form mt-3">
             @csrf
-            <button type="submit" class="btn auth-btn">
-                {{ __('Resend Verification Email') }}
+            <button type="submit" class="btn auth-btn" id="submitBtn">
+                <span class="spinner"></span>
+                <span class="btn-text">{{ __('Resend Verification Email') }}</span>
             </button>
 
             <div class="auth-footer">
@@ -37,4 +38,18 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('.auth-form');
+        const btn = document.getElementById('submitBtn');
+        
+        if (form && btn) {
+            form.addEventListener('submit', function() {
+                btn.classList.add('loading');
+                btn.disabled = true;
+            });
+        }
+    });
+</script>
 @endsection
