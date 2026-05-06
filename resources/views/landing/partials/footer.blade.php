@@ -45,11 +45,11 @@
                         <h6 class="footer-col-title">Quick Links</h6>
                         <ul class="list-unstyled footer-nav-links">
                             <li><a href="#hero"><i class="fas fa-chevron-right me-2"></i>Home</a></li>
-                            <li><a href="#about"><i class="fas fa-chevron-right me-2"></i>About Us</a></li>
-                            <li><a href="#services"><i class="fas fa-chevron-right me-2"></i>Services</a></li>
+                            <li><a href="{{ route('about') }}"><i class="fas fa-chevron-right me-2"></i>About Us</a></li>
+                            <li><a href="{{ route('services') }}"><i class="fas fa-chevron-right me-2"></i>Services</a></li>
                             <li><a href="{{ route('blog.index') }}"><i class="fas fa-chevron-right me-2"></i>Blog</a></li>
-                            <li><a href="#appointments"><i class="fas fa-chevron-right me-2"></i>Appointments</a></li>
-                            <li><a href="#contact"><i class="fas fa-chevron-right me-2"></i>Contact Us</a></li>
+                            <li><a href="{{ route('appointments') }}"><i class="fas fa-chevron-right me-2"></i>Appointments</a></li>
+                            <li><a href="{{ route('contact') }}"><i class="fas fa-chevron-right me-2"></i>Contact Us</a></li>
                         </ul>
                     </div>
                     <div class="col-6 col-md-3">
@@ -106,7 +106,7 @@
                 <div class="col-md-4 text-center text-md-end mt-3 mt-md-0">
                     <a href="#hero" class="small text-decoration-none footer-bottom-link">Home</a>
                     <span class="footer-bottom-sep">|</span>
-                    <a href="#" class="small text-decoration-none footer-bottom-link">Staff Portal</a>
+                    <a href="{{ route('resources.staff-portal') }}" class="small text-decoration-none footer-bottom-link">Staff Portal</a>
                 </div>
             </div>
         </div>
