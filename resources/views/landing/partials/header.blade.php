@@ -17,7 +17,7 @@
                     <span>+255 700 000 000</span>
                 </div>
                 <div class="d-flex align-items-center gap-3">
-                    <a href="#contact" class="text-green-700 text-decoration-none small fw-bold hover-underline">Contact us</a>
+                    <a href="{{ route('contact') }}" class="text-green-700 text-decoration-none small fw-bold hover-underline">Contact us</a>
                     @guest
                         <a href="{{ route('login') }}" class="btn btn-green px-4 py-2-custom rounded-pill fw-bold shadow-sm transition-all">
                             <i class="fas fa-calendar-alt me-2"></i>MAKE APPOINTMENT
@@ -41,16 +41,19 @@
                         <a href="#hero" class="nav-link text-dark px-0 py-2 custom-nav-link active">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#about" class="nav-link text-dark px-0 py-2 custom-nav-link">About Us</a>
+                        <a href="{{ route('about') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">About Us</a>
                     </li>
                     <li class="nav-item">
                         <a href="#branches" class="nav-link text-dark px-0 py-2 custom-nav-link">Branches</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#appointments" class="nav-link text-dark px-0 py-2 custom-nav-link">Appointments</a>
+                        <a href="{{ route('appointments') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Appointments</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#services" class="nav-link text-dark px-0 py-2 custom-nav-link">Services</a>
+                        <a href="{{ route('services') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('blog.index') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Blog</a>
                     </li>
                     <li class="nav-item">
                         <a href="#shop" class="nav-link text-dark px-0 py-2 custom-nav-link">Shop</a>
@@ -64,7 +67,7 @@
                     </li>
                     @endauth
                     <li class="nav-item">
-                        <a href="#contact" class="nav-link text-dark px-0 py-2 custom-nav-link">Contact Us</a>
+                        <a href="{{ route('contact') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Contact Us</a>
                     </li>
                 </ul>
             </div>
