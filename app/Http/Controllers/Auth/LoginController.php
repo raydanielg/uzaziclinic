@@ -24,15 +24,32 @@ class LoginController extends Controller
     /**
      * Where to redirect users after login.
      *
+     * @var string
+     */
+    protected $redirectTo = '/home';
+
+    /**
+     * Get the post-login redirect path.
+     *
      * @return string
      */
     protected function redirectTo()
     {
-        if (auth()->user()->role === 'admin') {
-            return '/admin/dashboard';
+        $user = auth()->user();
+        if (!$user->role) {
+            return '/home';
         }
 
-        return RouteServiceProvider::HOME;
+        switch ($user->role->name) {
+            case 'admin':
+                return route('admin.dashboard');
+            case 'doctor':
+                return route('home'); // Change to doctor.dashboard when ready
+            case 'pharmacist':
+                return route('home'); // Change to pharmacist.dashboard when ready
+            default:
+                return '/home';
+        }
     }
 
     /**
