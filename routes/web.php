@@ -44,6 +44,30 @@ Route::middleware(['auth', 'role:doctor'])->prefix('doctor')->name('doctor.')->g
     Route::get('/dashboard', [App\Http\Controllers\Doctor\DashboardController::class, 'index'])->name('dashboard');
 });
 
+Route::middleware(['auth', 'role:nurse'])->prefix('nurse')->name('nurse.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Nurse\DashboardController::class, 'index'])->name('dashboard');
+});
+
+Route::middleware(['auth', 'role:pharmacist'])->prefix('pharmacist')->name('pharmacist.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Pharmacist\DashboardController::class, 'index'])->name('dashboard');
+});
+
+Route::middleware(['auth', 'role:lab_tech'])->prefix('lab')->name('lab.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Lab\DashboardController::class, 'index'])->name('dashboard');
+});
+
+Route::middleware(['auth', 'role:accountant'])->prefix('accountant')->name('accountant.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Accountant\DashboardController::class, 'index'])->name('dashboard');
+});
+
+Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('receptionist.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Receptionist\DashboardController::class, 'index'])->name('dashboard');
+});
+
+Route::middleware(['auth', 'role:customer'])->prefix('patient')->name('patient.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Patient\DashboardController::class, 'index'])->name('dashboard');
+});
+
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/analytics', [App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('analytics');
