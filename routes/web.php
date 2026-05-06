@@ -38,6 +38,11 @@ Route::prefix('resources')->name('resources.')->group(function () {
 
 Route::view('/blog', 'pages.blog.index')->name('blog.index');
 
+Route::view('/about-us', 'pages.core.about')->name('about');
+Route::view('/services', 'pages.core.services')->name('services');
+Route::view('/appointments', 'pages.core.appointments')->name('appointments');
+Route::view('/contact-us', 'pages.core.contact')->name('contact');
+
 Auth::routes();
 
 Route::get('/home', function() {
