@@ -19,11 +19,13 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, string $role)
     {
         if (!Auth::check()) {
-            return redirect('login');
+            return redirect()->route('login');
         }
 
         $user = Auth::user();
-        if ($user->role && $user->role->name === $role) {
+        
+        // Safety check to handle potential object/string role issues
+        if ($user->role && is_object($user->role) && $user->role->name === $role) {
             return $next($request);
         }
 
