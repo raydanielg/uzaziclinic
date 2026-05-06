@@ -37,7 +37,11 @@
     <div id="app">
         @unless ($isAuthPage)
             @auth
-                @include('partials.sidebar')
+                @if(Auth::user()->role === 'customer' || (Auth::user()->role && Auth::user()->role->name === 'customer'))
+                    @include('partials.patient_sidebar')
+                @else
+                    @include('partials.sidebar')
+                @endif
                 <div class="main-content">
                     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm sticky-top">
                         <div class="container-fluid px-4">
