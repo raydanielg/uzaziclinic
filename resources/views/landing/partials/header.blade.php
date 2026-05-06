@@ -11,13 +11,13 @@
             </a>
 
             <!-- Contact & Auth Links -->
-            <div class="d-flex align-items-center gap-4">
+            <div class="d-flex align-items-center gap-3">
                 <div class="d-none d-md-flex align-items-center text-muted small fw-medium">
                     <i class="fas fa-phone-alt me-2 text-green-600"></i>
                     <span>+255 700 000 000</span>
                 </div>
                 <div class="d-flex align-items-center gap-3">
-                    <a href="{{ route('contact') }}" class="text-green-700 text-decoration-none small fw-bold hover-underline">Contact us</a>
+                    <a href="{{ route('contact') }}" class="d-none d-sm-inline-block text-green-700 text-decoration-none small fw-bold hover-underline">Contact us</a>
                     @guest
                         <a href="{{ route('login') }}" class="btn btn-green px-4 py-2-custom rounded-pill fw-bold shadow-sm transition-all">
                             <i class="fas fa-calendar-alt me-2"></i>MAKE APPOINTMENT
@@ -27,13 +27,18 @@
                             <i class="fa-solid fa-house me-2"></i>DASHBOARD
                         </a>
                     @endguest
+
+                    <!-- Mobile Menu Toggle -->
+                    <button class="btn btn-light rounded-circle shadow-sm border ms-2 d-lg-none" type="button" data-bs-toggle="modal" data-bs-target="#navigationModal" style="width: 45px; height: 45px;">
+                        <i class="fas fa-bars text-dark"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Navigation Menu (Flowbite Style) -->
-    <nav class="bg-light border-top border-bottom py-1">
+    <nav class="bg-light border-top border-bottom py-1 d-none d-lg-block">
         <div class="container-fluid container-lg">
             <div class="d-flex align-items-center overflow-auto no-scrollbar py-1">
                 <ul class="nav flex-nowrap gap-4 text-uppercase small fw-bold list-unstyled m-0">
