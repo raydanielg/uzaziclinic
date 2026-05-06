@@ -7,13 +7,16 @@
 @endphp
 
 <div class="sidebar shadow-sm" id="sidebar">
-    <div class="sidebar-header p-3 border-bottom text-center">
+    <div class="sidebar-header p-3 border-bottom text-center position-relative">
+        <button class="btn btn-sm btn-light position-absolute end-0 top-50 translate-middle-y d-lg-none me-2" id="sidebarClose">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
         <img src="{{ asset('logo.png') }}" alt="Logo" class="img-fluid mb-2" style="max-height: 50px;">
         <br>
         <small class="text-muted text-uppercase fw-bold">{{ $roleName }} Panel</small>
     </div>
     
-    <div class="sidebar-menu p-3">
+    <div class="sidebar-menu p-3" style="height: calc(100vh - 110px); overflow-y: auto;">
         <ul class="nav flex-column">
             {{-- 1. ADMIN MENU --}}
             @if($roleName == 'admin')
@@ -471,30 +474,52 @@
         left: 0;
         top: 0;
         background: white;
-        z-index: 1000;
-        transition: all 0.3s;
+        z-index: 1050;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 4px 0 10px rgba(0,0,0,0.05);
+    }
+    .sidebar-menu::-webkit-scrollbar {
+        width: 4px;
+    }
+    .sidebar-menu::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 10px;
     }
     .nav-link {
         color: #475569;
         font-weight: 500;
         padding: 0.8rem 1rem;
         border-radius: 10px;
-        transition: all 0.2s;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
     }
     .nav-link:hover {
         background: #f1f5f9;
         color: #166534;
+        transform: translateX(5px);
     }
     .nav-link.active {
         background: #166534;
         color: white;
+        box-shadow: 0 4px 12px rgba(22, 101, 52, 0.2);
     }
     .nav-link.active i {
         color: white;
     }
     .nav-link i {
-        width: 20px;
+        width: 24px;
         text-align: center;
         color: #64748b;
+        font-size: 1.1rem;
+    }
+    @media (max-width: 991.98px) {
+        .sidebar {
+            left: -260px;
+        }
+        .sidebar.active {
+            left: 0;
+        }
     }
 </style>
