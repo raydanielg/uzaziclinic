@@ -54,11 +54,11 @@
                     <div class="col-6 col-md-3">
                         <h6 class="footer-col-title">Resources</h6>
                         <ul class="list-unstyled footer-nav-links">
-                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Guidelines</a></li>
-                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Health Tips</a></li>
-                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>News</a></li>
-                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Research</a></li>
-                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Staff Portal</a></li>
+                            <li><a href="{{ route('resources.guidelines') }}"><i class="fas fa-chevron-right me-2"></i>Guidelines</a></li>
+                            <li><a href="{{ route('resources.health-tips') }}"><i class="fas fa-chevron-right me-2"></i>Health Tips</a></li>
+                            <li><a href="{{ route('resources.news') }}"><i class="fas fa-chevron-right me-2"></i>News</a></li>
+                            <li><a href="{{ route('resources.research') }}"><i class="fas fa-chevron-right me-2"></i>Research</a></li>
+                            <li><a href="{{ route('resources.staff-portal') }}"><i class="fas fa-chevron-right me-2"></i>Staff Portal</a></li>
                         </ul>
                     </div>
                     <div class="col-6 col-md-3">
