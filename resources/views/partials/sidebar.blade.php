@@ -180,10 +180,58 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-microscope me-2"></i> Today's Tests</a>
+                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-day me-2"></i> Today's Tests</a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-vial-circle-check me-2"></i> Enter Results</a>
+                    <a class="nav-link" href="#"><i class="fa-solid fa-clock me-2"></i> Pending Tests</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-flask me-2"></i> All Lab Tests</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-plus-circle me-2"></i> Add New Test</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-tags me-2"></i> Test Categories</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-vial me-2"></i> Sample Collection</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-truck-ramp-box me-2"></i> Sample Tracking</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-pen-to-square me-2"></i> Enter Results</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-spinner me-2"></i> Pending Results</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-square-check me-2"></i> Completed Results</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-print me-2"></i> Print Results</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-microscope me-2"></i> Lab Equipment List</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-screwdriver-wrench me-2"></i> Maintenance Schedule</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-box-archive me-2"></i> Lab Consumables / Reagents</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-triangle-exclamation me-2"></i> Low Stock Alerts</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-chart-pie me-2"></i> Reports (Test Volume/Revenue)</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-user-circle me-2"></i> My Profile</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-key me-2"></i> Change Password</a>
                 </li>
             @endif
 
