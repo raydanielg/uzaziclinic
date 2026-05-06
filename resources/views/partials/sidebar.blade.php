@@ -120,13 +120,55 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-pills me-2"></i> Stock Summary</a>
+                    <a class="nav-link" href="#"><i class="fa-solid fa-triangle-exclamation me-2"></i> Stock Summary</a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-prescription-bottle-medical me-2"></i> Pending Prescriptions</a>
+                    <a class="nav-link" href="#"><i class="fa-solid fa-pills me-2"></i> All Medicines</a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-truck-field me-2"></i> Suppliers</a>
+                    <a class="nav-link" href="#"><i class="fa-solid fa-plus-circle me-2"></i> Add New Medicine</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-right-left me-2"></i> Stock In / Out</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-truck-moving me-2"></i> Stock Transfer</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-file-prescription me-2"></i> Pending Prescriptions</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-file-medical me-2"></i> Process Prescription</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-history me-2"></i> Prescription History</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-shopping-cart me-2"></i> Medicine Orders</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-spinner me-2"></i> Process Online Orders</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-list-check me-2"></i> Order History</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-truck-field me-2"></i> Suppliers List</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-file-invoice me-2"></i> Purchase Orders</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-chart-bar me-2"></i> Reports (Stock/Sales/Expiry)</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-cog me-2"></i> Settings (Categories/Units)</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-user-circle me-2"></i> My Profile</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-key me-2"></i> Change Password</a>
                 </li>
             @endif
 
