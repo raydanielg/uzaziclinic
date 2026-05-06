@@ -36,6 +36,8 @@ Route::prefix('resources')->name('resources.')->group(function () {
     Route::view('/staff-portal', 'pages.resources.staff-portal')->name('staff-portal');
 });
 
+Route::view('/blog', 'pages.blog.index')->name('blog.index');
+
 Auth::routes();
 
 Route::get('/home', function() {
