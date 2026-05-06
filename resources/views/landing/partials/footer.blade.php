@@ -64,11 +64,11 @@
                     <div class="col-6 col-md-3">
                         <h6 class="footer-col-title">Support</h6>
                         <ul class="list-unstyled footer-nav-links">
-                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Help Center</a></li>
-                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>FAQs</a></li>
+                            <li><a href="{{ route('support.help-center') }}"><i class="fas fa-chevron-right me-2"></i>Help Center</a></li>
+                            <li><a href="{{ route('support.faqs') }}"><i class="fas fa-chevron-right me-2"></i>FAQs</a></li>
                             <li><a href="{{ route('login') }}"><i class="fas fa-chevron-right me-2"></i>Login</a></li>
                             <li><a href="{{ route('register') }}"><i class="fas fa-chevron-right me-2"></i>Create Account</a></li>
-                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Contact Support</a></li>
+                            <li><a href="{{ route('support.contact-support') }}"><i class="fas fa-chevron-right me-2"></i>Contact Support</a></li>
                         </ul>
                     </div>
                     <div class="col-6 col-md-3">
