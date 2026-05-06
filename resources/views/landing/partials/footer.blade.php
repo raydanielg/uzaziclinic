@@ -47,6 +47,7 @@
                             <li><a href="#hero"><i class="fas fa-chevron-right me-2"></i>Home</a></li>
                             <li><a href="#about"><i class="fas fa-chevron-right me-2"></i>About Us</a></li>
                             <li><a href="#services"><i class="fas fa-chevron-right me-2"></i>Services</a></li>
+                            <li><a href="{{ route('blog.index') }}"><i class="fas fa-chevron-right me-2"></i>Blog</a></li>
                             <li><a href="#appointments"><i class="fas fa-chevron-right me-2"></i>Appointments</a></li>
                             <li><a href="#contact"><i class="fas fa-chevron-right me-2"></i>Contact Us</a></li>
                         </ul>
@@ -56,7 +57,7 @@
                         <ul class="list-unstyled footer-nav-links">
                             <li><a href="{{ route('resources.guidelines') }}"><i class="fas fa-chevron-right me-2"></i>Guidelines</a></li>
                             <li><a href="{{ route('resources.health-tips') }}"><i class="fas fa-chevron-right me-2"></i>Health Tips</a></li>
-                            <li><a href="{{ route('resources.news') }}"><i class="fas fa-chevron-right me-2"></i>News</a></li>
+                            <li><a href="{{ route('blog.index') }}"><i class="fas fa-chevron-right me-2"></i>News</a></li>
                             <li><a href="{{ route('resources.research') }}"><i class="fas fa-chevron-right me-2"></i>Research</a></li>
                             <li><a href="{{ route('resources.staff-portal') }}"><i class="fas fa-chevron-right me-2"></i>Staff Portal</a></li>
                         </ul>
