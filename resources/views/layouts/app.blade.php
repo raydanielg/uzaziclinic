@@ -102,12 +102,30 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const toggle = document.getElementById('sidebarToggle');
+            const close = document.getElementById('sidebarClose');
             const sidebar = document.getElementById('sidebar');
+            
             if(toggle && sidebar) {
-                toggle.addEventListener('click', () => {
+                toggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     sidebar.classList.toggle('active');
                 });
             }
+
+            if(close && sidebar) {
+                close.addEventListener('click', () => {
+                    sidebar.classList.remove('active');
+                });
+            }
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth < 992 && sidebar && sidebar.classList.contains('active')) {
+                    if (!sidebar.contains(e.target) && e.target !== toggle) {
+                        sidebar.classList.remove('active');
+                    }
+                }
+            });
         });
     </script>
 
