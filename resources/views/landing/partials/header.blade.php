@@ -203,7 +203,7 @@
                     </div>
                     <!-- 6 Shop -->
                     <div class="col-12">
-                        <a href="#shop" class="menu-item-link">
+                        <a href="{{ route('shop.index') }}" class="menu-item-link">
                             <div class="menu-icon-box"><i class="fas fa-shopping-basket"></i></div>
                             <div class="menu-text">
                                 <div class="menu-title">Shop</div>
@@ -256,7 +256,7 @@
                         </div>
                         <!-- 11 Cart -->
                         <div class="col-12">
-                            <a href="{{ url('/cart') }}" class="menu-item-link">
+                            <a href="{{ route('shop.cart') }}" class="menu-item-link">
                                 <div class="menu-icon-box auth-icon"><i class="fas fa-shopping-cart"></i></div>
                                 <div class="menu-text">
                                     <div class="menu-title">Cart</div>
