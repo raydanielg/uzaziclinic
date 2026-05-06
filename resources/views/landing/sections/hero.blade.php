@@ -10,7 +10,7 @@
         <div class="row min-vh-100 align-items-start justify-content-center text-center pt-10 pb-5">
             <div class="col-lg-10 animate__animated animate__fadeInUp">
                 <!-- Emergency Number -->
-                <div class="emergency-badge d-inline-flex align-items-center bg-danger text-white px-4 py-2 rounded-pill mb-4 shadow-sm fw-bold">
+                <div class="emergency-badge d-inline-flex align-items-center bg-green-600 text-white px-4 py-2 rounded-pill mb-4 shadow-sm fw-bold">
                     <i class="fas fa-phone-alt me-2 animate__animated animate__pulse animate__infinite"></i>
                     EMERGENCY: +255 700 000 000
                 </div>
@@ -30,7 +30,7 @@
                     <a href="#appointments" class="btn btn-green btn-lg px-5 rounded-pill shadow-lg fw-bold transition-all py-3 border-3">
                         <i class="fas fa-calendar-check me-2"></i>BOOK APPOINTMENT
                     </a>
-                    <a href="#services" class="btn btn-dark btn-lg px-5 rounded-pill fw-bold transition-all py-3 border-3">
+                    <a href="#services" class="btn btn-outline-green btn-lg px-5 rounded-pill fw-bold transition-all py-3 border-3">
                         OUR SERVICES
                     </a>
                 </div>
@@ -52,6 +52,7 @@
         background: linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.7) 100%) !important;
     }
     .text-green-600 { color: #16a34a !important; }
+    .bg-green-600 { background-color: #16a34a !important; }
     .btn-green {
         background-color: #16a34a;
         color: white;
@@ -65,12 +66,16 @@
         transform: translateY(-3px);
         box-shadow: 0 10px 20px rgba(22, 163, 74, 0.3) !important;
     }
-    .btn-dark {
-        border: 3px solid #212529;
+    .btn-outline-green {
+        border: 3px solid #16a34a;
+        color: #16a34a;
+        background: transparent;
     }
-    .btn-dark:hover {
+    .btn-outline-green:hover {
+        background-color: #16a34a;
+        color: white;
         transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
+        box-shadow: 0 10px 20px rgba(22, 163, 74, 0.2) !important;
     }
     .object-fit-cover { object-fit: cover; }
     .emergency-badge {
