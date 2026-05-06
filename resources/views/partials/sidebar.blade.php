@@ -42,7 +42,25 @@
                     <a class="nav-link" href="#"><i class="fa-solid fa-flask-vial me-2"></i> Lab Requests</a>
                 </li>
                 <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-vial-circle-check me-2"></i> Lab Results</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-notes-medical me-2"></i> Medical Records</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-days me-2"></i> My Schedule</a>
+                </li>
+                <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-comments me-2"></i> Chat with Patients</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-user-circle me-2"></i> My Profile</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-key me-2"></i> Change Password</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-chart-line me-2"></i> Reports (My Performance)</a>
                 </li>
             @endif
 
