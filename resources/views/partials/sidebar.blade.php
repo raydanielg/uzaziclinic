@@ -1,11 +1,15 @@
 @php
-    $role = Auth::user()->role->name ?? 'guest';
+    $user = Auth::user();
+    $roleName = null;
+    if ($user && $user->role_id) {
+        $roleName = \App\Models\Role::find($user->role_id)->name ?? 'guest';
+    }
 @endphp
 
 <div class="sidebar shadow-sm" id="sidebar">
     <div class="sidebar-header p-3 border-bottom text-center">
         <h5 class="fw-bold mb-0 text-success">AfyaCare Pro</h5>
-        <small class="text-muted text-uppercase fw-bold">{{ $role }} Panel</small>
+        <small class="text-muted text-uppercase fw-bold">{{ $roleName }} Panel</small>
     </div>
     
     <div class="sidebar-menu p-3">
@@ -18,12 +22,12 @@
             </li>
 
             {{-- 1. ADMIN MENU --}}
-            @if($role == 'admin')
+            @if($roleName == 'admin')
                 @include('partials.menus.admin')
             @endif
 
             {{-- 2. DOCTOR MENU --}}
-            @if($role == 'doctor')
+            @if($roleName == 'doctor')
                 <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-calendar-check me-2"></i> My Appointments</a>
                 </li>
@@ -42,7 +46,7 @@
             @endif
 
             {{-- 3. NURSE MENU --}}
-            @if($role == 'nurse')
+            @if($roleName == 'nurse')
                 <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-user-check me-2"></i> Patient Check-in</a>
                 </li>
@@ -55,7 +59,7 @@
             @endif
 
             {{-- 4. PHARMACIST MENU --}}
-            @if($role == 'pharmacist')
+            @if($roleName == 'pharmacist')
                 <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-pills me-2"></i> Stock Summary</a>
                 </li>
@@ -68,7 +72,7 @@
             @endif
 
             {{-- 5. LAB TECHNICIAN MENU --}}
-            @if($role == 'lab_tech')
+            @if($roleName == 'lab_tech')
                 <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-microscope me-2"></i> Today's Tests</a>
                 </li>
@@ -78,7 +82,7 @@
             @endif
 
             {{-- 6. ACCOUNTANT MENU --}}
-            @if($role == 'accountant')
+            @if($roleName == 'accountant')
                 <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Create Invoice</a>
                 </li>
@@ -91,7 +95,7 @@
             @endif
 
             {{-- 7. RECEPTIONIST MENU --}}
-            @if($role == 'receptionist')
+            @if($roleName == 'receptionist')
                 <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-user-plus me-2"></i> Register Patient</a>
                 </li>
@@ -104,7 +108,7 @@
             @endif
 
             {{-- 8. PATIENT MENU --}}
-            @if($role == 'customer')
+            @if($roleName == 'customer')
                 <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-calendar-day me-2"></i> Book Appointment</a>
                 </li>
