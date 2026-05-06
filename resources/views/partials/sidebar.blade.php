@@ -48,13 +48,48 @@
             {{-- 3. NURSE MENU --}}
             @if($roleName == 'nurse')
                 <li class="nav-item mb-2">
+                    <a class="nav-link {{ Request::is('nurse/dashboard') ? 'active' : '' }}" href="{{ url('/nurse/dashboard') }}">
+                        <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-user-check me-2"></i> Patient Check-in</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-people-arrows me-2"></i> Waiting Queue</a>
                 </li>
                 <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-heart-pulse me-2"></i> Vitals Recording</a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-bed me-2"></i> Ward Management</a>
+                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-day me-2"></i> Today's Appointments</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-user-doctor me-2"></i> Assist Doctor List</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-users-rectangle me-2"></i> Patient Management</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-bed-pulse me-2"></i> Bed Allocation</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-hospital me-2"></i> Ward Management</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-vial me-2"></i> Lab Sample Collection</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-pills me-2"></i> Medication Administration</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-file-invoice me-2"></i> Reports (Daily Tasks)</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-user-circle me-2"></i> My Profile</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-key me-2"></i> Change Password</a>
                 </li>
             @endif
 
