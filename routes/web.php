@@ -22,16 +22,19 @@ Auth::routes();
 
 Route::get('/home', function() {
     $user = auth()->user();
-    if ($user && $user->role && is_object($user->role) && isset($user->role->name)) {
-        switch ($user->role->name) {
-            case 'admin': return redirect()->route('admin.dashboard');
-            case 'doctor': return redirect('/doctor/dashboard');
-            case 'nurse': return redirect('/nurse/dashboard');
-            case 'pharmacist': return redirect('/pharmacist/dashboard');
-            case 'lab_tech': return redirect('/lab/dashboard');
-            case 'accountant': return redirect('/accountant/dashboard');
-            case 'receptionist': return redirect('/receptionist/dashboard');
-            case 'customer': return redirect('/patient/dashboard');
+    if ($user && $user->role_id) {
+        $roleName = \App\Models\Role::find($user->role_id)->name ?? null;
+        if ($roleName) {
+            switch ($roleName) {
+                case 'admin': return redirect()->route('admin.dashboard');
+                case 'doctor': return redirect('/doctor/dashboard');
+                case 'nurse': return redirect('/nurse/dashboard');
+                case 'pharmacist': return redirect('/pharmacist/dashboard');
+                case 'lab_tech': return redirect('/lab/dashboard');
+                case 'accountant': return redirect('/accountant/dashboard');
+                case 'receptionist': return redirect('/receptionist/dashboard');
+                case 'customer': return redirect('/patient/dashboard');
+            }
         }
     }
     return redirect('/');
