@@ -40,27 +40,30 @@
             <div class="col-lg-7 animate__animated animate__fadeInRight">
                 <div class="card border-0 shadow-2xl p-4 p-md-5 rounded-5" style="background-color: #f8fafc; border: 1px solid rgba(0,0,0,0.05) !important;">
                     <h4 class="fw-bold mb-4 text-dark">Send a Quick Message</h4>
-                    <form>
+                    <form id="contactForm">
+                        @csrf
                         <div class="row g-4">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-dark small">YOUR NAME</label>
-                                <input type="text" class="form-control border-0 py-3 shadow-none custom-input" placeholder="Enter your name">
+                                <input type="text" name="name" class="form-control border-0 py-3 shadow-none custom-input" placeholder="Enter your name" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-dark small">EMAIL ADDRESS</label>
-                                <input type="email" class="form-control border-0 py-3 shadow-none custom-input" placeholder="Enter your email">
+                                <input type="email" name="email" class="form-control border-0 py-3 shadow-none custom-input" placeholder="Enter your email" required>
                             </div>
                             <div class="col-12">
                                 <label class="form-label fw-bold text-dark small">SUBJECT</label>
-                                <input type="text" class="form-control border-0 py-3 shadow-none custom-input" placeholder="What are you contacting us about?">
+                                <input type="text" name="subject" class="form-control border-0 py-3 shadow-none custom-input" placeholder="What are you contacting us about?" required>
                             </div>
                             <div class="col-12">
                                 <label class="form-label fw-bold text-dark small">YOUR MESSAGE</label>
-                                <textarea class="form-control border-0 py-3 shadow-none custom-input" rows="4" placeholder="Write your message here..."></textarea>
+                                <textarea name="message" class="form-control border-0 py-3 shadow-none custom-input" rows="4" placeholder="Write your message here..." required></textarea>
                             </div>
                             <div class="col-12 mt-4">
-                                <button type="submit" class="btn btn-green btn-lg px-5 w-100 rounded-pill py-3 fw-bold shadow-lg">
-                                    SEND MESSAGE <i class="fas fa-paper-plane ms-2"></i>
+                                <button type="submit" id="submitBtn" class="btn btn-green btn-lg px-5 w-100 rounded-pill py-3 fw-bold shadow-lg">
+                                    <span class="btn-text">SEND MESSAGE</span>
+                                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                    <i class="fas fa-paper-plane ms-2"></i>
                                 </button>
                             </div>
                         </div>
@@ -70,6 +73,69 @@
         </div>
     </div>
 </section>
+
+<!-- Include SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const form = this;
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const spinner = submitBtn.querySelector('.spinner-border');
+    
+    // Show spinner
+    btnText.classList.add('d-none');
+    spinner.classList.remove('d-none');
+    submitBtn.disabled = true;
+    
+    const formData = new FormData(form);
+    
+    fetch('{{ route("contact.submit") }}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Sent!',
+                text: data.message,
+                confirmButtonColor: '#16a34a',
+                timer: 3000
+            });
+            form.reset();
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.message || 'Something went wrong!',
+                confirmButtonColor: '#16a34a'
+            });
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'There was an error sending your message. Please try again.',
+            confirmButtonColor: '#16a34a'
+        });
+    })
+    .finally(() => {
+        // Reset button
+        btnText.classList.remove('d-none');
+        spinner.classList.add('d-none');
+        submitBtn.disabled = false;
+    });
+});
+</script>
 
 <style>
     .info-card {
