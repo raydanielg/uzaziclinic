@@ -22,7 +22,7 @@ Auth::routes();
 
 Route::get('/home', function() {
     $user = auth()->user();
-    if ($user && $user->role) {
+    if ($user && $user->role && is_object($user->role) && isset($user->role->name)) {
         switch ($user->role->name) {
             case 'admin': return redirect()->route('admin.dashboard');
             case 'doctor': return redirect('/doctor/dashboard');
