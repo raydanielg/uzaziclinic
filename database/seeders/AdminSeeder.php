@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\Role;
+use Illuminate\Support\Facades\Hash;
 
 class AdminSeeder extends Seeder
 {
@@ -13,13 +16,26 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::updateOrCreate(
-            ['email' => 'admin@malkia.com'],
+        // First, ensure roles exist
+        $roles = [
+            ['name' => 'admin', 'permissions' => json_encode(['all' => true])],
+            ['name' => 'doctor', 'permissions' => json_encode(['view_appointments' => true])],
+            ['name' => 'patient', 'permissions' => json_encode(['book_appointment' => true])],
+        ];
+
+        foreach ($roles as $roleData) {
+            Role::firstOrCreate(['name' => $roleData['name']], $roleData);
+        }
+
+        $adminRole = Role::where('name', 'admin')->first();
+
+        User::firstOrCreate(
+            ['email' => 'admin@afyacare.com'],
             [
-                'name' => 'Malkia Admin',
-                'password' => \Illuminate\Support\Facades\Hash::make('password123'),
-                'role' => 'admin',
-                'email_verified_at' => now(),
+                'name' => 'Super Admin',
+                'password' => Hash::make('password'),
+                'role_id' => $adminRole->id,
+                'status' => 'active',
             ]
         );
     }
