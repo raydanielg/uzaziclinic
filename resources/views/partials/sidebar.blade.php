@@ -309,13 +309,70 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-user-plus me-2"></i> Register Patient</a>
+                    <a class="nav-link" href="#"><i class="fa-solid fa-user-plus me-2"></i> Register New Patient</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-magnifying-glass me-2"></i> Search Patient</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-user-pen me-2"></i> Update Patient Info</a>
                 </li>
                 <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-calendar-plus me-2"></i> Book Appointment</a>
                 </li>
                 <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-check me-2"></i> Manage Appointments</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-minus me-2"></i> Reschedule Appointment</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-xmark me-2"></i> Cancel Appointment</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-print me-2"></i> Print Appointment Slip</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-hospital-user me-2"></i> Today's Arrivals</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-user-check me-2"></i> Patient Check-in</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-user-minus me-2"></i> Patient Check-out</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-user-doctor me-2"></i> Available Doctors</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-hand-holding-hand me-2"></i> Assign Doctor</a>
+                </li>
+                <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-users-viewfinder me-2"></i> Doctor Queue</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-bed-pulse me-2"></i> Bed Assignment</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-file-invoice me-2"></i> View Invoices</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-receipt me-2"></i> Print Receipt (Basic)</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-money-bill-wave me-2"></i> Collect Cash Payments</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-comment-sms me-2"></i> Send SMS Reminders</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-chart-line me-2"></i> Reports (Daily Visits)</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-user-circle me-2"></i> My Profile</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-key me-2"></i> Change Password</a>
                 </li>
             @endif
 
