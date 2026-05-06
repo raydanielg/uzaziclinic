@@ -28,6 +28,14 @@ Route::prefix('support')->name('support.')->group(function () {
     Route::view('/contact-support', 'pages.support.contact-support')->name('contact-support');
 });
 
+Route::prefix('resources')->name('resources.')->group(function () {
+    Route::view('/guidelines', 'pages.resources.guidelines')->name('guidelines');
+    Route::view('/health-tips', 'pages.resources.health-tips')->name('health-tips');
+    Route::view('/news', 'pages.resources.news')->name('news');
+    Route::view('/research', 'pages.resources.research')->name('research');
+    Route::view('/staff-portal', 'pages.resources.staff-portal')->name('staff-portal');
+});
+
 Auth::routes();
 
 Route::get('/home', function() {
