@@ -6,62 +6,43 @@
             <div class="mx-auto" style="width: 80px; height: 3px; background-color: #16a34a; border-radius: 2px;"></div>
         </div>
 
-        <div class="row g-5 align-items-center">
-            <!-- Feature Cards Left -->
-            <div class="col-lg-4">
-                <div class="feature-box-modern mb-5 d-flex align-items-start gap-3 p-4 rounded-4 shadow-sm bg-light hover-lift">
-                    <div class="feature-icon-wrapper bg-white shadow-sm p-3 rounded-circle">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3589/3589030.png" alt="Icon" width="40">
+        <div class="row g-4 pt-4">
+            <!-- Feature Card 1 -->
+            <div class="col-md-4">
+                <div class="feature-card-uniform p-5 rounded-4 shadow-sm bg-light text-center h-100 transition-all border-0">
+                    <div class="feature-img-wrapper mb-4 mx-auto shadow-sm">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3589/3589030.png" alt="Modern Facilities" class="img-fluid">
                     </div>
-                    <div>
-                        <h5 class="fw-bold mb-2">Modern Facilities</h5>
-                        <p class="text-muted small mb-0">Equipped with state-of-the-art medical technology for accurate diagnosis and treatment.</p>
-                    </div>
-                </div>
-                <div class="feature-box-modern d-flex align-items-start gap-3 p-4 rounded-4 shadow-sm bg-light hover-lift">
-                    <div class="feature-icon-wrapper bg-white shadow-sm p-3 rounded-circle">
-                        <i class="fas fa-user-md fs-3 text-green-600"></i>
-                    </div>
-                    <div>
-                        <h5 class="fw-bold mb-2">Expert Doctors</h5>
-                        <p class="text-muted small mb-0">Our team consists of highly qualified specialists with years of clinical experience.</p>
-                    </div>
+                    <h4 class="fw-bold mb-3 text-dark">Modern Facilities</h4>
+                    <p class="text-muted mb-0">Equipped with state-of-the-art medical technology for accurate diagnosis and treatment using global standards.</p>
                 </div>
             </div>
 
-            <!-- Central Image -->
-            <div class="col-lg-4 text-center d-none d-lg-block">
-                <div class="central-image-wrapper position-relative">
-                    <div class="rotating-border"></div>
-                    <img src="{{ asset('logo.png') }}" alt="Clinic Logo" class="img-fluid position-relative z-1 p-4 bg-white rounded-circle shadow">
+            <!-- Feature Card 2 -->
+            <div class="col-md-4">
+                <div class="feature-card-uniform p-5 rounded-4 shadow-sm bg-light text-center h-100 transition-all border-0">
+                    <div class="feature-img-wrapper mb-4 mx-auto shadow-sm">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3589/3589030.png" alt="Expert Doctors" class="img-fluid">
+                    </div>
+                    <h4 class="fw-bold mb-3 text-dark">Expert Doctors</h4>
+                    <p class="text-muted mb-0">Our team consists of highly qualified specialists with years of clinical experience in various medical fields.</p>
                 </div>
             </div>
 
-            <!-- Feature Cards Right -->
-            <div class="col-lg-4">
-                <div class="feature-box-modern mb-5 d-flex align-items-start gap-3 p-4 rounded-4 shadow-sm bg-light hover-lift">
-                    <div class="feature-icon-wrapper bg-white shadow-sm p-3 rounded-circle">
-                        <i class="fas fa-clock fs-3 text-green-600"></i>
+            <!-- Feature Card 3 -->
+            <div class="col-md-4">
+                <div class="feature-card-uniform p-5 rounded-4 shadow-sm bg-light text-center h-100 transition-all border-0">
+                    <div class="feature-img-wrapper mb-4 mx-auto shadow-sm">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3589/3589030.png" alt="Safe & Secure" class="img-fluid">
                     </div>
-                    <div>
-                        <h5 class="fw-bold mb-2">24/7 Availability</h5>
-                        <p class="text-muted small mb-0">We provide around-the-clock emergency services and patient support anytime you need us.</p>
-                    </div>
-                </div>
-                <div class="feature-box-modern d-flex align-items-start gap-3 p-4 rounded-4 shadow-sm bg-light hover-lift">
-                    <div class="feature-icon-wrapper bg-white shadow-sm p-3 rounded-circle">
-                        <i class="fas fa-shield-alt fs-3 text-green-600"></i>
-                    </div>
-                    <div>
-                        <h5 class="fw-bold mb-2">Safe & Secure</h5>
-                        <p class="text-muted small mb-0">Your medical records and privacy are protected with our advanced digital security systems.</p>
-                    </div>
+                    <h4 class="fw-bold mb-3 text-dark">Safe & Secure</h4>
+                    <p class="text-muted mb-0">Your medical records and privacy are protected with our advanced digital security systems and protocols.</p>
                 </div>
             </div>
         </div>
 
         <!-- Counter Section -->
-        <div class="row g-4 mt-5 pt-5 text-center">
+        <div class="row g-4 mt-5 pt-5 text-center border-top">
             <div class="col-md-3">
                 <div class="counter-item">
                     <h2 class="fw-bold text-green-600 mb-0">15+</h2>
@@ -91,39 +72,32 @@
 </section>
 
 <style>
-    .feature-box-modern {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid transparent;
+    .feature-card-uniform {
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(0,0,0,0.02) !important;
     }
-    .feature-box-modern:hover {
+    .feature-card-uniform:hover {
         background-color: white !important;
-        border-color: #16a34a;
-        transform: translateY(-10px);
-        box-shadow: 0 15px 30px rgba(22, 163, 74, 0.1) !important;
+        transform: translateY(-15px);
+        box-shadow: 0 30px 60px rgba(22, 163, 74, 0.1) !important;
+    }
+    .feature-img-wrapper {
+        width: 100px;
+        height: 100px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.4s ease;
+    }
+    .feature-card-uniform:hover .feature-img-wrapper {
+        transform: scale(1.1) rotate(5deg);
+        background-color: #f0fdf4;
     }
     .text-green-600 { color: #16a34a !important; }
     .ls-1 { letter-spacing: 1px; }
-    .central-image-wrapper {
-        padding: 40px;
-    }
-    .rotating-border {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border: 2px dashed #16a34a;
-        border-radius: 50%;
-        animation: rotate 20s linear infinite;
-        opacity: 0.3;
-    }
-    @keyframes rotate {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
-    .hover-lift:hover {
-        transform: translateY(-5px);
-    }
 </style>
 
 
