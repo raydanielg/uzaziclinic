@@ -138,6 +138,206 @@
     }
 </style>
 
+<!-- Navigation Modal -->
+<div class="modal fade" id="navigationModal" tabindex="-1" aria-labelledby="navigationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header border-0 pb-0">
+                <div class="d-flex align-items-center">
+                    <img src="{{ asset('logo.png') }}" alt="Logo" style="height: 35px;" class="me-2">
+                    <span class="fw-bold text-dark">{{ config('app.name', 'UzaziClinic') }}</span>
+                </div>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="menu-grid row g-3">
+                    <!-- 1 Home -->
+                    <div class="col-12">
+                        <a href="{{ url('/') }}" class="menu-item-link">
+                            <div class="menu-icon-box"><i class="fas fa-home"></i></div>
+                            <div class="menu-text">
+                                <div class="menu-title">Home</div>
+                                <div class="menu-sub">Ukurasa wa mwanzo</div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- 2 About Us -->
+                    <div class="col-12">
+                        <a href="{{ route('about') }}" class="menu-item-link">
+                            <div class="menu-icon-box"><i class="fas fa-info-circle"></i></div>
+                            <div class="menu-text">
+                                <div class="menu-title">About Us</div>
+                                <div class="menu-sub">Taarifa za kliniki</div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- 3 Branches -->
+                    <div class="col-12">
+                        <a href="#branches" class="menu-item-link">
+                            <div class="menu-icon-box"><i class="fas fa-map-marked-alt"></i></div>
+                            <div class="menu-text">
+                                <div class="menu-title">Branches</div>
+                                <div class="menu-sub">Matawi yote ya kliniki</div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- 4 Appointments -->
+                    <div class="col-12">
+                        <a href="{{ route('appointments') }}" class="menu-item-link">
+                            <div class="menu-icon-box"><i class="fas fa-calendar-check"></i></div>
+                            <div class="menu-text">
+                                <div class="menu-title">Appointments</div>
+                                <div class="menu-sub">Ukurasa wa kuweka miadi</div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- 5 Services -->
+                    <div class="col-12">
+                        <a href="{{ route('services') }}" class="menu-item-link">
+                            <div class="menu-icon-box"><i class="fas fa-hand-holding-medical"></i></div>
+                            <div class="menu-text">
+                                <div class="menu-title">Services</div>
+                                <div class="menu-sub">Huduma zote za kliniki</div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- 6 Shop -->
+                    <div class="col-12">
+                        <a href="#shop" class="menu-item-link">
+                            <div class="menu-icon-box"><i class="fas fa-shopping-basket"></i></div>
+                            <div class="menu-text">
+                                <div class="menu-title">Shop</div>
+                                <div class="menu-sub">Kununua dawa na bidhaa</div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- 9 Contact Us -->
+                    <div class="col-12">
+                        <a href="{{ route('contact') }}" class="menu-item-link">
+                            <div class="menu-icon-box"><i class="fas fa-envelope-open-text"></i></div>
+                            <div class="menu-text">
+                                <div class="menu-title">Contact Us</div>
+                                <div class="menu-sub">Mawasiliano</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    @auth
+                        <hr class="my-3 opacity-10">
+                        <!-- 7 My Prescriptions -->
+                        <div class="col-12">
+                            <a href="{{ url('/prescriptions') }}" class="menu-item-link">
+                                <div class="menu-icon-box auth-icon"><i class="fas fa-file-medical"></i></div>
+                                <div class="menu-text">
+                                    <div class="menu-title">My Prescriptions</div>
+                                    <div class="menu-sub">Maagizo ya dawa yangu</div>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- 8 Medical Records -->
+                        <div class="col-12">
+                            <a href="{{ url('/records') }}" class="menu-item-link">
+                                <div class="menu-icon-box auth-icon"><i class="fas fa-history"></i></div>
+                                <div class="menu-text">
+                                    <div class="menu-title">Medical Records</div>
+                                    <div class="menu-sub">Historia yangu ya matibabu</div>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- 10 My Account -->
+                        <div class="col-12">
+                            <a href="{{ url('/profile') }}" class="menu-item-link">
+                                <div class="menu-icon-box auth-icon"><i class="fas fa-user-circle"></i></div>
+                                <div class="menu-text">
+                                    <div class="menu-title">My Account</div>
+                                    <div class="menu-sub">Profile yangu</div>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- 11 Cart -->
+                        <div class="col-12">
+                            <a href="{{ url('/cart') }}" class="menu-item-link">
+                                <div class="menu-icon-box auth-icon"><i class="fas fa-shopping-cart"></i></div>
+                                <div class="menu-text">
+                                    <div class="menu-title">Cart</div>
+                                    <div class="menu-sub">Rukwama ya kununulia</div>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- 12 Logout -->
+                        <div class="col-12 mt-2">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-danger w-100 rounded-3 py-2 fw-bold">
+                                    <i class="fas fa-sign-out-alt me-2"></i>LOGOUT (Kutoka)
+                                </button>
+                            </form>
+                        </div>
+                    @else
+                         <hr class="my-3 opacity-10">
+                         <div class="col-12">
+                            <a href="{{ route('login') }}" class="btn btn-green w-100 rounded-3 py-2 fw-bold">
+                                LOGIN / REGISTER
+                            </a>
+                        </div>
+                    @endauth
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4">
+                <p class="text-muted small mb-0">&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .menu-item-link {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        background: #f8fafc;
+        border-radius: 12px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid #f1f5f9;
+    }
+    .menu-item-link:hover {
+        background: rgba(22, 163, 74, 0.08);
+        border-color: rgba(22, 163, 74, 0.2);
+        transform: translateX(5px);
+    }
+    .menu-icon-box {
+        width: 42px;
+        height: 42px;
+        background: white;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #16a34a;
+        font-size: 1.1rem;
+        margin-right: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .auth-icon {
+        color: #0f172a;
+        background: #f1f5f9;
+    }
+    .menu-title {
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 0.95rem;
+        line-height: 1.2;
+    }
+    .menu-sub {
+        font-size: 0.75rem;
+        color: #64748b;
+    }
+    .modal-fullscreen-sm-down {
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+</style>
+
 
 
 
