@@ -61,7 +61,7 @@
                         <a href="{{ route('blog.index') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Blog</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#shop" class="nav-link text-dark px-0 py-2 custom-nav-link">Shop</a>
+                        <a href="{{ route('shop.index') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Shop</a>
                     </li>
                     @auth
                     <li class="nav-item">
