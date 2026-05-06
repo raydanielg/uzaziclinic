@@ -1,64 +1,72 @@
-<footer class="bg-dark text-white py-5">
+<footer class="bg-dark text-white py-10" style="background-color: #0f172a !important;">
     <div class="container">
-        <div class="row g-4">
+        <div class="row g-5">
             <div class="col-lg-4">
-                <div class="d-flex align-items-center mb-3">
-                    <img src="{{ asset('logo.png') }}" alt="Logo" height="40" class="me-2 filter-white">
-                    <h4 class="mb-0 text-success fw-bold">{{ config('app.name', 'UzaziClinic') }}</h4>
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-white p-2 rounded-3 me-3 shadow-sm">
+                        <img src="{{ asset('logo.png') }}" alt="Logo" height="35">
+                    </div>
+                    <h4 class="mb-0 text-white fw-bold">{{ config('app.name', 'UzaziClinic') }}</h4>
                 </div>
-                <p class="text-muted">Tunatoa huduma bora za afya kwa kutumia teknolojia ya kisasa zaidi kwa ajili ya usalama na faraja yako.</p>
+                <p class="text-gray-400 mb-4" style="color: #94a3b8; line-height: 1.8;">We provide exceptional healthcare services using modern technology and a team of qualified specialists dedicated to your wellbeing.</p>
                 <div class="social-links d-flex gap-3">
-                    <a href="#" class="text-white-50 hover-white"><i class="fab fa-facebook-f fa-lg"></i></a>
-                    <a href="#" class="text-white-50 hover-white"><i class="fab fa-twitter fa-lg"></i></a>
-                    <a href="#" class="text-white-50 hover-white"><i class="fab fa-instagram fa-lg"></i></a>
-                    <a href="#" class="text-white-50 hover-white"><i class="fab fa-linkedin-in fa-lg"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
-            <div class="col-lg-2 col-md-4">
-                <h5 class="mb-4">Viungo Haraka</h5>
+            
+            <div class="col-lg-2 col-md-6">
+                <h5 class="fw-bold mb-4 text-white">Quick Links</h5>
                 <ul class="list-unstyled footer-links">
-                    <li class="mb-2"><a href="#hero" class="text-white-50 text-decoration-none">Nyumbani</a></li>
-                    <li class="mb-2"><a href="#features" class="text-white-50 text-decoration-none">Sifa</a></li>
-                    <li class="mb-2"><a href="#services" class="text-white-50 text-decoration-none">Huduma</a></li>
-                    <li class="mb-2"><a href="#contact" class="text-white-50 text-decoration-none">Mawasiliano</a></li>
+                    <li><a href="#hero">Home</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#branches">Branches</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
                 </ul>
             </div>
-            <div class="col-lg-2 col-md-4">
-                <h5 class="mb-4">Huduma Zetu</h5>
+
+            <div class="col-lg-2 col-md-6">
+                <h5 class="fw-bold mb-4 text-white">Our Services</h5>
                 <ul class="list-unstyled footer-links">
-                    <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Ushauri wa Daktari</a></li>
-                    <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Maabara</a></li>
-                    <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Famasi</a></li>
-                    <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Uzazi Salama</a></li>
+                    <li><a href="#">Reproductive Health</a></li>
+                    <li><a href="#">Modern Lab</a></li>
+                    <li><a href="#">Pharmacy</a></li>
+                    <li><a href="#">Pediatric Clinic</a></li>
                 </ul>
             </div>
-            <div class="col-lg-4 col-md-4">
-                <h5 class="mb-4">Mawasiliano</h5>
-                <ul class="list-unstyled text-white-50">
+
+            <div class="col-lg-4">
+                <h5 class="fw-bold mb-4 text-white">Contact Info</h5>
+                <ul class="list-unstyled text-gray-400" style="color: #94a3b8;">
                     <li class="mb-3 d-flex align-items-start gap-3">
-                        <i class="fas fa-map-marker-alt mt-1 text-success"></i>
+                        <i class="fas fa-map-marker-alt mt-1 text-green-600"></i>
                         <span>Mlimani City, Dar es Salaam, Tanzania</span>
                     </li>
                     <li class="mb-3 d-flex align-items-center gap-3">
-                        <i class="fas fa-phone text-success"></i>
+                        <i class="fas fa-phone text-green-600"></i>
                         <span>+255 700 000 000</span>
                     </li>
                     <li class="mb-3 d-flex align-items-center gap-3">
-                        <i class="fas fa-envelope text-success"></i>
+                        <i class="fas fa-envelope text-green-600"></i>
                         <span>info@uzaziclinic.com</span>
                     </li>
                 </ul>
             </div>
         </div>
-        <hr class="my-5 border-secondary">
+        
+        <hr class="my-5" style="border-color: rgba(255,255,255,0.1);">
+        
         <div class="row align-items-center">
             <div class="col-md-6 text-center text-md-start">
-                <p class="mb-0 text-white-50">&copy; {{ date('Y') }} {{ config('app.name', 'UzaziClinic') }}. Haki zote zimehifadhiwa.</p>
+                <p class="mb-0 small" style="color: #64748b;">&copy; {{ date('Y') }} {{ config('app.name', 'UzaziClinic') }}. All rights reserved.</p>
             </div>
             <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
                 <div class="footer-bottom-links">
-                    <a href="#" class="text-white-50 text-decoration-none me-3 small">Sera ya Faragha</a>
-                    <a href="#" class="text-white-50 text-decoration-none small">Masharti ya Matumizi</a>
+                    <a href="#" class="small me-3 text-decoration-none" style="color: #64748b;">Privacy Policy</a>
+                    <a href="#" class="small text-decoration-none" style="color: #64748b;">Terms of Use</a>
                 </div>
             </div>
         </div>
@@ -66,15 +74,33 @@
 </footer>
 
 <style>
-    .footer-links a:hover {
-        color: #198754 !important;
-        padding-left: 5px;
+    .py-10 { padding: 80px 0; }
+    .text-green-600 { color: #16a34a !important; }
+    .footer-links li { margin-bottom: 12px; }
+    .footer-links a {
+        color: #94a3b8;
+        text-decoration: none;
         transition: all 0.3s ease;
     }
-    .hover-white:hover {
-        color: white !important;
+    .footer-links a:hover {
+        color: #16a34a;
+        padding-left: 8px;
     }
-    .filter-white {
-        filter: brightness(0) invert(1);
+    .social-btn {
+        width: 40px;
+        height: 40px;
+        background-color: rgba(255,255,255,0.05);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    .social-btn:hover {
+        background-color: #16a34a;
+        color: white;
+        transform: translateY(-3px);
     }
 </style>
