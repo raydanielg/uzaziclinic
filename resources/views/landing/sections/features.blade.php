@@ -59,34 +59,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Counter Section -->
-        <div class="row g-4 mt-5 pt-5 text-center">
-            <div class="col-md-3">
-                <div class="counter-item">
-                    <h2 class="fw-bold text-green-600 mb-0">15+</h2>
-                    <p class="text-muted fw-bold small text-uppercase ls-1">Specialists</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="counter-item">
-                    <h2 class="fw-bold text-green-600 mb-0">25k+</h2>
-                    <p class="text-muted fw-bold small text-uppercase ls-1">Happy Patients</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="counter-item">
-                    <h2 class="fw-bold text-green-600 mb-0">10+</h2>
-                    <p class="text-muted fw-bold small text-uppercase ls-1">Year Experience</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="counter-item">
-                    <h2 class="fw-bold text-green-600 mb-0">100%</h2>
-                    <p class="text-muted fw-bold small text-uppercase ls-1">Quality Care</p>
-                </div>
-            </div>
-        </div>
     </div>
 </section>
 
