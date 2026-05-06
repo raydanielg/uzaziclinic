@@ -36,20 +36,20 @@ class LoginController extends Controller
     protected function redirectTo()
     {
         $user = auth()->user();
-        if (!$user->role) {
-            return '/home';
+        
+        // Check if role is an object and has a name property
+        if ($user->role && is_object($user->role) && isset($user->role->name)) {
+            switch ($user->role->name) {
+                case 'admin':
+                    return route('admin.dashboard');
+                case 'doctor':
+                    return route('home');
+                case 'pharmacist':
+                    return route('home');
+            }
         }
 
-        switch ($user->role->name) {
-            case 'admin':
-                return route('admin.dashboard');
-            case 'doctor':
-                return route('home'); // Change to doctor.dashboard when ready
-            case 'pharmacist':
-                return route('home'); // Change to pharmacist.dashboard when ready
-            default:
-                return '/home';
-        }
+        return '/home';
     }
 
     /**
