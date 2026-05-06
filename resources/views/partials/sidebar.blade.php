@@ -8,7 +8,8 @@
 
 <div class="sidebar shadow-sm" id="sidebar">
     <div class="sidebar-header p-3 border-bottom text-center">
-        <h5 class="fw-bold mb-0 text-success">AfyaCare Pro</h5>
+        <img src="{{ asset('logo.png') }}" alt="Logo" class="img-fluid mb-2" style="max-height: 50px;">
+        <br>
         <small class="text-muted text-uppercase fw-bold">{{ $roleName }} Panel</small>
     </div>
     
