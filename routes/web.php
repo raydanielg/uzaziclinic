@@ -22,6 +22,12 @@ Route::get('/landing', function () {
     return view('welcome');
 })->name('landing');
 
+Route::prefix('support')->name('support.')->group(function () {
+    Route::view('/help-center', 'pages.support.help-center')->name('help-center');
+    Route::view('/faqs', 'pages.support.faqs')->name('faqs');
+    Route::view('/contact-support', 'pages.support.contact-support')->name('contact-support');
+});
+
 Auth::routes();
 
 Route::get('/home', function() {
