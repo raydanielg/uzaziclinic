@@ -23,7 +23,7 @@
                             <i class="fas fa-calendar-alt me-2"></i>MAKE APPOINTMENT
                         </a>
                     @else
-                        <a href="{{ url('/home') }}" class="btn btn-green px-4 py-2-custom rounded-pill fw-bold shadow-sm transition-all">
+                        <a href="{{ route('home') }}" class="btn btn-green px-4 py-2-custom rounded-pill fw-bold shadow-sm transition-all">
                             <i class="fa-solid fa-house me-2"></i>DASHBOARD
                         </a>
                     @endguest
