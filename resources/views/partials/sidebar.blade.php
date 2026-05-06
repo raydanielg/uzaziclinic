@@ -246,10 +246,58 @@
                     <a class="nav-link" href="#"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Create Invoice</a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-receipt me-2"></i> All Receipts</a>
+                    <a class="nav-link" href="#"><i class="fa-solid fa-file-lines me-2"></i> All Invoices</a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-hand-holding-dollar me-2"></i> Insurance Claims</a>
+                    <a class="nav-link" href="#"><i class="fa-solid fa-clock-rotate-left me-2"></i> Pending Payments</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-circle-check me-2"></i> Paid Invoices</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-receipt me-2"></i> Generate Receipt</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-box-archive me-2"></i> All Receipts</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-print me-2"></i> Print Receipt</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-envelope-open-text me-2"></i> Email Receipt</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-file-pdf me-2"></i> Download PDF Receipt</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-money-bill-transfer me-2"></i> Payments (Cash/Card/Etc)</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-shield-heart me-2"></i> Insurance Management</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-hand-holding-medical me-2"></i> Insurance Claims</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-wallet me-2"></i> Expenses Management</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-tags me-2"></i> Discounts & Promos</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-chart-line me-2"></i> Financial Reports</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-chart-pie me-2"></i> Profit & Loss Report</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-landmark me-2"></i> Tax Report</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-user-circle me-2"></i> My Profile</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-key me-2"></i> Change Password</a>
                 </li>
             @endif
 
