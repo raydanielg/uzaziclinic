@@ -14,22 +14,22 @@
     
     <div class="sidebar-menu p-3">
         <ul class="nav flex-column">
-            {{-- COMMON DASHBOARD --}}
-            <li class="nav-item mb-2">
-                <a class="nav-link {{ Request::is('home') || Request::is('*/dashboard') ? 'active' : '' }}" href="{{ url('/home') }}">
-                    <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
-                </a>
-            </li>
-
             {{-- 1. ADMIN MENU --}}
             @if($roleName == 'admin')
+                <li class="nav-item mb-2">
+                    <a class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
+                        <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+                    </a>
+                </li>
                 @include('partials.menus.admin')
             @endif
 
             {{-- 2. DOCTOR MENU --}}
             @if($roleName == 'doctor')
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-check me-2"></i> My Appointments</a>
+                    <a class="nav-link {{ Request::is('doctor/dashboard') ? 'active' : '' }}" href="{{ url('/doctor/dashboard') }}">
+                        <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+                    </a>
                 </li>
                 <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-hospital-user me-2"></i> My Patients</a>
@@ -96,6 +96,11 @@
             {{-- 4. PHARMACIST MENU --}}
             @if($roleName == 'pharmacist')
                 <li class="nav-item mb-2">
+                    <a class="nav-link {{ Request::is('pharmacist/dashboard') ? 'active' : '' }}" href="{{ url('/pharmacist/dashboard') }}">
+                        <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-pills me-2"></i> Stock Summary</a>
                 </li>
                 <li class="nav-item mb-2">
@@ -109,6 +114,11 @@
             {{-- 5. LAB TECHNICIAN MENU --}}
             @if($roleName == 'lab_tech')
                 <li class="nav-item mb-2">
+                    <a class="nav-link {{ Request::is('lab/dashboard') ? 'active' : '' }}" href="{{ url('/lab/dashboard') }}">
+                        <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-microscope me-2"></i> Today's Tests</a>
                 </li>
                 <li class="nav-item mb-2">
@@ -118,6 +128,11 @@
 
             {{-- 6. ACCOUNTANT MENU --}}
             @if($roleName == 'accountant')
+                <li class="nav-item mb-2">
+                    <a class="nav-link {{ Request::is('accountant/dashboard') ? 'active' : '' }}" href="{{ url('/accountant/dashboard') }}">
+                        <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+                    </a>
+                </li>
                 <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Create Invoice</a>
                 </li>
@@ -132,6 +147,11 @@
             {{-- 7. RECEPTIONIST MENU --}}
             @if($roleName == 'receptionist')
                 <li class="nav-item mb-2">
+                    <a class="nav-link {{ Request::is('receptionist/dashboard') ? 'active' : '' }}" href="{{ url('/receptionist/dashboard') }}">
+                        <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-user-plus me-2"></i> Register Patient</a>
                 </li>
                 <li class="nav-item mb-2">
@@ -144,6 +164,11 @@
 
             {{-- 8. PATIENT MENU --}}
             @if($roleName == 'customer')
+                <li class="nav-item mb-2">
+                    <a class="nav-link {{ Request::is('patient/dashboard') ? 'active' : '' }}" href="{{ url('/patient/dashboard') }}">
+                        <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+                    </a>
+                </li>
                 <li class="nav-item mb-2">
                     <a class="nav-link" href="#"><i class="fa-solid fa-calendar-day me-2"></i> Book Appointment</a>
                 </li>
