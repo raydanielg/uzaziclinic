@@ -327,13 +327,73 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-day me-2"></i> Book Appointment</a>
+                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-plus me-2"></i> Book Appointment</a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-store me-2"></i> Shop Products</a>
+                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-check me-2"></i> My Appointments</a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-file-medical me-2"></i> My Prescriptions</a>
+                    <a class="nav-link" href="#"><i class="fa-solid fa-history me-2"></i> Appointment History</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-shop me-2"></i> Shop Products</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-cart-shopping me-2"></i> My Cart</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-bag-shopping me-2"></i> Checkout</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-box me-2"></i> My Orders</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-truck me-2"></i> Order Tracking</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-file-prescription me-2"></i> My Prescriptions</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-download me-2"></i> Download Prescription</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-notes-medical me-2"></i> Medical History</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-flask-vial me-2"></i> Lab Results</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Receipts & Invoices</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-file-pdf me-2"></i> Download PDF Receipt</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-credit-card me-2"></i> Make Payment</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-money-check-dollar me-2"></i> Payment History</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-comments me-2"></i> Chat with Doctor</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-bell me-2"></i> Notifications</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-user-circle me-2"></i> My Profile</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-user-pen me-2"></i> Edit Profile</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-key me-2"></i> Change Password</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-phone-flip me-2"></i> Emergency Contacts</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-shield-heart me-2"></i> Insurance Info</a>
                 </li>
             @endif
 
