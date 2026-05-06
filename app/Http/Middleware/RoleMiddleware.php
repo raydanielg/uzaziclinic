@@ -24,9 +24,11 @@ class RoleMiddleware
 
         $user = Auth::user();
         
-        // Safety check to handle potential object/string role issues
-        if ($user->role && is_object($user->role) && $user->role->name === $role) {
-            return $next($request);
+        if ($user->role_id) {
+            $roleName = \App\Models\Role::find($user->role_id)->name ?? null;
+            if ($roleName === $role) {
+                return $next($request);
+            }
         }
 
         abort(403, 'Huna ruhusa ya kuingia hapa.');
