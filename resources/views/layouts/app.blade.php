@@ -44,7 +44,7 @@
                             <button class="btn btn-light me-3" id="sidebarToggle">
                                 <i class="fa-solid fa-bars"></i>
                             </button>
-                            <span class="navbar-brand d-none d-md-block fw-bold text-success">AfyaCare Pro</span>
+                            <span class="navbar-brand d-none d-md-block fw-bold text-success">Welcome, {{ Auth::user()->name }}</span>
                             
                             <div class="ms-auto d-flex align-items-center">
                                 <div class="dropdown">
