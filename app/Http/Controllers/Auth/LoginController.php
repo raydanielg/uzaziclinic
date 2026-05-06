@@ -43,9 +43,19 @@ class LoginController extends Controller
                 case 'admin':
                     return route('admin.dashboard');
                 case 'doctor':
-                    return route('home');
+                    return '/doctor/dashboard';
+                case 'nurse':
+                    return '/nurse/dashboard';
                 case 'pharmacist':
-                    return route('home');
+                    return '/pharmacist/dashboard';
+                case 'lab_tech':
+                    return '/lab/dashboard';
+                case 'accountant':
+                    return '/accountant/dashboard';
+                case 'receptionist':
+                    return '/receptionist/dashboard';
+                case 'customer':
+                    return '/patient/dashboard';
             }
         }
 

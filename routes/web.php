@@ -20,7 +20,22 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', function() {
+    $user = auth()->user();
+    if ($user && $user->role) {
+        switch ($user->role->name) {
+            case 'admin': return redirect()->route('admin.dashboard');
+            case 'doctor': return redirect('/doctor/dashboard');
+            case 'nurse': return redirect('/nurse/dashboard');
+            case 'pharmacist': return redirect('/pharmacist/dashboard');
+            case 'lab_tech': return redirect('/lab/dashboard');
+            case 'accountant': return redirect('/accountant/dashboard');
+            case 'receptionist': return redirect('/receptionist/dashboard');
+            case 'customer': return redirect('/patient/dashboard');
+        }
+    }
+    return redirect('/');
+})->name('home');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
