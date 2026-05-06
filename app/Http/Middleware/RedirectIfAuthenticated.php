@@ -25,9 +25,11 @@ class RedirectIfAuthenticated
             if (Auth::guard($guard)->check()) {
                 $user = Auth::user();
                 
-                // Better check for admin role to match our redirection logic
-                if ($user->role && is_object($user->role) && $user->role->name === 'admin') {
-                    return redirect()->route('admin.dashboard');
+                if ($user->role_id) {
+                    $roleName = \App\Models\Role::find($user->role_id)->name ?? null;
+                    if ($roleName === 'admin') {
+                        return redirect()->route('admin.dashboard');
+                    }
                 }
                 
                 return redirect()->route('home');
