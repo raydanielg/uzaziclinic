@@ -213,9 +213,12 @@
         font-size: 0.92rem;
         margin-bottom: 16px;
     }
-    .footer-input-group { gap: 10px; }
+    .footer-input-group {
+        display: flex;
+        flex-wrap: nowrap;
+    }
     .footer-input {
-        border-radius: 12px !important;
+        border-radius: 12px 0 0 12px !important;
         background-color: rgba(255,255,255,0.05) !important;
         border: 1px solid rgba(255,255,255,0.10) !important;
         color: #e2e8f0 !important;
@@ -223,7 +226,7 @@
     }
     .footer-input::placeholder { color: rgba(226,232,240,0.6); }
     .footer-subscribe-btn {
-        border-radius: 12px !important;
+        border-radius: 0 12px 12px 0 !important;
         background-color: #16a34a;
         border: 1px solid #16a34a;
         color: white;
@@ -247,5 +250,19 @@
     .footer-bottom-sep {
         color: rgba(100,116,139,0.6);
         margin: 0 10px;
+    }
+
+    @media (max-width: 576px) {
+        .footer-input-group {
+            flex-wrap: wrap;
+        }
+        .footer-input {
+            border-radius: 12px !important;
+            margin-bottom: 10px;
+        }
+        .footer-subscribe-btn {
+            width: 100%;
+            border-radius: 12px !important;
+        }
     }
 </style>
