@@ -1,84 +1,111 @@
 <footer class="footer-modern bg-dark text-white pt-10 overflow-hidden" style="background-color: #0f172a !important;">
-    <!-- Top Shape Decor -->
     <div class="footer-shape-top"></div>
 
     <div class="container position-relative" style="z-index: 2;">
         <div class="row g-5">
-            <!-- Brand Column -->
-            <div class="col-lg-4 col-md-12 animate__animated animate__fadeInLeft">
-                <div class="d-flex align-items-center mb-4 footer-logo-box">
-                    <div class="bg-white p-2 rounded-4 me-3 shadow-lg">
-                        <img src="{{ asset('logo.png') }}" alt="Logo" height="40">
-                    </div>
+            <div class="col-lg-4 animate__animated animate__fadeInLeft">
+                <div class="footer-badge mb-3">
+                    <span class="badge rounded-pill px-3 py-2 fw-bold footer-badge-pill">
+                        <i class="fas fa-shield-alt me-2"></i>TRUSTED HEALTHCARE PLATFORM
+                    </span>
+                </div>
+                <div class="d-flex align-items-center mb-3 footer-logo-box">
                     <h3 class="mb-0 text-white fw-bold tracking-tight">{{ config('app.name', 'UzaziClinic') }}</h3>
                 </div>
-                <p class="text-slate-400 mb-5 pe-lg-4" style="color: #94a3b8; line-height: 1.8; font-size: 0.95rem;">
-                    Providing world-class healthcare solutions with compassion and innovation. Your family's wellness is our primary mission and lifelong commitment.
+                <p class="mb-4 footer-desc">
+                    Smart, secure, and patient-focused care. Built for modern clinics with fast service delivery and reliable medical support.
                 </p>
-                <div class="social-links-modern d-flex gap-3">
-                    <a href="#" class="social-circle-btn facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social-circle-btn twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-circle-btn instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="social-circle-btn linkedin"><i class="fab fa-linkedin-in"></i></a>
+                <div class="social-links-modern d-flex gap-2 mb-5">
+                    <a href="#" class="social-circle-btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-circle-btn"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-circle-btn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="social-circle-btn"><i class="fab fa-instagram"></i></a>
                 </div>
-            </div>
-            
-            <!-- Links Columns -->
-            <div class="col-lg-2 col-6 col-md-4 animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
-                <h5 class="fw-bold mb-4 text-white footer-title-underlined">Quick Links</h5>
-                <ul class="list-unstyled footer-nav-links">
-                    <li><a href="#hero"><i class="fas fa-chevron-right me-2"></i>Home</a></li>
-                    <li><a href="#about"><i class="fas fa-chevron-right me-2"></i>About Us</a></li>
-                    <li><a href="#branches"><i class="fas fa-chevron-right me-2"></i>Branches</a></li>
-                    <li><a href="#services"><i class="fas fa-chevron-right me-2"></i>Services</a></li>
-                    <li><a href="#contact"><i class="fas fa-chevron-right me-2"></i>Contact Us</a></li>
+
+                <h6 class="footer-mini-title">Contact</h6>
+                <ul class="list-unstyled footer-contact-list mb-0">
+                    <li class="d-flex align-items-start gap-3 mb-3">
+                        <i class="fas fa-map-marker-alt mt-1 text-green-600"></i>
+                        <span>Mlimani City, Dar es Salaam, Tanzania</span>
+                    </li>
+                    <li class="d-flex align-items-center gap-3 mb-3">
+                        <i class="fas fa-envelope text-green-600"></i>
+                        <span>info@uzaziclinic.com</span>
+                    </li>
+                    <li class="d-flex align-items-center gap-3">
+                        <i class="fas fa-phone text-green-600"></i>
+                        <span>+255 700 000 000</span>
+                    </li>
                 </ul>
             </div>
 
-            <div class="col-lg-2 col-6 col-md-4 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
-                <h5 class="fw-bold mb-4 text-white footer-title-underlined">Our Services</h5>
-                <ul class="list-unstyled footer-nav-links">
-                    <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Reproductive</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Modern Lab</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Pharmacy</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Pediatric</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Surgery</a></li>
-                </ul>
-            </div>
-
-            <!-- Contact Column -->
-            <div class="col-lg-4 col-md-4 animate__animated animate__fadeInRight" style="animation-delay: 0.3s;">
-                <h5 class="fw-bold mb-4 text-white footer-title-underlined">Newsletter</h5>
-                <p class="small text-slate-400 mb-4" style="color: #94a3b8;">Subscribe to get health tips and clinic updates directly to your inbox.</p>
-                <div class="newsletter-form mb-5">
-                    <div class="input-group">
-                        <input type="email" class="form-control bg-slate-800 border-0 py-3 text-white px-4 rounded-start-pill shadow-none" placeholder="Email Address" style="background-color: rgba(255,255,255,0.05);">
-                        <button class="btn btn-green px-4 rounded-end-pill fw-bold">JOIN</button>
+            <div class="col-lg-8 animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+                <div class="row g-4">
+                    <div class="col-6 col-md-3">
+                        <h6 class="footer-col-title">Quick Links</h6>
+                        <ul class="list-unstyled footer-nav-links">
+                            <li><a href="#hero"><i class="fas fa-chevron-right me-2"></i>Home</a></li>
+                            <li><a href="#about"><i class="fas fa-chevron-right me-2"></i>About Us</a></li>
+                            <li><a href="#services"><i class="fas fa-chevron-right me-2"></i>Services</a></li>
+                            <li><a href="#appointments"><i class="fas fa-chevron-right me-2"></i>Appointments</a></li>
+                            <li><a href="#contact"><i class="fas fa-chevron-right me-2"></i>Contact Us</a></li>
+                        </ul>
                     </div>
-                </div>
-                
-                <div class="footer-contact-box bg-slate-800 p-4 rounded-4 shadow-sm border border-slate-700" style="background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1) !important;">
-                    <div class="d-flex align-items-center mb-3 gap-3">
-                        <div class="contact-icon text-green-600 fs-5"><i class="fas fa-headset"></i></div>
-                        <div>
-                            <div class="small text-muted text-uppercase fw-bold" style="font-size: 10px; letter-spacing: 1px;">Emergency Call</div>
-                            <div class="fw-bold text-white">+255 700 000 000</div>
+                    <div class="col-6 col-md-3">
+                        <h6 class="footer-col-title">Resources</h6>
+                        <ul class="list-unstyled footer-nav-links">
+                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Guidelines</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Health Tips</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>News</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Research</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Staff Portal</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <h6 class="footer-col-title">Support</h6>
+                        <ul class="list-unstyled footer-nav-links">
+                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Help Center</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>FAQs</a></li>
+                            <li><a href="{{ route('login') }}"><i class="fas fa-chevron-right me-2"></i>Login</a></li>
+                            <li><a href="{{ route('register') }}"><i class="fas fa-chevron-right me-2"></i>Create Account</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Contact Support</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <h6 class="footer-col-title">Legal</h6>
+                        <ul class="list-unstyled footer-nav-links">
+                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Privacy Policy</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Terms of Service</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Cookie Policy</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right me-2"></i>Data Protection</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <div class="footer-newsletter rounded-4 p-4 p-md-4 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                            <h6 class="footer-col-title mb-2">Stay Updated</h6>
+                            <p class="footer-newsletter-desc mb-3">Subscribe for announcements, new features, and clinic updates.</p>
+                            <div class="input-group footer-input-group">
+                                <input type="email" class="form-control shadow-none footer-input" placeholder="Your email address">
+                                <button class="btn footer-subscribe-btn fw-bold">
+                                    <i class="fas fa-paper-plane me-2"></i>Subscribe
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <div class="footer-bottom mt-10 py-4 border-top border-slate-800" style="border-color: rgba(255,255,255,0.05) !important;">
+
+        <div class="footer-bottom mt-5 py-4" style="border-top: 1px solid rgba(255,255,255,0.08);">
             <div class="row align-items-center">
-                <div class="col-md-6 text-center text-md-start">
-                    <p class="mb-0 small" style="color: #64748b;">&copy; {{ date('Y') }} <span class="text-green-600 fw-bold">{{ config('app.name', 'UzaziClinic') }}</span>. All rights reserved.</p>
+                <div class="col-md-8 text-center text-md-start">
+                    <p class="mb-0 small footer-bottom-text">&copy; {{ date('Y') }} {{ config('app.name', 'UzaziClinic') }}. All rights reserved.</p>
                 </div>
-                <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
-                    <div class="footer-bottom-links">
-                        <a href="#" class="small me-4 text-decoration-none transition-all hover-green" style="color: #64748b;">Privacy Policy</a>
-                        <a href="#" class="small text-decoration-none transition-all hover-green" style="color: #64748b;">Terms of Use</a>
-                    </div>
+                <div class="col-md-4 text-center text-md-end mt-3 mt-md-0">
+                    <a href="#hero" class="small text-decoration-none footer-bottom-link">Home</a>
+                    <span class="footer-bottom-sep">|</span>
+                    <a href="#" class="small text-decoration-none footer-bottom-link">Staff Portal</a>
                 </div>
             </div>
         </div>
@@ -89,6 +116,9 @@
     .footer-modern {
         position: relative;
         z-index: 1;
+        background: radial-gradient(1200px 500px at 20% 0%, rgba(22, 163, 74, 0.12) 0%, rgba(15, 23, 42, 0) 55%),
+                    radial-gradient(900px 450px at 80% 10%, rgba(34, 197, 94, 0.10) 0%, rgba(15, 23, 42, 0) 55%),
+                    linear-gradient(180deg, #0b1220 0%, #0f172a 70%);
     }
     .footer-shape-top {
         position: absolute;
@@ -98,34 +128,50 @@
         height: 5px;
         background: linear-gradient(90deg, #16a34a 0%, #22c55e 100%);
     }
-    .py-10 { padding-top: 100px; }
-    .mt-10 { margin-top: 80px; }
+    .pt-10 { padding-top: 90px; }
     .text-green-600 { color: #16a34a !important; }
-    .btn-green { background-color: #16a34a; color: white; border: none; }
-    .btn-green:hover { background-color: #15803d; color: white; }
-    
-    .footer-title-underlined {
-        position: relative;
-        padding-bottom: 12px;
+
+    .footer-badge-pill {
+        background-color: rgba(255,255,255,0.06) !important;
+        border: 1px solid rgba(255,255,255,0.10);
+        color: #cbd5e1;
+        letter-spacing: 1px;
+        font-size: 0.72rem;
     }
-    .footer-title-underlined::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 35px;
-        height: 3px;
-        background-color: #16a34a;
-        border-radius: 2px;
+    .footer-desc {
+        color: #94a3b8;
+        line-height: 1.8;
+        font-size: 0.95rem;
+        max-width: 360px;
     }
-    
-    .footer-nav-links li { margin-bottom: 15px; }
+
+    .footer-mini-title {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #e2e8f0;
+        margin-bottom: 14px;
+        font-weight: 800;
+    }
+    .footer-contact-list {
+        color: #94a3b8;
+        font-size: 0.95rem;
+    }
+    .footer-contact-list span { color: #94a3b8; }
+
+    .footer-col-title {
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: #e2e8f0;
+        margin-bottom: 16px;
+    }
+    .footer-nav-links li { margin-bottom: 12px; }
     .footer-nav-links a {
         color: #94a3b8;
         text-decoration: none;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         display: inline-block;
-        font-size: 0.95rem;
+        font-size: 0.92rem;
     }
     .footer-nav-links a:hover {
         color: #16a34a;
@@ -139,8 +185,8 @@
     .footer-nav-links a:hover i { opacity: 1; color: #16a34a; }
 
     .social-circle-btn {
-        width: 45px;
-        height: 45px;
+        width: 40px;
+        height: 40px;
         background-color: rgba(255,255,255,0.03);
         color: #94a3b8;
         display: flex;
@@ -153,17 +199,53 @@
     }
     .social-circle-btn:hover {
         color: white;
-        transform: translateY(-5px) rotate(8deg);
+        transform: translateY(-5px);
+        background-color: rgba(22, 163, 74, 0.25);
+        border-color: rgba(22, 163, 74, 0.35);
     }
-    .facebook:hover { background-color: #3b5998; border-color: #3b5998; }
-    .twitter:hover { background-color: #1da1f2; border-color: #1da1f2; }
-    .instagram:hover { background-color: #e1306c; border-color: #e1306c; }
-    .linkedin:hover { background-color: #0077b5; border-color: #0077b5; }
 
-    .hover-green:hover { color: #16a34a !important; }
-    
-    .footer-logo-box:hover .bg-white {
-        transform: scale(1.05);
+    .footer-newsletter {
+        background-color: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-newsletter-desc {
+        color: #94a3b8;
+        font-size: 0.92rem;
+        margin-bottom: 16px;
+    }
+    .footer-input-group { gap: 10px; }
+    .footer-input {
+        border-radius: 12px !important;
+        background-color: rgba(255,255,255,0.05) !important;
+        border: 1px solid rgba(255,255,255,0.10) !important;
+        color: #e2e8f0 !important;
+        padding: 12px 14px;
+    }
+    .footer-input::placeholder { color: rgba(226,232,240,0.6); }
+    .footer-subscribe-btn {
+        border-radius: 12px !important;
+        background-color: #16a34a;
+        border: 1px solid #16a34a;
+        color: white;
+        padding: 12px 16px;
         transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+    .footer-subscribe-btn:hover {
+        background-color: #15803d;
+        border-color: #15803d;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(22, 163, 74, 0.25);
+    }
+
+    .footer-bottom-text { color: #64748b; }
+    .footer-bottom-link {
+        color: #64748b;
+        transition: all 0.3s ease;
+    }
+    .footer-bottom-link:hover { color: #16a34a; }
+    .footer-bottom-sep {
+        color: rgba(100,116,139,0.6);
+        margin: 0 10px;
     }
 </style>
