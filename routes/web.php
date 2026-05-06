@@ -43,6 +43,13 @@ Route::view('/services', 'pages.core.services')->name('services');
 Route::view('/appointments', 'pages.core.appointments')->name('appointments');
 Route::view('/contact-us', 'pages.core.contact')->name('contact');
 
+Route::prefix('shop')->name('shop.')->group(function () {
+    Route::get('/', function() { return view('pages.shop.index'); })->name('index');
+    Route::get('/cart', function() { return view('pages.shop.cart'); })->name('cart');
+    Route::get('/checkout', function() { return view('pages.shop.checkout'); })->name('checkout');
+    Route::post('/place-order', [App\Http\Controllers\ShopController::class, 'placeOrder'])->name('place-order');
+});
+
 Auth::routes();
 
 Route::get('/home', function() {
