@@ -12,24 +12,19 @@
 
             <!-- Contact & Auth Links -->
             <div class="d-flex align-items-center gap-3">
-                <div class="d-none d-lg-flex align-items-center text-muted small fw-medium">
-                    <i class="fas fa-phone-alt me-2 text-green-600"></i>
-                    <span>+255 700 000 000</span>
-                </div>
-                <div class="d-flex align-items-center gap-3">
-                    <a href="{{ url('/contact-us') }}" class="d-none d-lg-inline-block text-green-700 text-decoration-none small fw-bold hover-underline">Contact us</a>
+                <div class="d-flex align-items-center gap-2">
                     @guest
-                        <a href="{{ route('login') }}" class="btn btn-green px-3 px-md-4 py-2-custom rounded-pill fw-bold shadow-sm transition-all small">
-                            <i class="fas fa-calendar-alt me-md-2"></i><span class="d-none d-md-inline">MAKE APPOINTMENT</span><span class="d-inline d-md-none">BOOK</span>
+                        <a href="{{ route('login') }}" class="btn btn-green px-3 py-2 rounded-pill fw-bold shadow-sm transition-all small">
+                            <i class="fas fa-calendar-alt me-1"></i>BOOK
                         </a>
                     @else
-                        <a href="{{ url('/home') }}" class="btn btn-green px-3 px-md-4 py-2-custom rounded-pill fw-bold shadow-sm transition-all small">
-                            <i class="fa-solid fa-house me-md-2"></i><span class="d-none d-md-inline">DASHBOARD</span><span class="d-inline d-md-none">HOME</span>
+                        <a href="{{ url('/home') }}" class="btn btn-green px-3 py-2 rounded-pill fw-bold shadow-sm transition-all small">
+                            <i class="fa-solid fa-house me-1"></i>HOME
                         </a>
                     @endguest
 
                     <!-- Mobile Menu Toggle -->
-                    <button class="btn btn-light rounded-circle shadow-sm border ms-2 d-lg-none" type="button" data-bs-toggle="modal" data-bs-target="#navigationModal" style="width: 45px; height: 45px;">
+                    <button class="btn btn-light rounded-circle shadow-sm border d-lg-none" type="button" data-bs-toggle="modal" data-bs-target="#navigationModal" style="width: 40px; height: 40px;">
                         <i class="fas fa-bars text-dark"></i>
                     </button>
                 </div>
