@@ -12,19 +12,19 @@
 
             <!-- Contact & Auth Links -->
             <div class="d-flex align-items-center gap-3">
-                <div class="d-none d-md-flex align-items-center text-muted small fw-medium">
+                <div class="d-none d-lg-flex align-items-center text-muted small fw-medium">
                     <i class="fas fa-phone-alt me-2 text-green-600"></i>
                     <span>+255 700 000 000</span>
                 </div>
                 <div class="d-flex align-items-center gap-3">
-                    <a href="{{ url('/contact-us') }}" class="d-none d-sm-inline-block text-green-700 text-decoration-none small fw-bold hover-underline">Contact us</a>
+                    <a href="{{ url('/contact-us') }}" class="d-none d-lg-inline-block text-green-700 text-decoration-none small fw-bold hover-underline">Contact us</a>
                     @guest
-                        <a href="{{ route('login') }}" class="btn btn-green px-4 py-2-custom rounded-pill fw-bold shadow-sm transition-all">
-                            <i class="fas fa-calendar-alt me-2"></i>MAKE APPOINTMENT
+                        <a href="{{ route('login') }}" class="btn btn-green px-3 px-md-4 py-2-custom rounded-pill fw-bold shadow-sm transition-all small">
+                            <i class="fas fa-calendar-alt me-md-2"></i><span class="d-none d-md-inline">MAKE APPOINTMENT</span><span class="d-inline d-md-none">BOOK</span>
                         </a>
                     @else
-                        <a href="{{ url('/home') }}" class="btn btn-green px-4 py-2-custom rounded-pill fw-bold shadow-sm transition-all">
-                            <i class="fa-solid fa-house me-2"></i>DASHBOARD
+                        <a href="{{ url('/home') }}" class="btn btn-green px-3 px-md-4 py-2-custom rounded-pill fw-bold shadow-sm transition-all small">
+                            <i class="fa-solid fa-house me-md-2"></i><span class="d-none d-md-inline">DASHBOARD</span><span class="d-inline d-md-none">HOME</span>
                         </a>
                     @endguest
 
@@ -133,8 +133,11 @@
         letter-spacing: -0.5px;
     }
     @media (max-width: 576px) {
-        .logo-box img { height: 40px !important; }
-        .h4 { font-size: 1.1rem !important; }
+        .logo-box img { height: 35px !important; }
+        .logo-box { margin-right: 0.5rem !important; }
+        .h4 { font-size: 0.95rem !important; letter-spacing: -0.2px !important; }
+        .container-fluid { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+        .gap-3 { gap: 0.5rem !important; }
     }
 </style>
 
