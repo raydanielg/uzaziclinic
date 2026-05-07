@@ -92,7 +92,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     
     const formData = new FormData(form);
     
-    fetch('{{ route("contact.submit") }}', {
+    fetch('{{ url("/contact/submit") }}', {
         method: 'POST',
         body: formData,
         headers: {
