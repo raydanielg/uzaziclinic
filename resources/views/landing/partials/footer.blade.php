@@ -45,31 +45,31 @@
                         <h6 class="footer-col-title">Quick Links</h6>
                         <ul class="list-unstyled footer-nav-links">
                             <li><a href="#hero"><i class="fas fa-chevron-right me-2"></i>Home</a></li>
-                            <li><a href="{{ route('about') }}"><i class="fas fa-chevron-right me-2"></i>About Us</a></li>
-                            <li><a href="{{ route('services') }}"><i class="fas fa-chevron-right me-2"></i>Services</a></li>
-                            <li><a href="{{ route('blog.index') }}"><i class="fas fa-chevron-right me-2"></i>Blog</a></li>
-                            <li><a href="{{ route('appointments') }}"><i class="fas fa-chevron-right me-2"></i>Appointments</a></li>
-                            <li><a href="{{ route('contact') }}"><i class="fas fa-chevron-right me-2"></i>Contact Us</a></li>
+                            <li><a href="{{ url('/about-us') }}"><i class="fas fa-chevron-right me-2"></i>About Us</a></li>
+                            <li><a href="{{ url('/services') }}"><i class="fas fa-chevron-right me-2"></i>Services</a></li>
+                            <li><a href="{{ url('/blog') }}"><i class="fas fa-chevron-right me-2"></i>Blog</a></li>
+                            <li><a href="{{ url('/appointments') }}"><i class="fas fa-chevron-right me-2"></i>Appointments</a></li>
+                            <li><a href="{{ url('/contact-us') }}"><i class="fas fa-chevron-right me-2"></i>Contact Us</a></li>
                         </ul>
                     </div>
                     <div class="col-6 col-md-3">
                         <h6 class="footer-col-title">Resources</h6>
                         <ul class="list-unstyled footer-nav-links">
-                            <li><a href="{{ route('resources.guidelines') }}"><i class="fas fa-chevron-right me-2"></i>Guidelines</a></li>
-                            <li><a href="{{ route('resources.health-tips') }}"><i class="fas fa-chevron-right me-2"></i>Health Tips</a></li>
-                            <li><a href="{{ route('blog.index') }}"><i class="fas fa-chevron-right me-2"></i>News</a></li>
-                            <li><a href="{{ route('resources.research') }}"><i class="fas fa-chevron-right me-2"></i>Research</a></li>
-                            <li><a href="{{ route('resources.staff-portal') }}"><i class="fas fa-chevron-right me-2"></i>Staff Portal</a></li>
+                            <li><a href="{{ url('/resources/guidelines') }}"><i class="fas fa-chevron-right me-2"></i>Guidelines</a></li>
+                            <li><a href="{{ url('/resources/health-tips') }}"><i class="fas fa-chevron-right me-2"></i>Health Tips</a></li>
+                            <li><a href="{{ url('/blog') }}"><i class="fas fa-chevron-right me-2"></i>News</a></li>
+                            <li><a href="{{ url('/resources/research') }}"><i class="fas fa-chevron-right me-2"></i>Research</a></li>
+                            <li><a href="{{ url('/resources/staff-portal') }}"><i class="fas fa-chevron-right me-2"></i>Staff Portal</a></li>
                         </ul>
                     </div>
                     <div class="col-6 col-md-3">
                         <h6 class="footer-col-title">Support</h6>
                         <ul class="list-unstyled footer-nav-links">
-                            <li><a href="{{ route('support.help-center') }}"><i class="fas fa-chevron-right me-2"></i>Help Center</a></li>
-                            <li><a href="{{ route('support.faqs') }}"><i class="fas fa-chevron-right me-2"></i>FAQs</a></li>
+                            <li><a href="{{ url('/support/help-center') }}"><i class="fas fa-chevron-right me-2"></i>Help Center</a></li>
+                            <li><a href="{{ url('/support/faqs') }}"><i class="fas fa-chevron-right me-2"></i>FAQs</a></li>
                             <li><a href="{{ route('login') }}"><i class="fas fa-chevron-right me-2"></i>Login</a></li>
                             <li><a href="{{ route('register') }}"><i class="fas fa-chevron-right me-2"></i>Create Account</a></li>
-                            <li><a href="{{ route('support.contact-support') }}"><i class="fas fa-chevron-right me-2"></i>Contact Support</a></li>
+                            <li><a href="{{ url('/support/contact-support') }}"><i class="fas fa-chevron-right me-2"></i>Contact Support</a></li>
                         </ul>
                     </div>
                     <div class="col-6 col-md-3">
@@ -106,7 +106,7 @@
                 <div class="col-md-4 text-center text-md-end mt-3 mt-md-0">
                     <a href="#hero" class="small text-decoration-none footer-bottom-link">Home</a>
                     <span class="footer-bottom-sep">|</span>
-                    <a href="{{ route('resources.staff-portal') }}" class="small text-decoration-none footer-bottom-link">Staff Portal</a>
+                    <a href="{{ url('/resources/staff-portal') }}" class="small text-decoration-none footer-bottom-link">Staff Portal</a>
                 </div>
             </div>
         </div>
