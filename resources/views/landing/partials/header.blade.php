@@ -17,13 +17,13 @@
                     <span>+255 700 000 000</span>
                 </div>
                 <div class="d-flex align-items-center gap-3">
-                    <a href="{{ route('contact') }}" class="d-none d-sm-inline-block text-green-700 text-decoration-none small fw-bold hover-underline">Contact us</a>
+                    <a href="{{ url('/contact-us') }}" class="d-none d-sm-inline-block text-green-700 text-decoration-none small fw-bold hover-underline">Contact us</a>
                     @guest
                         <a href="{{ route('login') }}" class="btn btn-green px-4 py-2-custom rounded-pill fw-bold shadow-sm transition-all">
                             <i class="fas fa-calendar-alt me-2"></i>MAKE APPOINTMENT
                         </a>
                     @else
-                        <a href="{{ route('home') }}" class="btn btn-green px-4 py-2-custom rounded-pill fw-bold shadow-sm transition-all">
+                        <a href="{{ url('/home') }}" class="btn btn-green px-4 py-2-custom rounded-pill fw-bold shadow-sm transition-all">
                             <i class="fa-solid fa-house me-2"></i>DASHBOARD
                         </a>
                     @endguest
@@ -46,22 +46,22 @@
                         <a href="#hero" class="nav-link text-dark px-0 py-2 custom-nav-link active">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('about') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">About Us</a>
+                        <a href="{{ url('/about-us') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">About Us</a>
                     </li>
                     <li class="nav-item">
                         <a href="#branches" class="nav-link text-dark px-0 py-2 custom-nav-link">Branches</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('appointments') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Appointments</a>
+                        <a href="{{ url('/appointments') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Appointments</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('services') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Services</a>
+                        <a href="{{ url('/services') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('blog.index') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Blog</a>
+                        <a href="{{ url('/blog') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Blog</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('shop.index') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Shop</a>
+                        <a href="{{ url('/shop') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Shop</a>
                     </li>
                     @auth
                     <li class="nav-item">
@@ -72,7 +72,7 @@
                     </li>
                     @endauth
                     <li class="nav-item">
-                        <a href="{{ route('contact') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Contact Us</a>
+                        <a href="{{ url('/contact-us') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">Contact Us</a>
                     </li>
                 </ul>
             </div>
@@ -163,7 +163,7 @@
                     </div>
                     <!-- 2 About Us -->
                     <div class="col-12">
-                        <a href="{{ route('about') }}" class="menu-item-link">
+                        <a href="{{ url('/about-us') }}" class="menu-item-link">
                             <div class="menu-icon-box"><i class="fas fa-info-circle"></i></div>
                             <div class="menu-text">
                                 <div class="menu-title">About Us</div>
@@ -183,7 +183,7 @@
                     </div>
                     <!-- 4 Appointments -->
                     <div class="col-12">
-                        <a href="{{ route('appointments') }}" class="menu-item-link">
+                        <a href="{{ url('/appointments') }}" class="menu-item-link">
                             <div class="menu-icon-box"><i class="fas fa-calendar-check"></i></div>
                             <div class="menu-text">
                                 <div class="menu-title">Appointments</div>
@@ -193,7 +193,7 @@
                     </div>
                     <!-- 5 Services -->
                     <div class="col-12">
-                        <a href="{{ route('services') }}" class="menu-item-link">
+                        <a href="{{ url('/services') }}" class="menu-item-link">
                             <div class="menu-icon-box"><i class="fas fa-hand-holding-medical"></i></div>
                             <div class="menu-text">
                                 <div class="menu-title">Services</div>
@@ -203,7 +203,7 @@
                     </div>
                     <!-- 6 Shop -->
                     <div class="col-12">
-                        <a href="{{ route('shop.index') }}" class="menu-item-link">
+                        <a href="{{ url('/shop') }}" class="menu-item-link">
                             <div class="menu-icon-box"><i class="fas fa-shopping-basket"></i></div>
                             <div class="menu-text">
                                 <div class="menu-title">Shop</div>
@@ -213,7 +213,7 @@
                     </div>
                     <!-- 9 Contact Us -->
                     <div class="col-12">
-                        <a href="{{ route('contact') }}" class="menu-item-link">
+                        <a href="{{ url('/contact-us') }}" class="menu-item-link">
                             <div class="menu-icon-box"><i class="fas fa-envelope-open-text"></i></div>
                             <div class="menu-text">
                                 <div class="menu-title">Contact Us</div>
