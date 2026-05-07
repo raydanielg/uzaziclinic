@@ -50,6 +50,8 @@ Route::prefix('shop')->name('shop.')->group(function () {
     Route::post('/place-order', [App\Http\Controllers\ShopController::class, 'placeOrder'])->name('place-order');
 });
 
+Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'index']);
+
 Auth::routes();
 
 Route::get('/home', function() {
