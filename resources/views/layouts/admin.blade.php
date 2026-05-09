@@ -150,29 +150,30 @@
             font-weight: 400;
         }
 
-        /* Main Content */
+        /* Main Content Styles */
         #main-content {
+            flex-grow: 1;
             margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
             min-height: 100vh;
             transition: all 0.3s;
         }
 
-        /* Topbar */
         .topbar {
-            height: 70px;
-            background: #fff;
-            border-bottom: 1px solid #e2e8f0;
+            height: var(--topbar-height);
+            background: #ffffff;
+            padding: 0 30px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 2rem;
+            border-bottom: 1px solid #eef2f7;
             position: sticky;
             top: 0;
             z-index: 999;
         }
 
         .content-body {
-            padding: 2rem;
+            padding: 30px;
         }
 
         /* Logout button */
