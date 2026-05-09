@@ -49,9 +49,13 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="badge bg-light text-primary border px-2 py-1 fw-normal">
-                                            {{ ucfirst($user->role->name ?? 'User') }}
-                                        </span>
+                                        <select class="form-select form-select-sm role-select" data-user-id="{{ $user->id }}" style="max-width: 180px;">
+                                            @foreach(($roles ?? []) as $role)
+                                                <option value="{{ $role->id }}" {{ (int)$user->role_id === (int)$role->id ? 'selected' : '' }}>
+                                                    {{ ucfirst($role->name) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </td>
                                     <td class="text-muted small">
                                         {{ $user->phone ?? '---' }}
@@ -216,6 +220,47 @@
                 }
             })
         }
+
+        // Inline Role Change (AJAX)
+        $('.role-select').on('change', function() {
+            const userId = $(this).data('user-id');
+            const roleId = $(this).val();
+            const $select = $(this);
+
+            $.ajax({
+                url: `{{ url('admin/users') }}/${userId}/role`,
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    _method: 'PUT',
+                    role_id: roleId
+                },
+                success: function(resp) {
+                    if (resp && resp.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Updated',
+                            text: resp.message,
+                            timer: 1200,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to update role.' });
+                    }
+                },
+                error: function(xhr) {
+                    let msg = 'Failed to update role.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        msg = xhr.responseJSON.message;
+                    }
+                    Swal.fire({ icon: 'error', title: 'Error', text: msg });
+                    // revert selection
+                    $select.val($select.data('current'));
+                }
+            });
+        }).each(function() {
+            $(this).data('current', $(this).val());
+        });
     });
 
     @if(session('success'))
