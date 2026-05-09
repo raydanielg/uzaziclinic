@@ -38,12 +38,15 @@
                                 <tr>
                                     <td class="ps-2">
                                         <div class="d-flex align-items-center">
-                                            <div class="avatar bg-primary-subtle text-primary rounded-1 d-flex align-items-center justify-content-center fw-bold me-3" style="width: 40px; height: 40px;">
+                                            <div class="avatar bg-primary-subtle text-primary rounded-1 d-flex align-items-center justify-content-center fw-bold me-3" style="width: 45px; height: 45px;">
                                                 {{ substr($appointment->patient->name ?? 'P', 0, 1) }}
                                             </div>
                                             <div>
-                                                <div class="fw-bold text-dark">{{ $appointment->patient->name ?? 'Unknown' }}</div>
-                                                <div class="text-muted small">{{ $appointment->patient->phone ?? '---' }}</div>
+                                                <div class="fw-bold text-dark fs-6">{{ $appointment->patient->name ?? 'Unknown Patient' }}</div>
+                                                <div class="text-muted small">
+                                                    <span class="text-primary fw-medium">{{ $appointment->patient->patient_number }}</span> 
+                                                    | {{ $appointment->patient->phone ?? '---' }}
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
