@@ -102,18 +102,25 @@
                 <h5 class="modal-title fw-bold">Add New User</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('admin.users.create') }}" method="POST">
+            <form action="{{ route('admin.users.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">Full Name</label>
-                        <input type="text" name="name" class="form-control shadow-none" required placeholder="Enter full name">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label small fw-bold">Full Name</label>
+                            <input type="text" name="name" class="form-control shadow-none" required placeholder="Enter full name">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label small fw-bold">Email Address</label>
+                            <input type="email" name="email" class="form-control shadow-none" required placeholder="email@example.com">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">Email Address</label>
-                        <input type="email" name="email" class="form-control shadow-none" required placeholder="email@example.com">
-                    </div>
+                    
                     <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Phone Number</label>
+                            <input type="text" name="phone" class="form-control shadow-none" placeholder="e.g. +255...">
+                        </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-bold">Role</label>
                             <select name="role_id" class="form-select shadow-none" required>
@@ -123,12 +130,16 @@
                                 @endforeach
                             </select>
                         </div>
+                    </div>
+
+                    <div class="row mb-3">
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold">Status</label>
-                            <select name="status" class="form-select shadow-none" required>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
+                            <label class="form-label small fw-bold">Password</label>
+                            <input type="password" name="password" class="form-control shadow-none" required placeholder="Min. 8 characters">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Confirm Password</label>
+                            <input type="password" name="password_confirmation" class="form-control shadow-none" required placeholder="Repeat password">
                         </div>
                     </div>
                 </div>
@@ -155,25 +166,9 @@
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                // Hapa utaweka AJAX au form submission kwa ajili ya kufuta
-                Swal.fire(
-                    'Deleted!',
-                    'User has been deleted successfully.',
-                    'success'
-                )
+                document.getElementById('delete-form-' + id).submit();
             }
         })
-    }
-
-    function editUser(id) {
-        // Hapa utafetch data ya user na kuifungua kwenye modal
-        Swal.fire({
-            title: 'Edit User',
-            text: 'Fetching user details...',
-            icon: 'info',
-            timer: 1000,
-            showConfirmButton: false
-        });
     }
 
     @if(session('success'))
