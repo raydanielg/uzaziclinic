@@ -22,10 +22,56 @@
             @if($roleName == 'admin')
                 <li class="nav-item mb-2">
                     <a class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
-                        <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+                        <i class="fa-solid fa-shield-halved me-2"></i> System Control Panel
                     </a>
                 </li>
+                
+                {{-- Global Overview Section --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">System Management</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/users*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
+                        <i class="fa-solid fa-users-gear me-2 text-primary"></i> User Management
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/roles*') ? 'active' : '' }}" href="{{ route('admin.users.roles') }}">
+                        <i class="fa-solid fa-user-shield me-2 text-info"></i> Roles & Permissions
+                    </a>
+                </li>
+
+                {{-- Clinic Operations --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Clinic Operations</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/doctors*') ? 'active' : '' }}" href="{{ route('admin.doctors.index') }}">
+                        <i class="fa-solid fa-user-doctor me-2 text-success"></i> Doctor Management
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/patients*') ? 'active' : '' }}" href="{{ route('admin.patients.index') }}">
+                        <i class="fa-solid fa-hospital-user me-2 text-danger"></i> Patient Registry
+                    </a>
+                </li>
+
+                {{-- Advanced Admin Tools --}}
                 @include('partials.menus.admin')
+
+                {{-- Platform Maintenance --}}
+                <li class="nav-item-header mt-4 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Platform Maintenance</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/analytics*') ? 'active' : '' }}" href="{{ route('admin.analytics') }}">
+                        <i class="fa-solid fa-chart-pie me-2 text-warning"></i> System Analytics
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/settings*') ? 'active' : '' }}" href="{{ route('admin.settings.general') }}">
+                        <i class="fa-solid fa-gears me-2 text-secondary"></i> Global Settings
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/logs*') ? 'active' : '' }}" href="{{ route('admin.users.logs') }}">
+                        <i class="fa-solid fa-terminal me-2 text-dark"></i> System Logs
+                    </a>
+                </li>
             @endif
 
             {{-- 2. DOCTOR MENU --}}
