@@ -7,13 +7,19 @@
 @endphp
 
 <div class="sidebar shadow-sm" id="sidebar">
-    <div class="sidebar-header p-3 border-bottom text-center position-relative">
-        <button class="btn btn-sm btn-light position-absolute end-0 top-50 translate-middle-y d-lg-none me-2" id="sidebarClose">
+    <div class="sidebar-header p-4 border-bottom text-center position-relative bg-dark text-white">
+        <button class="btn btn-sm btn-outline-light position-absolute end-0 top-50 translate-middle-y d-lg-none me-2" id="sidebarClose">
             <i class="fa-solid fa-xmark"></i>
         </button>
-        <img src="{{ asset('logo.png') }}" alt="Logo" class="img-fluid mb-2" style="max-height: 50px;">
-        <br>
-        <small class="text-muted text-uppercase fw-bold">{{ $roleName }} Panel</small>
+        <div class="mb-2">
+            @if($roleName == 'admin')
+                <i class="fa-solid fa-user-shield fa-2xl text-warning"></i>
+            @else
+                <img src="{{ asset('logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 45px;">
+            @endif
+        </div>
+        <h6 class="mb-0 fw-bold tracking-wider text-uppercase">{{ $roleName == 'admin' ? 'Super Admin' : $roleName }}</h6>
+        <small class="text-uppercase opacity-50 small" style="font-size: 0.6rem;">{{ $roleName == 'admin' ? 'System Controller' : 'Panel' }}</small>
     </div>
     
     <div class="sidebar-menu p-3" style="height: calc(100vh - 110px); overflow-y: auto;">
