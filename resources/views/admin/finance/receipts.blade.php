@@ -34,7 +34,7 @@
                         @forelse($invoices as $invoice)
                         <tr>
                             <td class="ps-4 fw-bold">#INV-{{ str_pad($invoice->id, 5, '0', STR_PAD_LEFT) }}</td>
-                            <td>{{ $invoice->user->name ?? 'N/A' }}</td>
+                            <td>{{ $invoice->user->name ?? ($invoice->order->user->name ?? 'N/A') }}</td>
                             <td>{{ $invoice->created_at->format('d M, Y') }}</td>
                             <td class="fw-bold">{{ number_format($invoice->amount, 0) }}/=</td>
                             <td>
