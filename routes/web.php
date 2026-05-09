@@ -119,8 +119,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Appointment Management
     Route::prefix('appointments')->name('appointments.')->group(function () {
         Route::get('/', [App\Http\Controllers\Admin\AppointmentController::class, 'index'])->name('index');
-        Route::get('/today', [App\Http\Controllers\Admin\AppointmentController::class, 'today'])->name('today');
+        Route::get('/book', [App\Http\Controllers\Admin\AppointmentController::class, 'create'])->name('create');
+        Route::post('/book', [App\Http\Controllers\Admin\AppointmentController::class, 'store'])->name('store');
         Route::get('/upcoming', [App\Http\Controllers\Admin\AppointmentController::class, 'upcoming'])->name('upcoming');
+        Route::get('/history', [App\Http\Controllers\Admin\AppointmentController::class, 'history'])->name('history');
+        Route::get('/today', [App\Http\Controllers\Admin\AppointmentController::class, 'today'])->name('today');
         Route::get('/cancelled', [App\Http\Controllers\Admin\AppointmentController::class, 'cancelled'])->name('cancelled');
     });
 
@@ -142,22 +145,38 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/reports', [App\Http\Controllers\Admin\LabController::class, 'reports'])->name('reports');
     });
 
-    // E-commerce Store
-    Route::prefix('store')->name('store.')->group(function () {
-        Route::get('/products', [App\Http\Controllers\Admin\EcommerceController::class, 'index'])->name('index');
-        Route::get('/create', [App\Http\Controllers\Admin\EcommerceController::class, 'create'])->name('create');
-        Route::get('/categories', [App\Http\Controllers\Admin\EcommerceController::class, 'categories'])->name('categories');
-        Route::get('/orders', [App\Http\Controllers\Admin\EcommerceController::class, 'orders'])->name('orders');
-        Route::get('/reviews', [App\Http\Controllers\Admin\EcommerceController::class, 'reviews'])->name('reviews');
+    // Medical Services
+    Route::prefix('medical')->name('medical.')->group(function () {
+        Route::get('/prescriptions', [App\Http\Controllers\Admin\MedicalServiceController::class, 'prescriptions'])->name('prescriptions');
+        Route::get('/records', [App\Http\Controllers\Admin\MedicalServiceController::class, 'records'])->name('records');
+        Route::get('/lab-results', [App\Http\Controllers\Admin\MedicalServiceController::class, 'labResults'])->name('lab-results');
     });
 
-    // Billing & Finance
+    // E-commerce / Store
+    Route::prefix('store')->name('products.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\EcommerceController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Admin\EcommerceController::class, 'create'])->name('create');
+        Route::post('/store', [App\Http\Controllers\Admin\EcommerceController::class, 'store'])->name('store');
+        Route::get('/orders', [App\Http\Controllers\Admin\EcommerceController::class, 'orders'])->name('orders');
+    });
+
+    // Payments & Billing
     Route::prefix('finance')->name('finance.')->group(function () {
         Route::get('/invoices', [App\Http\Controllers\Admin\FinanceController::class, 'invoices'])->name('invoices');
-        Route::get('/receipt', [App\Http\Controllers\Admin\FinanceController::class, 'receipt'])->name('receipt');
+        Route::get('/receipts', [App\Http\Controllers\Admin\FinanceController::class, 'receipts'])->name('receipts');
         Route::get('/payments', [App\Http\Controllers\Admin\FinanceController::class, 'payments'])->name('payments');
-        Route::get('/insurance', [App\Http\Controllers\Admin\FinanceController::class, 'insurance'])->name('insurance');
-        Route::get('/tax', [App\Http\Controllers\Admin\FinanceController::class, 'tax'])->name('tax');
+        Route::get('/history', [App\Http\Controllers\Admin\FinanceController::class, 'history'])->name('history');
+    });
+
+    // Communication
+    Route::prefix('communication')->name('communication.')->group(function () {
+        Route::get('/chat', [App\Http\Controllers\Admin\ChatController::class, 'index'])->name('chat');
+    });
+
+    // Insurance
+    Route::prefix('insurance')->name('insurance.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\InsuranceController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Admin\InsuranceController::class, 'create'])->name('create');
     });
 
     // Reports

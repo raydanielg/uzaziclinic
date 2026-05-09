@@ -14,8 +14,12 @@ class DashboardController extends Controller
     public function index()
     {
         $stats = [
-            'total_patients' => User::whereHas('role', function($q) { $q->where('name', 'customer'); })->count(),
-            'total_doctors' => User::whereHas('role', function($q) { $q->where('name', 'doctor'); })->count(),
+            'total_patients' => User::where('role', 'customer')
+                ->orWhereHas('role', function($q) { $q->where('name', 'customer'); })
+                ->count(),
+            'total_doctors' => User::where('role', 'doctor')
+                ->orWhereHas('role', function($q) { $q->where('name', 'doctor'); })
+                ->count(),
             'today_appointments' => Appointment::whereDate('appointment_date', today())->count(),
             'pending_orders' => Order::where('status', 'pending')->count(),
         ];
