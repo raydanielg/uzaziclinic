@@ -19,31 +19,39 @@
                         <tr>
                             <th>Doctor</th>
                             <th>Specialization</th>
-                            <th>Schedule</th>
-                            <th>Patients</th>
+                            <th>License</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar-sm bg-info-subtle text-info rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">DR</div>
-                                    <span class="fw-bold">Dr. Robert Smith</span>
-                                </div>
-                            </td>
-                            <td>Cardiologist</td>
-                            <td>Mon, Wed, Fri</td>
-                            <td>45</td>
-                            <td><span class="badge bg-success-subtle text-success">On Duty</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-light rounded-circle"><i class="fa-solid fa-calendar"></i></button>
-                                <button class="btn btn-sm btn-light rounded-circle"><i class="fa-solid fa-pen"></i></button>
-                            </td>
-                        </tr>
+                        @forelse($doctors as $doctor)
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-sm bg-info-subtle text-info rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">DR</div>
+                                        <span class="fw-bold">{{ $doctor->user->name ?? 'N/A' }}</span>
+                                    </div>
+                                    <div class="text-muted small">{{ $doctor->user->email ?? '' }}</div>
+                                </td>
+                                <td>{{ $doctor->specialization ?? 'N/A' }}</td>
+                                <td class="text-muted">{{ $doctor->license_number ?? 'N/A' }}</td>
+                                <td><span class="badge bg-success-subtle text-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-light rounded-circle"><i class="fa-solid fa-pen"></i></button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">No doctors found.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
+            </div>
+
+            <div class="mt-3">
+                {{ $doctors->links() }}
             </div>
         </div>
     </div>
