@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
@@ -55,7 +56,7 @@ class UserController extends Controller
 
     public function logs()
     {
-        $users = User::with('role')->latest()->paginate(10);
-        return view('admin.users.index', compact('users'));
+        $logs = AuditLog::with('user')->latest()->paginate(20);
+        return view('admin.users.logs', compact('logs'));
     }
 }
