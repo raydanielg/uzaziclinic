@@ -142,7 +142,9 @@
                                     <select name="doctor_id" class="form-select shadow-none" required>
                                         <option value="">Select Doctor...</option>
                                         @foreach($doctors as $d)
-                                            <option value="{{ $d->id }}">Dr. {{ $d->user->name }} - {{ $d->specialization }}</option>
+                                            <option value="{{ $d->id }}">
+                                                Dr. {{ $d->name ?? ($d->user->name ?? 'Unknown') }} - {{ $d->specialization ?? 'General' }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
