@@ -51,7 +51,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="fw-medium text-dark">Dr. {{ $appointment->doctor->name ?? ($appointment->doctor->user->name ?? 'N/A') }}</div>
+                                        <div class="fw-medium text-dark">Dr. {{ $appointment->doctor->display_name ?? 'N/A' }}</div>
                                         <div class="text-muted small">{{ $appointment->doctor->specialization ?? 'General' }}</div>
                                     </td>
                                     <td>

@@ -57,7 +57,7 @@
                                             <option value="">Select Doctor...</option>
                                             @foreach($doctors as $d)
                                                 <option value="{{ $d->id }}">
-                                                    Dr. {{ $d->name ?? ($d->user->name ?? 'N/A') }} - {{ $d->specialization ?? 'General' }}
+                                                    Dr. {{ $d->display_name }} - {{ $d->specialization ?? 'General' }}
                                                 </option>
                                             @endforeach
                                         </select>
