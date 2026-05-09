@@ -183,11 +183,12 @@
     @endif
 </script>
 
-@style
+<style>
     .table thead th {
-        font-size: 0.7rem;
+        font-size: 0.7rem !important;
         letter-spacing: 0.5px;
-        background: #fcfdfe;
+        background: #fcfdfe !important;
+        text-transform: uppercase;
     }
     .btn-group .btn {
         padding: 0.25rem 0.6rem;
@@ -204,5 +205,5 @@
         font-weight: 500;
         font-size: 0.9rem;
     }
-@endstyle
+</style>
 @endsection
