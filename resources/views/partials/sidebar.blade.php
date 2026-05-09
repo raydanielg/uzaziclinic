@@ -48,6 +48,11 @@
                 {{-- Clinic Operations --}}
                 <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Clinic Operations</li>
                 <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/appointments*') ? 'active' : '' }}" href="{{ route('admin.appointments.index') }}">
+                        <i class="fa-solid fa-calendar-check me-2 text-primary"></i> Appointment Center
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/doctors*') ? 'active' : '' }}" href="{{ route('admin.doctors.index') }}">
                         <i class="fa-solid fa-user-doctor me-2 text-success"></i> Doctor Management
                     </a>
@@ -59,8 +64,23 @@
                 </li>
 
                 {{-- Advanced Admin Tools --}}
-                @include('partials.menus.admin')
-
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Store & Services</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/store*') ? 'active' : '' }}" href="{{ route('admin.products.index') }}">
+                        <i class="fa-solid fa-box-open me-2 text-warning"></i> Inventory & Store
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/medical*') ? 'active' : '' }}" href="{{ route('admin.medical.records') }}">
+                        <i class="fa-solid fa-notes-medical me-2 text-info"></i> Medical Services
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/finance*') ? 'active' : '' }}" href="{{ route('admin.finance.invoices') }}">
+                        <i class="fa-solid fa-money-bill-transfer me-2 text-success"></i> Revenue & Billing
+                    </a>
+                </li>
+                
                 {{-- Platform Maintenance --}}
                 <li class="nav-item-header mt-4 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Platform Maintenance</li>
                 <li class="nav-item mb-1">
