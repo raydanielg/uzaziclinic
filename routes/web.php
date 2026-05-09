@@ -127,6 +127,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/', [App\Http\Controllers\Admin\AppointmentController::class, 'index'])->name('index');
         Route::get('/book', [App\Http\Controllers\Admin\AppointmentController::class, 'create'])->name('create');
         Route::post('/book', [App\Http\Controllers\Admin\AppointmentController::class, 'store'])->name('store');
+        Route::post('/quick-patient', [App\Http\Controllers\Admin\AppointmentController::class, 'quickPatient'])->name('quick-patient');
         Route::get('/upcoming', [App\Http\Controllers\Admin\AppointmentController::class, 'upcoming'])->name('upcoming');
         Route::get('/history', [App\Http\Controllers\Admin\AppointmentController::class, 'history'])->name('history');
         Route::get('/today', [App\Http\Controllers\Admin\AppointmentController::class, 'today'])->name('today');
