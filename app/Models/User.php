@@ -50,4 +50,67 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+
+    /**
+     * Check if user has a specific role
+     */
+    public function hasRole($role)
+    {
+        if (!$this->role) {
+            return false;
+        }
+        return $this->role->name === $role;
+    }
+
+    /**
+     * Check if user has a specific permission
+     */
+    public function hasPermission($permission)
+    {
+        if (!$this->role) {
+            return false;
+        }
+
+        $permissions = json_decode($this->role->permissions, true);
+        
+        if (!$permissions) {
+            return false;
+        }
+
+        // Admin has all permissions
+        if (isset($permissions['all_access']) || isset($permissions['all'])) {
+            return true;
+        }
+
+        return isset($permissions[$permission]) && $permissions[$permission] === true;
+    }
+
+    /**
+     * Check if user has any of the given permissions
+     */
+    public function hasAnyPermission(array $permissions)
+    {
+        foreach ($permissions as $permission) {
+            if ($this->hasPermission($permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if user is admin
+     */
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
+
+    /**
+     * Check if user is active
+     */
+    public function isActive()
+    {
+        return $this->status === 'active';
+    }
 }
