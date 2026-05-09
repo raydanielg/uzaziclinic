@@ -24,7 +24,7 @@
     
     <div class="sidebar-menu p-3" style="height: calc(100vh - 110px); overflow-y: auto;">
         <ul class="nav flex-column">
-            {{-- 1. ADMIN MENU --}}
+            {{-- 1. SUPER ADMIN / MANAGEMENT MENU --}}
             @if($roleName == 'admin')
                 <li class="nav-item mb-2">
                     <a class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
@@ -96,6 +96,111 @@
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/logs*') ? 'active' : '' }}" href="{{ route('admin.users.logs') }}">
                         <i class="fa-solid fa-shield-virus me-2 text-dark"></i> Security Audit Logs
+                    </a>
+                </li>
+            @endif
+
+            {{-- 2. PATIENT / CUSTOMER MENU --}}
+            @if($roleName == 'customer')
+                <li class="nav-item mb-2">
+                    <a class="nav-link {{ Request::is('patient/dashboard') ? 'active' : '' }}" href="{{ route('patient.dashboard') }}">
+                        <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+                    </a>
+                </li>
+
+                {{-- Appointments Section --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Appointments</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('patient/appointments/book') ? 'active' : '' }}" href="#">
+                        <i class="fa-solid fa-calendar-plus me-2 text-primary"></i> Book Appointment
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('patient/appointments') && !Request::is('patient/appointments/*') ? 'active' : '' }}" href="#">
+                        <i class="fa-solid fa-calendar-check me-2 text-success"></i> My Appointments
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('patient/appointments/upcoming') ? 'active' : '' }}" href="#">
+                        <i class="fa-solid fa-calendar-day me-2 text-info"></i> Upcoming Appointments
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('patient/appointments/history') ? 'active' : '' }}" href="#">
+                        <i class="fa-solid fa-clock-rotate-left me-2 text-secondary"></i> Appointment History
+                    </a>
+                </li>
+
+                {{-- Shop Section --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Shop / Store</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('shop*') ? 'active' : '' }}" href="#">
+                        <i class="fa-solid fa-shop me-2 text-warning"></i> All Products
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('cart*') ? 'active' : '' }}" href="#">
+                        <i class="fa-solid fa-cart-shopping me-2 text-primary"></i> My Cart
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('patient/orders*') ? 'active' : '' }}" href="#">
+                        <i class="fa-solid fa-bag-shopping me-2 text-danger"></i> My Orders
+                    </a>
+                </li>
+
+                {{-- Medical Services Section --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Medical Services</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('patient/prescriptions*') ? 'active' : '' }}" href="#">
+                        <i class="fa-solid fa-file-prescription me-2 text-success"></i> My Prescriptions
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('patient/medical-records*') ? 'active' : '' }}" href="#">
+                        <i class="fa-solid fa-folder-tree me-2 text-primary"></i> Medical Records
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('patient/lab-results*') ? 'active' : '' }}" href="#">
+                        <i class="fa-solid fa-flask-vial me-2 text-warning"></i> Lab Results
+                    </a>
+                </li>
+
+                {{-- Payments Section --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Payments & Billing</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('patient/invoices*') ? 'active' : '' }}" href="#">
+                        <i class="fa-solid fa-file-invoice-dollar me-2 text-danger"></i> Receipts & Invoices
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('patient/payments*') ? 'active' : '' }}" href="#">
+                        <i class="fa-solid fa-credit-card me-2 text-success"></i> Payment History
+                    </a>
+                </li>
+
+                {{-- Communication --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Communication</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('patient/chat*') ? 'active' : '' }}" href="#">
+                        <i class="fa-solid fa-comments me-2 text-primary"></i> Chat with Doctor
+                    </a>
+                </li>
+
+                {{-- Insurance Section --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Insurance</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('patient/insurance*') ? 'active' : '' }}" href="#">
+                        <i class="fa-solid fa-shield-heart me-2 text-danger"></i> My Insurance Info
+                    </a>
+                </li>
+
+                {{-- Settings --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Settings</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('patient/profile*') ? 'active' : '' }}" href="#">
+                        <i class="fa-solid fa-user-gear me-2 text-secondary"></i> My Profile
                     </a>
                 </li>
             @endif
