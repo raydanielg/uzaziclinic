@@ -13,27 +13,26 @@ class AppointmentController extends Controller
 {
     public function index()
     {
-        $appointments = Appointment::with(['patient', 'doctor'])->latest()->paginate(10);
-        return view('admin.appointments.index', compact('appointments'));
-    }
-
-    public function create()
-    {
-        $patients = Patient::all();
-        $doctors = Doctor::all();
-        return view('admin.appointments.create', compact('patients', 'doctors'));
+        $appointments = Appointment::with(['patient', 'doctor.user'])->latest()->get();
+        $patients = Patient::orderBy('name')->get();
+        $doctors = Doctor::with('user')->get();
+        return view('admin.appointments.index', compact('appointments', 'patients', 'doctors'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = \Validator::make($request->all(), [
             'patient_id' => 'required|exists:patients,id',
             'doctor_id' => 'required|exists:doctors,id',
             'appointment_date' => 'required|date|after:now',
             'symptoms' => 'nullable|string',
         ]);
 
-        Appointment::create([
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+        }
+
+        $appointment = Appointment::create([
             'patient_id' => $request->patient_id,
             'doctor_id' => $request->doctor_id,
             'appointment_date' => $request->appointment_date,
@@ -41,7 +40,51 @@ class AppointmentController extends Controller
             'symptoms' => $request->symptoms,
         ]);
 
-        return redirect()->route('admin.appointments.index')->with('success', 'Miadi imewekwa kikamilifu!');
+        return response()->json([
+            'success' => true, 
+            'message' => 'Appointment scheduled successfully!',
+            'data' => $appointment->load(['patient', 'doctor.user'])
+        ]);
+    }
+
+    public function quickPatient(Request $request)
+    {
+        $validator = \Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20|unique:patients,phone',
+            'email' => 'nullable|email|unique:users,email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+        }
+
+        // Create user if email provided
+        $userId = null;
+        if ($request->email) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => \Hash::make('password'),
+                'role_id' => \App\Models\Role::where('name', 'customer')->first()->id ?? null,
+                'status' => 'active'
+            ]);
+            $userId = $user->id;
+        }
+
+        $patient = Patient::create([
+            'user_id' => $userId,
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'gender' => $request->gender ?? 'unknown',
+            'status' => 'active'
+        ]);
+
+        return response()->json([
+            'success' => true, 
+            'message' => 'Patient registered successfully!',
+            'data' => $patient
+        ]);
     }
 
     public function upcoming()
