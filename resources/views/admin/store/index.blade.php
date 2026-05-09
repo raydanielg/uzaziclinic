@@ -13,23 +13,16 @@
                 </a>
             </div>
             
-            <div class="row g-4">
-                <div class="col-md-3">
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
-                            <i class="fa-solid fa-baby fa-4x text-muted opacity-25"></i>
-                        </div>
-                        <div class="card-body p-3">
-                            <h6 class="fw-bold mb-1">Baby Care Set</h6>
-                            <p class="text-muted small mb-2">Maternity Products</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="fw-bold text-primary">TSh 85,000</span>
-                                <span class="badge bg-success-subtle text-success">12 in Stock</span>
-                            </div>
-                        </div>
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon-box bg-primary-soft text-primary me-3">
+                        <i class="fas fa-boxes"></i>
                     </div>
-                </div>
-                <div class="col-md-3">
+                    <div>
+                        <h6 class="text-muted mb-0 small text-uppercase">Total Products</h6>
+                        <h4 class="mb-0 fw-bold">{{ $stats['total_products'] }}</h4>
                     </div>
                 </div>
             </div>
@@ -42,7 +35,7 @@
                     </div>
                     <div>
                         <h6 class="text-muted mb-0 small text-uppercase">Active Orders</h6>
-                        <h4 class="mb-0 fw-bold">12</h4>
+                        <h4 class="mb-0 fw-bold">{{ $stats['active_orders'] }}</h4>
                     </div>
                 </div>
             </div>
@@ -55,11 +48,12 @@
                     </div>
                     <div>
                         <h6 class="text-muted mb-0 small text-uppercase">Low Stock Items</h6>
-                        <h4 class="mb-0 fw-bold">5</h4>
+                        <h4 class="mb-0 fw-bold">{{ $stats['low_stock'] }}</h4>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <div class="card border-0 shadow-sm">

@@ -12,7 +12,12 @@ class EcommerceController extends Controller
     public function index()
     {
         $products = Product::latest()->paginate(10);
-        return view('admin.store.index', compact('products'));
+        $stats = [
+            'total_products' => Product::count(),
+            'active_orders' => Order::where('status', 'pending')->count(),
+            'low_stock' => Product::where('stock_quantity', '<', 10)->count(),
+        ];
+        return view('admin.store.index', compact('products', 'stats'));
     }
 
     public function create()
