@@ -391,10 +391,10 @@
                     </a>
                     <ul class="sidebar-dropdown">
                         <li><a href="{{ route('admin.finance.invoices') }}" class="nav-link">All Invoices</a></li>
-                        <li><a href="{{ route('admin.finance.receipt') }}" class="nav-link">Generate Receipt</a></li>
+                        <li><a href="{{ route('admin.finance.receipts') }}" class="nav-link">Receipts</a></li>
                         <li><a href="{{ route('admin.finance.payments') }}" class="nav-link">Payment History</a></li>
-                        <li><a href="{{ route('admin.finance.insurance') }}" class="nav-link">Insurance Claims</a></li>
-                        <li><a href="{{ route('admin.finance.tax') }}" class="nav-link">Tax Settings</a></li>
+                        <li><a href="{{ route('admin.insurance.index') }}" class="nav-link">Insurance Claims</a></li>
+                        <li><a href="{{ route('admin.settings.gateways') }}" class="nav-link">Tax Settings</a></li>
                     </ul>
                 </div>
 

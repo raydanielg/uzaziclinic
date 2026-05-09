@@ -46,12 +46,25 @@ class EcommerceController extends Controller
 
         Product::create($data);
 
-        return redirect()->route('admin.products.index')->with('success', 'Bidhaa imeongezwa kikamilifu!');
+        return redirect()->route('admin.store.index')->with('success', 'Product added successfully!');
     }
 
     public function orders()
     {
         $orders = Order::with('user')->latest()->paginate(10);
         return view('admin.store.orders', compact('orders'));
+    }
+
+    public function categories()
+    {
+        $categories = Product::select('category', \DB::raw('count(*) as total'))
+            ->groupBy('category')
+            ->get();
+        return view('admin.store.categories', compact('categories'));
+    }
+
+    public function reviews()
+    {
+        return view('admin.store.reviews');
     }
 }
