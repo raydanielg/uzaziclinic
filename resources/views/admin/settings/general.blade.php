@@ -12,31 +12,31 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label text-muted">Clinic Name</label>
-                        <input type="text" class="form-control rounded-3" value="Malkia Uzazi Clinic">
+                        <input type="text" class="form-control rounded-3" value="{{ $settings['clinic_name'] ?? 'Malkia Uzazi Clinic' }}">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label text-muted">Contact Email</label>
-                        <input type="email" class="form-control rounded-3" value="info@malkia.com">
+                        <input type="email" class="form-control rounded-3" value="{{ $settings['contact_email'] ?? 'info@malkia.com' }}">
                     </div>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label text-muted">Address</label>
-                    <textarea class="form-control rounded-3" rows="2">123 Health St, Dar es Salaam, Tanzania</textarea>
+                    <textarea class="form-control rounded-3" rows="2">{{ $settings['clinic_address'] ?? '123 Health St, Dar es Salaam, Tanzania' }}</textarea>
                 </div>
 
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <label class="form-label text-muted">Currency</label>
                         <select class="form-select rounded-3">
-                            <option selected>Tanzanian Shilling (TSh)</option>
+                            <option selected>{{ $settings['currency'] ?? 'Tanzanian Shilling (TSh)' }}</option>
                             <option>US Dollar ($)</option>
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label text-muted">Timezone</label>
                         <select class="form-select rounded-3">
-                            <option selected>East Africa Time (GMT+3)</option>
+                            <option selected>{{ $settings['timezone'] ?? 'East Africa Time (GMT+3)' }}</option>
                         </select>
                     </div>
                 </div>
