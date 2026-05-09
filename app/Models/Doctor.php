@@ -19,6 +19,29 @@ class Doctor extends Model
         'bio',
     ];
 
+    public function getDisplayNameAttribute(): string
+    {
+        if (!empty($this->name)) {
+            return $this->name;
+        }
+
+        if ($this->relationLoaded('user')) {
+            if (!empty($this->user?->name)) {
+                return $this->user->name;
+            }
+        } else {
+            try {
+                if (!empty($this->user?->name)) {
+                    return $this->user->name;
+                }
+            } catch (\Throwable $e) {
+                // ignore
+            }
+        }
+
+        return 'Doctor #' . $this->id;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
