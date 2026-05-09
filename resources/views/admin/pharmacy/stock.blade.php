@@ -3,6 +3,48 @@
 @section('page_title', 'Pharmacy Stock')
 
 @section('content')
+<div class="row animate__animated animate__fadeInUp mb-4">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 p-3">
+            <div class="d-flex align-items-center">
+                <div class="bg-primary-subtle rounded-circle p-3 me-3">
+                    <i class="fa-solid fa-pills text-primary fs-4"></i>
+                </div>
+                <div>
+                    <p class="text-muted mb-0 small">Total Medicines</p>
+                    <h4 class="fw-bold mb-0">{{ $stats['total'] ?? 0 }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 p-3">
+            <div class="d-flex align-items-center">
+                <div class="bg-warning-subtle rounded-circle p-3 me-3">
+                    <i class="fa-solid fa-triangle-exclamation text-warning fs-4"></i>
+                </div>
+                <div>
+                    <p class="text-muted mb-0 small">Low Stock</p>
+                    <h4 class="fw-bold mb-0">{{ $stats['low_stock'] ?? 0 }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 p-3">
+            <div class="d-flex align-items-center">
+                <div class="bg-danger-subtle rounded-circle p-3 me-3">
+                    <i class="fa-solid fa-calendar-xmark text-danger fs-4"></i>
+                </div>
+                <div>
+                    <p class="text-muted mb-0 small">Expired</p>
+                    <h4 class="fw-bold mb-0">{{ $stats['expired'] ?? 0 }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row animate__animated animate__fadeInUp">
     <div class="col-12">
         <div class="card border-0 shadow-sm rounded-4 p-4">
@@ -26,29 +68,29 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @forelse($medicines ?? [] as $medicine)
                         <tr>
-                            <td><span class="fw-bold">Paracetamol 500mg</span></td>
-                            <td>General</td>
-                            <td>450 Units</td>
-                            <td>Dec 2027</td>
-                            <td><span class="badge bg-success-subtle text-success">In Stock</span></td>
+                            <td><span class="fw-bold">{{ $medicine->name }}</span></td>
+                            <td>{{ $medicine->category }}</td>
+                            <td>{{ $medicine->quantity }} Units</td>
+                            <td>{{ $medicine->expiry_date?->format('M Y') ?? 'N/A' }}</td>
+                            <td><span class="badge {{ $medicine->status_badge }}">{{ $medicine->status_label }}</span></td>
                             <td>
                                 <button class="btn btn-sm btn-light rounded-circle"><i class="fa-solid fa-pen"></i></button>
                             </td>
                         </tr>
+                        @empty
                         <tr>
-                            <td><span class="fw-bold text-danger">Amoxicillin</span></td>
-                            <td>Antibiotic</td>
-                            <td>5 Units</td>
-                            <td>Jun 2026</td>
-                            <td><span class="badge bg-danger-subtle text-danger">Low Stock</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-light rounded-circle"><i class="fa-solid fa-pen"></i></button>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                <i class="fa-solid fa-pills fs-1 mb-2 d-block"></i>
+                                No medicines found. Add your first medicine.
                             </td>
                         </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
+            {{ $medicines->links() ?? '' }}
         </div>
     </div>
 </div>
