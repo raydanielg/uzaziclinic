@@ -24,20 +24,21 @@
 {{-- 2. Shop / Store Section --}}
 <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Shop / Store</li>
 <li class="nav-item mb-1">
-    <a class="nav-link {{ Request::is('admin/products*') ? 'active' : '' }}" href="#">
+    <a class="nav-link {{ Request::is('admin/store') && !Request::is('admin/store/*') ? 'active' : '' }}" href="{{ route('admin.products.index') }}">
         <i class="fa-solid fa-box-open me-2 text-warning"></i> All Products
     </a>
 </li>
 <li class="nav-item mb-1">
-    <a class="nav-link {{ Request::is('admin/orders*') ? 'active' : '' }}" href="#">
-        <i class="fa-solid fa-cart-shopping me-2 text-danger"></i> My Orders
+    <a class="nav-link {{ Request::is('admin/store/create') ? 'active' : '' }}" href="{{ route('admin.products.create') }}">
+        <i class="fa-solid fa-plus-circle me-2 text-primary"></i> Add New Product
     </a>
 </li>
 <li class="nav-item mb-1">
-    <a class="nav-link {{ Request::is('admin/tracking*') ? 'active' : '' }}" href="#">
-        <i class="fa-solid fa-truck me-2 text-info"></i> Order Tracking
+    <a class="nav-link {{ Request::is('admin/store/orders*') ? 'active' : '' }}" href="{{ route('admin.products.orders') }}">
+        <i class="fa-solid fa-cart-shopping me-2 text-danger"></i> Customer Orders
     </a>
 </li>
+
 
 {{-- 3. Medical Services --}}
 <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Medical Services</li>
