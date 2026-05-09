@@ -125,7 +125,9 @@
                                     <select name="patient_id" id="patient_select" class="form-select shadow-none" required>
                                         <option value="">Select a patient...</option>
                                         @foreach($patients as $p)
-                                            <option value="{{ $p->id }}">{{ $p->name }} ({{ $p->phone }})</option>
+                                            <option value="{{ $p->id }}">
+                                                PT-{{ str_pad($p->id, 3, '0', STR_PAD_LEFT) }} | {{ $p->name }} ({{ $p->phone }})
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
