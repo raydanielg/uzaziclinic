@@ -104,7 +104,7 @@
 </style>
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
     @if(session('success'))
         Swal.fire({
@@ -126,4 +126,4 @@
         });
     @endif
 </script>
-@endsection
+@endpush
