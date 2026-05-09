@@ -183,7 +183,7 @@
     @endif
 </script>
 
-<style>
+@style
     .table thead th {
         font-size: 0.7rem;
         letter-spacing: 0.5px;
@@ -204,6 +204,5 @@
         font-weight: 500;
         font-size: 0.9rem;
     }
-</style>
-@endsection
+@endstyle
 @endsection
