@@ -34,13 +34,20 @@
                                     </div>
                                 </div>
                             </td>
-                            <td><span class="badge bg-danger-subtle text-danger">Administrator</span></td>
-                            <td><span class="badge bg-success-subtle text-success">Active</span></td>
-                            <td>
+                            <td><span class="badge bg-info-subtle text-info">{{ $user->role->name ?? 'User' }}</span></td>
+                            <td>{{ $user->phone ?? 'N/A' }}</td>
+                            <td><span class="badge bg-success-subtle text-success">{{ ucfirst($user->status ?? 'Active') }}</span></td>
+                            <td>{{ $user->created_at->format('d M, Y') }}</td>
+                            <td class="text-end pe-4">
                                 <button class="btn btn-sm btn-light rounded-circle"><i class="fa-solid fa-pen"></i></button>
                                 <button class="btn btn-sm btn-light rounded-circle text-danger"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">No users found.</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
