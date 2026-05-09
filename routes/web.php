@@ -96,6 +96,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('/', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('index');
         Route::get('/create', [App\Http\Controllers\Admin\UserController::class, 'create'])->name('create');
+        Route::post('/store', [App\Http\Controllers\Admin\UserController::class, 'store'])->name('store');
+        Route::get('/{user}/edit', [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('edit');
+        Route::put('/{user}', [App\Http\Controllers\Admin\UserController::class, 'update'])->name('update');
+        Route::delete('/{user}', [App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('destroy');
         Route::get('/roles', [App\Http\Controllers\Admin\UserController::class, 'roles'])->name('roles');
         Route::get('/logs', [App\Http\Controllers\Admin\UserController::class, 'logs'])->name('logs');
     });
