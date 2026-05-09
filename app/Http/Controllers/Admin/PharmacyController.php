@@ -4,13 +4,50 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Medicine;
 
 class PharmacyController extends Controller
 {
-    public function stock() { return view('admin.pharmacy.stock'); }
-    public function create() { return view('admin.pharmacy.stock'); }
-    public function alerts() { return view('admin.pharmacy.stock'); }
-    public function suppliers() { return view('admin.pharmacy.stock'); }
-    public function orders() { return view('admin.pharmacy.stock'); }
-    public function expiry() { return view('admin.pharmacy.stock'); }
+    public function stock()
+    {
+        $medicines = Medicine::orderBy('name')->paginate(15);
+        $stats = [
+            'total' => Medicine::count(),
+            'low_stock' => Medicine::where('quantity', '<=', 10)->count(),
+            'expired' => Medicine::where('expiry_date', '<', now())->count(),
+        ];
+        return view('admin.pharmacy.stock', compact('medicines', 'stats'));
+    }
+
+    public function create()
+    {
+        return view('admin.pharmacy.create');
+    }
+
+    public function alerts()
+    {
+        $alerts = Medicine::where('quantity', '<=', 10)
+            ->orWhere('expiry_date', '<', now()->addMonths(3))
+            ->orderBy('name')
+            ->get();
+        return view('admin.pharmacy.alerts', compact('alerts'));
+    }
+
+    public function suppliers()
+    {
+        return view('admin.pharmacy.suppliers');
+    }
+
+    public function orders()
+    {
+        return view('admin.pharmacy.orders');
+    }
+
+    public function expiry()
+    {
+        $expiring = Medicine::where('expiry_date', '<', now()->addMonths(6))
+            ->orderBy('expiry_date')
+            ->paginate(15);
+        return view('admin.pharmacy.expiry', compact('expiring'));
+    }
 }
