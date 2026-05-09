@@ -1,17 +1,22 @@
 {{-- 1. Appointments Section --}}
 <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Appointments</li>
 <li class="nav-item mb-1">
-    <a class="nav-link {{ Request::is('admin/appointments/book') ? 'active' : '' }}" href="#">
+    <a class="nav-link {{ Request::is('admin/appointments') && !Request::is('admin/appointments/*') ? 'active' : '' }}" href="{{ route('admin.appointments.index') }}">
+        <i class="fa-solid fa-list-check me-2 text-secondary"></i> All Appointments
+    </a>
+</li>
+<li class="nav-item mb-1">
+    <a class="nav-link {{ Request::is('admin/appointments/book') ? 'active' : '' }}" href="{{ route('admin.appointments.create') }}">
         <i class="fa-solid fa-calendar-plus me-2 text-primary"></i> Book Appointment
     </a>
 </li>
 <li class="nav-item mb-1">
-    <a class="nav-link {{ Request::is('admin/appointments/upcoming') ? 'active' : '' }}" href="#">
+    <a class="nav-link {{ Request::is('admin/appointments/upcoming') ? 'active' : '' }}" href="{{ route('admin.appointments.upcoming') }}">
         <i class="fa-solid fa-calendar-check me-2 text-success"></i> Upcoming Appointments
     </a>
 </li>
 <li class="nav-item mb-1">
-    <a class="nav-link {{ Request::is('admin/appointments/history') ? 'active' : '' }}" href="#">
+    <a class="nav-link {{ Request::is('admin/appointments/history') ? 'active' : '' }}" href="{{ route('admin.appointments.history') }}">
         <i class="fa-solid fa-clock-rotate-left me-2 text-info"></i> Appointment History
     </a>
 </li>
