@@ -19,26 +19,37 @@
                         <tr>
                             <th>Patient ID</th>
                             <th>Name</th>
-                            <th>Age/Gender</th>
                             <th>Last Visit</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><span class="fw-bold text-primary">#PT-001</span></td>
-                            <td>Sarah Johnson</td>
-                            <td>28 / Female</td>
-                            <td>May 05, 2026</td>
-                            <td><span class="badge bg-success-subtle text-success">Stable</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-light rounded-circle"><i class="fa-solid fa-eye"></i></button>
-                                <button class="btn btn-sm btn-light rounded-circle"><i class="fa-solid fa-pen"></i></button>
-                            </td>
-                        </tr>
+                        @forelse($patients as $patient)
+                            <tr>
+                                <td><span class="fw-bold text-primary">#PT-{{ str_pad($patient->id, 5, '0', STR_PAD_LEFT) }}</span></td>
+                                <td>
+                                    <div class="fw-bold">{{ $patient->user->name ?? 'N/A' }}</div>
+                                    <div class="text-muted small">{{ $patient->user->email ?? '' }}</div>
+                                </td>
+                                <td class="text-muted">{{ optional($patient->updated_at)->format('d M, Y') }}</td>
+                                <td><span class="badge bg-success-subtle text-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-light rounded-circle"><i class="fa-solid fa-eye"></i></button>
+                                    <button class="btn btn-sm btn-light rounded-circle"><i class="fa-solid fa-pen"></i></button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">No patients found.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
+            </div>
+
+            <div class="mt-3">
+                {{ $patients->links() }}
             </div>
         </div>
     </div>

@@ -11,13 +11,13 @@ class FinanceController extends Controller
 {
     public function invoices()
     {
-        $invoices = Invoice::with(['user', 'order'])->latest()->paginate(10);
+        $invoices = Invoice::with(['user', 'order.user'])->latest()->paginate(10);
         return view('admin.finance.invoices', compact('invoices'));
     }
 
     public function receipts()
     {
-        $invoices = Invoice::where('status', 'paid')->with(['user'])->latest()->paginate(10);
+        $invoices = Invoice::where('status', 'paid')->with(['user', 'order.user'])->latest()->paginate(10);
         return view('admin.finance.receipts', compact('invoices'));
     }
 
@@ -29,7 +29,7 @@ class FinanceController extends Controller
     public function history()
     {
         // For now, listing all invoices as a proxy for payment history
-        $invoices = Invoice::with(['user'])->latest()->paginate(10);
+        $invoices = Invoice::with(['user', 'order.user'])->latest()->paginate(10);
         return view('admin.finance.history', compact('invoices'));
     }
 }
