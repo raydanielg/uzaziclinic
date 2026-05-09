@@ -36,66 +36,66 @@
                 <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">System Management</li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/users*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
-                        <i class="fa-solid fa-users-gear me-2 text-primary"></i> User Management
+                        <i class="fa-solid fa-users-gear me-2 text-primary"></i> User Accounts
                     </a>
                 </li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/roles*') ? 'active' : '' }}" href="{{ route('admin.users.roles') }}">
-                        <i class="fa-solid fa-user-shield me-2 text-info"></i> Roles & Permissions
+                        <i class="fa-solid fa-user-shield me-2 text-info"></i> Access Control (Roles)
                     </a>
                 </li>
 
                 {{-- Clinic Operations --}}
-                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Clinic Operations</li>
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Clinic Management</li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/appointments*') ? 'active' : '' }}" href="{{ route('admin.appointments.index') }}">
-                        <i class="fa-solid fa-calendar-check me-2 text-primary"></i> Appointment Center
+                        <i class="fa-solid fa-calendar-check me-2 text-primary"></i> Master Appointments
                     </a>
                 </li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/doctors*') ? 'active' : '' }}" href="{{ route('admin.doctors.index') }}">
-                        <i class="fa-solid fa-user-doctor me-2 text-success"></i> Doctor Management
+                        <i class="fa-solid fa-user-doctor me-2 text-success"></i> Medical Staff
                     </a>
                 </li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/patients*') ? 'active' : '' }}" href="{{ route('admin.patients.index') }}">
-                        <i class="fa-solid fa-hospital-user me-2 text-danger"></i> Patient Registry
+                        <i class="fa-solid fa-hospital-user me-2 text-danger"></i> Patient Database
                     </a>
                 </li>
 
-                {{-- Advanced Admin Tools --}}
-                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Store & Services</li>
+                {{-- Business & Inventory --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Enterprise & Logistics</li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/store*') ? 'active' : '' }}" href="{{ route('admin.products.index') }}">
-                        <i class="fa-solid fa-box-open me-2 text-warning"></i> Inventory & Store
+                        <i class="fa-solid fa-boxes-stacked me-2 text-warning"></i> Inventory & Products
                     </a>
                 </li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/medical*') ? 'active' : '' }}" href="{{ route('admin.medical.records') }}">
-                        <i class="fa-solid fa-notes-medical me-2 text-info"></i> Medical Services
+                        <i class="fa-solid fa-file-medical me-2 text-info"></i> Clinical Records Rx
                     </a>
                 </li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/finance*') ? 'active' : '' }}" href="{{ route('admin.finance.invoices') }}">
-                        <i class="fa-solid fa-money-bill-transfer me-2 text-success"></i> Revenue & Billing
+                        <i class="fa-solid fa-file-invoice-dollar me-2 text-success"></i> Financial Management
                     </a>
                 </li>
-                
+
                 {{-- Platform Maintenance --}}
-                <li class="nav-item-header mt-4 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Platform Maintenance</li>
+                <li class="nav-item-header mt-4 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">System Health</li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/analytics*') ? 'active' : '' }}" href="{{ route('admin.analytics') }}">
-                        <i class="fa-solid fa-chart-pie me-2 text-warning"></i> System Analytics
+                        <i class="fa-solid fa-chart-line me-2 text-warning"></i> Platform Analytics
                     </a>
                 </li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/settings*') ? 'active' : '' }}" href="{{ route('admin.settings.general') }}">
-                        <i class="fa-solid fa-gears me-2 text-secondary"></i> Global Settings
+                        <i class="fa-solid fa-sliders me-2 text-secondary"></i> Global Configurations
                     </a>
                 </li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/logs*') ? 'active' : '' }}" href="{{ route('admin.users.logs') }}">
-                        <i class="fa-solid fa-terminal me-2 text-dark"></i> System Logs
+                        <i class="fa-solid fa-shield-virus me-2 text-dark"></i> Security Audit Logs
                     </a>
                 </li>
             @endif
