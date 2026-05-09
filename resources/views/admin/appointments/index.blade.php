@@ -261,16 +261,21 @@
                 method: "POST",
                 data: $(this).serialize(),
                 success: function(response) {
-                    Swal.fire({ icon: 'success', title: 'Patient Registered!', text: response.message, timer: 2000, showConfirmButton: false });
-                    
-                    // Add new patient to the select dropdown
-                    const patient = response.data;
-                    $('#patient_select').append(new Option(patient.name + ' (' + patient.phone + ')', patient.id));
-                    $('#patient_select').val(patient.id);
-                    
-                    // Switch back to appointment tab
-                    $('#existing-tab').click();
-                    $('#quickPatientForm')[0].reset();
+                    if (response.success && response.data) {
+                        const patient = response.data;
+                        Swal.fire({ icon: 'success', title: 'Patient Registered!', text: response.message, timer: 1500, showConfirmButton: false });
+                        
+                        // Add and select the new patient
+                        const newOption = new Option(patient.name + ' (' + patient.phone + ')', patient.id, true, true);
+                        $('#patient_select').append(newOption).trigger('change');
+                        
+                        // Switch back to appointment tab
+                        const existingTab = document.querySelector('#existing-tab');
+                        const bootstrapTab = new bootstrap.Tab(existingTab);
+                        bootstrapTab.show();
+                        
+                        $('#quickPatientForm')[0].reset();
+                    }
                     
                     $btn.removeClass('d-none');
                     $spinner.addClass('d-none');
