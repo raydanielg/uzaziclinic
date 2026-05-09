@@ -266,7 +266,9 @@
                         Swal.fire({ icon: 'success', title: 'Patient Registered!', text: response.message, timer: 1500, showConfirmButton: false });
                         
                         // Add and select the new patient
-                        const newOption = new Option(patient.name + ' (' + patient.phone + ')', patient.id, true, true);
+                        const patientName = patient.name || 'New Patient';
+                        const patientPhone = patient.phone || 'N/A';
+                        const newOption = new Option(patientName + ' (' + patientPhone + ')', patient.id, true, true);
                         $('#patient_select').append(newOption).trigger('change');
                         
                         // Switch back to appointment tab
