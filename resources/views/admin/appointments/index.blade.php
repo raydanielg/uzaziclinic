@@ -270,7 +270,10 @@
                         // Add and select the new patient
                         const patientName = patient.name || 'New Patient';
                         const patientPhone = patient.phone || 'N/A';
-                        const newOption = new Option(patientName + ' (' + patientPhone + ')', patient.id, true, true);
+                        const patientId = String(patient.id).padStart(3, '0');
+                        const displayText = 'PT-' + patientId + ' | ' + patientName + ' (' + patientPhone + ')';
+                        
+                        const newOption = new Option(displayText, patient.id, true, true);
                         $('#patient_select').append(newOption).trigger('change');
                         
                         // Switch back to appointment tab
