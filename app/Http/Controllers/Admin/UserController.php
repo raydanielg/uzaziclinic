@@ -15,7 +15,8 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('role')->latest()->paginate(10);
-        return view('admin.users.index', compact('users'));
+        $roles = Role::orderBy('name')->get();
+        return view('admin.users.index', compact('users', 'roles'));
     }
 
     public function create()
@@ -89,6 +90,26 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('admin.users.index')->with('success', 'User deleted successfully!');
+    }
+
+    public function updateUserRole(Request $request, User $user)
+    {
+        $request->validate([
+            'role_id' => ['required', 'exists:roles,id'],
+        ]);
+
+        $user->role_id = $request->role_id;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User role updated successfully!',
+            'data' => [
+                'user_id' => $user->id,
+                'role_id' => $user->role_id,
+                'role_name' => optional($user->role)->name,
+            ],
+        ]);
     }
 
     public function roles()

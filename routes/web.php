@@ -99,6 +99,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::post('/store', [App\Http\Controllers\Admin\UserController::class, 'store'])->name('store');
         Route::get('/{user}/edit', [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('edit');
         Route::put('/{user}', [App\Http\Controllers\Admin\UserController::class, 'update'])->name('update');
+        Route::put('/{user}/role', [App\Http\Controllers\Admin\UserController::class, 'updateUserRole'])->name('role.update');
         Route::delete('/{user}', [App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('destroy');
         Route::get('/roles', [App\Http\Controllers\Admin\UserController::class, 'roles'])->name('roles');
         Route::put('/roles/{role}', [App\Http\Controllers\Admin\UserController::class, 'updateRole'])->name('roles.update');
