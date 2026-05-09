@@ -51,6 +51,11 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function doctor()
+    {
+        return $this->hasOne(Doctor::class);
+    }
+
     /**
      * Check if user has a specific role
      */

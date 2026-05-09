@@ -15,7 +15,18 @@ class DoctorController extends Controller
     public function index()
     {
         $doctors = Doctor::with('user')->latest()->paginate(10);
-        return view('admin.doctors.index', compact('doctors'));
+
+        $doctorRoleId = Role::where('name', 'doctor')->value('id');
+        $doctorUsersMissingProfile = collect();
+        if ($doctorRoleId) {
+            $doctorUsersMissingProfile = User::with(['role', 'doctor'])
+                ->where('role_id', $doctorRoleId)
+                ->whereDoesntHave('doctor')
+                ->orderBy('name')
+                ->get();
+        }
+
+        return view('admin.doctors.index', compact('doctors', 'doctorUsersMissingProfile'));
     }
 
     public function create()
@@ -58,6 +69,26 @@ class DoctorController extends Controller
         ]);
 
         return redirect()->route('admin.doctors.index')->with('success', 'Doctor created successfully!');
+    }
+
+    public function createProfileFromUser(User $user)
+    {
+        $doctorRoleId = Role::where('name', 'doctor')->value('id');
+        if (!$doctorRoleId || (int)$user->role_id !== (int)$doctorRoleId) {
+            return redirect()->back()->with('error', 'Selected user is not a doctor.');
+        }
+
+        Doctor::firstOrCreate(
+            ['user_id' => $user->id],
+            [
+                'name' => $user->name,
+                'phone' => $user->phone,
+                'status' => $user->status ?? 'active',
+                'specialization' => 'General',
+            ]
+        );
+
+        return redirect()->route('admin.doctors.index')->with('success', 'Doctor profile created successfully!');
     }
     public function schedules() { return view('admin.doctors.index'); }
     public function specializations() { return view('admin.doctors.index'); }

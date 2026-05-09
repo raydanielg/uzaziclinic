@@ -120,6 +120,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/', [App\Http\Controllers\Admin\DoctorController::class, 'index'])->name('index');
         Route::get('/create', [App\Http\Controllers\Admin\DoctorController::class, 'create'])->name('create');
         Route::post('/', [App\Http\Controllers\Admin\DoctorController::class, 'store'])->name('store');
+        Route::post('/from-user/{user}', [App\Http\Controllers\Admin\DoctorController::class, 'createProfileFromUser'])->name('from-user');
         Route::get('/schedules', [App\Http\Controllers\Admin\DoctorController::class, 'schedules'])->name('schedules');
         Route::get('/specializations', [App\Http\Controllers\Admin\DoctorController::class, 'specializations'])->name('specializations');
     });
