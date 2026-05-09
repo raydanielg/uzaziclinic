@@ -94,7 +94,54 @@ class UserController extends Controller
     public function roles()
     {
         $roles = Role::withCount('users')->get();
-        return view('admin.users.roles', compact('roles'));
+        $availablePermissions = [
+            'manage_users' => 'Manage Users',
+            'manage_roles' => 'Manage Roles',
+            'manage_settings' => 'System Settings',
+            'view_reports' => 'View Reports',
+            'manage_patients' => 'Patient Management',
+            'manage_doctors' => 'Doctor Management',
+            'manage_appointments' => 'Manage Appointments',
+            'manage_stock' => 'Pharmacy Stock',
+            'manage_tests' => 'Lab Management',
+            'process_orders' => 'E-commerce Orders',
+            'manage_finance' => 'Financial Management',
+            'all_access' => 'Full System Access (Admin)',
+        ];
+        return view('admin.users.roles', compact('roles', 'availablePermissions'));
+    }
+
+    public function updateRole(Request $request, Role $role)
+    {
+        $request->validate([
+            'permissions' => 'nullable|array'
+        ]);
+
+        $permissions = [];
+        if ($request->has('permissions')) {
+            foreach ($request->permissions as $perm) {
+                $permissions[$perm] = true;
+            }
+        }
+
+        $role->permissions = $permissions;
+        $role->save();
+
+        return redirect()->back()->with('success', 'Role permissions updated successfully!');
+    }
+
+    public function destroyRole(Role $role)
+    {
+        if ($role->users_count > 0) {
+            return redirect()->back()->with('error', 'Cannot delete role that has active users!');
+        }
+
+        if ($role->name === 'admin') {
+            return redirect()->back()->with('error', 'Cannot delete the Super Admin role!');
+        }
+
+        $role->delete();
+        return redirect()->back()->with('success', 'Role deleted successfully!');
     }
 
     public function logs()
