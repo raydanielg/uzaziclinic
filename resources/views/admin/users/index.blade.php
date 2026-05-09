@@ -10,7 +10,8 @@
                 <div class="card-header bg-white border-bottom py-3 px-4">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h5 class="fw-bold mb-0">System Users</h5>
+                            <h5 class="fw-bold mb-0">System Users Management</h5>
+                            <p class="text-muted small mb-0">Manage system access, roles and export reports</p>
                         </div>
                         <div class="col-auto">
                             <button class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#addUserModal">
@@ -20,23 +21,23 @@
                     </div>
                 </div>
                 
-                <div class="card-body p-0">
+                <div class="card-body p-4">
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="bg-light">
+                        <table id="usersTable" class="table table-hover align-middle mb-0">
+                            <thead>
                                 <tr>
-                                    <th class="ps-4 py-3 text-muted fw-semibold small">USER DETAILS</th>
-                                    <th class="py-3 text-muted fw-semibold small">ROLE</th>
-                                    <th class="py-3 text-muted fw-semibold small">CONTACT</th>
-                                    <th class="py-3 text-muted fw-semibold small">STATUS</th>
-                                    <th class="py-3 text-muted fw-semibold small">JOINED</th>
-                                    <th class="pe-4 py-3 text-end text-muted fw-semibold small">ACTIONS</th>
+                                    <th class="ps-2">USER DETAILS</th>
+                                    <th>ROLE</th>
+                                    <th>CONTACT</th>
+                                    <th>STATUS</th>
+                                    <th>JOINED</th>
+                                    <th class="text-end pe-2">ACTIONS</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($users ?? [] as $user)
+                                @foreach($users ?? [] as $user)
                                 <tr>
-                                    <td class="ps-4 py-3">
+                                    <td class="ps-2">
                                         <div class="d-flex align-items-center">
                                             <div class="avatar bg-primary-subtle text-primary rounded-1 d-flex align-items-center justify-content-center fw-bold me-3" style="width: 40px; height: 40px;">
                                                 {{ substr($user->name, 0, 1) }}
@@ -47,25 +48,25 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="py-3">
+                                    <td>
                                         <span class="badge bg-light text-primary border px-2 py-1 fw-normal">
                                             {{ ucfirst($user->role->name ?? 'User') }}
                                         </span>
                                     </td>
-                                    <td class="py-3 text-muted small">
+                                    <td class="text-muted small">
                                         {{ $user->phone ?? '---' }}
                                     </td>
-                                    <td class="py-3">
+                                    <td>
                                         @if($user->status == 'active')
                                             <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 fw-normal">Active</span>
                                         @else
                                             <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1 fw-normal">Inactive</span>
                                         @endif
                                     </td>
-                                    <td class="py-3 text-muted small">
+                                    <td class="text-muted small">
                                         {{ $user->created_at->format('M d, Y') }}
                                     </td>
-                                    <td class="pe-4 py-3 text-end">
+                                    <td class="text-end pe-2">
                                         <div class="btn-group">
                                             <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-outline-secondary" title="Edit">
                                                 <i class="fa-solid fa-pen-to-square"></i>
@@ -80,11 +81,7 @@
                                         </form>
                                     </td>
                                 </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="6" class="text-center py-5 text-muted">No users found.</td>
-                                </tr>
-                                @endforelse
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -152,47 +149,107 @@
     </div>
 </div>
 
+@push('scripts')
 <script>
-    function confirmDelete(id, name) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You are about to delete user: " + name,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('delete-form-' + id).submit();
+    $(document).ready(function() {
+        var table = $('#usersTable').DataTable({
+            responsive: true,
+            dom: '<"d-flex justify-content-between align-items-center mb-3"lBf>rt<"d-flex justify-content-between align-items-center mt-3"ip>',
+            buttons: [
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i class="fa-solid fa-file-pdf me-2"></i> Export to PDF',
+                    className: 'btn btn-outline-danger btn-sm px-3',
+                    title: 'System Users Report',
+                    orientation: 'portrait',
+                    pageSize: 'A4',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4]
+                    },
+                    customize: function(doc) {
+                        doc.content[1].table.widths = ['30%', '20%', '20%', '15%', '15%'];
+                        doc.styles.tableHeader = {
+                            fillColor: '#6366f1',
+                            color: 'white',
+                            alignment: 'left',
+                            bold: true,
+                            fontSize: 10
+                        };
+                        doc.defaultStyle.fontSize = 9;
+                        doc.content.splice(0, 1, {
+                            text: 'DRISSA AFYA CARE - USER REPORT',
+                            fontSize: 18,
+                            bold: true,
+                            alignment: 'center',
+                            margin: [0, 0, 0, 20],
+                            color: '#6366f1'
+                        });
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa-solid fa-print me-2"></i> Print',
+                    className: 'btn btn-outline-secondary btn-sm px-3'
+                }
+            ],
+            lengthMenu: [ [10, 50, -1], [10, 50, "All"] ],
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search users...",
+                lengthMenu: "Show _MENU_ entries"
             }
-        })
-    }
+        });
+
+        // Delete Confirmation
+        window.confirmDelete = function(id, name) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You are about to delete: " + name,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            })
+        }
+    });
 
     @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: "{{ session('success') }}",
-            timer: 3000,
-            showConfirmButton: false
-        });
+        Swal.fire({ icon: 'success', title: 'Success!', text: "{{ session('success') }}", timer: 3000, showConfirmButton: false });
     @endif
-
     @if(session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: "{{ session('error') }}",
-            timer: 3000,
-            showConfirmButton: false
-        });
+        Swal.fire({ icon: 'error', title: 'Error!', text: "{{ session('error') }}", timer: 3000, showConfirmButton: false });
     @endif
 </script>
+@endpush
 
 <style>
+    .dataTables_length select {
+        padding: 0.3rem 2rem 0.3rem 0.75rem !important;
+        border-radius: 4px;
+        border: 1px solid #e2e8f0;
+    }
+    .dataTables_filter input {
+        padding: 0.3rem 0.75rem !important;
+        border-radius: 4px;
+        border: 1px solid #e2e8f0;
+        outline: none;
+    }
+    .table thead th {
+        font-size: 0.75rem !important;
+        letter-spacing: 0.5px;
+        background: #f8fafc !important;
+        color: #64748b !important;
+        border-bottom: 2px solid #e2e8f0 !important;
+    }
+    .dt-buttons .btn {
+        margin-right: 5px;
+        border-radius: 4px !important;
+    }
     .table thead th {
         font-size: 0.7rem !important;
         letter-spacing: 0.5px;
