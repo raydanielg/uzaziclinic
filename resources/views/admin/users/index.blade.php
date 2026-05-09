@@ -26,12 +26,10 @@
                         <table id="usersTable" class="table table-hover align-middle mb-0">
                             <thead>
                                 <tr>
-                                    <th class="ps-2">USER DETAILS</th>
-                                    <th>ROLE</th>
-                                    <th>CONTACT</th>
-                                    <th>STATUS</th>
-                                    <th>JOINED</th>
-                                    <th class="text-end pe-2">ACTIONS</th>
+                                    <th class="ps-2" style="width: 50%;">USER DETAILS</th>
+                                    <th style="width: 15%;">STATUS</th>
+                                    <th style="width: 20%;">JOINED DATE</th>
+                                    <th class="text-end pe-2" style="width: 15%;">ACTIONS</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -39,31 +37,29 @@
                                 <tr>
                                     <td class="ps-2">
                                         <div class="d-flex align-items-center">
-                                            <div class="avatar bg-primary-subtle text-primary rounded-1 d-flex align-items-center justify-content-center fw-bold me-3" style="width: 40px; height: 40px;">
+                                            <div class="avatar bg-primary-subtle text-primary rounded-1 d-flex align-items-center justify-content-center fw-bold me-3" style="width: 45px; height: 45px;">
                                                 {{ substr($user->name, 0, 1) }}
                                             </div>
                                             <div>
-                                                <div class="fw-bold text-dark">{{ $user->name }}</div>
+                                                <div class="fw-bold text-dark fs-6">{{ $user->name }}</div>
                                                 <div class="text-muted small">{{ $user->email }}</div>
+                                                <div class="mt-1">
+                                                    <span class="badge bg-light text-primary border px-2 py-0 fw-normal small">
+                                                        {{ ucfirst($user->role->name ?? 'User') }}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="badge bg-light text-primary border px-2 py-1 fw-normal">
-                                            {{ ucfirst($user->role->name ?? 'User') }}
-                                        </span>
-                                    </td>
-                                    <td class="text-muted small">
-                                        {{ $user->phone ?? '---' }}
-                                    </td>
-                                    <td>
                                         @if($user->status == 'active')
-                                            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 fw-normal">Active</span>
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 fw-normal">Active</span>
                                         @else
-                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1 fw-normal">Inactive</span>
+                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-1 fw-normal">Inactive</span>
                                         @endif
                                     </td>
-                                    <td class="text-muted small">
+                                    <td class="text-muted">
+                                        <i class="fa-regular fa-calendar me-1 small"></i>
                                         {{ $user->created_at->format('M d, Y') }}
                                     </td>
                                     <td class="text-end pe-2">
