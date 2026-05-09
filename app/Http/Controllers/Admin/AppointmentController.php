@@ -19,6 +19,13 @@ class AppointmentController extends Controller
         return view('admin.appointments.index', compact('appointments', 'patients', 'doctors'));
     }
 
+    public function create()
+    {
+        $patients = Patient::orderBy('name')->get();
+        $doctors = Doctor::with('user')->get();
+        return view('admin.appointments.create', compact('patients', 'doctors'));
+    }
+
     public function store(Request $request)
     {
         $validator = \Validator::make($request->all(), [
