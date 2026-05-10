@@ -152,6 +152,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Lab Management
     Route::prefix('lab')->name('lab.')->group(function () {
         Route::get('/catalog', [App\Http\Controllers\Admin\LabController::class, 'catalog'])->name('catalog');
+        Route::post('/catalog', [App\Http\Controllers\Admin\LabController::class, 'store'])->name('store');
+        Route::delete('/catalog/{labTest}', [App\Http\Controllers\Admin\LabController::class, 'destroy'])->name('destroy');
         Route::get('/results', [App\Http\Controllers\Admin\LabController::class, 'results'])->name('results');
         Route::get('/equipment', [App\Http\Controllers\Admin\LabController::class, 'equipment'])->name('equipment');
         Route::get('/reports', [App\Http\Controllers\Admin\LabController::class, 'reports'])->name('reports');
