@@ -3,161 +3,262 @@
 @section('page_title', 'E-commerce Store')
 
 @section('content')
-<div class="row animate__animated animate__fadeInUp">
-    <div class="col-12">
-        <div class="card border-0 shadow-sm rounded-4 p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="fw-bold mb-0">Product Catalog</h5>
-                <a href="{{ route('admin.store.create') }}" class="btn btn-primary rounded-pill px-4">
-                    <i class="fa-solid fa-plus me-2"></i> Add Product
-                </a>
-            </div>
-            
-    <div class="row g-4 mb-4">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body d-flex align-items-center">
-                    <div class="icon-box bg-primary-soft text-primary me-3">
-                        <i class="fas fa-boxes"></i>
-                    </div>
-                    <div>
-                        <h6 class="text-muted mb-0 small text-uppercase">Total Products</h6>
-                        <h4 class="mb-0 fw-bold">{{ $stats['total_products'] }}</h4>
-                    </div>
+<div class="row animate__animated animate__fadeInUp mb-4">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+            <div class="d-flex align-items-center">
+                <div class="bg-primary-subtle rounded-circle p-3 me-3">
+                    <i class="fa-solid fa-boxes-stacked text-primary fs-4"></i>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body d-flex align-items-center">
-                    <div class="icon-box bg-success-soft text-success me-3">
-                        <i class="fas fa-shopping-bag"></i>
-                    </div>
-                    <div>
-                        <h6 class="text-muted mb-0 small text-uppercase">Active Orders</h6>
-                        <h4 class="mb-0 fw-bold">{{ $stats['active_orders'] }}</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body d-flex align-items-center">
-                    <div class="icon-box bg-warning-soft text-warning me-3">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <div>
-                        <h6 class="text-muted mb-0 small text-uppercase">Low Stock Items</h6>
-                        <h4 class="mb-0 fw-bold">{{ $stats['low_stock'] }}</h4>
-                    </div>
+                <div>
+                    <p class="text-muted mb-0 small fw-bold text-uppercase">Total Products</p>
+                    <h4 class="fw-bold mb-0 text-dark">{{ $stats['total_products'] }}</h4>
                 </div>
             </div>
         </div>
     </div>
-    </div>
-
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-white border-0 py-3">
-            <h5 class="mb-0 fw-bold">Product List</h5>
-        </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="ps-4">Bidhaa</th>
-                            <th>Category</th>
-                            <th>Bei (TZS)</th>
-                            <th>Stock</th>
-                            <th>Hali (Status)</th>
-                            <th class="text-end pe-4">Vitendo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($products as $product)
-                        <tr>
-                            <td class="ps-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="product-img me-3">
-                                        @if($product->image)
-                                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="rounded shadow-sm" style="width: 45px; height: 45px; object-fit: cover;">
-                                        @else
-                                            <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted" style="width: 45px; height: 45px;">
-                                                <i class="fas fa-image"></i>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div>
-                                        <div class="fw-bold">{{ $product->name }}</div>
-                                        <small class="text-muted text-truncate d-block" style="max-width: 200px;">{{ $product->description }}</small>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="badge bg-light text-dark border rounded-pill">{{ $product->category ?? 'N/A' }}</span></td>
-                            <td class="fw-bold text-dark">{{ number_format($product->price, 0) }}/=</td>
-                            <td>
-                                @if($product->stock_quantity <= 5)
-                                    <span class="text-danger fw-bold"><i class="fas fa-arrow-down me-1"></i>{{ $product->stock_quantity }}</span>
-                                @else
-                                    <span class="text-success fw-bold">{{ $product->stock_quantity }}</span>
-                                @endif
-                            </td>
-                            <td>
-                                @if($product->stock_quantity > 0)
-                                    <span class="badge bg-success-soft text-success rounded-pill px-3 py-2">In Stock</span>
-                                @else
-                                    <span class="badge bg-danger-soft text-danger rounded-pill px-3 py-2">Out of Stock</span>
-                                @endif
-                            </td>
-                            <td class="text-end pe-4">
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-light border shadow-none" type="button" data-bs-toggle="dropdown">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">
-                                        <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2 text-success"></i>Hariri</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash-alt me-2"></i>Futa</a></li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="text-center py-5">
-                                <div class="text-muted">
-                                    <i class="fas fa-box-open fa-3x mb-3 opacity-20"></i>
-                                    <p class="mb-0">Hakuna bidhaa iliyopatikana kwenye duka.</p>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-            @if($products->hasPages())
-                <div class="card-footer bg-white border-0 py-3">
-                    {{ $products->links() }}
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+            <div class="d-flex align-items-center">
+                <div class="bg-success-subtle rounded-circle p-3 me-3">
+                    <i class="fa-solid fa-cart-shopping text-success fs-4"></i>
                 </div>
-            @endif
+                <div>
+                    <p class="text-muted mb-0 small fw-bold text-uppercase">Active Orders</p>
+                    <h4 class="fw-bold mb-0 text-dark">{{ $stats['active_orders'] }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+            <div class="d-flex align-items-center">
+                <div class="bg-warning-subtle rounded-circle p-3 me-3">
+                    <i class="fa-solid fa-triangle-exclamation text-warning fs-4"></i>
+                </div>
+                <div>
+                    <p class="text-muted mb-0 small fw-bold text-uppercase">Low Stock</p>
+                    <h4 class="fw-bold mb-0 text-dark">{{ $stats['low_stock'] }}</h4>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
+<div class="row animate__animated animate__fadeInUp">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h5 class="fw-bold mb-0 text-dark">E-commerce Catalog</h5>
+                    <p class="text-muted small mb-0">Manage your online store inventory and availability</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <select id="filterCategory" class="form-select form-select-sm rounded-1 px-3 border-0 shadow-sm" style="width: 160px;">
+                        <option value="">All Categories</option>
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat }}">{{ $cat }}</option>
+                        @endforeach
+                    </select>
+                    <button type="button" class="btn btn-primary rounded-1 px-4 shadow-sm border-0" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                        <i class="fa-solid fa-plus me-2"></i> Add Product
+                    </button>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table id="productTable" class="table table-hover align-middle border-0">
+                    <thead class="bg-light text-muted small">
+                        <tr>
+                            <th class="ps-4 border-0">PRODUCT DETAILS</th>
+                            <th class="border-0">CATEGORY</th>
+                            <th class="border-0">PRICE</th>
+                            <th class="border-0">STOCK</th>
+                            <th class="border-0">STATUS</th>
+                            <th class="text-end pe-4 border-0">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                        @include('admin.store._product_table')
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-3">
+                {{ $products->links() }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Product Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0 pb-0 pt-4 px-4">
+                <h5 class="modal-title fw-bold text-dark">Add New Store Product</h5>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="addProductForm" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Product Name</label>
+                            <input type="text" name="name" class="form-control rounded-1 px-3 shadow-none border-light bg-light" placeholder="e.g. First Aid Kit" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Category</label>
+                            <input type="text" name="category" class="form-control rounded-1 px-3 shadow-none border-light bg-light" placeholder="e.g. Medical Equipment">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Price (TZS)</label>
+                            <input type="number" name="price" class="form-control rounded-1 px-3 shadow-none border-light bg-light" placeholder="0.00" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Stock Quantity</label>
+                            <input type="number" name="stock_quantity" class="form-control rounded-1 px-3 shadow-none border-light bg-light" placeholder="0" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Product Image</label>
+                            <input type="file" name="image" class="form-control rounded-1 px-3 shadow-none border-light bg-light" accept="image/*">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Description</label>
+                            <textarea name="description" class="form-control rounded-1 px-3 shadow-none border-light bg-light" rows="3" placeholder="Product details..."></textarea>
+                        </div>
+                    </div>
+                    <div class="text-end mt-4">
+                        <button type="button" class="btn btn-light rounded-1 px-4 me-2 border" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary rounded-1 px-5 shadow-sm border-0">
+                            <i class="fa-solid fa-check me-2"></i> Save Product
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        const productTable = $('#productTable').DataTable({
+            responsive: true,
+            dom: 'rftip',
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search products...",
+                emptyTable: "No products found."
+            }
+        });
+
+        // AJAX Filtering
+        function applyFilters() {
+            const category = $('#filterCategory').val();
+            const search = $('.dataTables_filter input').val();
+
+            $.ajax({
+                url: "{{ route('admin.store.index') }}",
+                data: { category, search },
+                success: function(html) {
+                    productTable.destroy();
+                    $('#productTableBody').html(html);
+                    $('#productTable').DataTable({
+                        responsive: true,
+                        dom: 'rftip',
+                        language: {
+                            search: "_INPUT_",
+                            searchPlaceholder: "Search products...",
+                            emptyTable: "No products found."
+                        }
+                    });
+                }
+            });
+        }
+
+        $('#filterCategory').on('change', applyFilters);
+
+        // AJAX Creation
+        $('#addProductForm').on('submit', function(e) {
+            e.preventDefault();
+            const $btn = $(this).find('button[type="submit"]');
+            const originalText = $btn.html();
+            $btn.html('<span class="spinner-border spinner-border-sm me-2"></span> Saving...').prop('disabled', true);
+
+            const formData = new FormData(this);
+
+            $.ajax({
+                url: "{{ route('admin.store.store') }}",
+                method: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(resp) {
+                    $('#addProductModal').modal('hide');
+                    Swal.fire({ icon: 'success', title: 'Success!', text: resp.message, timer: 1500, showConfirmButton: false })
+                    .then(() => location.reload());
+                },
+                error: function(xhr) {
+                    $btn.html(originalText).prop('disabled', false);
+                    let msg = 'Something went wrong!';
+                    if (xhr.status === 422) {
+                        msg = Object.values(xhr.responseJSON.errors).flat().join('\n');
+                    }
+                    Swal.fire('Error!', msg, 'error');
+                }
+            });
+        });
+
+        // AJAX Deletion
+        $(document).on('click', '.delete-product', function() {
+            const id = $(this).data('id');
+            const name = $(this).data('name');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `You want to remove ${name} from catalog?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `{{ url('admin/store') }}/${id}`,
+                        method: 'POST',
+                        data: { _token: '{{ csrf_token() }}', _method: 'DELETE' },
+                        success: function(resp) {
+                            Swal.fire({ icon: 'success', title: 'Deleted!', text: resp.message, timer: 1500, showConfirmButton: false })
+                            .then(() => location.reload());
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+
 <style>
-    .bg-primary-soft { background-color: rgba(13, 110, 253, 0.1); }
-    .bg-success-soft { background-color: rgba(25, 135, 84, 0.1); }
-    .bg-warning-soft { background-color: rgba(255, 193, 7, 0.1); }
-    .bg-danger-soft { background-color: rgba(220, 53, 69, 0.1); }
-    
-    .icon-box {
-        width: 45px;
-        height: 45px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
+    .avatar-sm { background-color: #f8fafc; }
+    .table thead th {
+        font-size: 0.7rem !important;
+        letter-spacing: 1px;
+        background: transparent !important;
+        color: #94a3b8 !important;
+        padding-bottom: 15px !important;
+    }
+    .btn-white { background: #fff; border: 1px solid #f1f5f9 !important; }
+    .btn-white:hover { background: #f8fafc; }
+    .ls-1 { letter-spacing: 0.5px; }
+    .extra-small { font-size: 0.65rem; }
+    .dataTables_filter input {
+        border-radius: 4px !important;
+        padding: 8px 20px !important;
+        border: 0 !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
+        background: #fff !important;
+        width: 250px !important;
     }
 </style>
+@endpush
 @endsection
