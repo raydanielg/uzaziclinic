@@ -37,30 +37,36 @@ class LoginController extends Controller
     {
         $user = auth()->user();
         
-        // Ensure the role relation is loaded
-        if ($user->role_id) {
-            $roleName = \App\Models\Role::find($user->role_id)->name ?? null;
-            
-            if ($roleName) {
-                switch ($roleName) {
-                    case 'admin':
-                        return route('admin.dashboard');
-                    case 'doctor':
-                        return '/doctor/dashboard';
-                    case 'nurse':
-                        return '/nurse/dashboard';
-                    case 'pharmacist':
-                        return '/pharmacist/dashboard';
-                    case 'lab_tech':
-                        return '/lab/dashboard';
-                    case 'accountant':
-                        return '/accountant/dashboard';
-                    case 'receptionist':
-                        return '/receptionist/dashboard';
-                    case 'customer':
-                        return '/patient/dashboard';
-                }
-            }
+        if ($user->isAdmin()) {
+            return route('admin.dashboard');
+        }
+
+        if ($user->hasRole('doctor')) {
+            return route('doctor.dashboard');
+        }
+        
+        if ($user->hasRole('nurse')) {
+            return route('nurse.dashboard');
+        }
+        
+        if ($user->hasRole('pharmacist')) {
+            return route('pharmacist.dashboard');
+        }
+        
+        if ($user->hasRole('lab_tech')) {
+            return route('lab.dashboard');
+        }
+        
+        if ($user->hasRole('accountant')) {
+            return route('accountant.dashboard');
+        }
+        
+        if ($user->hasRole('receptionist')) {
+            return route('receptionist.dashboard');
+        }
+        
+        if ($user->hasRole('customer')) {
+            return route('patient.dashboard');
         }
 
         return '/home';
