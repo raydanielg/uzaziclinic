@@ -15,6 +15,12 @@ class CreateMedicalRecordsTable extends Migration
     {
         Schema::create('medical_records', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('patient_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('doctor_id')->constrained('users')->onDelete('cascade');
+            $table->string('diagnosis');
+            $table->text('notes')->nullable();
+            $table->text('symptoms')->nullable();
+            $table->text('treatment')->nullable();
             $table->timestamps();
         });
     }
