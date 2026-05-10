@@ -94,6 +94,7 @@ return array(
     'App\\Models\\Setting' => $baseDir . '/app/Models/Setting.php',
     'App\\Models\\StockMovement' => $baseDir . '/app/Models/StockMovement.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
+    'App\\Models\\Ward' => $baseDir . '/app/Models/Ward.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'App\\Providers\\AuthServiceProvider' => $baseDir . '/app/Providers/AuthServiceProvider.php',
     'App\\Providers\\BroadcastServiceProvider' => $baseDir . '/app/Providers/BroadcastServiceProvider.php',
