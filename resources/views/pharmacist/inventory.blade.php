@@ -35,10 +35,10 @@
                             </td>
                             <td><span class="badge bg-light text-dark border rounded-pill px-3">{{ $med->category }}</span></td>
                             <td>
-                                <div class="fw-bold {{ $med->stock <= $med->min_stock ? 'text-danger' : 'text-dark' }}">
-                                    {{ $med->stock }} {{ $med->unit }}
+                                <div class="fw-bold {{ $med->quantity <= 10 ? 'text-danger' : 'text-dark' }}">
+                                    {{ $med->quantity }} {{ $med->unit ?? 'pcs' }}
                                 </div>
-                                @if($med->stock <= $med->min_stock)
+                                @if($med->quantity <= 10)
                                     <span class="badge bg-danger-subtle text-danger rounded-pill" style="font-size: 0.6rem;">Low Stock</span>
                                 @endif
                             </td>

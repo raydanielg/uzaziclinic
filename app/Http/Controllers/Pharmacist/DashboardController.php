@@ -63,7 +63,7 @@ class DashboardController extends Controller
 
     public function alerts()
     {
-        $low_stock = Medicine::whereRaw('stock <= min_stock')->get();
+        $low_stock = Medicine::where('quantity', '<=', 10)->get();
         $expired = Medicine::whereDate('expiry_date', '<', today())->get();
         return view('pharmacist.alerts', compact('low_stock', 'expired'));
     }
