@@ -182,6 +182,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Payments & Billing
     Route::prefix('finance')->name('finance.')->group(function () {
         Route::get('/invoices', [App\Http\Controllers\Admin\FinanceController::class, 'invoices'])->name('invoices');
+        Route::post('/invoices', [App\Http\Controllers\Admin\FinanceController::class, 'storeInvoice'])->name('invoices.store');
         Route::get('/receipts', [App\Http\Controllers\Admin\FinanceController::class, 'receipts'])->name('receipts');
         Route::get('/payments', [App\Http\Controllers\Admin\FinanceController::class, 'payments'])->name('payments');
         Route::get('/history', [App\Http\Controllers\Admin\FinanceController::class, 'history'])->name('history');

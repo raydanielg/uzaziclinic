@@ -67,7 +67,7 @@
                     <p class="text-muted small mb-0">Manage billing and patient invoices</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-primary rounded-1 px-4 shadow-sm border-0">
+                    <button class="btn btn-primary rounded-1 px-4 shadow-sm border-0" data-bs-toggle="modal" data-bs-target="#addInvoiceModal">
                         <i class="fa-solid fa-plus me-2"></i> Create Invoice
                     </button>
                 </div>
@@ -161,6 +161,65 @@
 </style>
 @endsection
 
+<!-- Add Invoice Modal -->
+<div class="modal fade" id="addInvoiceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0 pb-0 pt-4 px-4">
+                <h5 class="modal-title fw-bold text-dark">Create New Invoice</h5>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="addInvoiceForm">
+                    @csrf
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Customer / Patient</label>
+                            <select name="user_id" class="form-select rounded-1 px-3 shadow-none border-light bg-light" required>
+                                <option value="">Select Customer</option>
+                                @foreach($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Related Order (Optional)</label>
+                            <select name="order_id" class="form-select rounded-1 px-3 shadow-none border-light bg-light">
+                                <option value="">No Related Order</option>
+                                @foreach($orders as $order)
+                                    <option value="{{ $order->id }}">Order #{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }} - {{ number_format($order->total_amount) }} TZS</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Total Amount (TZS)</label>
+                            <input type="number" name="total_amount" class="form-control rounded-1 px-3 shadow-none border-light bg-light" placeholder="0.00" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Initial Status</label>
+                            <select name="status" class="form-select rounded-1 px-3 shadow-none border-light bg-light" required>
+                                <option value="pending">Pending</option>
+                                <option value="paid">Paid</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Notes / Billing Description</label>
+                            <textarea name="notes" class="form-control rounded-1 px-3 shadow-none border-light bg-light" rows="3" placeholder="Service details or billing notes..."></textarea>
+                        </div>
+                    </div>
+                    <div class="text-end mt-4">
+                        <button type="button" class="btn btn-light rounded-1 px-4 me-2 border" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary rounded-1 px-5 shadow-sm border-0">
+                            <i class="fa-solid fa-check me-2"></i> Generate Invoice
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
     $(document).ready(function() {
@@ -172,6 +231,33 @@
                 searchPlaceholder: "Search invoices...",
                 emptyTable: "No invoices found."
             }
+        });
+
+        // AJAX Invoice Creation
+        $('#addInvoiceForm').on('submit', function(e) {
+            e.preventDefault();
+            const $btn = $(this).find('button[type="submit"]');
+            const originalText = $btn.html();
+            $btn.html('<span class="spinner-border spinner-border-sm me-2"></span> Generating...').prop('disabled', true);
+
+            $.ajax({
+                url: "{{ route('admin.finance.invoices.store') }}",
+                method: "POST",
+                data: $(this).serialize(),
+                success: function(resp) {
+                    $('#addInvoiceModal').modal('hide');
+                    Swal.fire({ icon: 'success', title: 'Success!', text: resp.message, timer: 1500, showConfirmButton: false })
+                    .then(() => location.reload());
+                },
+                error: function(xhr) {
+                    $btn.html(originalText).prop('disabled', false);
+                    let msg = 'Something went wrong!';
+                    if (xhr.status === 422) {
+                        msg = Object.values(xhr.responseJSON.errors).flat().join('\n');
+                    }
+                    Swal.fire('Error!', msg, 'error');
+                }
+            });
         });
     });
 </script>
