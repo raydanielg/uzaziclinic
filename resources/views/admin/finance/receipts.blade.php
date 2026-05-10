@@ -4,56 +4,62 @@
 
 @section('content')
 <div class="container-fluid py-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="h3 mb-0 text-gray-800 fw-bold">Receipts & Invoices (Malipo na Ankara)</h1>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Finance</li>
-                </ol>
-            </nav>
-        </div>
-    </div>
 
-    <div class="card border-0 shadow-sm">
-        <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
+                <table id="receiptsTable" class="table table-hover align-middle border-0">
+                    <thead class="bg-light text-muted small">
                         <tr>
-                            <th class="ps-4">Invoice ID</th>
-                            <th>Mteja / Mgonjwa</th>
-                            <th>Tarehe</th>
-                            <th>Kiasi (TZS)</th>
-                            <th>Hali (Status)</th>
-                            <th class="text-end pe-4">Vitendo</th>
+                            <th class="ps-3 border-0">RECEIPT ID / DATE</th>
+                            <th class="border-0">PATIENT / CUSTOMER</th>
+                            <th class="border-0">INVOICE REF</th>
+                            <th class="border-0">PAID AMOUNT</th>
+                            <th class="border-0">METHOD</th>
+                            <th class="text-end pe-3 border-0">ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($invoices as $invoice)
+                        @foreach($receipts as $receipt)
                         <tr>
-                            <td class="ps-4 fw-bold">#INV-{{ str_pad($invoice->id, 5, '0', STR_PAD_LEFT) }}</td>
-                            <td>{{ $invoice->user->name ?? ($invoice->order->user->name ?? 'N/A') }}</td>
-                            <td>{{ $invoice->created_at->format('d M, Y') }}</td>
-                            <td class="fw-bold">{{ number_format($invoice->amount, 0) }}/=</td>
+                            <td class="ps-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-sm bg-success-subtle text-success rounded-1 d-flex align-items-center justify-content-center me-3" style="width: 35px; height: 35px;">
+                                        <i class="fa-solid fa-receipt small"></i>
+                                    </div>
+                                    <div>
+                                        <span class="fw-bold text-dark d-block text-uppercase small ls-1">#REC-{{ str_pad($receipt->id, 5, '0', STR_PAD_LEFT) }}</span>
+                                        <span class="text-muted extra-small">{{ $receipt->updated_at->format('d M, Y') }}</span>
+                                    </div>
+                                </div>
+                            </td>
                             <td>
-                                <span class="badge bg-{{ $invoice->status == 'paid' ? 'success' : 'warning' }}-soft text-{{ $invoice->status == 'paid' ? 'success' : 'warning' }} rounded-pill px-3 py-2 text-capitalize">
-                                    {{ $invoice->status }}
+                                <div class="fw-bold text-dark">{{ $receipt->user->name ?? 'System User' }}</div>
+                                <div class="text-muted extra-small">{{ $receipt->user->email ?? '' }}</div>
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-secondary border-0 px-2 py-1 small fw-normal">
+                                    #INV-{{ str_pad($receipt->id, 5, '0', STR_PAD_LEFT) }}
                                 </span>
                             </td>
-                            <td class="text-end pe-4">
-                                <a href="#" class="btn btn-sm btn-light border"><i class="fas fa-print me-1 text-primary"></i>Ankara</a>
+                            <td>
+                                <div class="fw-bold text-success small">{{ number_format($receipt->total_amount) }} TZS</div>
+                            </td>
+                            <td>
+                                <span class="badge bg-info-subtle text-info border-0 px-2 py-1 fw-bold text-uppercase ls-1" style="font-size: 0.6rem;">
+                                    Online
+                                </span>
+                            </td>
+                            <td class="text-end pe-3">
+                                <div class="btn-group shadow-sm rounded-1 overflow-hidden">
+                                    <button class="btn btn-sm btn-white border-0 py-1 px-3" title="View Receipt">
+                                        <i class="fa-solid fa-eye text-primary small"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-white border-0 py-1 px-3" title="Print Receipt">
+                                        <i class="fa-solid fa-print text-secondary small"></i>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="text-center py-5 text-muted">
-                                <i class="fas fa-file-invoice-dollar fa-3x mb-3 opacity-20"></i>
-                                <p class="mb-0">Hakuna ankara (invoices) zilizopatikana.</p>
-                            </td>
-                        </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
