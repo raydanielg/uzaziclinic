@@ -28,25 +28,32 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'phone' => 'nullable|string|max:20',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role_id' => ['required', 'exists:roles,id'],
-            'phone' => ['nullable', 'string', 'max:20'],
-            'address' => ['nullable', 'string'],
+            'role_id' => 'required|exists:roles,id',
+            'status' => 'required|in:active,inactive',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
             'role_id' => $request->role_id,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'status' => 'active',
+            'status' => $request->status,
         ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'Mtumiaji ameongezwa kikamilifu!');
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'User created successfully!',
+                'user' => $user->load('role')
+            ]);
+        }
+
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully!');
     }
 
     public function edit(User $user)
