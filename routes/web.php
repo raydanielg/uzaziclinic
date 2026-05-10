@@ -38,23 +38,20 @@ Route::get('/home', function() {
     }
 
     // Role-based redirect
-    if ($user->role) {
-        switch ($user->role->name) {
-            case 'doctor':
-                return redirect()->route('doctor.dashboard');
-            case 'nurse':
-                return redirect()->route('nurse.dashboard');
-            case 'pharmacist':
-                return redirect()->route('pharmacist.dashboard');
-            case 'lab_tech':
-                return redirect()->route('lab.dashboard');
-            case 'accountant':
-                return redirect()->route('accountant.dashboard');
-            case 'receptionist':
-                return redirect()->route('receptionist.dashboard');
-            case 'customer':
-                return redirect()->route('patient.dashboard');
-        }
+    if ($user->hasRole('doctor')) {
+        return redirect()->route('doctor.dashboard');
+    } elseif ($user->hasRole('nurse')) {
+        return redirect()->route('nurse.dashboard');
+    } elseif ($user->hasRole('pharmacist')) {
+        return redirect()->route('pharmacist.dashboard');
+    } elseif ($user->hasRole('lab_tech')) {
+        return redirect()->route('lab.dashboard');
+    } elseif ($user->hasRole('accountant')) {
+        return redirect()->route('accountant.dashboard');
+    } elseif ($user->hasRole('receptionist')) {
+        return redirect()->route('receptionist.dashboard');
+    } elseif ($user->hasRole('customer')) {
+        return redirect()->route('patient.dashboard');
     }
 
     return redirect('/')->with('error', 'Unauthorized access or role not found.');
