@@ -74,8 +74,8 @@
             
             <div class="table-responsive">
                 <table id="stockTable" class="table table-hover align-middle border-0">
-                    <thead>
-                        <tr class="text-muted small">
+                    <thead class="bg-light text-muted small">
+                        <tr>
                             <th class="ps-3 border-0">MEDICINE NAME</th>
                             <th class="border-0">CATEGORY</th>
                             <th class="border-0">QUANTITY</th>
