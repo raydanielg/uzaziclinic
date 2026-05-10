@@ -153,7 +153,7 @@
                                 </a>
                             </div>
                             <div class="col-6">
-                                <a href="{{ route('admin.products.create') }}" class="quick-action-btn">
+                                <a href="{{ route('admin.store.create') }}" class="quick-action-btn">
                                     <i class="fa-solid fa-box-open d-block mb-2 text-warning fa-xl"></i>
                                     <span>Add Product</span>
                                 </a>
