@@ -125,12 +125,18 @@ Route::middleware(['auth', 'role:nurse'])->prefix('nurse')->name('nurse.')->grou
 
 Route::middleware(['auth', 'role:pharmacist'])->prefix('pharmacist')->name('pharmacist.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Pharmacist\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/stock-summary', [App\Http\Controllers\Pharmacist\DashboardController::class, 'stockSummary'])->name('stock-summary');
     Route::get('/inventory', [App\Http\Controllers\Pharmacist\DashboardController::class, 'inventory'])->name('inventory');
+    Route::get('/medicines/create', [App\Http\Controllers\Pharmacist\DashboardController::class, 'createMedicine'])->name('medicines.create');
+    Route::post('/medicines/store', [App\Http\Controllers\Pharmacist\DashboardController::class, 'storeMedicine'])->name('medicines.store');
+    Route::get('/stock-move', [App\Http\Controllers\Pharmacist\DashboardController::class, 'stockMove'])->name('stock-move');
     Route::get('/prescriptions', [App\Http\Controllers\Pharmacist\DashboardController::class, 'prescriptions'])->name('prescriptions');
+    Route::get('/prescriptions/history', [App\Http\Controllers\Pharmacist\DashboardController::class, 'prescriptionHistory'])->name('prescriptions.history');
     Route::get('/prescriptions/dispense/{id}', [App\Http\Controllers\Pharmacist\DashboardController::class, 'dispense'])->name('prescriptions.dispense');
+    Route::get('/online-orders', [App\Http\Controllers\Pharmacist\DashboardController::class, 'onlineOrders'])->name('online-orders');
     Route::get('/orders', [App\Http\Controllers\Pharmacist\DashboardController::class, 'orders'])->name('orders');
     Route::get('/suppliers', [App\Http\Controllers\Pharmacist\DashboardController::class, 'suppliers'])->name('suppliers');
-    Route::get('/alerts', [App\Http\Controllers\Pharmacist\DashboardController::class, 'alerts'])->name('alerts');
+    Route::get('/settings', [App\Http\Controllers\Pharmacist\DashboardController::class, 'settings'])->name('settings');
     Route::get('/reports', [App\Http\Controllers\Pharmacist\DashboardController::class, 'reports'])->name('reports');
     Route::get('/profile', [App\Http\Controllers\Pharmacist\DashboardController::class, 'profile'])->name('profile');
     Route::get('/password', [App\Http\Controllers\Pharmacist\DashboardController::class, 'password'])->name('password');
