@@ -141,6 +141,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::prefix('pharmacy')->name('pharmacy.')->group(function () {
         Route::get('/stock', [App\Http\Controllers\Admin\PharmacyController::class, 'stock'])->name('stock');
         Route::get('/create', [App\Http\Controllers\Admin\PharmacyController::class, 'create'])->name('create');
+        Route::delete('/stock/{medicine}', [App\Http\Controllers\Admin\PharmacyController::class, 'destroy'])->name('destroy');
         Route::get('/alerts', [App\Http\Controllers\Admin\PharmacyController::class, 'alerts'])->name('alerts');
         Route::get('/suppliers', [App\Http\Controllers\Admin\PharmacyController::class, 'suppliers'])->name('suppliers');
         Route::get('/orders', [App\Http\Controllers\Admin\PharmacyController::class, 'orders'])->name('orders');
