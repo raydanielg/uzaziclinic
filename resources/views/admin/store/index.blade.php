@@ -188,7 +188,7 @@
             </div>
         </div>
     </div>
-</div>
+@push('scripts')
 <script>
     $(document).ready(function() {
         const productTable = $('#productTable').DataTable({
