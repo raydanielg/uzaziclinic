@@ -60,9 +60,20 @@ Route::get('/home', function() {
 
 Route::post('/contact/submit', [App\Http\Controllers\ContactController::class, 'store'])->name('contact.submit');
 
-Route::middleware(['auth', 'role:doctor'])->prefix('doctor')->name('doctor.')->group(function () {
-    Route::get('/dashboard', [App\Http\Controllers\Doctor\DashboardController::class, 'index'])->name('dashboard');
-});
+    // Doctor Routes
+    Route::middleware(['auth', 'role:doctor'])->prefix('doctor')->name('doctor.')->group(function () {
+        Route::get('/dashboard', [App\Http\Controllers\Doctor\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/patients', [App\Http\Controllers\Doctor\DashboardController::class, 'patients'])->name('patients');
+        Route::get('/prescriptions/add', [App\Http\Controllers\Doctor\DashboardController::class, 'addPrescription'])->name('prescriptions.add');
+        Route::get('/lab-requests', [App\Http\Controllers\Doctor\DashboardController::class, 'labRequests'])->name('lab.requests');
+        Route::get('/lab-results', [App\Http\Controllers\Doctor\DashboardController::class, 'labResults'])->name('lab.results');
+        Route::get('/medical-records', [App\Http\Controllers\Doctor\DashboardController::class, 'medicalRecords'])->name('medical.records');
+        Route::get('/schedule', [App\Http\Controllers\Doctor\DashboardController::class, 'schedule'])->name('schedule');
+        Route::get('/chat', [App\Http\Controllers\Doctor\DashboardController::class, 'chat'])->name('chat');
+        Route::get('/profile', [App\Http\Controllers\Doctor\DashboardController::class, 'profile'])->name('profile');
+        Route::get('/password', [App\Http\Controllers\Doctor\DashboardController::class, 'password'])->name('password');
+        Route::get('/reports', [App\Http\Controllers\Doctor\DashboardController::class, 'reports'])->name('reports');
+    });
 
 Route::middleware(['auth', 'role:nurse'])->prefix('nurse')->name('nurse.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Nurse\DashboardController::class, 'index'])->name('dashboard');
