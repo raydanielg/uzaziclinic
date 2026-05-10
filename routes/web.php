@@ -80,6 +80,19 @@ Route::post('/contact/submit', [App\Http\Controllers\ContactController::class, '
 
 Route::middleware(['auth', 'role:nurse'])->prefix('nurse')->name('nurse.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Nurse\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/checkin', [App\Http\Controllers\Nurse\DashboardController::class, 'checkin'])->name('checkin');
+    Route::get('/queue', [App\Http\Controllers\Nurse\DashboardController::class, 'queue'])->name('queue');
+    Route::get('/vitals', [App\Http\Controllers\Nurse\DashboardController::class, 'vitals'])->name('vitals');
+    Route::get('/appointments', [App\Http\Controllers\Nurse\DashboardController::class, 'appointments'])->name('appointments');
+    Route::get('/assist-doctor', [App\Http\Controllers\Nurse\DashboardController::class, 'assistDoctor'])->name('assist-doctor');
+    Route::get('/patients', [App\Http\Controllers\Nurse\DashboardController::class, 'patients'])->name('patients');
+    Route::get('/bed-allocation', [App\Http\Controllers\Nurse\DashboardController::class, 'bedAllocation'])->name('bed-allocation');
+    Route::get('/wards', [App\Http\Controllers\Nurse\DashboardController::class, 'wardManagement'])->name('wards');
+    Route::get('/lab-collection', [App\Http\Controllers\Nurse\DashboardController::class, 'labCollection'])->name('lab-collection');
+    Route::get('/medication', [App\Http\Controllers\Nurse\DashboardController::class, 'medication'])->name('medication');
+    Route::get('/reports', [App\Http\Controllers\Nurse\DashboardController::class, 'reports'])->name('reports');
+    Route::get('/profile', [App\Http\Controllers\Nurse\DashboardController::class, 'profile'])->name('profile');
+    Route::get('/password', [App\Http\Controllers\Nurse\DashboardController::class, 'password'])->name('password');
 });
 
 Route::middleware(['auth', 'role:pharmacist'])->prefix('pharmacist')->name('pharmacist.')->group(function () {
