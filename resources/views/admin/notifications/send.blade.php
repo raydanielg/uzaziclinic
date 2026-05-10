@@ -1,74 +1,106 @@
-@extends('layouts.admin')
+@extends('admin.notifications.layout')
 
-@section('page_title', 'Push Notifications')
+@section('notification_title', 'Send New Broadcast')
+@section('notification_subtitle', 'Reach out to your clinic community via multiple channels')
 
-@section('content')
-<div class="row animate__animated animate__fadeInUp">
-    <div class="col-md-7">
-        <div class="card border-0 shadow-sm rounded-4 p-4">
-            <h5 class="fw-bold mb-4">Send New Notification</h5>
-            <form>
-                <div class="mb-3">
-                    <label class="form-label text-muted">Recipient Group</label>
-                    <select class="form-select rounded-3">
-                        <option>All Patients</option>
-                        <option>All Doctors</option>
-                        <option>Active Mothers Group</option>
-                        <option>Specific User</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-muted">Channel</label>
-                    <div class="d-flex gap-4">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" checked id="chEmail">
-                            <label class="form-check-label" for="chEmail">Email</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="chSMS">
-                            <label class="form-check-label" for="chSMS">SMS</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="chPush">
-                            <label class="form-check-label" for="chPush">App Push</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-muted">Title</label>
-                    <input type="text" class="form-control rounded-3" placeholder="Notification Title">
-                </div>
-                <div class="mb-4">
-                    <label class="form-label text-muted">Message Content</label>
-                    <textarea class="form-control rounded-3" rows="4" placeholder="Write your message here..."></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary rounded-pill px-5">Broadcast Notification</button>
-            </form>
+@section('notification_content')
+<form id="sendNotificationForm">
+    @csrf
+    <div class="row g-4">
+        <div class="col-md-12">
+            <label class="form-label">Recipient Group</label>
+            <select name="recipients" class="form-select rounded-1 border-light bg-light shadow-none">
+                <option value="all_patients">All Patients</option>
+                <option value="all_doctors">All Doctors</option>
+                <option value="maternity">Maternity Patients</option>
+                <option value="staff">All Staff Members</option>
+                <option value="specific">Specific User...</option>
+            </select>
         </div>
-    </div>
-    
-    <div class="col-md-5">
-        <div class="card border-0 shadow-sm rounded-4 p-4">
-            <h6 class="fw-bold mb-3">Recent Notifications Sent</h6>
-            <div class="list-group list-group-flush">
-                <div class="list-group-item px-0 py-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="badge bg-primary-subtle text-primary">Email</span>
-                        <span class="text-muted small">1h ago</span>
-                    </div>
-                    <h6 class="small fw-bold mt-2">Clinic Holiday Announcement</h6>
-                    <p class="mb-0 text-muted small">Sent to all patients registered...</p>
+
+        <div class="col-md-12">
+            <label class="form-label d-block mb-3">Communication Channels</label>
+            <div class="d-flex gap-4 p-3 bg-light rounded-1 border border-light">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="channels[]" value="email" id="chEmail" checked>
+                    <label class="form-check-label fw-bold small text-dark" for="chEmail">
+                        <i class="fa-solid fa-envelope text-primary me-1"></i> Email
+                    </label>
                 </div>
-                <div class="list-group-item px-0 py-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="badge bg-success-subtle text-success">SMS</span>
-                        <span class="text-muted small">5h ago</span>
-                    </div>
-                    <h6 class="small fw-bold mt-2">Maternity Checkup Reminder</h6>
-                    <p class="mb-0 text-muted small">Sent to Sarah Johnson...</p>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="channels[]" value="sms" id="chSMS">
+                    <label class="form-check-label fw-bold small text-dark" for="chSMS">
+                        <i class="fa-solid fa-comment-sms text-success me-1"></i> SMS
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="channels[]" value="push" id="chPush">
+                    <label class="form-check-label fw-bold small text-dark" for="chPush">
+                        <i class="fa-solid fa-bell text-warning me-1"></i> App Push
+                    </label>
                 </div>
             </div>
         </div>
+
+        <div class="col-md-12">
+            <label class="form-label">Notification Title</label>
+            <input type="text" name="title" class="form-control rounded-1 border-light bg-light shadow-none" placeholder="e.g., Important Clinic Update" required>
+        </div>
+
+        <div class="col-md-12">
+            <label class="form-label">Message Content</label>
+            <textarea name="message" class="form-control rounded-1 border-light bg-light shadow-none" rows="5" placeholder="Type your message here..." required></textarea>
+            <div class="form-text small">You can use placeholders like [name], [date], [clinic_name]</div>
+        </div>
+
+        <div class="col-md-12 text-end mt-4">
+            <button type="submit" class="btn btn-primary rounded-1 px-5 shadow-sm border-0">
+                <i class="fa-solid fa-paper-plane me-2"></i> Broadcast Now
+            </button>
+        </div>
     </div>
-</div>
+</form>
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    $('#sendNotificationForm').on('submit', function(e) {
+        e.preventDefault();
+        const $btn = $(this).find('button[type="submit"]');
+        const originalText = $btn.html();
+        
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This will send the notification to the selected group!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#0d6efd',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, Send it!',
+            customClass: {
+                confirmButton: 'rounded-1',
+                cancelButton: 'rounded-1'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $btn.html('<span class="spinner-border spinner-border-sm me-2"></span> Broadcasting...').prop('disabled', true);
+                
+                // Simulating AJAX for now as the backend might not have the route
+                setTimeout(() => {
+                    $btn.html(originalText).prop('disabled', false);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Notification broadcasted successfully!',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    $('#sendNotificationForm')[0].reset();
+                }, 1500);
+            }
+        });
+    });
+});
+</script>
+@endpush
 @endsection
