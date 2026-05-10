@@ -9,15 +9,35 @@ use App\Models\Order;
 
 class EcommerceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::latest()->paginate(10);
+        $query = Product::query();
+
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('description', 'like', '%' . $request->search . '%')
+                  ->orWhere('category', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->has('category') && $request->category != '') {
+            $query->where('category', $request->category);
+        }
+
+        $products = $query->latest()->paginate(10);
+        
+        $categories = Product::distinct()->pluck('category')->filter();
+
         $stats = [
             'total_products' => Product::count(),
             'active_orders' => Order::where('status', 'pending')->count(),
             'low_stock' => Product::where('stock_quantity', '<', 10)->count(),
         ];
-        return view('admin.store.index', compact('products', 'stats'));
+
+        if ($request->ajax()) {
+            return view('admin.store._product_table', compact('products'))->render();
+        }
+
+        return view('admin.store.index', compact('products', 'stats', 'categories'));
     }
 
     public function create()
@@ -44,9 +64,26 @@ class EcommerceController extends Controller
             $data['image'] = 'uploads/products/'.$imageName;
         }
 
-        Product::create($data);
+        $product = Product::create($data);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Product added successfully!',
+                'product' => $product
+            ]);
+        }
 
         return redirect()->route('admin.store.index')->with('success', 'Product added successfully!');
+    }
+
+    public function destroy(Product $product)
+    {
+        $product->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Product deleted successfully!'
+        ]);
     }
 
     public function orders()
