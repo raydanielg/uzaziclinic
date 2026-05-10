@@ -1,42 +1,13 @@
-@extends('layouts.admin')
+@extends('admin.settings.layout')
 
-@section('page_title', 'General Settings')
+@section('settings_title', 'General Configuration')
+@section('settings_group', 'general')
 
-@section('content')
-<div class="row animate__animated animate__fadeInUp">
-    <div class="col-md-8">
-        <div class="card border-0 shadow-sm rounded-4 p-4">
-            <h5 class="fw-bold mb-4">Clinic Configuration</h5>
-            
-            <form>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label text-muted">Clinic Name</label>
-                        <input type="text" class="form-control rounded-3" value="{{ $settings['clinic_name'] ?? 'Malkia Uzazi Clinic' }}">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label text-muted">Contact Email</label>
-                        <input type="email" class="form-control rounded-3" value="{{ $settings['contact_email'] ?? 'info@malkia.com' }}">
-                    </div>
-                </div>
-                
-                <div class="mb-3">
-                    <label class="form-label text-muted">Address</label>
-                    <textarea class="form-control rounded-3" rows="2">{{ $settings['clinic_address'] ?? '123 Health St, Dar es Salaam, Tanzania' }}</textarea>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <label class="form-label text-muted">Currency</label>
-                        <select class="form-select rounded-3">
-                            <option selected>{{ $settings['currency'] ?? 'Tanzanian Shilling (TSh)' }}</option>
-                            <option>US Dollar ($)</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label text-muted">Timezone</label>
-                        <select class="form-select rounded-3">
-                            <option selected>{{ $settings['timezone'] ?? 'East Africa Time (GMT+3)' }}</option>
+@section('settings_content')
+<div class="row g-4">
+    <div class="col-md-6">
+        <label class="form-label">System Name</label>
+        <input type="text" name="system_name" class="form-control rounded-1 border-light bg-light shadow-none" value="{{ $settings['system_name'] ?? 'Uzazi Clinic' }}" required>
                         </select>
                     </div>
                 </div>
