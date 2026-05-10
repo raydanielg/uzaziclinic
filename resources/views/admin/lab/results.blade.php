@@ -31,7 +31,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($results ?? [] as $test)
+                        @foreach($results ?? [] as $test)
                         <tr>
                             <td class="ps-3">
                                 <div class="d-flex align-items-center">
@@ -73,14 +73,7 @@
                                 </div>
                             </td>
                         </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="text-center py-5 text-muted">
-                                <i class="fa-solid fa-folder-open fs-1 mb-2 d-block opacity-50"></i>
-                                No completed lab results found.
-                            </td>
-                        </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
