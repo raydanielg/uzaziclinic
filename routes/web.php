@@ -173,6 +173,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/', [App\Http\Controllers\Admin\EcommerceController::class, 'index'])->name('index');
         Route::get('/create', [App\Http\Controllers\Admin\EcommerceController::class, 'create'])->name('create');
         Route::post('/store', [App\Http\Controllers\Admin\EcommerceController::class, 'store'])->name('store');
+        Route::delete('/{product}', [App\Http\Controllers\Admin\EcommerceController::class, 'destroy'])->name('destroy');
         Route::get('/orders', [App\Http\Controllers\Admin\EcommerceController::class, 'orders'])->name('orders');
         Route::get('/categories', [App\Http\Controllers\Admin\EcommerceController::class, 'categories'])->name('categories');
         Route::get('/reviews', [App\Http\Controllers\Admin\EcommerceController::class, 'reviews'])->name('reviews');
