@@ -6,6 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
 
+use App\Models\Medicine;
+use App\Models\Prescription;
+use App\Models\PrescriptionItem;
+use App\Models\Patient;
+use DB;
+
 class DashboardController extends Controller
 {
     public function index()
@@ -52,7 +58,68 @@ class DashboardController extends Controller
         
         return view('doctor.patient_details', compact('patient', 'appointments', 'medical_records'));
     }
-    public function addPrescription() { return view('doctor.prescriptions_add'); }
+    public function addPrescription() 
+    { 
+        $patients = Appointment::with('user')
+            ->where('doctor_id', auth()->id())
+            ->get()
+            ->map(function($app) {
+                return $app->user;
+            })->unique('id');
+
+        $medicines = Medicine::where('status', 'in_stock')->get();
+
+        return view('doctor.prescriptions_add', compact('patients', 'medicines')); 
+    }
+
+    public function storePrescription(Request $request)
+    {
+        $request->validate([
+            'patient_id' => 'required',
+            'diagnosis' => 'nullable',
+            'medicines' => 'required|array',
+            'medicines.*.name' => 'required',
+            'medicines.*.dosage' => 'required',
+            'medicines.*.frequency' => 'required',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $prescription = Prescription::create([
+                'patient_id' => $request->patient_id,
+                'doctor_id' => auth()->id(),
+                'diagnosis' => $request->diagnosis,
+                'notes' => $request->notes,
+                'status' => 'active'
+            ]);
+
+            foreach ($request->medicines as $item) {
+                PrescriptionItem::create([
+                    'prescription_id' => $prescription->id,
+                    'medicine_name' => $item['name'],
+                    'dosage' => $item['dosage'],
+                    'frequency' => $item['frequency'],
+                    'duration' => $item['duration'] ?? null,
+                ]);
+            }
+
+            DB::commit();
+
+            if ($request->ajax()) {
+                return response()->json(['success' => true, 'message' => 'Prescription saved successfully!']);
+            }
+
+            return redirect()->route('doctor.dashboard')->with('success', 'Prescription saved!');
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            }
+            return back()->with('error', 'Error: ' . $e->getMessage());
+        }
+    }
     public function labRequests() { return view('doctor.lab_requests'); }
     public function labResults() { return view('doctor.lab_results'); }
     public function medicalRecords() { return view('doctor.medical_records'); }
