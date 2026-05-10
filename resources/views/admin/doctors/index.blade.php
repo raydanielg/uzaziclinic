@@ -8,7 +8,7 @@
         <div class="card border-0 shadow-sm rounded-4 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h5 class="fw-bold mb-0">Doctor Directory</h5>
-                <a href="{{ route('admin.doctors.create') }}" class="btn btn-primary rounded-pill px-4">
+                <a href="{{ route('admin.doctors.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
                     <i class="fa-solid fa-plus me-2"></i> Add Doctor
                 </a>
             </div>
@@ -92,7 +92,7 @@
                              <td class="text-end">
                                  <form action="{{ route('admin.doctors.from-user', $u->id) }}" method="POST" class="d-inline">
                                      @csrf
-                                     <button type="submit" class="btn btn-sm btn-outline-primary">
+                                     <button type="submit" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm">
                                          <i class="fa-solid fa-user-plus me-1"></i> Create Profile
                                      </button>
                                  </form>
