@@ -216,6 +216,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/sms', [App\Http\Controllers\Admin\SettingController::class, 'sms'])->name('sms');
         Route::get('/gateways', [App\Http\Controllers\Admin\SettingController::class, 'gateways'])->name('gateways');
         Route::get('/backup', [App\Http\Controllers\Admin\SettingController::class, 'backup'])->name('backup');
+        Route::post('/update', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('update');
     });
 
     // Notifications
