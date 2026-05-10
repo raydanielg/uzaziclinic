@@ -138,14 +138,29 @@ Route::middleware(['auth', 'role:pharmacist'])->prefix('pharmacist')->name('phar
 
 Route::middleware(['auth', 'role:lab_tech'])->prefix('lab')->name('lab.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Lab\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/requests', [App\Http\Controllers\Lab\DashboardController::class, 'requests'])->name('requests');
+    Route::get('/equipment', [App\Http\Controllers\Lab\DashboardController::class, 'equipment'])->name('equipment');
+    Route::get('/tests', [App\Http\Controllers\Lab\DashboardController::class, 'tests'])->name('tests');
+    Route::get('/profile', [App\Http\Controllers\Lab\DashboardController::class, 'profile'])->name('profile');
+    Route::get('/password', [App\Http\Controllers\Lab\DashboardController::class, 'password'])->name('password');
 });
 
 Route::middleware(['auth', 'role:accountant'])->prefix('accountant')->name('accountant.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Accountant\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/invoices', [App\Http\Controllers\Accountant\DashboardController::class, 'invoices'])->name('invoices');
+    Route::get('/payments', [App\Http\Controllers\Accountant\DashboardController::class, 'payments'])->name('payments');
+    Route::get('/reports', [App\Http\Controllers\Accountant\DashboardController::class, 'reports'])->name('reports');
+    Route::get('/profile', [App\Http\Controllers\Accountant\DashboardController::class, 'profile'])->name('profile');
+    Route::get('/password', [App\Http\Controllers\Accountant\DashboardController::class, 'password'])->name('password');
 });
 
 Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('receptionist.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Receptionist\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/appointments', [App\Http\Controllers\Receptionist\DashboardController::class, 'appointments'])->name('appointments');
+    Route::get('/patients', [App\Http\Controllers\Receptionist\DashboardController::class, 'patients'])->name('patients');
+    Route::get('/doctors', [App\Http\Controllers\Receptionist\DashboardController::class, 'doctors'])->name('doctors');
+    Route::get('/profile', [App\Http\Controllers\Receptionist\DashboardController::class, 'profile'])->name('profile');
+    Route::get('/password', [App\Http\Controllers\Receptionist\DashboardController::class, 'password'])->name('password');
 });
 
 Route::middleware(['auth', 'role:customer'])->prefix('patient')->name('patient.')->group(function () {
