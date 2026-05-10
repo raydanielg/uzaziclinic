@@ -53,61 +53,39 @@
                     <h5 class="fw-bold mb-0 text-dark">Medicines Inventory</h5>
                     <p class="text-muted small mb-0">Monitor and manage your pharmaceutical stock levels</p>
                 </div>
-                <a href="{{ route('admin.pharmacy.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                    <i class="fa-solid fa-plus me-2"></i> Add Medicine
-                </a>
+                <div class="d-flex gap-2">
+                    <select id="filterCategory" class="form-select form-select-sm rounded-pill px-3 border-0 shadow-sm" style="width: 150px;">
+                        <option value="">All Categories</option>
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat }}">{{ $cat }}</option>
+                        @endforeach
+                    </select>
+                    <select id="filterStatus" class="form-select form-select-sm rounded-pill px-3 border-0 shadow-sm" style="width: 150px;">
+                        <option value="">All Status</option>
+                        <option value="in_stock">In Stock</option>
+                        <option value="low_stock">Low Stock</option>
+                        <option value="expired">Expired</option>
+                    </select>
+                    <a href="{{ route('admin.pharmacy.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm border-0">
+                        <i class="fa-solid fa-plus me-2"></i> Add Medicine
+                    </a>
+                </div>
             </div>
             
             <div class="table-responsive">
-                <table id="stockTable" class="table table-hover align-middle">
-                    <thead class="bg-light text-muted">
-                        <tr>
-                            <th class="ps-3">MEDICINE NAME</th>
-                            <th>CATEGORY</th>
-                            <th>QUANTITY</th>
-                            <th>EXPIRY DATE</th>
-                            <th>STATUS</th>
-                            <th class="text-end pe-3">ACTIONS</th>
+                <table id="stockTable" class="table table-hover align-middle border-0">
+                    <thead>
+                        <tr class="text-muted small">
+                            <th class="ps-3 border-0">MEDICINE NAME</th>
+                            <th class="border-0">CATEGORY</th>
+                            <th class="border-0">QUANTITY</th>
+                            <th class="border-0">EXPIRY DATE</th>
+                            <th class="border-0">STATUS</th>
+                            <th class="text-end pe-3 border-0">ACTIONS</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach($medicines ?? [] as $medicine)
-                        <tr>
-                            <td class="ps-3">
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar-sm bg-light text-secondary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
-                                        <i class="fa-solid fa-capsules"></i>
-                                    </div>
-                                    <span class="fw-bold text-dark">{{ $medicine->name }}</span>
-                                </div>
-                            </td>
-                            <td>{{ $medicine->category }}</td>
-                            <td>
-                                <span class="fw-bold {{ $medicine->quantity <= 10 ? 'text-danger' : 'text-dark' }}">
-                                    {{ $medicine->quantity }} Units
-                                </span>
-                            </td>
-                            <td class="text-muted small">{{ $medicine->expiry_date?->format('d M, Y') ?? 'N/A' }}</td>
-                            <td>
-                                <span class="badge {{ $medicine->status_badge }} border px-2 py-1 fw-bold text-uppercase" style="font-size: 0.65rem;">
-                                    {{ $medicine->status_label }}
-                                </span>
-                            </td>
-                            <td class="text-end pe-3">
-                                <div class="btn-group">
-                                    <button class="btn btn-sm btn-light rounded-circle shadow-none me-1" title="Edit">
-                                        <i class="fa-solid fa-pen text-primary"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-light rounded-circle shadow-none delete-medicine" 
-                                            data-id="{{ $medicine->id }}" 
-                                            data-name="{{ $medicine->name }}"
-                                            title="Delete">
-                                        <i class="fa-solid fa-trash text-danger"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
+                    <tbody id="stockTableBody">
+                        @include('admin.pharmacy._stock_table')
                     </tbody>
                 </table>
             </div>
@@ -119,15 +97,41 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        $('#stockTable').DataTable({
+        const stockTable = $('#stockTable').DataTable({
             responsive: true,
             order: [[0, 'asc']],
+            dom: 'rftip', // Custom DOM to keep it clean
             language: {
                 search: "_INPUT_",
                 searchPlaceholder: "Search stock...",
-                lengthMenu: "Show _MENU_ entries"
             }
         });
+
+        // AJAX Filter Function
+        function applyFilters() {
+            const category = $('#filterCategory').val();
+            const status = $('#filterStatus').val();
+
+            $.ajax({
+                url: "{{ route('admin.pharmacy.stock') }}",
+                data: { category, status },
+                success: function(html) {
+                    stockTable.destroy();
+                    $('#stockTableBody').html(html);
+                    $('#stockTable').DataTable({
+                        responsive: true,
+                        order: [[0, 'asc']],
+                        dom: 'rftip',
+                        language: {
+                            search: "_INPUT_",
+                            searchPlaceholder: "Search stock...",
+                        }
+                    });
+                }
+            });
+        }
+
+        $('#filterCategory, #filterStatus').on('change', applyFilters);
 
         $(document).on('click', '.delete-medicine', function() {
             const id = $(this).data('id');
@@ -175,17 +179,27 @@
 </script>
 
 <style>
-    .avatar-sm { background-color: #f1f5f9; }
+    .avatar-sm { background-color: #f8fafc; }
     .table thead th {
-        font-size: 0.75rem !important;
-        letter-spacing: 0.5px;
-        background: #f8fafc !important;
-        color: #64748b !important;
+        font-size: 0.7rem !important;
+        letter-spacing: 1px;
+        background: transparent !important;
+        color: #94a3b8 !important;
+        padding-bottom: 15px !important;
     }
-    .hover-shadow:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+    .btn-white { background: #fff; border: 1px solid #f1f5f9 !important; }
+    .btn-white:hover { background: #f8fafc; }
+    .ls-1 { letter-spacing: 0.5px; }
+    .extra-small { font-size: 0.65rem; }
+    .form-select-sm { font-size: 0.75rem; height: 38px; }
+    .dataTables_filter input {
+        border-radius: 50px !important;
+        padding: 8px 20px !important;
+        border: 0 !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
+        background: #fff !important;
+        width: 250px !important;
     }
-    .transition { transition: all 0.3s ease; }
+    .dataTables_info, .dataTables_paginate { font-size: 0.8rem; margin-top: 15px; }
 </style>
 @endpush
