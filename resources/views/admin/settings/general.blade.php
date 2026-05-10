@@ -8,30 +8,25 @@
     <div class="col-md-6">
         <label class="form-label">System Name</label>
         <input type="text" name="system_name" class="form-control rounded-1 border-light bg-light shadow-none" value="{{ $settings['system_name'] ?? 'Uzazi Clinic' }}" required>
-                        </select>
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn btn-primary rounded-pill px-5">Save Settings</button>
-            </form>
-        </div>
     </div>
-    
-    <div class="col-md-4">
-        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-            <h6 class="fw-bold mb-3">System Status</h6>
-            <div class="d-flex justify-content-between mb-2">
-                <span class="text-muted">Database</span>
-                <span class="badge bg-success">Connected</span>
-            </div>
-            <div class="d-flex justify-content-between mb-2">
-                <span class="text-muted">Storage</span>
-                <span class="text-dark fw-bold">1.2 GB / 10 GB</span>
-            </div>
-            <div class="progress" style="height: 6px;">
-                <div class="progress-bar bg-primary" style="width: 12%"></div>
-            </div>
-        </div>
+    <div class="col-md-6">
+        <label class="form-label">Clinic Address</label>
+        <input type="text" name="clinic_address" class="form-control rounded-1 border-light bg-light shadow-none" value="{{ $settings['clinic_address'] ?? 'Dar es Salaam, TZ' }}">
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Contact Phone</label>
+        <input type="text" name="contact_phone" class="form-control rounded-1 border-light bg-light shadow-none" value="{{ $settings['contact_phone'] ?? '+255...' }}">
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Support Email</label>
+        <input type="email" name="support_email" class="form-control rounded-1 border-light bg-light shadow-none" value="{{ $settings['support_email'] ?? 'support@uzaziclinic.co.tz' }}">
+    </div>
+    <div class="col-md-12">
+        <label class="form-label">Footer Copyright Text</label>
+        <input type="text" name="footer_text" class="form-control rounded-1 border-light bg-light shadow-none" value="{{ $settings['footer_text'] ?? ' 2026 Uzazi Clinic Management System' }}">
+    </div>
+    <div class="col-md-12">
+        <button type="submit" class="btn btn-primary rounded-pill px-5">Save Settings</button>
     </div>
 </div>
 @endsection
