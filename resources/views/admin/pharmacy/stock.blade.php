@@ -66,9 +66,9 @@
                         <option value="low_stock">Low Stock</option>
                         <option value="expired">Expired</option>
                     </select>
-                    <a href="{{ route('admin.pharmacy.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm border-0">
+                    <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm border-0" data-bs-toggle="modal" data-bs-target="#addMedicineModal">
                         <i class="fa-solid fa-plus me-2"></i> Add Medicine
-                    </a>
+                    </button>
                 </div>
             </div>
             
