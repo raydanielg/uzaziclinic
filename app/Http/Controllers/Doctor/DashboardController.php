@@ -205,7 +205,16 @@ class DashboardController extends Controller
 
         return view('doctor.medical_records', compact('medical_records', 'patients')); 
     }
-    public function schedule() { return view('doctor.schedule'); }
+    public function schedule() 
+    { 
+        $appointments = Appointment::with('user')
+            ->where('doctor_id', auth()->id())
+            ->whereDate('appointment_date', '>=', today())
+            ->orderBy('appointment_date', 'asc')
+            ->get();
+
+        return view('doctor.schedule', compact('appointments')); 
+    }
     public function chat() { return view('doctor.chat'); }
     public function profile() { return view('doctor.profile'); }
     public function password() { return view('doctor.password'); }
