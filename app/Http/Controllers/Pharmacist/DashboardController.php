@@ -18,12 +18,12 @@ class DashboardController extends Controller
     {
         $stats = [
             'total_medicines' => Medicine::count(),
-            'low_stock' => Medicine::whereRaw('stock <= min_stock')->count(),
+            'low_stock' => Medicine::where('quantity', '<=', 10)->count(),
             'today_prescriptions' => Prescription::whereDate('created_at', today())->count(),
             'pending_orders' => Order::where('status', 'pending')->count(),
         ];
 
-        $low_stock_items = Medicine::whereRaw('stock <= min_stock')->limit(5)->get();
+        $low_stock_items = Medicine::where('quantity', '<=', 10)->limit(5)->get();
         $recent_prescriptions = Prescription::with('patient', 'doctor')->latest()->limit(5)->get();
 
         return view('pharmacist.dashboard', compact('stats', 'low_stock_items', 'recent_prescriptions'));
