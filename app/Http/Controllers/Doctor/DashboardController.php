@@ -179,7 +179,16 @@ class DashboardController extends Controller
             return back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
-    public function labResults() { return view('doctor.lab_results'); }
+    public function labResults() 
+    { 
+        $completed_results = LabRequest::with('patient')
+            ->where('doctor_id', auth()->id())
+            ->where('status', 'completed')
+            ->latest()
+            ->get();
+
+        return view('doctor.lab_results', compact('completed_results')); 
+    }
     public function medicalRecords() { return view('doctor.medical_records'); }
     public function schedule() { return view('doctor.schedule'); }
     public function chat() { return view('doctor.chat'); }
