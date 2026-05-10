@@ -79,6 +79,7 @@
                             <table class="table table-hover align-middle mb-0 border-0">
                                 <thead class="bg-light">
                                     <tr>
+                                        <th class="border-0">Instock</th>
                                         <th class="ps-4 small text-uppercase fw-bold text-muted border-0">Patient</th>
                                         <th class="small text-uppercase fw-bold text-muted border-0">Doctor</th>
                                         <th class="small text-uppercase fw-bold text-muted border-0">Date</th>
@@ -88,6 +89,11 @@
                                 <tbody>
                                     @forelse($recent_prescriptions as $presc)
                                     <tr>
+                                        <td>
+                                            <span class="fw-bold {{ ($presc->medicine->quantity ?? 0) > 0 ? 'text-success' : 'text-danger' }}">
+                                                {{ $presc->medicine->quantity ?? 0 }} {{ $presc->medicine->unit ?? 'pcs' }}
+                                            </span>
+                                        </td>
                                         <td class="ps-4">
                                             <div class="fw-bold text-dark">{{ $presc->patient->name ?? 'N/A' }}</div>
                                             <div class="small text-muted">ID: #PT-{{ $presc->patient_id }}</div>
@@ -125,7 +131,7 @@
                         <div class="d-flex align-items-center justify-content-between p-3 rounded-4 bg-light mb-3 border border-danger border-opacity-10">
                             <div>
                                 <h6 class="fw-bold mb-1 small text-dark">{{ $item->name }}</h6>
-                                <p class="small text-muted mb-0">Stock: <span class="text-danger fw-bold">{{ $item->stock }} {{ $item->unit }}</span></p>
+                                <p class="small text-muted mb-0">Stock: <span class="text-danger fw-bold">{{ $item->quantity }} {{ $item->unit ?? 'pcs' }}</span></p>
                             </div>
                             <a href="{{ route('pharmacist.inventory') }}" class="btn btn-sm btn-white rounded-circle shadow-none border-light">
                                 <i class="fa-solid fa-cart-plus text-primary"></i>
