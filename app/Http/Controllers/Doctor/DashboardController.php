@@ -12,6 +12,9 @@ use App\Models\PrescriptionItem;
 use App\Models\Patient;
 use DB;
 
+use App\Models\LabRequest;
+use App\Models\LabTest;
+
 class DashboardController extends Controller
 {
     public function index()
@@ -120,7 +123,62 @@ class DashboardController extends Controller
             return back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
-    public function labRequests() { return view('doctor.lab_requests'); }
+    public function labRequests() 
+    { 
+        $patients = Appointment::with('user')
+            ->where('doctor_id', auth()->id())
+            ->get()
+            ->map(function($app) {
+                return $app->user;
+            })->unique('id');
+
+        $available_tests = LabTest::where('status', 'active')->get();
+        
+        $pending_requests = LabRequest::with('patient')
+            ->where('doctor_id', auth()->id())
+            ->where('status', '!=', 'completed')
+            ->latest()
+            ->get();
+
+        $completed_results = LabRequest::with('patient')
+            ->where('doctor_id', auth()->id())
+            ->where('status', 'completed')
+            ->latest()
+            ->get();
+
+        return view('doctor.lab_requests', compact('patients', 'available_tests', 'pending_requests', 'completed_results')); 
+    }
+
+    public function storeLabRequest(Request $request)
+    {
+        $request->validate([
+            'patient_id' => 'required',
+            'test_names' => 'required|array',
+            'priority' => 'required'
+        ]);
+
+        try {
+            LabRequest::create([
+                'patient_id' => $request->patient_id,
+                'doctor_id' => auth()->id(),
+                'test_names' => implode(', ', $request->test_names),
+                'clinical_notes' => $request->clinical_notes,
+                'priority' => $request->priority,
+                'status' => 'pending'
+            ]);
+
+            if ($request->ajax()) {
+                return response()->json(['success' => true, 'message' => 'Lab request submitted successfully!']);
+            }
+
+            return back()->with('success', 'Lab request submitted!');
+        } catch (\Exception $e) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            }
+            return back()->with('error', 'Error: ' . $e->getMessage());
+        }
+    }
     public function labResults() { return view('doctor.lab_results'); }
     public function medicalRecords() { return view('doctor.medical_records'); }
     public function schedule() { return view('doctor.schedule'); }
