@@ -61,7 +61,7 @@ class User extends Authenticatable
      */
     public function hasRole($role)
     {
-        if (!$this->role) {
+        if (!$this->role || is_string($this->role)) {
             return false;
         }
         return $this->role->name === $role;
