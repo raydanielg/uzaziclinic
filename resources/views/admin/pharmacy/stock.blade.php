@@ -54,19 +54,19 @@
                     <p class="text-muted small mb-0">Monitor and manage your pharmaceutical stock levels</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <select id="filterCategory" class="form-select form-select-sm rounded-pill px-3 border-0 shadow-sm" style="width: 150px;">
+                    <select id="filterCategory" class="form-select form-select-sm rounded-1 px-3 border-0 shadow-sm" style="width: 150px;">
                         <option value="">All Categories</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat }}">{{ $cat }}</option>
                         @endforeach
                     </select>
-                    <select id="filterStatus" class="form-select form-select-sm rounded-pill px-3 border-0 shadow-sm" style="width: 150px;">
+                    <select id="filterStatus" class="form-select form-select-sm rounded-1 px-3 border-0 shadow-sm" style="width: 150px;">
                         <option value="">All Status</option>
                         <option value="in_stock">In Stock</option>
                         <option value="low_stock">Low Stock</option>
                         <option value="expired">Expired</option>
                     </select>
-                    <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm border-0" data-bs-toggle="modal" data-bs-target="#addMedicineModal">
+                    <button type="button" class="btn btn-primary rounded-1 px-4 shadow-sm border-0" data-bs-toggle="modal" data-bs-target="#addMedicineModal">
                         <i class="fa-solid fa-plus me-2"></i> Add Medicine
                     </button>
                 </div>
@@ -110,12 +110,12 @@
                     <div class="row g-3">
                         <div class="col-md-12">
                             <label class="form-label small fw-bold text-muted text-uppercase ls-1">Medicine Name</label>
-                            <input type="text" name="name" class="form-control rounded-pill px-3 shadow-none border-light bg-light" placeholder="e.g. Paracetamol" required>
+                            <input type="text" name="name" class="form-control rounded-1 px-3 shadow-none border-light bg-light" placeholder="e.g. Paracetamol" required>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label small fw-bold text-muted text-uppercase ls-1">Category</label>
-                            <select name="category" class="form-select rounded-pill px-3 shadow-none border-light bg-light" required>
+                            <select name="category" class="form-select rounded-1 px-3 shadow-none border-light bg-light" required>
                                 <option value="">Select Category</option>
                                 <option value="Antibiotics">Antibiotics</option>
                                 <option value="Painkillers">Painkillers</option>
@@ -127,17 +127,17 @@
 
                         <div class="col-md-6">
                             <label class="form-label small fw-bold text-muted text-uppercase ls-1">Quantity (Units)</label>
-                            <input type="number" name="quantity" class="form-control rounded-pill px-3 shadow-none border-light bg-light" placeholder="e.g. 100" required>
+                            <input type="number" name="quantity" class="form-control rounded-1 px-3 shadow-none border-light bg-light" placeholder="e.g. 100" required>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label small fw-bold text-muted text-uppercase ls-1">Price per Unit</label>
-                            <input type="number" step="0.01" name="price" class="form-control rounded-pill px-3 shadow-none border-light bg-light" placeholder="e.g. 500.00" required>
+                            <input type="number" step="0.01" name="price" class="form-control rounded-1 px-3 shadow-none border-light bg-light" placeholder="e.g. 500.00" required>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label small fw-bold text-muted text-uppercase ls-1">Expiry Date</label>
-                            <input type="date" name="expiry_date" class="form-control rounded-pill px-3 shadow-none border-light bg-light" required min="{{ date('Y-m-d') }}">
+                            <input type="date" name="expiry_date" class="form-control rounded-1 px-3 shadow-none border-light bg-light" required min="{{ date('Y-m-d') }}">
                         </div>
 
                         <div class="col-md-12">
@@ -146,8 +146,8 @@
                         </div>
                     </div>
                     <div class="text-end mt-4">
-                        <button type="button" class="btn btn-light rounded-pill px-4 me-2 border" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary rounded-pill px-5 shadow-sm border-0">
+                        <button type="button" class="btn btn-light rounded-1 px-4 me-2 border" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary rounded-1 px-5 shadow-sm border-0">
                             <i class="fa-solid fa-check me-2"></i> Save Medicine
                         </button>
                     </div>
@@ -293,7 +293,7 @@
     .extra-small { font-size: 0.65rem; }
     .form-select-sm { font-size: 0.75rem; height: 38px; }
     .dataTables_filter input {
-        border-radius: 50px !important;
+        border-radius: 4px !important;
         padding: 8px 20px !important;
         border: 0 !important;
         box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
