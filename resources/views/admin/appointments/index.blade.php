@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('page_title', 'Appointment Management')
+@section('page_title', ($type ?? 'All') . ' Appointments')
 
 @section('content')
 <div class="container-fluid px-0">
@@ -10,8 +10,8 @@
                 <div class="card-header bg-white border-bottom py-3 px-4">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h5 class="fw-bold mb-0">Appointments List</h5>
-                            <p class="text-muted small mb-0">View and manage patient visits and doctor schedules</p>
+                            <h5 class="fw-bold mb-0">{{ $type ?? 'All' }} Appointments</h5>
+                            <p class="text-muted small mb-0">View and manage {{ strtolower($type ?? 'all') }} patient visits</p>
                         </div>
                         <div class="col-auto">
                             <a href="{{ route('admin.appointments.create') }}" class="btn btn-primary px-4 shadow-sm">
@@ -61,16 +61,27 @@
                                     <td>
                                         @php
                                             $statusClass = match($appointment->status) {
-                                                'pending' => 'bg-warning-subtle text-warning border-warning-subtle',
-                                                'confirmed' => 'bg-info-subtle text-info border-info-subtle',
-                                                'completed' => 'bg-success-subtle text-success border-success-subtle',
-                                                'cancelled' => 'bg-danger-subtle text-danger border-danger-subtle',
+                                                'pending' => 'bg-warning-subtle text-warning border-warning',
+                                                'confirmed' => 'bg-info-subtle text-info border-info',
+                                                'completed' => 'bg-success-subtle text-success border-success',
+                                                'cancelled' => 'bg-danger-subtle text-danger border-danger',
                                                 default => 'bg-light text-dark'
                                             };
                                         @endphp
-                                        <span class="badge {{ $statusClass }} border px-2 py-1 fw-normal text-uppercase" style="font-size: 0.65rem;">
-                                            {{ $appointment->status }}
-                                        </span>
+                                        <div class="dropdown d-inline-block">
+                                            <button class="badge {{ $statusClass }} border px-2 py-1 fw-bold text-uppercase dropdown-toggle shadow-none" 
+                                                    style="font-size: 0.65rem; cursor: pointer;" 
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                {{ $appointment->status }}
+                                            </button>
+                                            <ul class="dropdown-menu shadow border-0 py-2">
+                                                <li><a class="dropdown-item small py-2 update-status" href="#" data-id="{{ $appointment->id }}" data-status="pending">Pending</a></li>
+                                                <li><a class="dropdown-item small py-2 update-status" href="#" data-id="{{ $appointment->id }}" data-status="confirmed">Confirmed</a></li>
+                                                <li><a class="dropdown-item small py-2 update-status" href="#" data-id="{{ $appointment->id }}" data-status="completed">Completed</a></li>
+                                                <li><hr class="dropdown-divider my-1"></li>
+                                                <li><a class="dropdown-item small py-2 update-status text-danger" href="#" data-id="{{ $appointment->id }}" data-status="cancelled">Cancel Appointment</a></li>
+                                            </ul>
+                                        </div>
                                     </td>
                                     <td class="text-end pe-2">
                                         <div class="btn-group">
@@ -103,7 +114,62 @@
                 search: "_INPUT_",
                 searchPlaceholder: "Search appointments...",
                 lengthMenu: "Show _MENU_ entries"
+            },
+            initComplete: function () {
+                this.api().columns(3).every(function () {
+                    var column = this;
+                    var select = $('<select class="form-select form-select-sm ms-2" style="width: 150px;"><option value="">All Status</option></select>')
+                        .appendTo('#appointmentsTable_filter')
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+                    column.data().unique().sort().each(function (d, j) {
+                        var status = $(d).text().trim();
+                        if (status) {
+                            select.append('<option value="' + status + '">' + status + '</option>');
+                        }
+                    });
+                });
             }
+        });
+
+        // Update status AJAX
+        $('.update-status').on('click', function(e) {
+            e.preventDefault();
+            const id = $(this).data('id');
+            const status = $(this).data('status');
+            const $this = $(this);
+
+            Swal.fire({
+                title: 'Update Status?',
+                text: `Set appointment status to ${status}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, update',
+                cancelButtonText: 'No, keep current'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `{{ url('admin/appointments') }}/${id}/status`,
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            status: status
+                        },
+                        success: function(resp) {
+                            if(resp.success) {
+                                Swal.fire('Updated!', resp.message, 'success').then(() => {
+                                    location.reload();
+                                });
+                            }
+                        },
+                        error: function() {
+                            Swal.fire('Error', 'Failed to update status', 'error');
+                        }
+                    });
+                }
+            });
         });
     });
 

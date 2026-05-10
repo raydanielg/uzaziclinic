@@ -54,6 +54,22 @@ class AppointmentController extends Controller
         ]);
     }
 
+    public function updateStatus(Request $request, Appointment $appointment)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,confirmed,completed,cancelled'
+        ]);
+
+        $appointment->update([
+            'status' => $request->status
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Appointment status updated to ' . ucfirst($request->status)
+        ]);
+    }
+
     public function quickPatient(Request $request)
     {
         $validator = \Validator::make($request->all(), [
