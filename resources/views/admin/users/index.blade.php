@@ -8,16 +8,11 @@
         <div class="col-12">
             <div class="card border-0 shadow-sm rounded-3">
                 <div class="card-header bg-white border-bottom py-3 px-4">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <h5 class="fw-bold mb-0">System Users Management</h5>
-                            <p class="text-muted small mb-0">Manage system access, roles and export reports</p>
-                        </div>
-                        <div class="col-auto">
-                            <button class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#addUserModal">
-                                <i class="fa-solid fa-plus me-2"></i> Add New User
-                            </button>
-                        </div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold mb-0">System Users</h5>
+                        <button type="button" class="btn btn-primary rounded-1 px-4 shadow-sm border-0" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                            <i class="fa-solid fa-plus me-2"></i> Add User
+                        </button>
                     </div>
                 </div>
                 
@@ -35,9 +30,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($users ?? [] as $user)
-                                <tr>
-                                    <td class="ps-2">
+                                @foreach($users as $user)
+                                <tr id="user-row-{{ $user->id }}">
+                                    <td class="ps-3">
                                         <div class="d-flex align-items-center">
                                             <div class="avatar bg-primary-subtle text-primary rounded-1 d-flex align-items-center justify-content-center fw-bold me-3" style="width: 40px; height: 40px;">
                                                 {{ substr($user->name, 0, 1) }}
@@ -49,7 +44,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <select class="form-select form-select-sm role-select" data-user-id="{{ $user->id }}" style="max-width: 180px;">
+                                        <select class="form-select form-select-sm role-select rounded-1 border-light bg-light" data-user-id="{{ $user->id }}" style="max-width: 180px;">
                                             @foreach(($roles ?? []) as $role)
                                                 <option value="{{ $role->id }}" {{ (int)$user->role_id === (int)$role->id ? 'selected' : '' }}>
                                                     {{ ucfirst($role->name) }}
@@ -61,22 +56,23 @@
                                         {{ $user->phone ?? '---' }}
                                     </td>
                                     <td>
-                                        @if($user->status == 'active')
-                                            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 fw-normal">Active</span>
-                                        @else
-                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1 fw-normal">Inactive</span>
-                                        @endif
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input status-toggle" type="checkbox" data-user-id="{{ $user->id }}" {{ $user->status == 'active' ? 'checked' : '' }}>
+                                            <span class="badge {{ $user->status == 'active' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }} status-badge-{{ $user->id }} border-0 px-2 py-1 ms-1">
+                                                {{ ucfirst($user->status) }}
+                                            </span>
+                                        </div>
                                     </td>
                                     <td class="text-muted small">
                                         {{ $user->created_at->format('M d, Y') }}
                                     </td>
-                                    <td class="text-end pe-2">
-                                        <div class="btn-group">
-                                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-outline-secondary" title="Edit">
-                                                <i class="fa-solid fa-pen-to-square"></i>
+                                    <td class="text-end pe-3">
+                                        <div class="btn-group shadow-sm rounded-1 overflow-hidden">
+                                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-white border-0 py-1 px-3" title="Edit">
+                                                <i class="fa-solid fa-pen text-primary small"></i>
                                             </a>
-                                            <button class="btn btn-sm btn-outline-danger" onclick="confirmDelete({{ $user->id }}, '{{ $user->name }}')" title="Delete">
-                                                <i class="fa-solid fa-trash"></i>
+                                            <button type="button" class="btn btn-sm btn-white border-0 py-1 px-3" onclick="confirmDelete({{ $user->id }}, '{{ $user->name }}')" title="Delete">
+                                                <i class="fa-solid fa-trash text-danger small"></i>
                                             </button>
                                         </div>
                                         <form id="delete-form-{{ $user->id }}" action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-none">
