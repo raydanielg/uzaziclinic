@@ -208,39 +208,60 @@
             {{-- 2. DOCTOR MENU --}}
             @if($roleName == 'doctor')
                 <li class="nav-item mb-2">
-                    <a class="nav-link {{ Request::is('doctor/dashboard') ? 'active' : '' }}" href="{{ url('/doctor/dashboard') }}">
-                        <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+                    <a class="nav-link {{ Request::is('doctor/dashboard') ? 'active' : '' }}" href="{{ route('doctor.dashboard') }}">
+                        <i class="fa-solid fa-gauge-high me-2 text-primary"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-hospital-user me-2"></i> My Patients</a>
+                    <a class="nav-link {{ Request::is('doctor/patients*') ? 'active' : '' }}" href="{{ route('doctor.patients') }}">
+                        <i class="fa-solid fa-hospital-user me-2 text-success"></i> My Patients
+                    </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-file-medical me-2"></i> Add Prescription</a>
+                    <a class="nav-link {{ Request::is('doctor/prescriptions*') ? 'active' : '' }}" href="{{ route('doctor.prescriptions.add') }}">
+                        <i class="fa-solid fa-file-medical me-2 text-info"></i> Add Prescription
+                    </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-flask-vial me-2"></i> Lab Requests</a>
+                    <a class="nav-link {{ Request::is('doctor/lab-requests*') ? 'active' : '' }}" href="{{ route('doctor.lab.requests') }}">
+                        <i class="fa-solid fa-flask-vial me-2 text-warning"></i> Lab Requests
+                    </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-vial-circle-check me-2"></i> Lab Results</a>
+                    <a class="nav-link {{ Request::is('doctor/lab-results*') ? 'active' : '' }}" href="{{ route('doctor.lab.results') }}">
+                        <i class="fa-solid fa-vial-circle-check me-2 text-success"></i> Lab Results
+                    </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-notes-medical me-2"></i> Medical Records</a>
+                    <a class="nav-link {{ Request::is('doctor/medical-records*') ? 'active' : '' }}" href="{{ route('doctor.medical.records') }}">
+                        <i class="fa-solid fa-notes-medical me-2 text-primary"></i> Medical Records
+                    </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-days me-2"></i> My Schedule</a>
+                    <a class="nav-link {{ Request::is('doctor/schedule*') ? 'active' : '' }}" href="{{ route('doctor.schedule') }}">
+                        <i class="fa-solid fa-calendar-days me-2 text-info"></i> My Schedule
+                    </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-comments me-2"></i> Chat with Patients</a>
+                    <a class="nav-link {{ Request::is('doctor/chat*') ? 'active' : '' }}" href="{{ route('doctor.chat') }}">
+                        <i class="fa-solid fa-comments me-2 text-primary"></i> Chat with Patients
+                    </a>
+                </li>
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Account</li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link {{ Request::is('doctor/profile*') ? 'active' : '' }}" href="{{ route('doctor.profile') }}">
+                        <i class="fa-solid fa-user-circle me-2 text-secondary"></i> My Profile
+                    </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-user-circle me-2"></i> My Profile</a>
+                    <a class="nav-link {{ Request::is('doctor/password*') ? 'active' : '' }}" href="{{ route('doctor.password') }}">
+                        <i class="fa-solid fa-key me-2 text-danger"></i> Change Password
+                    </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-key me-2"></i> Change Password</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-chart-line me-2"></i> Reports (My Performance)</a>
+                    <a class="nav-link {{ Request::is('doctor/reports*') ? 'active' : '' }}" href="{{ route('doctor.reports') }}">
+                        <i class="fa-solid fa-chart-line me-2 text-warning"></i> Reports (My Performance)
+                    </a>
                 </li>
             @endif
 
