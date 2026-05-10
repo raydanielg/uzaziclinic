@@ -141,10 +141,6 @@
                     </div>
                 </div>
                 <div class="modal-footer bg-light border-top">
-                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary px-4">Create User</button>
-                </div>
-            </form>
         </div>
     </div>
 </div>
@@ -198,6 +194,63 @@
                 searchPlaceholder: "Search users...",
                 lengthMenu: "Show _MENU_ entries"
             }
+        });
+
+        // Add User AJAX
+        $('#addUserForm').on('submit', function(e) {
+            e.preventDefault();
+            const $btn = $(this).find('button[type="submit"]');
+            const originalText = $btn.html();
+            $btn.html('<span class="spinner-border spinner-border-sm me-2"></span> Saving...').prop('disabled', true);
+
+            $.ajax({
+                url: "{{ route('admin.users.store') }}",
+                method: "POST",
+                data: $(this).serialize(),
+                success: function(resp) {
+                    $('#addUserModal').modal('hide');
+                    Swal.fire({ icon: 'success', title: 'Success!', text: resp.message, timer: 1500, showConfirmButton: false })
+                    .then(() => location.reload());
+                },
+                error: function(xhr) {
+                    $btn.html(originalText).prop('disabled', false);
+                    let msg = 'Something went wrong!';
+                    if (xhr.status === 422) {
+                        msg = Object.values(xhr.responseJSON.errors).flat().join('\n');
+                    }
+                    Swal.fire('Error!', msg, 'error');
+                }
+            });
+        });
+
+        // Inline Status Change (Live toggle)
+        $(document).on('change', '.status-toggle', function() {
+            const userId = $(this).data('user-id');
+            const status = $(this).is(':checked') ? 'active' : 'inactive';
+            const $badge = $(`.status-badge-${userId}`);
+
+            $.ajax({
+                url: `{{ url('admin/users') }}/${userId}`,
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    _method: 'PUT',
+                    status: status,
+                    name: $(`#user-row-${userId} .fw-bold`).text(), // Need to send name/email for validation usually
+                    email: $(`#user-row-${userId} .text-muted.small`).text(),
+                    role_id: $(`#user-row-${userId} .role-select`).val()
+                },
+                success: function(resp) {
+                    $badge.text(status.charAt(0).toUpperCase() + status.slice(1))
+                          .removeClass('bg-success-subtle text-success bg-danger-subtle text-danger')
+                          .addClass(status === 'active' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger');
+                    
+                    Swal.fire({ icon: 'success', title: 'Updated', text: 'Status updated successfully', timer: 1000, showConfirmButton: false });
+                },
+                error: function() {
+                    Swal.fire('Error', 'Failed to update status', 'error');
+                }
+            });
         });
 
         // Delete Confirmation
