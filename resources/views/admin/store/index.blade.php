@@ -227,6 +227,57 @@
 
         $('#filterCategory').on('change', applyFilters);
 
+        // Open Edit Modal
+        $(document).on('click', '.edit-product', function() {
+            const id = $(this).data('id');
+            const name = $(this).data('name');
+            const category = $(this).data('category');
+            const price = $(this).data('price');
+            const quantity = $(this).data('quantity');
+            const description = $(this).data('description');
+
+            $('#edit_product_id').val(id);
+            $('#edit_name').val(name);
+            $('#edit_category').val(category);
+            $('#edit_price').val(price);
+            $('#edit_quantity').val(quantity);
+            $('#edit_description').val(description);
+
+            $('#editProductModal').modal('show');
+        });
+
+        // AJAX Update
+        $('#editProductForm').on('submit', function(e) {
+            e.preventDefault();
+            const id = $('#edit_product_id').val();
+            const $btn = $(this).find('button[type="submit"]');
+            const originalText = $btn.html();
+            $btn.html('<span class="spinner-border spinner-border-sm me-2"></span> Updating...').prop('disabled', true);
+
+            const formData = new FormData(this);
+
+            $.ajax({
+                url: `{{ url('admin/store') }}/${id}`,
+                method: "POST", // Form has _method PUT
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(resp) {
+                    $('#editProductModal').modal('hide');
+                    Swal.fire({ icon: 'success', title: 'Updated!', text: resp.message, timer: 1500, showConfirmButton: false })
+                    .then(() => location.reload());
+                },
+                error: function(xhr) {
+                    $btn.html(originalText).prop('disabled', false);
+                    let msg = 'Something went wrong!';
+                    if (xhr.status === 422) {
+                        msg = Object.values(xhr.responseJSON.errors).flat().join('\n');
+                    }
+                    Swal.fire('Error!', msg, 'error');
+                }
+            });
+        });
+
         // AJAX Creation
         $('#addProductForm').on('submit', function(e) {
             e.preventDefault();
