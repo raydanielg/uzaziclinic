@@ -96,6 +96,67 @@
 </div>
 @endsection
 
+<!-- Add Medicine Modal -->
+<div class="modal fade" id="addMedicineModal" tabindex="-1" aria-labelledby="addMedicineModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0 pb-0 pt-4 px-4">
+                <h5 class="modal-title fw-bold text-dark" id="addMedicineModalLabel">Add New Medicine</h5>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="addMedicineForm">
+                    @csrf
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Medicine Name</label>
+                            <input type="text" name="name" class="form-control rounded-pill px-3 shadow-none border-light bg-light" placeholder="e.g. Paracetamol" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Category</label>
+                            <select name="category" class="form-select rounded-pill px-3 shadow-none border-light bg-light" required>
+                                <option value="">Select Category</option>
+                                <option value="Antibiotics">Antibiotics</option>
+                                <option value="Painkillers">Painkillers</option>
+                                <option value="Antipyretics">Antipyretics</option>
+                                <option value="Antifungals">Antifungals</option>
+                                <option value="Supplements">Supplements</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Quantity (Units)</label>
+                            <input type="number" name="quantity" class="form-control rounded-pill px-3 shadow-none border-light bg-light" placeholder="e.g. 100" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Price per Unit</label>
+                            <input type="number" step="0.01" name="price" class="form-control rounded-pill px-3 shadow-none border-light bg-light" placeholder="e.g. 500.00" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Expiry Date</label>
+                            <input type="date" name="expiry_date" class="form-control rounded-pill px-3 shadow-none border-light bg-light" required min="{{ date('Y-m-d') }}">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Description (Optional)</label>
+                            <textarea name="description" class="form-control rounded-4 px-3 shadow-none border-light bg-light" rows="3" placeholder="Additional details..."></textarea>
+                        </div>
+                    </div>
+                    <div class="text-end mt-4">
+                        <button type="button" class="btn btn-light rounded-pill px-4 me-2 border" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-5 shadow-sm border-0">
+                            <i class="fa-solid fa-check me-2"></i> Save Medicine
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
     $(document).ready(function() {
@@ -135,6 +196,42 @@
         }
 
         $('#filterCategory, #filterStatus').on('change', applyFilters);
+
+        // Add Medicine AJAX
+        $('#addMedicineForm').on('submit', function(e) {
+            e.preventDefault();
+            const $btn = $(this).find('button[type="submit"]');
+            const originalText = $btn.html();
+            
+            $btn.html('<span class="spinner-border spinner-border-sm me-2"></span> Saving...').prop('disabled', true);
+
+            $.ajax({
+                url: "{{ route('admin.pharmacy.store') }}",
+                method: "POST",
+                data: $(this).serialize(),
+                success: function(resp) {
+                    $('#addMedicineModal').modal('hide');
+                    $('#addMedicineForm')[0].reset();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Medicine added successfully!',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        location.reload(); // Refresh to update stats and table
+                    });
+                },
+                error: function(xhr) {
+                    $btn.html(originalText).prop('disabled', false);
+                    let msg = 'Something went wrong!';
+                    if (xhr.status === 422) {
+                        msg = Object.values(xhr.responseJSON.errors).flat().join('\n');
+                    }
+                    Swal.fire('Error!', msg, 'error');
+                }
+            });
+        });
 
         $(document).on('click', '.delete-medicine', function() {
             const id = $(this).data('id');
