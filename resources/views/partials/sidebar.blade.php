@@ -316,60 +316,109 @@
             {{-- 4. PHARMACIST MENU --}}
             @if($roleName == 'pharmacist')
                 <li class="nav-item mb-2">
-                    <a class="nav-link {{ Request::is('pharmacist/dashboard') ? 'active' : '' }}" href="{{ url('/pharmacist/dashboard') }}">
-                        <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+                    <a class="nav-link {{ Request::is('pharmacist/dashboard') ? 'active' : '' }}" href="{{ route('pharmacist.dashboard') }}">
+                        <i class="fa-solid fa-gauge-high me-2 text-primary"></i> Dashboard
                     </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-triangle-exclamation me-2"></i> Stock Summary</a>
+                
+                {{-- Inventory Section --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Inventory & Stock</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('pharmacist/stock-summary') ? 'active' : '' }}" href="{{ route('pharmacist.stock-summary') }}">
+                        <i class="fa-solid fa-chart-pie me-2 text-info"></i> Stock Summary
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-pills me-2"></i> All Medicines</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('pharmacist/inventory') ? 'active' : '' }}" href="{{ route('pharmacist.inventory') }}">
+                        <i class="fa-solid fa-pills me-2 text-success"></i> All Medicines
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-plus-circle me-2"></i> Add New Medicine</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('pharmacist/medicines/create') ? 'active' : '' }}" href="{{ route('pharmacist.medicines.create') }}">
+                        <i class="fa-solid fa-plus-circle me-2 text-primary"></i> Add New Medicine
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-right-left me-2"></i> Stock In / Out</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('pharmacist/stock-move') ? 'active' : '' }}" href="{{ route('pharmacist.stock-move') }}">
+                        <i class="fa-solid fa-right-left me-2 text-warning"></i> Stock In / Out
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-truck-moving me-2"></i> Stock Transfer</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-truck-moving me-2 text-secondary"></i> Stock Transfer
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-file-prescription me-2"></i> Pending Prescriptions</a>
+
+                {{-- Prescriptions Section --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Prescriptions</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('pharmacist/prescriptions') && !Request::is('pharmacist/prescriptions/history') ? 'active' : '' }}" href="{{ route('pharmacist.prescriptions') }}">
+                        <i class="fa-solid fa-file-prescription me-2 text-danger"></i> Pending Prescriptions
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-file-medical me-2"></i> Process Prescription</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-file-medical me-2 text-primary"></i> Process Prescription
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-history me-2"></i> Prescription History</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('pharmacist/prescriptions/history') ? 'active' : '' }}" href="{{ route('pharmacist.prescriptions.history') }}">
+                        <i class="fa-solid fa-clock-rotate-left me-2 text-secondary"></i> Prescription History
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-shopping-cart me-2"></i> Medicine Orders</a>
+
+                {{-- Orders Section --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Orders & Procurement</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('pharmacist/orders') ? 'active' : '' }}" href="{{ route('pharmacist.orders') }}">
+                        <i class="fa-solid fa-shopping-cart me-2 text-warning"></i> Medicine Orders
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-spinner me-2"></i> Process Online Orders</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('pharmacist/online-orders') ? 'active' : '' }}" href="{{ route('pharmacist.online-orders') }}">
+                        <i class="fa-solid fa-spinner me-2 text-info"></i> Process Online Orders
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-list-check me-2"></i> Order History</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-list-check me-2 text-success"></i> Order History
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-truck-field me-2"></i> Suppliers List</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('pharmacist/suppliers') ? 'active' : '' }}" href="{{ route('pharmacist.suppliers') }}">
+                        <i class="fa-solid fa-truck-field me-2 text-primary"></i> Suppliers List
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-file-invoice me-2"></i> Purchase Orders</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-file-invoice me-2 text-secondary"></i> Purchase Orders
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-chart-bar me-2"></i> Reports (Stock/Sales/Expiry)</a>
+
+                {{-- Reports & Settings --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Admin & Reports</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('pharmacist/reports') ? 'active' : '' }}" href="{{ route('pharmacist.reports') }}">
+                        <i class="fa-solid fa-chart-bar me-2 text-warning"></i> Reports (Stock/Sales/Expiry)
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-cog me-2"></i> Settings (Categories/Units)</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('pharmacist/settings') ? 'active' : '' }}" href="{{ route('pharmacist.settings') }}">
+                        <i class="fa-solid fa-cog me-2 text-secondary"></i> Settings (Categories/Units)
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-user-circle me-2"></i> My Profile</a>
+
+                {{-- Account Section --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">My Account</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('pharmacist/profile') ? 'active' : '' }}" href="{{ route('pharmacist.profile') }}">
+                        <i class="fa-solid fa-user-circle me-2 text-primary"></i> My Profile
+                    </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-key me-2"></i> Change Password</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('pharmacist/password') ? 'active' : '' }}" href="{{ route('pharmacist.password') }}">
+                        <i class="fa-solid fa-key me-2 text-danger"></i> Change Password
+                    </a>
                 </li>
             @endif
 
