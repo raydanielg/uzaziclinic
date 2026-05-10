@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('home');
+    }
     return view('welcome');
 });
 
@@ -22,40 +25,39 @@ Route::get('/landing', function () {
     return view('welcome');
 })->name('landing');
 
-Route::prefix('support')->name('support.')->group(function () {
-    Route::view('/help-center', 'pages.support.help-center')->name('help-center');
-    Route::view('/faqs', 'pages.support.faqs')->name('faqs');
-    Route::view('/contact-support', 'pages.support.contact-support')->name('contact-support');
-});
-
-Route::prefix('resources')->name('resources.')->group(function () {
-    Route::view('/guidelines', 'pages.resources.guidelines')->name('guidelines');
-    Route::view('/health-tips', 'pages.resources.health-tips')->name('health-tips');
-    Route::view('/news', 'pages.resources.news')->name('news');
-    Route::view('/research', 'pages.resources.research')->name('research');
-    Route::view('/staff-portal', 'pages.resources.staff-portal')->name('staff-portal');
-});
-
-Route::view('/blog', 'pages.blog.index')->name('blog.index');
-
-Route::view('/about-us', 'pages.core.about')->name('about');
-Route::view('/services', 'pages.core.services')->name('services');
-Route::view('/appointments', 'pages.core.appointments')->name('appointments');
-Route::view('/contact-us', 'pages.core.contact')->name('contact');
-
-Route::prefix('shop')->name('shop.')->group(function () {
-    Route::get('/', function() { return view('pages.shop.index'); })->name('index');
-    Route::get('/cart', function() { return view('pages.shop.cart'); })->name('cart');
-    Route::get('/checkout', function() { return view('pages.shop.checkout'); })->name('checkout');
-    Route::post('/place-order', [App\Http\Controllers\ShopController::class, 'placeOrder'])->name('place-order');
-});
-
-Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'index']);
-
-Auth::routes();
-
 Route::get('/home', function() {
-    // ... switch logic
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+
+    $user = auth()->user();
+    
+    // Admin check
+    if ($user->isAdmin()) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    // Role-based redirect
+    if ($user->role) {
+        switch ($user->role->name) {
+            case 'doctor':
+                return redirect()->route('doctor.dashboard');
+            case 'nurse':
+                return redirect()->route('nurse.dashboard');
+            case 'pharmacist':
+                return redirect()->route('pharmacist.dashboard');
+            case 'lab_tech':
+                return redirect()->route('lab.dashboard');
+            case 'accountant':
+                return redirect()->route('accountant.dashboard');
+            case 'receptionist':
+                return redirect()->route('receptionist.dashboard');
+            case 'customer':
+                return redirect()->route('patient.dashboard');
+        }
+    }
+
+    return redirect('/')->with('error', 'Unauthorized access or role not found.');
 })->name('home');
 
 Route::post('/contact/submit', [App\Http\Controllers\ContactController::class, 'store'])->name('contact.submit');
