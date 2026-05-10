@@ -15,6 +15,10 @@ class CreateWardsTable extends Migration
     {
         Schema::create('wards', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('type')->default('general'); // general, maternity, ICU, etc.
+            $table->integer('capacity')->default(0);
+            $table->string('status')->default('active');
             $table->timestamps();
         });
     }
