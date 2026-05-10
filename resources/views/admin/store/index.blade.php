@@ -139,7 +139,56 @@
     </div>
 </div>
 
-@push('scripts')
+<!-- Edit Product Modal -->
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0 pb-0 pt-4 px-4">
+                <h5 class="modal-title fw-bold text-dark">Edit Store Product</h5>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="editProductForm" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="id" id="edit_product_id">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Product Name</label>
+                            <input type="text" name="name" id="edit_name" class="form-control rounded-1 px-3 shadow-none border-light bg-light" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Category</label>
+                            <input type="text" name="category" id="edit_category" class="form-control rounded-1 px-3 shadow-none border-light bg-light">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Price (TZS)</label>
+                            <input type="number" name="price" id="edit_price" class="form-control rounded-1 px-3 shadow-none border-light bg-light" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Stock Quantity</label>
+                            <input type="number" name="stock_quantity" id="edit_quantity" class="form-control rounded-1 px-3 shadow-none border-light bg-light" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Product Image (Leave blank to keep current)</label>
+                            <input type="file" name="image" class="form-control rounded-1 px-3 shadow-none border-light bg-light" accept="image/*">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Description</label>
+                            <textarea name="description" id="edit_description" class="form-control rounded-1 px-3 shadow-none border-light bg-light" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="text-end mt-4">
+                        <button type="button" class="btn btn-light rounded-1 px-4 me-2 border" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary rounded-1 px-5 shadow-sm border-0">
+                            <i class="fa-solid fa-check me-2"></i> Update Product
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function() {
         const productTable = $('#productTable').DataTable({

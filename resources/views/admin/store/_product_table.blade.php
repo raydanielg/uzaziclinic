@@ -36,7 +36,14 @@
     </td>
     <td class="text-end pe-4">
         <div class="btn-group shadow-sm rounded-1 overflow-hidden">
-            <button class="btn btn-sm btn-white border-0 py-1 px-3" title="Edit">
+            <button class="btn btn-sm btn-white border-0 py-1 px-3 edit-product" 
+                    data-id="{{ $product->id }}" 
+                    data-name="{{ $product->name }}"
+                    data-category="{{ $product->category }}"
+                    data-price="{{ $product->price }}"
+                    data-quantity="{{ $product->stock_quantity }}"
+                    data-description="{{ $product->description }}"
+                    title="Edit">
                 <i class="fa-solid fa-pen text-primary small"></i>
             </button>
             <button class="btn btn-sm btn-white border-0 py-1 px-3 delete-product" 
