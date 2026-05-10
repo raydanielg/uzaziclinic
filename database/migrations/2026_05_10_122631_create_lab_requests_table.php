@@ -15,6 +15,13 @@ class CreateLabRequestsTable extends Migration
     {
         Schema::create('lab_requests', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('patient_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('doctor_id')->constrained('users')->onDelete('cascade');
+            $table->text('test_names'); // Storing as JSON or comma-separated for now
+            $table->text('clinical_notes')->nullable();
+            $table->string('priority')->default('normal'); // normal, urgent, emergency
+            $table->string('status')->default('pending'); // pending, processing, completed, cancelled
+            $table->text('result_notes')->nullable();
             $table->timestamps();
         });
     }

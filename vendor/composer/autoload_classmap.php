@@ -79,6 +79,7 @@ return array(
     'App\\Models\\Insurance' => $baseDir . '/app/Models/Insurance.php',
     'App\\Models\\Invoice' => $baseDir . '/app/Models/Invoice.php',
     'App\\Models\\LabEquipment' => $baseDir . '/app/Models/LabEquipment.php',
+    'App\\Models\\LabRequest' => $baseDir . '/app/Models/LabRequest.php',
     'App\\Models\\LabTest' => $baseDir . '/app/Models/LabTest.php',
     'App\\Models\\Medicine' => $baseDir . '/app/Models/Medicine.php',
     'App\\Models\\Order' => $baseDir . '/app/Models/Order.php',
