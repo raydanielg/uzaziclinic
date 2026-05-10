@@ -57,6 +57,30 @@ class PharmacyController extends Controller
         return view('admin.pharmacy.create');
     }
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'category' => 'required|string',
+            'quantity' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
+            'expiry_date' => 'required|date|after_or_equal:today',
+            'description' => 'nullable|string',
+        ]);
+
+        Medicine::create([
+            'name' => $request->name,
+            'category' => $request->category,
+            'quantity' => $request->quantity,
+            'price' => $request->price,
+            'expiry_date' => $request->expiry_date,
+            'description' => $request->description,
+            'status' => 'active'
+        ]);
+
+        return redirect()->route('admin.pharmacy.stock')->with('success', 'Medicine added successfully!');
+    }
+
     public function alerts()
     {
         $alerts = Medicine::where('quantity', '<=', 10)
