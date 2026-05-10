@@ -8,7 +8,7 @@
         <div class="card border-0 shadow-sm rounded-4 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h5 class="fw-bold mb-0">Doctor Schedules</h5>
-                <button class="btn btn-primary rounded-pill px-4">
+                <button class="btn btn-primary rounded-pill px-4 shadow-sm">
                     <i class="fa-solid fa-calendar-plus me-2"></i> Set Schedule
                 </button>
             </div>

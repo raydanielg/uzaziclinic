@@ -78,10 +78,10 @@
                             </div>
 
                             <div class="col-12 mt-3">
-                                <button type="submit" class="btn btn-primary px-5">
+                                <button type="submit" class="btn btn-primary rounded-pill px-5 shadow-sm">
                                     <i class="fa-solid fa-check me-2"></i> Create Doctor
                                 </button>
-                                <a href="{{ route('admin.doctors.index') }}" class="btn btn-light px-5 ms-2">Cancel</a>
+                                <a href="{{ route('admin.doctors.index') }}" class="btn btn-light rounded-pill px-5 ms-2 shadow-sm">Cancel</a>
                             </div>
                         </div>
                     </form>
