@@ -77,6 +77,42 @@ class EcommerceController extends Controller
         return redirect()->route('admin.store.index')->with('success', 'Product added successfully!');
     }
 
+    public function update(Request $request, Product $product)
+    {
+        $request->validate([
+            'name' => 'required|string|max:200',
+            'category' => 'nullable|string|max:100',
+            'price' => 'required|numeric|min:0',
+            'stock_quantity' => 'required|integer|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'description' => 'nullable|string',
+        ]);
+
+        $data = $request->all();
+        
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($product->image && file_exists(public_path($product->image))) {
+                unlink(public_path($product->image));
+            }
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('uploads/products'), $imageName);
+            $data['image'] = 'uploads/products/'.$imageName;
+        }
+
+        $product->update($data);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Product updated successfully!',
+                'product' => $product
+            ]);
+        }
+
+        return redirect()->route('admin.store.index')->with('success', 'Product updated successfully!');
+    }
+
     public function destroy(Product $product)
     {
         $product->delete();
