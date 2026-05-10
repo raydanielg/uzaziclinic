@@ -21,6 +21,20 @@ class Patient extends Model
         'emergency_contact',
     ];
 
+    public function getDisplayNameAttribute()
+    {
+        if (!empty($this->name)) {
+            return $this->name;
+        }
+
+        if ($this->relationLoaded('user') && !empty($this->user?->name)) {
+            return $this->user->name;
+        }
+
+        // Fallback to related user name if not loaded
+        return $this->user->name ?? 'Patient #' . $this->id;
+    }
+
     /**
      * Get the formatted Patient ID (e.g., PT-001)
      */
