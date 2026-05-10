@@ -73,6 +73,7 @@ return array(
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
     'App\\Models\\Appointment' => $baseDir . '/app/Models/Appointment.php',
     'App\\Models\\AuditLog' => $baseDir . '/app/Models/AuditLog.php',
+    'App\\Models\\Bed' => $baseDir . '/app/Models/Bed.php',
     'App\\Models\\Cart' => $baseDir . '/app/Models/Cart.php',
     'App\\Models\\ContactMessage' => $baseDir . '/app/Models/ContactMessage.php',
     'App\\Models\\Doctor' => $baseDir . '/app/Models/Doctor.php',
