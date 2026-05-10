@@ -675,6 +675,7 @@ class ComposerStaticInitc61ff82cbf0142a401a48a8161e1595a
         'App\\Models\\LabEquipment' => __DIR__ . '/../..' . '/app/Models/LabEquipment.php',
         'App\\Models\\LabRequest' => __DIR__ . '/../..' . '/app/Models/LabRequest.php',
         'App\\Models\\LabTest' => __DIR__ . '/../..' . '/app/Models/LabTest.php',
+        'App\\Models\\MedicalRecord' => __DIR__ . '/../..' . '/app/Models/MedicalRecord.php',
         'App\\Models\\Medicine' => __DIR__ . '/../..' . '/app/Models/Medicine.php',
         'App\\Models\\Order' => __DIR__ . '/../..' . '/app/Models/Order.php',
         'App\\Models\\Patient' => __DIR__ . '/../..' . '/app/Models/Patient.php',
