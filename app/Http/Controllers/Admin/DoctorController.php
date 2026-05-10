@@ -90,6 +90,17 @@ class DoctorController extends Controller
 
         return redirect()->route('admin.doctors.index')->with('success', 'Doctor profile created successfully!');
     }
-    public function schedules() { return view('admin.doctors.index'); }
-    public function specializations() { return view('admin.doctors.index'); }
+    public function schedules()
+    {
+        $doctors = Doctor::with('user')->get();
+        return view('admin.doctors.schedules', compact('doctors'));
+    }
+
+    public function specializations()
+    {
+        $specializations = Doctor::whereNotNull('specialization')
+            ->distinct()
+            ->pluck('specialization');
+        return view('admin.doctors.specializations', compact('specializations'));
+    }
 }
