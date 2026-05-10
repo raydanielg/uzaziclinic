@@ -85,6 +85,7 @@ return array(
     'App\\Models\\Patient' => $baseDir . '/app/Models/Patient.php',
     'App\\Models\\Payment' => $baseDir . '/app/Models/Payment.php',
     'App\\Models\\Prescription' => $baseDir . '/app/Models/Prescription.php',
+    'App\\Models\\PrescriptionItem' => $baseDir . '/app/Models/PrescriptionItem.php',
     'App\\Models\\Product' => $baseDir . '/app/Models/Product.php',
     'App\\Models\\Role' => $baseDir . '/app/Models/Role.php',
     'App\\Models\\Setting' => $baseDir . '/app/Models/Setting.php',
