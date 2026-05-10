@@ -5,12 +5,9 @@
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h4 class="fw-bold mb-0">My Patients</h4>
+                <h4 class="fw-bold mb-0 text-dark">My Patients</h4>
                 <p class="text-muted small">Manage and view history of all your assigned patients</p>
             </div>
-            <button class="btn btn-primary rounded-1 px-4 shadow-sm border-0">
-                <i class="fa-solid fa-user-plus me-2"></i> New Patient
-            </button>
         </div>
 
         <div class="card border-0 shadow-sm rounded-4 p-4">
@@ -19,30 +16,41 @@
                     <thead class="bg-light">
                         <tr>
                             <th class="ps-4 small text-uppercase fw-bold text-muted border-0">Patient Name</th>
-                            <th class="small text-uppercase fw-bold text-muted border-0">Patient ID</th>
-                            <th class="small text-uppercase fw-bold text-muted border-0">Last Visit</th>
-                            <th class="small text-uppercase fw-bold text-muted border-0">Status</th>
+                            <th class="small text-uppercase fw-bold text-muted border-0">Email / Phone</th>
+                            <th class="small text-uppercase fw-bold text-muted border-0">Join Date</th>
+                            <th class="small text-uppercase fw-bold text-muted border-0 text-center">Status</th>
                             <th class="text-end pe-4 small text-uppercase fw-bold text-muted border-0">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- This would be populated from database -->
+                        @foreach($patients as $patient)
                         <tr>
                             <td class="ps-4">
                                 <div class="d-flex align-items-center">
                                     <div class="bg-primary-subtle text-primary rounded-circle p-2 me-3">
                                         <i class="fa-solid fa-user"></i>
                                     </div>
-                                    <div class="fw-bold">Jane Cooper</div>
+                                    <div>
+                                        <div class="fw-bold text-dark">{{ $patient->name }}</div>
+                                        <div class="small text-muted">ID: #PT-{{ $patient->id }}</div>
+                                    </div>
                                 </div>
                             </td>
-                            <td><span class="badge bg-light text-dark border rounded-1">PT-8829</span></td>
-                            <td>May 10, 2026</td>
-                            <td><span class="badge bg-success-subtle text-success rounded-pill px-3">Stable</span></td>
+                            <td>
+                                <div class="small fw-bold text-dark">{{ $patient->email }}</div>
+                                <div class="small text-muted">{{ $patient->phone ?? 'N/A' }}</div>
+                            </td>
+                            <td>{{ $patient->created_at->format('M d, Y') }}</td>
+                            <td class="text-center">
+                                <span class="badge bg-success-subtle text-success rounded-pill px-3">{{ ucfirst($patient->status ?? 'Active') }}</span>
+                            </td>
                             <td class="text-end pe-4">
-                                <button class="btn btn-sm btn-light rounded-1"><i class="fa-solid fa-eye me-1"></i> Details</button>
+                                <a href="{{ route('doctor.patients.details', $patient->id) }}" class="btn btn-sm btn-light rounded-1 px-3 fw-bold text-primary">
+                                    <i class="fa-solid fa-eye me-1"></i> View Details
+                                </a>
                             </td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -55,7 +63,11 @@
 $(document).ready(function() {
     $('#patientsTable').DataTable({
         pageLength: 10,
-        language: { search: "", searchPlaceholder: "Search patients..." }
+        language: {
+            search: "_INPUT_",
+            searchPlaceholder: "Search patients...",
+            lengthMenu: "_MENU_ entries per page"
+        }
     });
 });
 </script>

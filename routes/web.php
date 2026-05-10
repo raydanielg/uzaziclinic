@@ -64,6 +64,7 @@ Route::post('/contact/submit', [App\Http\Controllers\ContactController::class, '
     Route::middleware(['auth', 'role:doctor'])->prefix('doctor')->name('doctor.')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\Doctor\DashboardController::class, 'index'])->name('dashboard');
         Route::get('/patients', [App\Http\Controllers\Doctor\DashboardController::class, 'patients'])->name('patients');
+        Route::get('/patients/{id}', [App\Http\Controllers\Doctor\DashboardController::class, 'patientDetails'])->name('patients.details');
         Route::get('/prescriptions/add', [App\Http\Controllers\Doctor\DashboardController::class, 'addPrescription'])->name('prescriptions.add');
         Route::get('/lab-requests', [App\Http\Controllers\Doctor\DashboardController::class, 'labRequests'])->name('lab.requests');
         Route::get('/lab-results', [App\Http\Controllers\Doctor\DashboardController::class, 'labResults'])->name('lab.results');
