@@ -10,13 +10,22 @@ class PharmacyController extends Controller
 {
     public function stock()
     {
-        $medicines = Medicine::orderBy('name')->paginate(15);
+        $medicines = Medicine::orderBy('name')->get();
         $stats = [
             'total' => Medicine::count(),
             'low_stock' => Medicine::where('quantity', '<=', 10)->count(),
             'expired' => Medicine::where('expiry_date', '<', now())->count(),
         ];
         return view('admin.pharmacy.stock', compact('medicines', 'stats'));
+    }
+
+    public function destroy(Medicine $medicine)
+    {
+        $medicine->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Medicine deleted successfully!'
+        ]);
     }
 
     public function create()
