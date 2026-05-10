@@ -88,7 +88,38 @@ class LabController extends Controller
 
     public function equipment()
     {
-        return view('admin.lab.equipment');
+        $equipment = \App\Models\LabEquipment::latest()->get();
+        return view('admin.lab.equipment', compact('equipment'));
+    }
+
+    public function storeEquipment(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'model' => 'nullable|string|max:255',
+            'serial_number' => 'nullable|string|max:255|unique:lab_equipment,serial_number',
+            'department' => 'nullable|string|max:255',
+            'status' => 'required|in:operational,maintenance,out_of_order,retired',
+            'last_maintenance' => 'nullable|date',
+            'next_calibration' => 'nullable|date',
+        ]);
+
+        $item = \App\Models\LabEquipment::create($request->all());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Equipment registered successfully!',
+            'data' => $item
+        ]);
+    }
+
+    public function destroyEquipment(\App\Models\LabEquipment $equipment)
+    {
+        $equipment->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Equipment deleted successfully!'
+        ]);
     }
 
     public function reports()
