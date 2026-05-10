@@ -98,9 +98,9 @@
 
                             <div class="col-12 mt-4 text-end">
                                 <hr>
-                                <a href="{{ route('admin.products.index') }}" class="btn btn-light px-4 py-2 rounded-pill fw-bold me-2">Ghairi</a>
-                                <button type="submit" class="btn btn-primary px-5 py-2 rounded-pill fw-bold">
-                                    <i class="fas fa-save me-2"></i>Hifadhi Bidhaa
+                                <a href="{{ route('admin.store.index') }}" class="btn btn-light px-4 py-2 rounded-1 fw-bold me-2 border shadow-sm">Cancel</a>
+                                <button type="submit" class="btn btn-primary px-5 py-2 rounded-1 fw-bold shadow-sm border-0">
+                                    <i class="fas fa-save me-2"></i>Save Product
                                 </button>
                             </div>
                         </div>
