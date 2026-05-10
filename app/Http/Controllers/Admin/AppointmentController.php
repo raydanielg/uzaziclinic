@@ -101,7 +101,8 @@ class AppointmentController extends Controller
             ->where('status', '!=', 'cancelled')
             ->latest()
             ->paginate(10);
-        return view('admin.appointments.index', compact('appointments'));
+        $type = 'Upcoming';
+        return view('admin.appointments.index', compact('appointments', 'type'));
     }
 
     public function history()
@@ -110,7 +111,8 @@ class AppointmentController extends Controller
             ->where('appointment_date', '<', now())
             ->latest()
             ->paginate(10);
-        return view('admin.appointments.index', compact('appointments'));
+        $type = 'History';
+        return view('admin.appointments.index', compact('appointments', 'type'));
     }
 
     public function today()
@@ -119,7 +121,8 @@ class AppointmentController extends Controller
             ->whereDate('appointment_date', today())
             ->latest()
             ->paginate(10);
-        return view('admin.appointments.index', compact('appointments'));
+        $type = 'Today';
+        return view('admin.appointments.index', compact('appointments', 'type'));
     }
 
     public function cancelled()
@@ -128,6 +131,7 @@ class AppointmentController extends Controller
             ->where('status', 'cancelled')
             ->latest()
             ->paginate(10);
-        return view('admin.appointments.index', compact('appointments'));
+        $type = 'Cancelled';
+        return view('admin.appointments.index', compact('appointments', 'type'));
     }
 }
