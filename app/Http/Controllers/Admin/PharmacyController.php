@@ -8,15 +8,39 @@ use App\Models\Medicine;
 
 class PharmacyController extends Controller
 {
-    public function stock()
+    public function stock(Request $request)
     {
-        $medicines = Medicine::orderBy('name')->get();
+        $query = Medicine::query();
+
+        if ($request->has('category') && $request->category != '') {
+            $query->where('category', $request->category);
+        }
+
+        if ($request->has('status') && $request->status != '') {
+            if ($request->status == 'low_stock') {
+                $query->where('quantity', '<=', 10);
+            } elseif ($request->status == 'expired') {
+                $query->where('expiry_date', '<', now());
+            } elseif ($request->status == 'in_stock') {
+                $query->where('quantity', '>', 10)->where('expiry_date', '>=', now());
+            }
+        }
+
+        $medicines = $query->orderBy('name')->get();
+        
+        $categories = Medicine::distinct()->pluck('category');
+
         $stats = [
             'total' => Medicine::count(),
             'low_stock' => Medicine::where('quantity', '<=', 10)->count(),
             'expired' => Medicine::where('expiry_date', '<', now())->count(),
         ];
-        return view('admin.pharmacy.stock', compact('medicines', 'stats'));
+
+        if ($request->ajax()) {
+            return view('admin.pharmacy._stock_table', compact('medicines'))->render();
+        }
+
+        return view('admin.pharmacy.stock', compact('medicines', 'stats', 'categories'));
     }
 
     public function destroy(Medicine $medicine)
