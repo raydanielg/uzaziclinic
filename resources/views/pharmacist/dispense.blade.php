@@ -83,8 +83,8 @@
                                     <td><span class="badge bg-primary-subtle text-primary rounded-pill px-3 fw-bold">{{ $item->dosage }}</span></td>
                                     <td class="small">{{ $item->duration }}</td>
                                     <td>
-                                        <span class="fw-bold {{ ($item->medicine->stock ?? 0) > 0 ? 'text-success' : 'text-danger' }}">
-                                            {{ $item->medicine->stock ?? 0 }} {{ $item->medicine->unit ?? 'pcs' }}
+                                        <span class="fw-bold {{ ($item->medicine->quantity ?? 0) > 0 ? 'text-success' : 'text-danger' }}">
+                                            {{ $item->medicine->quantity ?? 0 }} {{ $item->medicine->unit ?? 'pcs' }}
                                         </span>
                                     </td>
                                     <td class="text-end pe-4">
