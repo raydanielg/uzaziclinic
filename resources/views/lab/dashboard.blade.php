@@ -106,22 +106,23 @@
                                 </tbody>
                             </table>
                         </div>
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
-                    <div class="bg-success-soft text-success p-3 rounded-circle mx-auto mb-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-users fa-2xl"></i>
                     </div>
-                    <h5 class="fw-bold">Wagonjwa</h5>
-                    <p class="text-muted small">Orodha ya wagonjwa waliosajiliwa.</p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
-                    <div class="bg-info-soft text-info p-3 rounded-circle mx-auto mb-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-chart-pie fa-2xl"></i>
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                    <h6 class="fw-bold mb-3 small text-uppercase ls-1">Quick Tools</h6>
+                    <div class="d-grid gap-2">
+                        <a href="{{ route('lab.requests') }}" class="btn btn-primary rounded-1 py-2 text-start ps-3 border-0 shadow-none">
+                            <i class="fa-solid fa-vial me-2"></i> Manage Requests
+                        </a>
+                        <a href="{{ route('lab.equipment') }}" class="btn btn-info text-white rounded-1 py-2 text-start ps-3 border-0 shadow-none fw-bold">
+                            <i class="fa-solid fa-microscope me-2"></i> Lab Equipment
+                        </a>
+                        <a href="{{ route('lab.tests') }}" class="btn btn-warning rounded-1 py-2 text-start ps-3 border-0 shadow-none fw-bold">
+                            <i class="fa-solid fa-clipboard-list me-2"></i> Test Catalog
+                        </a>
                     </div>
-                    <h5 class="fw-bold">Ripoti</h5>
-                    <p class="text-muted small">Ripoti na muhtasari wa utendaji.</p>
                 </div>
             </div>
         </div>
@@ -131,6 +132,8 @@
 <style>
     .bg-primary-soft { background-color: rgba(13, 110, 253, 0.1); }
     .bg-success-soft { background-color: rgba(25, 135, 84, 0.1); }
+    .bg-warning-soft { background-color: rgba(255, 193, 7, 0.1); }
     .bg-info-soft { background-color: rgba(13, 202, 240, 0.1); }
+    .ls-1 { letter-spacing: 1px; }
 </style>
 @endsection
