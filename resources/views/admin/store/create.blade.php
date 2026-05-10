@@ -10,8 +10,13 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('admin.products.index') }}">Products</a></li>
-                    <li class="breadcrumb-item active">Add New</li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.store.index') }}">Products</a></li>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold mb-0">Add New Product</h5>
+                        <a href="{{ route('admin.store.index') }}" class="btn btn-light rounded-1 px-4 shadow-sm border small">
+                            <i class="fa-solid fa-arrow-left me-2"></i> Back to Catalog
+                        </a>
+                    </div>
                 </ol>
             </nav>
         </div>
@@ -21,7 +26,7 @@
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4">
-                    <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.store.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         
                         <div class="row g-3">
