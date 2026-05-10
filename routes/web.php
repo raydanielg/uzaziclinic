@@ -68,6 +68,7 @@ Route::post('/contact/submit', [App\Http\Controllers\ContactController::class, '
         Route::get('/prescriptions/add', [App\Http\Controllers\Doctor\DashboardController::class, 'addPrescription'])->name('prescriptions.add');
         Route::post('/prescriptions/store', [App\Http\Controllers\Doctor\DashboardController::class, 'storePrescription'])->name('prescriptions.store');
         Route::get('/lab-requests', [App\Http\Controllers\Doctor\DashboardController::class, 'labRequests'])->name('lab.requests');
+        Route::post('/lab-requests/store', [App\Http\Controllers\Doctor\DashboardController::class, 'storeLabRequest'])->name('lab.requests.store');
         Route::get('/lab-results', [App\Http\Controllers\Doctor\DashboardController::class, 'labResults'])->name('lab.results');
         Route::get('/medical-records', [App\Http\Controllers\Doctor\DashboardController::class, 'medicalRecords'])->name('medical.records');
         Route::get('/schedule', [App\Http\Controllers\Doctor\DashboardController::class, 'schedule'])->name('schedule');
