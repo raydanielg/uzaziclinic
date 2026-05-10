@@ -85,7 +85,9 @@
                         </tr>
                     </thead>
                     <tbody id="stockTableBody">
-                        @include('admin.pharmacy._stock_table')
+                        @if(count($medicines) > 0)
+                            @include('admin.pharmacy._stock_table')
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -100,10 +102,11 @@
         const stockTable = $('#stockTable').DataTable({
             responsive: true,
             order: [[0, 'asc']],
-            dom: 'rftip', // Custom DOM to keep it clean
+            dom: 'rftip',
             language: {
                 search: "_INPUT_",
                 searchPlaceholder: "Search stock...",
+                emptyTable: "No medicines found matching your filters."
             }
         });
 

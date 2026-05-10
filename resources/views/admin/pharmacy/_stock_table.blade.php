@@ -39,10 +39,3 @@
     </td>
 </tr>
 @endforeach
-@if(count($medicines) == 0)
-<tr>
-    <td colspan="6" class="text-center py-5 text-muted empty-row">
-        No medicines found matching your filters.
-    </td>
-</tr>
-@endif
