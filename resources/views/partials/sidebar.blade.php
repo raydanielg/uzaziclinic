@@ -268,48 +268,51 @@
             {{-- 3. NURSE MENU --}}
             @if($roleName == 'nurse')
                 <li class="nav-item mb-2">
-                    <a class="nav-link {{ Request::is('nurse/dashboard') ? 'active' : '' }}" href="{{ url('/nurse/dashboard') }}">
+                    <a class="nav-link {{ Request::is('nurse/dashboard') ? 'active' : '' }}" href="{{ route('nurse.dashboard') }}">
                         <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
                     </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-user-check me-2"></i> Patient Check-in</a>
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Patient Care</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('nurse/checkin') ? 'active' : '' }}" href="{{ route('nurse.checkin') }}"><i class="fa-solid fa-user-check me-2 text-primary"></i> Patient Check-in</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-people-arrows me-2"></i> Waiting Queue</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('nurse/queue') ? 'active' : '' }}" href="{{ route('nurse.queue') }}"><i class="fa-solid fa-people-arrows me-2 text-warning"></i> Waiting Queue</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-heart-pulse me-2"></i> Vitals Recording</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('nurse/vitals') ? 'active' : '' }}" href="{{ route('nurse.vitals') }}"><i class="fa-solid fa-heart-pulse me-2 text-danger"></i> Vitals Recording</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-day me-2"></i> Today's Appointments</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('nurse/appointments') ? 'active' : '' }}" href="{{ route('nurse.appointments') }}"><i class="fa-solid fa-calendar-day me-2 text-info"></i> Today's Appointments</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-user-doctor me-2"></i> Assist Doctor List</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('nurse/assist-doctor') ? 'active' : '' }}" href="{{ route('nurse.assist-doctor') }}"><i class="fa-solid fa-user-doctor me-2 text-success"></i> Assist Doctor</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-users-rectangle me-2"></i> Patient Management</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('nurse/patients') ? 'active' : '' }}" href="{{ route('nurse.patients') }}"><i class="fa-solid fa-users-rectangle me-2 text-primary"></i> Patient Management</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-bed-pulse me-2"></i> Bed Allocation</a>
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Ward & Lab</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('nurse/bed-allocation') ? 'active' : '' }}" href="{{ route('nurse.bed-allocation') }}"><i class="fa-solid fa-bed-pulse me-2 text-warning"></i> Bed Allocation</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-hospital me-2"></i> Ward Management</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('nurse/wards') ? 'active' : '' }}" href="{{ route('nurse.wards') }}"><i class="fa-solid fa-hospital me-2 text-info"></i> Ward Management</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-vial me-2"></i> Lab Sample Collection</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('nurse/lab-collection') ? 'active' : '' }}" href="{{ route('nurse.lab-collection') }}"><i class="fa-solid fa-vial me-2 text-danger"></i> Lab Sample Collection</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-pills me-2"></i> Medication Administration</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('nurse/medication') ? 'active' : '' }}" href="{{ route('nurse.medication') }}"><i class="fa-solid fa-pills me-2 text-success"></i> Medication Administration</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-file-invoice me-2"></i> Reports (Daily Tasks)</a>
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Account</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('nurse/reports') ? 'active' : '' }}" href="{{ route('nurse.reports') }}"><i class="fa-solid fa-file-invoice me-2 text-secondary"></i> Reports</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-user-circle me-2"></i> My Profile</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('nurse/profile') ? 'active' : '' }}" href="{{ route('nurse.profile') }}"><i class="fa-solid fa-user-circle me-2 text-primary"></i> My Profile</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-key me-2"></i> Change Password</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('nurse/password') ? 'active' : '' }}" href="{{ route('nurse.password') }}"><i class="fa-solid fa-key me-2 text-danger"></i> Change Password</a>
                 </li>
             @endif
 
@@ -425,204 +428,80 @@
             {{-- 5. LAB TECHNICIAN MENU --}}
             @if($roleName == 'lab_tech')
                 <li class="nav-item mb-2">
-                    <a class="nav-link {{ Request::is('lab/dashboard') ? 'active' : '' }}" href="{{ url('/lab/dashboard') }}">
-                        <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+                    <a class="nav-link {{ Request::is('lab/dashboard') ? 'active' : '' }}" href="{{ route('lab.dashboard') }}">
+                        <i class="fa-solid fa-gauge-high me-2 text-primary"></i> Dashboard
                     </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-day me-2"></i> Today's Tests</a>
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Lab Work</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('lab/requests') ? 'active' : '' }}" href="{{ route('lab.requests') }}"><i class="fa-solid fa-flask me-2 text-danger"></i> Lab Requests</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-clock me-2"></i> Pending Tests</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('lab/tests') ? 'active' : '' }}" href="{{ route('lab.tests') }}"><i class="fa-solid fa-vial-circle-check me-2 text-success"></i> Tests Catalog</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-flask me-2"></i> All Lab Tests</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('lab/equipment') ? 'active' : '' }}" href="{{ route('lab.equipment') }}"><i class="fa-solid fa-microscope me-2 text-info"></i> Equipment</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-plus-circle me-2"></i> Add New Test</a>
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Account</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('lab/profile') ? 'active' : '' }}" href="{{ route('lab.profile') }}"><i class="fa-solid fa-user-circle me-2 text-primary"></i> My Profile</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-tags me-2"></i> Test Categories</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-vial me-2"></i> Sample Collection</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-truck-ramp-box me-2"></i> Sample Tracking</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-pen-to-square me-2"></i> Enter Results</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-spinner me-2"></i> Pending Results</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-square-check me-2"></i> Completed Results</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-print me-2"></i> Print Results</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-microscope me-2"></i> Lab Equipment List</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-screwdriver-wrench me-2"></i> Maintenance Schedule</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-box-archive me-2"></i> Lab Consumables / Reagents</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-triangle-exclamation me-2"></i> Low Stock Alerts</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-chart-pie me-2"></i> Reports (Test Volume/Revenue)</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-user-circle me-2"></i> My Profile</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-key me-2"></i> Change Password</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('lab/password') ? 'active' : '' }}" href="{{ route('lab.password') }}"><i class="fa-solid fa-key me-2 text-danger"></i> Change Password</a>
                 </li>
             @endif
 
             {{-- 6. ACCOUNTANT MENU --}}
             @if($roleName == 'accountant')
                 <li class="nav-item mb-2">
-                    <a class="nav-link {{ Request::is('accountant/dashboard') ? 'active' : '' }}" href="{{ url('/accountant/dashboard') }}">
-                        <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+                    <a class="nav-link {{ Request::is('accountant/dashboard') ? 'active' : '' }}" href="{{ route('accountant.dashboard') }}">
+                        <i class="fa-solid fa-gauge-high me-2 text-primary"></i> Dashboard
                     </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Create Invoice</a>
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Billing & Finance</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('accountant/invoices') ? 'active' : '' }}" href="{{ route('accountant.invoices') }}"><i class="fa-solid fa-file-invoice-dollar me-2 text-warning"></i> Invoices</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-file-lines me-2"></i> All Invoices</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('accountant/payments') ? 'active' : '' }}" href="{{ route('accountant.payments') }}"><i class="fa-solid fa-money-bill-wave me-2 text-success"></i> Payments</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-clock-rotate-left me-2"></i> Pending Payments</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('accountant/reports') ? 'active' : '' }}" href="{{ route('accountant.reports') }}"><i class="fa-solid fa-chart-line me-2 text-info"></i> Financial Reports</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-circle-check me-2"></i> Paid Invoices</a>
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Account</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('accountant/profile') ? 'active' : '' }}" href="{{ route('accountant.profile') }}"><i class="fa-solid fa-user-circle me-2 text-primary"></i> My Profile</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-receipt me-2"></i> Generate Receipt</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-box-archive me-2"></i> All Receipts</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-print me-2"></i> Print Receipt</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-envelope-open-text me-2"></i> Email Receipt</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-file-pdf me-2"></i> Download PDF Receipt</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-money-bill-transfer me-2"></i> Payments (Cash/Card/Etc)</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-shield-heart me-2"></i> Insurance Management</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-hand-holding-medical me-2"></i> Insurance Claims</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-wallet me-2"></i> Expenses Management</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-tags me-2"></i> Discounts & Promos</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-chart-line me-2"></i> Financial Reports</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-chart-pie me-2"></i> Profit & Loss Report</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-landmark me-2"></i> Tax Report</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-user-circle me-2"></i> My Profile</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-key me-2"></i> Change Password</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('accountant/password') ? 'active' : '' }}" href="{{ route('accountant.password') }}"><i class="fa-solid fa-key me-2 text-danger"></i> Change Password</a>
                 </li>
             @endif
 
             {{-- 7. RECEPTIONIST MENU --}}
             @if($roleName == 'receptionist')
                 <li class="nav-item mb-2">
-                    <a class="nav-link {{ Request::is('receptionist/dashboard') ? 'active' : '' }}" href="{{ url('/receptionist/dashboard') }}">
-                        <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+                    <a class="nav-link {{ Request::is('receptionist/dashboard') ? 'active' : '' }}" href="{{ route('receptionist.dashboard') }}">
+                        <i class="fa-solid fa-gauge-high me-2 text-primary"></i> Dashboard
                     </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-user-plus me-2"></i> Register New Patient</a>
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Patient Management</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('receptionist/patients') ? 'active' : '' }}" href="{{ route('receptionist.patients') }}"><i class="fa-solid fa-user-plus me-2 text-success"></i> Patients Registry</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-magnifying-glass me-2"></i> Search Patient</a>
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Appointments</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('receptionist/appointments') ? 'active' : '' }}" href="{{ route('receptionist.appointments') }}"><i class="fa-solid fa-calendar-check me-2 text-primary"></i> Manage Appointments</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-user-pen me-2"></i> Update Patient Info</a>
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Doctors</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('receptionist/doctors') ? 'active' : '' }}" href="{{ route('receptionist.doctors') }}"><i class="fa-solid fa-user-doctor me-2 text-info"></i> Doctor Directory</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-plus me-2"></i> Book Appointment</a>
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Account</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('receptionist/profile') ? 'active' : '' }}" href="{{ route('receptionist.profile') }}"><i class="fa-solid fa-user-circle me-2 text-primary"></i> My Profile</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-check me-2"></i> Manage Appointments</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-minus me-2"></i> Reschedule Appointment</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-xmark me-2"></i> Cancel Appointment</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-print me-2"></i> Print Appointment Slip</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-hospital-user me-2"></i> Today's Arrivals</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-user-check me-2"></i> Patient Check-in</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-user-minus me-2"></i> Patient Check-out</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-user-doctor me-2"></i> Available Doctors</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-hand-holding-hand me-2"></i> Assign Doctor</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-users-viewfinder me-2"></i> Doctor Queue</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-bed-pulse me-2"></i> Bed Assignment</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-file-invoice me-2"></i> View Invoices</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-receipt me-2"></i> Print Receipt (Basic)</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-money-bill-wave me-2"></i> Collect Cash Payments</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-comment-sms me-2"></i> Send SMS Reminders</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-chart-line me-2"></i> Reports (Daily Visits)</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-user-circle me-2"></i> My Profile</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-key me-2"></i> Change Password</a>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('receptionist/password') ? 'active' : '' }}" href="{{ route('receptionist.password') }}"><i class="fa-solid fa-key me-2 text-danger"></i> Change Password</a>
                 </li>
             @endif
 
