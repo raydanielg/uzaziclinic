@@ -104,22 +104,43 @@
                                 </tbody>
                             </table>
                         </div>
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
-                    <div class="bg-success-soft text-success p-3 rounded-circle mx-auto mb-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-users fa-2xl"></i>
                     </div>
-                    <h5 class="fw-bold">Wagonjwa</h5>
-                    <p class="text-muted small">Orodha ya wagonjwa waliosajiliwa.</p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
-                    <div class="bg-info-soft text-info p-3 rounded-circle mx-auto mb-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-chart-pie fa-2xl"></i>
+
+            <!-- Quick Actions -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+                    <div class="bg-dark p-4 text-white">
+                        <h6 class="small text-uppercase opacity-75 fw-bold mb-2">Today's Overview</h6>
+                        <h3 class="fw-bold mb-0">{{ $stats['today_appointments'] }} Appointments</h3>
+                        <p class="small mb-0 opacity-75">{{ $stats['total_patients'] }} Total Patients Registered</p>
                     </div>
-                    <h5 class="fw-bold">Ripoti</h5>
-                    <p class="text-muted small">Ripoti na muhtasari wa utendaji.</p>
+                    <div class="card-body p-4">
+                        <div class="d-grid gap-2">
+                            <a href="{{ route('receptionist.appointments') }}" class="btn btn-primary rounded-1 py-2 text-start ps-3 border-0 fw-bold">
+                                <i class="fa-solid fa-calendar-check me-2"></i> View Appointments
+                            </a>
+                            <a href="{{ route('receptionist.patients') }}" class="btn btn-success rounded-1 py-2 text-start ps-3 border-0 fw-bold text-white">
+                                <i class="fa-solid fa-users me-2"></i> Patient List
+                            </a>
+                            <a href="{{ route('receptionist.doctors') }}" class="btn btn-outline-secondary rounded-1 py-2 text-start ps-3 border-0">
+                                <i class="fa-solid fa-user-doctor me-2"></i> Doctor Directory
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4 p-4">
+                    <h6 class="fw-bold mb-3 small text-uppercase">Stats Summary</h6>
+                    <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                        <span class="small text-muted">New Patients Today</span>
+                        <span class="badge bg-success-subtle text-success fw-bold">{{ $stats['pending_registrations'] }}</span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between py-2">
+                        <span class="small text-muted">Active Doctors</span>
+                        <span class="badge bg-info-subtle text-info fw-bold">{{ $stats['active_doctors'] }}</span>
+                    </div>
                 </div>
             </div>
         </div>
