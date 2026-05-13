@@ -3,7 +3,7 @@
     <div class="container-fluid container-lg py-3">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <!-- Logo Section -->
-            <a href="{{ url('/') }}" class="d-flex align-items-center text-decoration-none">
+            <a href="{{ auth()->check() ? route('home') : url('/') }}" class="d-flex align-items-center text-decoration-none">
                 <div class="logo-box me-3">
                     <img src="{{ asset('logo.png') }}" alt="Logo" style="height: 50px; width: auto; object-fit: contain;" class="rounded shadow-sm">
                 </div>
@@ -18,7 +18,7 @@
                             <i class="fas fa-calendar-alt me-1"></i>BOOK
                         </a>
                     @else
-                        <a href="{{ url('/home') }}" class="btn btn-green px-3 py-2 rounded-pill fw-bold shadow-sm transition-all small">
+                        <a href="{{ route('home') }}" class="btn btn-green px-3 py-2 rounded-pill fw-bold shadow-sm transition-all small">
                             <i class="fa-solid fa-house me-1"></i>HOME
                         </a>
                     @endguest
@@ -151,7 +151,7 @@
                 <div class="menu-grid row g-3">
                     <!-- 1 Home -->
                     <div class="col-12">
-                        <a href="{{ url('/') }}" class="menu-item-link">
+                        <a href="{{ auth()->check() ? route('home') : url('/') }}" class="menu-item-link">
                             <div class="menu-icon-box"><i class="fas fa-home"></i></div>
                             <div class="menu-text">
                                 <div class="menu-title">Home</div>

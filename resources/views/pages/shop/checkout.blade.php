@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     text: data.message,
                     confirmButtonColor: '#16a34a'
                 }).then(() => {
-                    window.location.href = "{{ url('/home') }}";
+                    window.location.href = "{{ route('home') }}";
                 });
             } else {
                 Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong. Please check your details.', confirmButtonColor: '#16a34a' });
