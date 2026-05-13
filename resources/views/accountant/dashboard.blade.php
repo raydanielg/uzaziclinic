@@ -99,22 +99,49 @@
                                 </tbody>
                             </table>
                         </div>
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
-                    <div class="bg-success-soft text-success p-3 rounded-circle mx-auto mb-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-users fa-2xl"></i>
                     </div>
-                    <h5 class="fw-bold">Wagonjwa</h5>
-                    <p class="text-muted small">Orodha ya wagonjwa waliosajiliwa.</p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
-                    <div class="bg-info-soft text-info p-3 rounded-circle mx-auto mb-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-chart-pie fa-2xl"></i>
+
+            <!-- Quick Actions -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+                    <div class="bg-success p-4 text-white">
+                        <h6 class="small text-uppercase opacity-75 fw-bold mb-3">Finance Summary</h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h3 class="fw-bold mb-0">TZS {{ number_format($stats['today_payments']) }}</h3>
+                                <p class="small mb-0 opacity-75">Today's Collection</p>
+                            </div>
+                            <i class="fa-solid fa-sack-dollar fs-1 opacity-25"></i>
+                        </div>
                     </div>
-                    <h5 class="fw-bold">Ripoti</h5>
-                    <p class="text-muted small">Ripoti na muhtasari wa utendaji.</p>
+                    <div class="card-body p-4">
+                        <div class="d-grid gap-2">
+                            <a href="{{ route('accountant.invoices') }}" class="btn btn-warning rounded-1 py-2 text-start ps-3 border-0 fw-bold">
+                                <i class="fa-solid fa-file-invoice me-2"></i> Manage Invoices
+                            </a>
+                            <a href="{{ route('accountant.payments') }}" class="btn btn-success rounded-1 py-2 text-start ps-3 border-0 fw-bold text-white">
+                                <i class="fa-solid fa-money-bill-wave me-2"></i> View Payments
+                            </a>
+                            <a href="{{ route('accountant.reports') }}" class="btn btn-outline-secondary rounded-1 py-2 text-start ps-3 border-0">
+                                <i class="fa-solid fa-chart-bar me-2"></i> Financial Reports
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending invoices alert -->
+                <div class="card border-0 shadow-sm rounded-4 p-4">
+                    <h6 class="fw-bold mb-3 small text-uppercase">Pending Invoices</h6>
+                    <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                        <span class="small text-muted">Total Pending</span>
+                        <span class="badge bg-warning-subtle text-warning fw-bold fs-6">{{ $stats['pending_invoices'] }}</span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between py-2">
+                        <span class="small text-muted">Total Invoices</span>
+                        <span class="badge bg-primary-subtle text-primary fw-bold fs-6">{{ $stats['total_invoices'] }}</span>
+                    </div>
                 </div>
             </div>
         </div>
