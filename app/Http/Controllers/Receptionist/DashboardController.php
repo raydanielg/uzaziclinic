@@ -22,7 +22,7 @@ class DashboardController extends Controller
             'total_patients' => User::whereHas('role', function($q) { $q->where('name', 'customer'); })->count(),
         ];
 
-        $recent_appointments = Appointment::with('user', 'doctor')->latest()->limit(10)->get();
+        $recent_appointments = Appointment::with(['patient.user', 'doctor'])->latest()->limit(10)->get();
 
         return view('receptionist.dashboard', compact('stats', 'recent_appointments'));
     }

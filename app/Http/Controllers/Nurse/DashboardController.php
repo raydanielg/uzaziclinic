@@ -32,21 +32,21 @@ class DashboardController extends Controller
         return view('nurse.dashboard', compact('stats', 'recent_patients'));
     }
 
-    public function checkin() { 
-        $pending_appointments = Appointment::with('user')
+    public function checkin() {
+        $pending_appointments = Appointment::with(['patient.user', 'doctor'])
             ->where('status', 'pending')
             ->whereDate('appointment_date', today())
             ->get();
-        return view('nurse.checkin', compact('pending_appointments')); 
+        return view('nurse.checkin', compact('pending_appointments'));
     }
 
-    public function queue() { 
-        $queue = Appointment::with('user', 'doctor')
-            ->whereIn('status', ['pending', 'checked_in'])
+    public function queue() {
+        $queue = Appointment::with(['patient.user', 'doctor'])
+            ->whereIn('status', ['pending', 'confirmed'])
             ->whereDate('appointment_date', today())
             ->orderBy('created_at', 'asc')
             ->get();
-        return view('nurse.queue', compact('queue')); 
+        return view('nurse.queue', compact('queue'));
     }
 
     public function vitals() { 
@@ -54,11 +54,11 @@ class DashboardController extends Controller
         return view('nurse.vitals', compact('patients')); 
     }
 
-    public function appointments() { 
-        $appointments = Appointment::with('user', 'doctor')
+    public function appointments() {
+        $appointments = Appointment::with(['patient.user', 'doctor'])
             ->whereDate('appointment_date', today())
             ->get();
-        return view('nurse.appointments', compact('appointments')); 
+        return view('nurse.appointments', compact('appointments'));
     }
 
     public function assistDoctor() { 
