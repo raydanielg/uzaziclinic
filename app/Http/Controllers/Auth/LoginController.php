@@ -34,32 +34,7 @@ class LoginController extends Controller
      */
     protected function authenticated(\Illuminate\Http\Request $request, $user)
     {
-        if ($user->isAdmin()) {
-            return redirect()->route('admin.dashboard');
-        }
-        if ($user->hasRole('doctor')) {
-            return redirect()->route('doctor.dashboard');
-        }
-        if ($user->hasRole('nurse')) {
-            return redirect()->route('nurse.dashboard');
-        }
-        if ($user->hasRole('pharmacist')) {
-            return redirect()->route('pharmacist.dashboard');
-        }
-        if ($user->hasRole('lab_tech')) {
-            return redirect()->route('lab.dashboard');
-        }
-        if ($user->hasRole('accountant')) {
-            return redirect()->route('accountant.dashboard');
-        }
-        if ($user->hasRole('receptionist')) {
-            return redirect()->route('receptionist.dashboard');
-        }
-        if ($user->hasRole('customer')) {
-            return redirect()->route('patient.dashboard');
-        }
-
-        return redirect()->route('home');
+        return redirect($user->getDashboardRoute());
     }
 
     /**

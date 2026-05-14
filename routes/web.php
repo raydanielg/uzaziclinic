@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect(auth()->user()->getDashboardRoute());
+    }
     return view('welcome');
 });
 
@@ -26,32 +29,7 @@ Route::get('/home', function() {
     if (!auth()->check()) {
         return redirect()->route('login');
     }
-
-    $user = auth()->user();
-    
-    // Admin check
-    if ($user->isAdmin()) {
-        return redirect()->route('admin.dashboard');
-    }
-
-    // Role-based redirect
-    if ($user->hasRole('doctor')) {
-        return redirect()->route('doctor.dashboard');
-    } elseif ($user->hasRole('nurse')) {
-        return redirect()->route('nurse.dashboard');
-    } elseif ($user->hasRole('pharmacist')) {
-        return redirect()->route('pharmacist.dashboard');
-    } elseif ($user->hasRole('lab_tech')) {
-        return redirect()->route('lab.dashboard');
-    } elseif ($user->hasRole('accountant')) {
-        return redirect()->route('accountant.dashboard');
-    } elseif ($user->hasRole('receptionist')) {
-        return redirect()->route('receptionist.dashboard');
-    } elseif ($user->hasRole('customer')) {
-        return redirect()->route('patient.dashboard');
-    }
-
-    return redirect('/')->with('error', 'Unauthorized access or role not found.');
+    return redirect(auth()->user()->getDashboardRoute());
 })->name('home');
 
 Route::prefix('support')->name('support.')->group(function () {
