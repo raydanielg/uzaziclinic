@@ -13,14 +13,16 @@ class CreateBedsTable extends Migration
      */
     public function up()
     {
-        Schema::create('beds', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('ward_id')->constrained()->onDelete('cascade');
-            $table->string('bed_number');
-            $table->string('status')->default('available'); // available, occupied, maintenance
-            $table->foreignId('patient_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('beds')) {
+            Schema::create('beds', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('ward_id')->constrained()->onDelete('cascade');
+                $table->string('bed_number');
+                $table->string('status')->default('available'); // available, occupied, maintenance
+                $table->foreignId('patient_id')->nullable()->constrained('users')->onDelete('set null');
+                $table->timestamps();
+            });
+        }
     }
 
     /**
