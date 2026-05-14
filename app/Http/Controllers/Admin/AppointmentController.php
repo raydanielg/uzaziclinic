@@ -13,9 +13,9 @@ class AppointmentController extends Controller
 {
     public function index()
     {
-        $appointments = Appointment::with(['patient', 'doctor.user'])->latest()->get();
+        $appointments = Appointment::with(['patient.user', 'doctor'])->latest()->paginate(20);
         $patients = Patient::orderBy('name')->get();
-        $doctors = Doctor::with('user')->get();
+        $doctors  = Doctor::with('user')->where('status', 'active')->get();
         return view('admin.appointments.index', compact('appointments', 'patients', 'doctors'));
     }
 
