@@ -133,6 +133,6 @@ class User extends Authenticatable
         if ($this->hasRole('receptionist')) return route('receptionist.dashboard');
         if ($this->hasRole('customer')) return route('patient.dashboard');
 
-        return route('login');
+        return url('/landing');
     }
 }
