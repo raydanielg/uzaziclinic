@@ -1,22 +1,25 @@
 @extends('layouts.app')
+@include('partials.dashboard-styles')
 
 @section('content')
 <div class="patient-dashboard py-4">
     <div class="container-fluid">
 
         <!-- Welcome Header -->
-        <div class="row mb-4">
+        <div class="row mb-4 anim-1">
             <div class="col-12">
-                <div class="card border-0 shadow-sm rounded-4 p-4 overflow-hidden position-relative" style="background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <h1 class="h4 mb-1 fw-bold text-white">Welcome back, {{ Auth::user()->name }}! 👋</h1>
-                            <p class="text-white mb-0 opacity-75">Patient ID: <strong>#PT-{{ str_pad(Auth::id(), 4, '0', STR_PAD_LEFT) }}</strong> &nbsp;|&nbsp; {{ now()->format('l, d F Y') }}</p>
+                <div class="dash-hero-card" style="background:linear-gradient(135deg,#1d4ed8 0%,#2563eb 60%,#06b6d4 100%);">
+                    <div class="hero-icon"><i class="fa-solid fa-hospital-user"></i></div>
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <div class="user-avatar bg-white bg-opacity-20 text-white fs-5">
+                            <i class="fa-solid fa-user-injured"></i>
                         </div>
-                        <div class="col-auto d-none d-md-block">
-                            <i class="fa-solid fa-hospital-user text-white opacity-25" style="font-size: 5rem;"></i>
+                        <div>
+                            <p class="mb-0 opacity-75 small fw-semibold text-uppercase">Portal ya Mgonjwa</p>
+                            <h4 class="mb-0 fw-bold">Karibu, {{ Auth::user()->name }}!</h4>
                         </div>
                     </div>
+                    <p class="mb-0 opacity-75 small">Nambari ya Mgonjwa: <strong>#PT-{{ str_pad(Auth::id(),4,'0',STR_PAD_LEFT) }}</strong> &bull; {{ now()->format('l, d F Y') }}</p>
                 </div>
             </div>
         </div>
