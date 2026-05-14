@@ -118,4 +118,21 @@ class User extends Authenticatable
     {
         return $this->status === 'active';
     }
+
+    /**
+     * Get the dashboard route URL for this user based on their role.
+     */
+    public function getDashboardRoute(): string
+    {
+        if ($this->isAdmin()) return route('admin.dashboard');
+        if ($this->hasRole('doctor')) return route('doctor.dashboard');
+        if ($this->hasRole('nurse')) return route('nurse.dashboard');
+        if ($this->hasRole('pharmacist')) return route('pharmacist.dashboard');
+        if ($this->hasRole('lab_tech')) return route('lab.dashboard');
+        if ($this->hasRole('accountant')) return route('accountant.dashboard');
+        if ($this->hasRole('receptionist')) return route('receptionist.dashboard');
+        if ($this->hasRole('customer')) return route('patient.dashboard');
+
+        return route('login');
+    }
 }
