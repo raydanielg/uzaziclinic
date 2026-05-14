@@ -150,4 +150,35 @@ class AppointmentController extends Controller
         $type = 'Cancelled';
         return view('admin.appointments.index', compact('appointments', 'type'));
     }
+
+    public function show(Appointment $appointment)
+    {
+        $appointment->load(['patient.user', 'doctor.user']);
+        $doctors = Doctor::with('user')->where('status', 'active')->get();
+        return view('admin.appointments.show', compact('appointment', 'doctors'));
+    }
+
+    public function destroy(Appointment $appointment)
+    {
+        $appointment->update(['status' => 'cancelled']);
+        if (request()->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Appointment cancelled successfully.']);
+        }
+        return back()->with('success', 'Appointment cancelled.');
+    }
+
+    public function reassignDoctor(Request $request, Appointment $appointment)
+    {
+        $request->validate([
+            'doctor_id' => 'required|exists:doctors,id',
+        ]);
+
+        $appointment->update(['doctor_id' => $request->doctor_id]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Doctor reassigned successfully.',
+            'doctor'  => Doctor::with('user')->find($request->doctor_id),
+        ]);
+    }
 }

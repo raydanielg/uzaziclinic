@@ -195,6 +195,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/history', [App\Http\Controllers\Admin\AppointmentController::class, 'history'])->name('history');
         Route::get('/today', [App\Http\Controllers\Admin\AppointmentController::class, 'today'])->name('today');
         Route::get('/cancelled', [App\Http\Controllers\Admin\AppointmentController::class, 'cancelled'])->name('cancelled');
+        Route::get('/{appointment}', [App\Http\Controllers\Admin\AppointmentController::class, 'show'])->name('show');
+        Route::post('/{appointment}/status', [App\Http\Controllers\Admin\AppointmentController::class, 'updateStatus'])->name('status');
+        Route::post('/{appointment}/reassign', [App\Http\Controllers\Admin\AppointmentController::class, 'reassignDoctor'])->name('reassign');
+        Route::delete('/{appointment}', [App\Http\Controllers\Admin\AppointmentController::class, 'destroy'])->name('destroy');
     });
 
     // Pharmacy & Inventory
