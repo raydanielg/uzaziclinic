@@ -18,9 +18,15 @@
                             <i class="fas fa-calendar-alt me-1"></i>BOOK
                         </a>
                     @else
-                        <a href="{{ route('home') }}" class="btn btn-green px-3 py-2 rounded-pill fw-bold shadow-sm transition-all small">
+                        <a href="{{ auth()->user()->getDashboardRoute() }}" class="btn btn-green px-3 py-2 rounded-pill fw-bold shadow-sm transition-all small">
                             <i class="fa-solid fa-gauge-high me-1"></i>DASHBOARD
                         </a>
+                        <form id="header-logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-danger px-3 py-2 rounded-pill fw-bold shadow-sm transition-all small">
+                                <i class="fa-solid fa-right-from-bracket me-1"></i>LOGOUT
+                            </button>
+                        </form>
                     @endguest
 
                     <!-- Mobile Menu Toggle -->

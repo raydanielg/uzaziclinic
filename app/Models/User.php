@@ -61,10 +61,11 @@ class User extends Authenticatable
      */
     public function hasRole($role)
     {
-        if (!$this->role || is_string($this->role)) {
-            return false;
+        if (!empty($this->role_id)) {
+            $roleName = \App\Models\Role::find($this->role_id)->name ?? null;
+            return $roleName === $role;
         }
-        return $this->role->name === $role;
+        return false;
     }
 
     /**
@@ -124,15 +125,21 @@ class User extends Authenticatable
      */
     public function getDashboardRoute(): string
     {
-        if ($this->isAdmin()) return route('admin.dashboard');
-        if ($this->hasRole('doctor')) return route('doctor.dashboard');
-        if ($this->hasRole('nurse')) return route('nurse.dashboard');
-        if ($this->hasRole('pharmacist')) return route('pharmacist.dashboard');
-        if ($this->hasRole('lab_tech')) return route('lab.dashboard');
-        if ($this->hasRole('accountant')) return route('accountant.dashboard');
-        if ($this->hasRole('receptionist')) return route('receptionist.dashboard');
-        if ($this->hasRole('customer')) return route('patient.dashboard');
+        $roleName = null;
+        if (!empty($this->role_id)) {
+            $roleName = \App\Models\Role::find($this->role_id)->name ?? null;
+        }
 
-        return url('/landing');
+        return match($roleName) {
+            'admin'        => route('admin.dashboard'),
+            'doctor'       => route('doctor.dashboard'),
+            'nurse'        => route('nurse.dashboard'),
+            'pharmacist'   => route('pharmacist.dashboard'),
+            'lab_tech'     => route('lab.dashboard'),
+            'accountant'   => route('accountant.dashboard'),
+            'receptionist' => route('receptionist.dashboard'),
+            'customer'     => route('patient.dashboard'),
+            default        => url('/landing'),
+        };
     }
 }
