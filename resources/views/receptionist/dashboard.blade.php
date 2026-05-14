@@ -24,55 +24,48 @@
             </div>
         </div>
 
-        <div class="row g-4 mb-4">
-            <div class="col-xl-3 col-md-6">
-                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                    <div class="d-flex align-items-center">
-                        <div class="bg-primary-soft text-primary p-3 rounded-4 me-3">
-                            <i class="fa-solid fa-calendar-day fs-4"></i>
-                        </div>
+        {{-- Stat Cards --}}
+        <div class="row g-3 mb-4">
+            <div class="col-xl-3 col-md-6 anim-2">
+                <div class="stat-card-modern stat-card-blue h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="stat-icon stat-card-blue"><i class="fa-solid fa-calendar-day"></i></div>
                         <div>
-                            <h6 class="text-muted mb-1 small fw-bold text-uppercase ls-1">Today's Appts</h6>
-                            <h3 class="mb-0 fw-bold">{{ $stats['today_appointments'] }}</h3>
+                            <div class="stat-label">Miadi Leo</div>
+                            <div class="stat-value" data-count="{{ $stats['today_appointments'] }}">0</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                    <div class="d-flex align-items-center">
-                        <div class="bg-success-soft text-success p-3 rounded-4 me-3">
-                            <i class="fa-solid fa-user-plus fs-4"></i>
-                        </div>
+            <div class="col-xl-3 col-md-6 anim-3">
+                <div class="stat-card-modern stat-card-green h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="stat-icon stat-card-green"><i class="fa-solid fa-user-plus"></i></div>
                         <div>
-                            <h6 class="text-muted mb-1 small fw-bold text-uppercase ls-1">New Patients</h6>
-                            <h3 class="mb-0 fw-bold">{{ $stats['pending_registrations'] }}</h3>
+                            <div class="stat-label">Wagonjwa Wapya</div>
+                            <div class="stat-value" data-count="{{ $stats['pending_registrations'] }}">0</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                    <div class="d-flex align-items-center">
-                        <div class="bg-info-soft text-info p-3 rounded-4 me-3">
-                            <i class="fa-solid fa-user-doctor fs-4"></i>
-                        </div>
+            <div class="col-xl-3 col-md-6 anim-4">
+                <div class="stat-card-modern stat-card-cyan h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="stat-icon stat-card-cyan"><i class="fa-solid fa-user-doctor"></i></div>
                         <div>
-                            <h6 class="text-muted mb-1 small fw-bold text-uppercase ls-1">Active Doctors</h6>
-                            <h3 class="mb-0 fw-bold">{{ $stats['active_doctors'] }}</h3>
+                            <div class="stat-label">Madaktari Wanaofanya Kazi</div>
+                            <div class="stat-value" data-count="{{ $stats['active_doctors'] }}">0</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                    <div class="d-flex align-items-center">
-                        <div class="bg-warning-soft text-warning p-3 rounded-4 me-3">
-                            <i class="fa-solid fa-users fs-4"></i>
-                        </div>
+            <div class="col-xl-3 col-md-6 anim-5">
+                <div class="stat-card-modern stat-card-amber h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="stat-icon stat-card-amber"><i class="fa-solid fa-users"></i></div>
                         <div>
-                            <h6 class="text-muted mb-1 small fw-bold text-uppercase ls-1">Total Patients</h6>
-                            <h3 class="mb-0 fw-bold">{{ $stats['total_patients'] }}</h3>
+                            <div class="stat-label">Jumla ya Wagonjwa</div>
+                            <div class="stat-value" data-count="{{ $stats['total_patients'] }}">0</div>
                         </div>
                     </div>
                 </div>
@@ -80,80 +73,81 @@
         </div>
 
         <div class="row g-4">
-            <div class="col-lg-8">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-clock-list me-2 text-primary"></i>Recent Appointments</h5>
-                        <a href="{{ route('receptionist.appointments') }}" class="btn btn-sm btn-light rounded-1 text-primary fw-bold px-3 border-0">View All</a>
+            {{-- Recent Appointments --}}
+            <div class="col-lg-8 anim-5">
+                <div class="dash-table-card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 fw-bold"><i class="fa-solid fa-calendar-clock me-2 text-blue"></i>Miadi ya Hivi Karibuni</h6>
+                        <a href="{{ route('receptionist.appointments') }}" class="btn btn-sm btn-light fw-semibold px-3">Zote</a>
                     </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0 border-0">
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th class="ps-4 small text-uppercase fw-bold text-muted border-0">Patient</th>
-                                        <th class="small text-uppercase fw-bold text-muted border-0">Doctor</th>
-                                        <th class="small text-uppercase fw-bold text-muted border-0">Time</th>
-                                        <th class="text-end pe-4 small text-uppercase fw-bold text-muted border-0">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($recent_appointments as $app)
-                                    <tr>
-                                        <td class="ps-4">
-                                            <div class="fw-bold text-dark">{{ $app->user->name ?? 'N/A' }}</div>
-                                            <div class="small text-muted">ID: #PT-{{ $app->user_id }}</div>
-                                        </td>
-                                        <td>Dr. {{ $app->doctor->name ?? 'N/A' }}</td>
-                                        <td class="small text-muted">{{ \Carbon\Carbon::parse($app->appointment_date)->format('H:i A') }}</td>
-                                        <td class="text-end pe-4">
-                                            <span class="badge bg-{{ $app->status == 'pending' ? 'warning' : 'success' }}-subtle text-{{ $app->status == 'pending' ? 'warning' : 'success' }} rounded-pill px-3">{{ ucfirst($app->status) }}</span>
-                                        </td>
-                                    </tr>
-                                    @empty
-                                    <tr>
-                                        <td colspan="4" class="text-center py-5 text-muted">No recent appointments.</td>
-                                    </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead><tr>
+                                <th class="ps-3">Mgonjwa</th>
+                                <th>Daktari</th>
+                                <th>Muda</th>
+                                <th class="text-end pe-3">Hali</th>
+                            </tr></thead>
+                            <tbody>
+                                @forelse($recent_appointments as $app)
+                                @php
+                                    $pName = $app->user->name ?? 'N/A';
+                                    $sc = match($app->status ?? 'pending') {
+                                        'confirmed' => ['bg-blue-soft text-blue','fa-circle-check'],
+                                        'completed' => ['bg-green-soft text-green','fa-check-double'],
+                                        'cancelled' => ['bg-rose-soft text-rose','fa-circle-xmark'],
+                                        default     => ['bg-amber-soft text-amber','fa-clock'],
+                                    };
+                                @endphp
+                                <tr>
+                                    <td class="ps-3">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="user-avatar bg-blue-soft text-blue">{{ strtoupper(substr($pName,0,1)) }}</div>
+                                            <div>
+                                                <div class="fw-semibold small">{{ $pName }}</div>
+                                                <div class="text-muted" style="font-size:.7rem">#PT-{{ $app->user_id }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="small fw-semibold">Dkt. {{ $app->doctor->name ?? 'N/A' }}</td>
+                                    <td class="small text-muted">{{ \Carbon\Carbon::parse($app->appointment_date)->format('H:i, d M') }}</td>
+                                    <td class="text-end pe-3">
+                                        <span class="status-badge {{ $sc[0] }}"><i class="fa-solid {{ $sc[1] }} me-1"></i>{{ ucfirst($app->status ?? 'pending') }}</span>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr><td colspan="4" class="text-center py-5 text-muted">
+                                    <i class="fa-solid fa-calendar-xmark fs-2 opacity-25 d-block mb-2"></i>Hakuna miadi
+                                </td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
-            <!-- Quick Actions -->
-            <div class="col-lg-4">
-                <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
-                    <div class="bg-dark p-4 text-white">
-                        <h6 class="small text-uppercase opacity-75 fw-bold mb-2">Today's Overview</h6>
-                        <h3 class="fw-bold mb-0">{{ $stats['today_appointments'] }} Appointments</h3>
-                        <p class="small mb-0 opacity-75">{{ $stats['total_patients'] }} Total Patients Registered</p>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="d-grid gap-2">
-                            <a href="{{ route('receptionist.appointments') }}" class="btn btn-primary rounded-1 py-2 text-start ps-3 border-0 fw-bold">
-                                <i class="fa-solid fa-calendar-check me-2"></i> View Appointments
-                            </a>
-                            <a href="{{ route('receptionist.patients') }}" class="btn btn-success rounded-1 py-2 text-start ps-3 border-0 fw-bold text-white">
-                                <i class="fa-solid fa-users me-2"></i> Patient List
-                            </a>
-                            <a href="{{ route('receptionist.doctors') }}" class="btn btn-outline-secondary rounded-1 py-2 text-start ps-3 border-0">
-                                <i class="fa-solid fa-user-doctor me-2"></i> Doctor Directory
-                            </a>
-                        </div>
-                    </div>
+            {{-- Right Panel --}}
+            <div class="col-lg-4 anim-6">
+                {{-- Weekly Chart --}}
+                <div class="dash-chart-card mb-4">
+                    <div class="card-header"><h6 class="mb-0 fw-bold"><i class="fa-solid fa-chart-bar me-2 text-cyan"></i>Miadi ya Wiki Hii</h6></div>
+                    <div class="card-body"><canvas id="receptionistChart" height="185"></canvas></div>
                 </div>
-
-                <div class="card border-0 shadow-sm rounded-4 p-4">
-                    <h6 class="fw-bold mb-3 small text-uppercase">Stats Summary</h6>
-                    <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
-                        <span class="small text-muted">New Patients Today</span>
-                        <span class="badge bg-success-subtle text-success fw-bold">{{ $stats['pending_registrations'] }}</span>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between py-2">
-                        <span class="small text-muted">Active Doctors</span>
-                        <span class="badge bg-info-subtle text-info fw-bold">{{ $stats['active_doctors'] }}</span>
+                {{-- Quick Actions --}}
+                <div class="dash-chart-card">
+                    <div class="card-header"><h6 class="mb-0 fw-bold"><i class="fa-solid fa-bolt me-2 text-amber"></i>Vitendo vya Haraka</h6></div>
+                    <div class="card-body d-flex flex-column gap-2 pt-3">
+                        @foreach([
+                            ['fa-calendar-check','bg-blue-soft text-blue',route('receptionist.appointments'),'Angalia Miadi'],
+                            ['fa-users','bg-green-soft text-green',route('receptionist.patients'),'Orodha ya Wagonjwa'],
+                            ['fa-user-doctor','bg-cyan-soft text-cyan',route('receptionist.doctors'),'Saraka ya Madaktari'],
+                            ['fa-user','bg-violet-soft text-violet',route('receptionist.profile'),'Wasifu Wangu'],
+                        ] as [$icon,$cls,$href,$label])
+                        <a href="{{ $href }}" class="quick-action-item">
+                            <div class="qa-icon {{ $cls }}"><i class="fa-solid {{ $icon }}"></i></div>
+                            <span>{{ $label }}</span>
+                        </a>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -161,9 +155,30 @@
     </div>
 </div>
 
-<style>
-    .bg-primary-soft { background-color: rgba(13, 110, 253, 0.1); }
-    .bg-success-soft { background-color: rgba(25, 135, 84, 0.1); }
-    .bg-info-soft { background-color: rgba(13, 202, 240, 0.1); }
-</style>
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('receptionistChart');
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jum','Jtatu','Jua','Alh','Iju','Jumam','Jmap'],
+                datasets: [{
+                    label: 'Miadi',
+                    data: [8,12,9,15,11,5,3],
+                    backgroundColor: 'rgba(14,116,144,0.8)',
+                    borderRadius: 6, borderSkipped: false
+                }]
+            },
+            options: { responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#f1f5f9' } },
+                    x: { grid: { display: false } } } }
+        });
+    }
+});
+</script>
+@endpush
 @endsection
