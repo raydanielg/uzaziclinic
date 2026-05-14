@@ -311,38 +311,4 @@ $(document).ready(function() {
 </script>
 @endpush
 @endsection
-    }
-</script>
-@endpush
-
-
-<style>
-    .nav-pills .nav-link {
-        color: #64748b;
-        font-weight: 500;
-        font-size: 0.9rem;
-    }
-    .nav-pills .nav-link.active {
-        background-color: #fff;
-        color: #6366f1;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    .form-control, .form-select {
-        border-radius: 4px;
-        padding: 0.6rem 0.75rem;
-        border: 1px solid #e2e8f0;
-        font-size: 0.9rem;
-    }
-    .table thead th {
-        font-size: 0.75rem !important;
-        letter-spacing: 0.5px;
-        background: #f8fafc !important;
-        color: #64748b !important;
-        text-transform: uppercase;
-    }
-    .avatar {
-        background-color: #f0f4ff;
-    }
-</style>
-@endsection
 
