@@ -138,6 +138,9 @@ Route::middleware(['auth', 'role:accountant'])->prefix('accountant')->name('acco
 Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('receptionist.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Receptionist\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/appointments', [App\Http\Controllers\Receptionist\DashboardController::class, 'appointments'])->name('appointments');
+    Route::post('/appointments', [App\Http\Controllers\Receptionist\DashboardController::class, 'storeAppointment'])->name('appointments.store');
+    Route::post('/appointments/{appointment}/status', [App\Http\Controllers\Receptionist\DashboardController::class, 'updateAppointmentStatus'])->name('appointments.status');
+    Route::delete('/appointments/{appointment}', [App\Http\Controllers\Receptionist\DashboardController::class, 'cancelAppointment'])->name('appointments.cancel');
     Route::get('/patients', [App\Http\Controllers\Receptionist\DashboardController::class, 'patients'])->name('patients');
     Route::get('/doctors', [App\Http\Controllers\Receptionist\DashboardController::class, 'doctors'])->name('doctors');
     Route::get('/profile', [App\Http\Controllers\Receptionist\DashboardController::class, 'profile'])->name('profile');
