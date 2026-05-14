@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Receptionist;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
+use App\Models\Patient;
+use App\Models\Doctor;
 use App\Models\User;
 
 class DashboardController extends Controller

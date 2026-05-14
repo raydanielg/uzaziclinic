@@ -74,6 +74,8 @@ Route::post('/contact/submit', [App\Http\Controllers\ContactController::class, '
         Route::post('/lab-requests/store', [App\Http\Controllers\Doctor\DashboardController::class, 'storeLabRequest'])->name('lab.requests.store');
         Route::get('/lab-results', [App\Http\Controllers\Doctor\DashboardController::class, 'labResults'])->name('lab.results');
         Route::get('/medical-records', [App\Http\Controllers\Doctor\DashboardController::class, 'medicalRecords'])->name('medical.records');
+        Route::get('/appointments', [App\Http\Controllers\Doctor\DashboardController::class, 'appointments'])->name('appointments');
+        Route::post('/appointments/{appointment}/status', [App\Http\Controllers\Doctor\DashboardController::class, 'updateAppointmentStatus'])->name('appointments.status');
         Route::get('/schedule', [App\Http\Controllers\Doctor\DashboardController::class, 'schedule'])->name('schedule');
         Route::get('/chat', [App\Http\Controllers\Doctor\DashboardController::class, 'chat'])->name('chat');
         Route::get('/profile', [App\Http\Controllers\Doctor\DashboardController::class, 'profile'])->name('profile');
