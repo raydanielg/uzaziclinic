@@ -1,12 +1,26 @@
 @extends('layouts.app')
+@include('partials.dashboard-styles')
 
 @section('content')
 <div class="receptionist-dashboard py-4">
     <div class="container-fluid">
-        <div class="row mb-4">
+
+        {{-- Hero --}}
+        <div class="row mb-4 anim-1">
             <div class="col-12">
-                <h1 class="h3 mb-0 text-gray-800 fw-bold">Receptionist Dashboard</h1>
-                <p class="text-muted small">Welcome, {{ Auth::user()->name }}. Manage appointments and patient registrations.</p>
+                <div class="dash-hero-card" style="background:linear-gradient(135deg,#1e3a5f 0%,#0e7490 100%);">
+                    <div class="hero-icon"><i class="fa-solid fa-hospital"></i></div>
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <div class="user-avatar bg-white bg-opacity-20 text-white fs-5">
+                            <i class="fa-solid fa-person-desk"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0 opacity-75 small fw-semibold text-uppercase">Karani wa Mapokezi</p>
+                            <h4 class="mb-0 fw-bold">Karibu, {{ Auth::user()->name }}</h4>
+                        </div>
+                    </div>
+                    <p class="mb-0 opacity-75 small">{{ now()->format('l, d F Y') }} &bull; Miadi leo: <strong>{{ $stats['today_appointments'] }}</strong> &bull; Wagonjwa wapya: <strong>{{ $stats['pending_registrations'] }}</strong></p>
+                </div>
             </div>
         </div>
 
