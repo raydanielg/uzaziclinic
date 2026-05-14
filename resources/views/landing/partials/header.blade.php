@@ -19,7 +19,7 @@
                         </a>
                     @else
                         <a href="{{ route('home') }}" class="btn btn-green px-3 py-2 rounded-pill fw-bold shadow-sm transition-all small">
-                            <i class="fa-solid fa-house me-1"></i>HOME
+                            <i class="fa-solid fa-gauge-high me-1"></i>DASHBOARD
                         </a>
                     @endguest
 
@@ -38,7 +38,11 @@
             <div class="d-flex align-items-center overflow-auto no-scrollbar py-1">
                 <ul class="nav flex-nowrap gap-4 text-uppercase small fw-bold list-unstyled m-0">
                     <li class="nav-item">
-                        <a href="#hero" class="nav-link text-dark px-0 py-2 custom-nav-link active">Home</a>
+                        @auth
+                            <a href="{{ route('home') }}" class="nav-link text-dark px-0 py-2 custom-nav-link active">Dashboard</a>
+                        @else
+                            <a href="#hero" class="nav-link text-dark px-0 py-2 custom-nav-link active">Home</a>
+                        @endauth
                     </li>
                     <li class="nav-item">
                         <a href="{{ url('/about-us') }}" class="nav-link text-dark px-0 py-2 custom-nav-link">About Us</a>
@@ -149,15 +153,25 @@
             </div>
             <div class="modal-body p-4">
                 <div class="menu-grid row g-3">
-                    <!-- 1 Home -->
+                    <!-- 1 Home / Dashboard -->
                     <div class="col-12">
-                        <a href="{{ auth()->check() ? route('home') : url('/') }}" class="menu-item-link">
+                        @auth
+                        <a href="{{ route('home') }}" class="menu-item-link">
+                            <div class="menu-icon-box"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="menu-text">
+                                <div class="menu-title">Dashboard</div>
+                                <div class="menu-sub">Rudi kwenye dashibodi</div>
+                            </div>
+                        </a>
+                        @else
+                        <a href="{{ url('/') }}" class="menu-item-link">
                             <div class="menu-icon-box"><i class="fas fa-home"></i></div>
                             <div class="menu-text">
                                 <div class="menu-title">Home</div>
                                 <div class="menu-sub">Ukurasa wa mwanzo</div>
                             </div>
                         </a>
+                        @endauth
                     </div>
                     <!-- 2 About Us -->
                     <div class="col-12">
