@@ -29,47 +29,37 @@ class LoginController extends Controller
     protected $redirectTo = '/home';
 
     /**
-     * Get the post-login redirect path.
-     *
-     * @return string
+     * Handle post-authentication redirect by role.
+     * Overrides redirect()->intended() to always go to the correct dashboard.
      */
-    protected function redirectTo()
+    protected function authenticated(\Illuminate\Http\Request $request, $user)
     {
-        $user = auth()->user();
-        
         if ($user->isAdmin()) {
-            return route('admin.dashboard');
+            return redirect()->route('admin.dashboard');
         }
-
         if ($user->hasRole('doctor')) {
-            return route('doctor.dashboard');
+            return redirect()->route('doctor.dashboard');
         }
-        
         if ($user->hasRole('nurse')) {
-            return route('nurse.dashboard');
+            return redirect()->route('nurse.dashboard');
         }
-        
         if ($user->hasRole('pharmacist')) {
-            return route('pharmacist.dashboard');
+            return redirect()->route('pharmacist.dashboard');
         }
-        
         if ($user->hasRole('lab_tech')) {
-            return route('lab.dashboard');
+            return redirect()->route('lab.dashboard');
         }
-        
         if ($user->hasRole('accountant')) {
-            return route('accountant.dashboard');
+            return redirect()->route('accountant.dashboard');
         }
-        
         if ($user->hasRole('receptionist')) {
-            return route('receptionist.dashboard');
+            return redirect()->route('receptionist.dashboard');
         }
-        
         if ($user->hasRole('customer')) {
-            return route('patient.dashboard');
+            return redirect()->route('patient.dashboard');
         }
 
-        return '/home';
+        return redirect()->route('home');
     }
 
     /**
