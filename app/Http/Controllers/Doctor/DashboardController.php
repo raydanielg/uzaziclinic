@@ -159,30 +159,26 @@ class DashboardController extends Controller
             return back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
-    public function labRequests() 
-    { 
-        $patients = Appointment::with('user')
-            ->where('doctor_id', auth()->id())
-            ->get()
-            ->map(function($app) {
-                return $app->user;
-            })->unique('id');
+    public function labRequests()
+    {
+        $doctorId = $this->getDoctorId();
+        $patients = Patient::whereIn('id',
+            Appointment::forDoctor($doctorId)->pluck('patient_id')
+        )->with('user')->get();
 
         $available_tests = LabTest::where('status', 'active')->get();
-        
+
         $pending_requests = LabRequest::with('patient')
             ->where('doctor_id', auth()->id())
             ->where('status', '!=', 'completed')
-            ->latest()
-            ->get();
+            ->latest()->get();
 
         $completed_results = LabRequest::with('patient')
             ->where('doctor_id', auth()->id())
             ->where('status', 'completed')
-            ->latest()
-            ->get();
+            ->latest()->get();
 
-        return view('doctor.lab_requests', compact('patients', 'available_tests', 'pending_requests', 'completed_results')); 
+        return view('doctor.lab_requests', compact('patients', 'available_tests', 'pending_requests', 'completed_results'));
     }
 
     public function storeLabRequest(Request $request)
@@ -225,42 +221,36 @@ class DashboardController extends Controller
 
         return view('doctor.lab_results', compact('completed_results')); 
     }
-    public function medicalRecords() 
-    { 
-        $patients = Appointment::with('user')
-            ->where('doctor_id', auth()->id())
-            ->get()
-            ->map(function($app) {
-                return $app->user;
-            })->unique('id');
+    public function medicalRecords()
+    {
+        $doctorId = $this->getDoctorId();
+        $patients = Patient::whereIn('id',
+            Appointment::forDoctor($doctorId)->pluck('patient_id')
+        )->with('user')->get();
 
         $medical_records = \App\Models\MedicalRecord::with('patient', 'doctor')
             ->where('doctor_id', auth()->id())
-            ->latest()
-            ->get();
+            ->latest()->get();
 
-        return view('doctor.medical_records', compact('medical_records', 'patients')); 
+        return view('doctor.medical_records', compact('medical_records', 'patients'));
     }
-    public function schedule() 
-    { 
-        $appointments = Appointment::with('user')
-            ->where('doctor_id', auth()->id())
+    public function schedule()
+    {
+        $doctorId = $this->getDoctorId();
+        $appointments = Appointment::with(['patient.user'])
+            ->forDoctor($doctorId)
             ->whereDate('appointment_date', '>=', today())
             ->orderBy('appointment_date', 'asc')
             ->get();
-
-        return view('doctor.schedule', compact('appointments')); 
+        return view('doctor.schedule', compact('appointments'));
     }
-    public function chat() 
-    { 
-        $patients = Appointment::with('user')
-            ->where('doctor_id', auth()->id())
-            ->get()
-            ->map(function($app) {
-                return $app->user;
-            })->unique('id');
-
-        return view('doctor.chat', compact('patients')); 
+    public function chat()
+    {
+        $doctorId = $this->getDoctorId();
+        $patients = Patient::whereIn('id',
+            Appointment::forDoctor($doctorId)->pluck('patient_id')
+        )->with('user')->get();
+        return view('doctor.chat', compact('patients'));
     }
     public function profile() { return view('doctor.profile'); }
     public function password() { return view('doctor.password'); }
