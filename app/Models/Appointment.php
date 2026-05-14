@@ -36,16 +36,9 @@ class Appointment extends Model
     }
 
     /**
-     * Accessor: $appointment->user — returns the Patient's linked User account.
-     * Keeps backward-compat with controllers/views that call ->user->name.
-     */
-    public function getUserAttribute()
-    {
-        return $this->patient?->user;
-    }
-
-    /**
-     * Eager-loadable workaround: load patient.user when 'user' is requested.
+     * Relationship: get the patient's linked User account via hasOneThrough.
+     * Usage: $appointment->user (or eager-load with 'user').
+     * For nested: use with('patient.user') for best performance.
      */
     public function user()
     {
