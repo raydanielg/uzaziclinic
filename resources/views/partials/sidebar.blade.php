@@ -213,6 +213,11 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
+                    <a class="nav-link {{ Request::is('doctor/consultation') ? 'active' : '' }}" href="{{ route('doctor.consultation.queue') }}">
+                        <i class="fa-solid fa-user-doctor me-2 text-success"></i> Foleni Yangu (Consultation)
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
                     <a class="nav-link {{ Request::is('doctor/patients*') ? 'active' : '' }}" href="{{ route('doctor.patients') }}">
                         <i class="fa-solid fa-hospital-user me-2 text-success"></i> My Patients
                     </a>
@@ -355,8 +360,13 @@
                 {{-- Prescriptions Section --}}
                 <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Prescriptions</li>
                 <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('pharmacist/dispense') ? 'active' : '' }}" href="{{ route('pharmacist.dispense.index') }}">
+                        <i class="fa-solid fa-pills me-2 text-danger"></i> Kutolea Dawa (Dispense)
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('pharmacist/prescriptions') && !Request::is('pharmacist/prescriptions/history') ? 'active' : '' }}" href="{{ route('pharmacist.prescriptions') }}">
-                        <i class="fa-solid fa-file-prescription me-2 text-danger"></i> Pending Prescriptions
+                        <i class="fa-solid fa-file-prescription me-2 text-danger"></i> Pending Prescriptions (Old)
                     </a>
                 </li>
                 <li class="nav-item mb-1">
@@ -434,7 +444,10 @@
                 </li>
                 <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Lab Work</li>
                 <li class="nav-item mb-1">
-                    <a class="nav-link {{ Request::is('lab/requests') ? 'active' : '' }}" href="{{ route('lab.requests') }}"><i class="fa-solid fa-flask me-2 text-danger"></i> Lab Requests</a>
+                    <a class="nav-link {{ Request::is('lab/process') ? 'active' : '' }}" href="{{ route('lab.process.index') }}"><i class="fa-solid fa-flask me-2 text-danger"></i> Ombi la Majaribio (Process)</a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('lab/requests') ? 'active' : '' }}" href="{{ route('lab.requests') }}"><i class="fa-solid fa-list me-2 text-danger"></i> Lab Requests (Old)</a>
                 </li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('lab/tests') ? 'active' : '' }}" href="{{ route('lab.tests') }}"><i class="fa-solid fa-vial-circle-check me-2 text-success"></i> Tests Catalog</a>
@@ -489,6 +502,9 @@
                     <a class="nav-link {{ Request::is('receptionist/patients') ? 'active' : '' }}" href="{{ route('receptionist.patients') }}"><i class="fa-solid fa-user-plus me-2 text-success"></i> Patients Registry</a>
                 </li>
                 <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem;">Appointments</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('receptionist/visits/queue') ? 'active' : '' }}" href="{{ route('receptionist.visits.queue') }}"><i class="fa-solid fa-users-line me-2 text-primary"></i> Foleni ya Wagonjwa</a>
+                </li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('receptionist/appointments') ? 'active' : '' }}" href="{{ route('receptionist.appointments') }}"><i class="fa-solid fa-calendar-check me-2 text-primary"></i> Manage Appointments</a>
                 </li>

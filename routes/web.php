@@ -81,6 +81,16 @@ Route::post('/contact/submit', [App\Http\Controllers\ContactController::class, '
         Route::get('/profile', [App\Http\Controllers\Doctor\DashboardController::class, 'profile'])->name('profile');
         Route::get('/password', [App\Http\Controllers\Doctor\DashboardController::class, 'password'])->name('password');
         Route::get('/reports', [App\Http\Controllers\Doctor\DashboardController::class, 'reports'])->name('reports');
+
+        /* ── Consultation flow (patient queue → vitals → lab → prescribe → done) ── */
+        Route::prefix('consultation')->name('consultation.')->group(function () {
+            Route::get('/',                          [App\Http\Controllers\Doctor\ConsultationController::class, 'queue'])->name('queue');
+            Route::get('/{appointment}',             [App\Http\Controllers\Doctor\ConsultationController::class, 'show'])->name('show');
+            Route::post('/{appointment}/vitals',     [App\Http\Controllers\Doctor\ConsultationController::class, 'saveVitals'])->name('vitals');
+            Route::post('/{appointment}/lab',        [App\Http\Controllers\Doctor\ConsultationController::class, 'requestLab'])->name('lab');
+            Route::post('/{appointment}/prescribe',  [App\Http\Controllers\Doctor\ConsultationController::class, 'prescribe'])->name('prescribe');
+            Route::post('/{appointment}/complete',   [App\Http\Controllers\Doctor\ConsultationController::class, 'complete'])->name('complete');
+        });
     });
 
 Route::middleware(['auth', 'role:nurse'])->prefix('nurse')->name('nurse.')->group(function () {
@@ -117,6 +127,14 @@ Route::middleware(['auth', 'role:pharmacist'])->prefix('pharmacist')->name('phar
     Route::get('/reports', [App\Http\Controllers\Pharmacist\DashboardController::class, 'reports'])->name('reports');
     Route::get('/profile', [App\Http\Controllers\Pharmacist\DashboardController::class, 'profile'])->name('profile');
     Route::get('/password', [App\Http\Controllers\Pharmacist\DashboardController::class, 'password'])->name('password');
+
+    /* ── Dispensing flow (review → deduct stock → close visit) ── */
+    Route::prefix('dispense')->name('dispense.')->group(function () {
+        Route::get('/',                       [App\Http\Controllers\Pharmacist\DispenseController::class, 'index'])->name('index');
+        Route::get('/{prescription}',         [App\Http\Controllers\Pharmacist\DispenseController::class, 'show'])->name('show');
+        Route::post('/{prescription}/complete', [App\Http\Controllers\Pharmacist\DispenseController::class, 'complete'])->name('complete');
+        Route::post('/{prescription}/cancel',   [App\Http\Controllers\Pharmacist\DispenseController::class, 'cancel'])->name('cancel');
+    });
 });
 
 Route::middleware(['auth', 'role:lab_tech'])->prefix('lab')->name('lab.')->group(function () {
@@ -126,6 +144,15 @@ Route::middleware(['auth', 'role:lab_tech'])->prefix('lab')->name('lab.')->group
     Route::get('/tests', [App\Http\Controllers\Lab\DashboardController::class, 'tests'])->name('tests');
     Route::get('/profile', [App\Http\Controllers\Lab\DashboardController::class, 'profile'])->name('profile');
     Route::get('/password', [App\Http\Controllers\Lab\DashboardController::class, 'password'])->name('password');
+
+    /* ── Lab request processing (start → enter results → complete → routes back to doctor) ── */
+    Route::prefix('process')->name('process.')->group(function () {
+        Route::get('/',                          [App\Http\Controllers\Lab\ProcessController::class, 'index'])->name('index');
+        Route::get('/{labRequest}',              [App\Http\Controllers\Lab\ProcessController::class, 'show'])->name('show');
+        Route::post('/{labRequest}/start',       [App\Http\Controllers\Lab\ProcessController::class, 'start'])->name('start');
+        Route::post('/{labRequest}/complete',    [App\Http\Controllers\Lab\ProcessController::class, 'complete'])->name('complete');
+        Route::post('/{labRequest}/cancel',      [App\Http\Controllers\Lab\ProcessController::class, 'cancel'])->name('cancel');
+    });
 });
 
 Route::middleware(['auth', 'role:accountant'])->prefix('accountant')->name('accountant.')->group(function () {
@@ -147,6 +174,15 @@ Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('
     Route::get('/doctors', [App\Http\Controllers\Receptionist\DashboardController::class, 'doctors'])->name('doctors');
     Route::get('/profile', [App\Http\Controllers\Receptionist\DashboardController::class, 'profile'])->name('profile');
     Route::get('/password', [App\Http\Controllers\Receptionist\DashboardController::class, 'password'])->name('password');
+
+    /* ── Visit / Queue flow (search/register patient → send to doctor → monitor queue) ── */
+    Route::prefix('visits')->name('visits.')->group(function () {
+        Route::get('/queue',                       [App\Http\Controllers\Receptionist\VisitController::class, 'queue'])->name('queue');
+        Route::get('/search-patient',              [App\Http\Controllers\Receptionist\VisitController::class, 'searchPatient'])->name('search');
+        Route::post('/register-patient',           [App\Http\Controllers\Receptionist\VisitController::class, 'registerPatient'])->name('register');
+        Route::post('/send-to-doctor',             [App\Http\Controllers\Receptionist\VisitController::class, 'sendToDoctor'])->name('send');
+        Route::post('/{appointment}/cancel',       [App\Http\Controllers\Receptionist\VisitController::class, 'cancelVisit'])->name('cancel');
+    });
 });
 
 Route::middleware(['auth', 'role:customer'])->prefix('patient')->name('patient.')->group(function () {
