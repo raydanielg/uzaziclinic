@@ -174,8 +174,8 @@
                     </tbody>
                 </table>
             </div>
-            @if($employees->hasPages())
-            <div class="px-3 py-2 border-top bg-white">{{ $employees->links() }}</div>
+            @if($allStaff->hasPages())
+            <div class="px-3 py-2 border-top bg-white">{{ $allStaff->links() }}</div>
             @endif
         </div>
     </div>
