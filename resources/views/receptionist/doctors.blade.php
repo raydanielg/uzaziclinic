@@ -200,7 +200,7 @@ $('#sendPatientBtn').on('click', function() {
         _token: CSRF,
         patient_id: patientId,
         doctor_id: doctorId,
-        notes: notes
+        chief_complaint: notes
     }).done(function(r) {
         if (r.success) {
             Swal.fire({
