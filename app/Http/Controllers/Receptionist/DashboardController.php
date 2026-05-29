@@ -88,6 +88,77 @@ class DashboardController extends Controller
         return view('receptionist.patients', compact('patients'));
     }
 
+    public function viewPatient($id)
+    {
+        $patient = User::with(['role', 'patient'])->findOrFail($id);
+        $patientFiles = PatientFile::where('patient_id', $patient->patient->id ?? null)
+            ->with('uploadedBy')
+            ->latest()
+            ->get();
+        
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'patient' => $patient,
+                'patient_profile' => $patient->patient,
+                'files' => $patientFiles,
+            ]
+        ]);
+    }
+
+    public function editPatient($id)
+    {
+        $patient = User::with(['role', 'patient'])->findOrFail($id);
+        
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'patient' => $patient,
+                'patient_profile' => $patient->patient,
+            ]
+        ]);
+    }
+
+    public function updatePatient(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'phone' => 'required|string|max:20',
+            'date_of_birth' => 'nullable|date',
+            'gender' => 'nullable|in:male,female,other',
+            'national_id' => 'nullable|string|max:50',
+            'blood_type' => 'nullable|string|max:5',
+            'insurance_provider' => 'nullable|string|max:255',
+            'address' => 'nullable|string',
+            'emergency_contact_name' => 'nullable|string|max:255',
+            'emergency_contact_phone' => 'nullable|string|max:20',
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->status = $request->status;
+        $user->save();
+
+        // Update patient profile if exists
+        if ($user->patient) {
+            $user->patient->update([
+                'gender' => $request->gender,
+                'blood_group' => $request->blood_type,
+                'emergency_contact' => $request->emergency_contact_name . ' - ' . $request->emergency_contact_phone,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Patient updated successfully!',
+            'data' => $user->load('patient'),
+        ]);
+    }
+
     public function registerPatient(Request $request)
     {
         $request->validate([
