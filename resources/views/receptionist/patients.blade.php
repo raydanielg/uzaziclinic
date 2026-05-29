@@ -67,6 +67,9 @@
                                         <button class="btn btn-sm btn-outline-primary rounded-2 me-1" onclick="viewPatient({{ $patient->id }})" title="View">
                                             <i class="fa-solid fa-eye"></i>
                                         </button>
+                                        <button class="btn btn-sm btn-outline-success rounded-2 me-1" onclick="sendToDoctor({{ $patient->id }})" title="Send to Doctor">
+                                            <i class="fa-solid fa-user-doctor"></i>
+                                        </button>
                                         <button class="btn btn-sm btn-outline-secondary rounded-2" onclick="editPatient({{ $patient->id }})" title="Edit">
                                             <i class="fa-solid fa-pen"></i>
                                         </button>
