@@ -160,13 +160,13 @@ window.openSendPatientModal = function(doctorId, doctorName) {
 
 // Load patients for dropdown
 function loadPatients() {
-    $.get('{{ route("receptionist.patients") }}')
+    $.get('{{ route("receptionist.patients.json") }}')
         .done(function(data) {
             const select = $('#patientSelect');
             select.html('<option value="">Select a patient</option>');
             
             data.forEach(function(patient) {
-                select.append(`<option value="${patient.id}">${patient.name} (PT-${patient.id})</option>`);
+                select.append(`<option value="${patient.id}">${patient.name} (${patient.patient_number})</option>`);
             });
         })
         .fail(function() {
