@@ -221,7 +221,7 @@ class DashboardController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'nullable|email|unique:users,email',
             'phone' => 'required|string|max:20',
             'date_of_birth' => 'nullable|date',
             'gender' => 'nullable|in:male,female,other',
@@ -235,38 +235,47 @@ class DashboardController extends Controller
             'files.*' => 'file|mimes:pdf,jpg,jpeg,png,doc,docx|max:5120',
         ]);
 
-        // Create user account
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => bcrypt('password123'), // Default password, user will change on first login
-            'status' => 'active',
-        ]);
+        try {
+            DB::beginTransaction();
 
-        // Assign customer role
-        $customerRole = \App\Models\Role::where('name', 'customer')->first();
-        if ($customerRole) {
-            $user->role()->associate($customerRole);
-            $user->save();
-        }
+            // Generate email if not provided
+            $email = $request->email;
+            if (!$email) {
+                $email = 'patient_' . time() . '_' . substr(md5($request->phone), 0, 6) . '@local.invalid';
+            }
 
-        // Create patient profile
-        $patient = Patient::create([
-            'user_id' => $user->id,
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            'gender' => $request->gender,
-            'blood_group' => $request->blood_type,
-            'allergies' => $request->allergies ?? null,
-            'emergency_contact' => $request->emergency_contact_name . ' - ' . $request->emergency_contact_phone,
-            'status' => 'active',
-        ]);
+            // Create user account
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $email,
+                'phone' => $request->phone,
+                'password' => bcrypt('password123'), // Default password, user will change on first login
+                'status' => 'active',
+            ]);
 
-        // Handle file uploads
-        if ($request->hasFile('files')) {
-            foreach ($request->file('files') as $file) {
+            // Assign customer role
+            $customerRole = \App\Models\Role::where('name', 'customer')->first();
+            if ($customerRole) {
+                $user->role()->associate($customerRole);
+                $user->save();
+            }
+
+            // Create patient profile
+            $patient = Patient::create([
+                'user_id' => $user->id,
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'email' => $email,
+                'gender' => $request->gender,
+                'blood_group' => $request->blood_type,
+                'allergies' => $request->allergies ?? null,
+                'emergency_contact' => $request->emergency_contact_name . ' - ' . $request->emergency_contact_phone,
+                'status' => 'active',
+            ]);
+
+            // Handle file uploads
+            if ($request->hasFile('files')) {
+                foreach ($request->file('files') as $file) {
                 $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('patient_files/' . $patient->id, $fileName, 'public');
                 
