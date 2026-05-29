@@ -130,6 +130,111 @@
     </div>
 </div>
 
+<!-- Receipt Modal -->
+<div class="modal fade" id="receiptModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 bg-dark text-white">
+                <h6 class="modal-title fw-bold"><i class="fa-solid fa-receipt me-2"></i>Payment Receipt</h6>
+                <button type="button" class="btn-close btn-close-white btn-sm" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div id="receiptContent" class="border p-4 bg-white">
+                    <!-- Receipt Header -->
+                    <div class="text-center mb-4 pb-3 border-bottom">
+                        <h4 class="fw-bold mb-1">Uzazi Clinic</h4>
+                        <p class="text-muted small mb-0">Quality Healthcare Services</p>
+                        <p class="text-muted small mb-0">Date: <span id="receiptDate"></span></p>
+                        <p class="text-muted small mb-0">Receipt #: <span id="receiptNumber"></span></p>
+                    </div>
+
+                    <!-- Patient Info -->
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <label class="small text-muted">Patient Name:</label>
+                            <div class="fw-bold" id="receiptPatientName">-</div>
+                        </div>
+                        <div class="col-6">
+                            <label class="small text-muted">Patient Number:</label>
+                            <div class="fw-bold" id="receiptPatientNumber">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Case Details -->
+                    <div class="mb-4 p-3 bg-light rounded">
+                        <h6 class="fw-bold mb-2"><i class="fa-solid fa-user-injured me-2"></i>Case Details</h6>
+                        <div class="small">
+                            <label class="text-muted">Chief Complaint:</label>
+                            <div id="receiptComplaint">-</div>
+                        </div>
+                        <div class="small mt-2">
+                            <label class="text-muted">Diagnosis:</label>
+                            <div id="receiptDiagnosis">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Services -->
+                    <div class="mb-4">
+                        <h6 class="fw-bold mb-3"><i class="fa-solid fa-list-check me-2"></i>Services Received</h6>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th class="text-end">Cost (TZS)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="receiptServices">
+                                <tr>
+                                    <td>Doctor Consultation</td>
+                                    <td class="text-end">5,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Laboratory Tests</td>
+                                    <td class="text-end">15,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Medication</td>
+                                    <td class="text-end">25,000</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="table-dark">
+                                    <th class="fw-bold">Total</th>
+                                    <th class="text-end fw-bold" id="receiptTotal">45,000</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <!-- Payment Details -->
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <label class="small text-muted">Payment Method:</label>
+                            <div class="fw-bold" id="receiptPaymentMethod">-</div>
+                        </div>
+                        <div class="col-6">
+                            <label class="small text-muted">Amount Paid:</label>
+                            <div class="fw-bold text-success" id="receiptAmountPaid">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="text-center mt-4 pt-3 border-top">
+                        <p class="small text-muted mb-1">Thank you for choosing Uzazi Clinic</p>
+                        <p class="small text-muted mb-0">Get well soon!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button class="btn btn-light rounded-1" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-primary rounded-1 px-4" onclick="printReceipt()">
+                    <i class="fa-solid fa-print me-2"></i>Print Receipt
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Payment Modal -->
 <div class="modal fade" id="paymentModal" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -664,13 +769,22 @@ $(function () {
             amount_received: amountReceived
         }).done(function(r) {
             if (r.success) {
-                Swal.fire({
-                    icon:'success',
-                    title:'Payment Processed Successfully!',
-                    text:'Patient has been discharged',
-                    timer:2000,
-                    showConfirmButton:false
-                }).then(() => location.reload());
+                // Hide payment modal
+                bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
+                
+                // Populate receipt
+                $('#receiptDate').text(new Date().toLocaleDateString());
+                $('#receiptNumber').text('RCP-' + Date.now().toString().slice(-8));
+                $('#receiptPatientName').text($('#paymentPatientName').text());
+                $('#receiptPatientNumber').text($('#paymentPatientNumber').text());
+                $('#receiptComplaint').text(r.data?.complaint || 'General Consultation');
+                $('#receiptDiagnosis').text(r.data?.diagnosis || 'Completed consultation');
+                $('#receiptPaymentMethod').text(r.data?.payment_method || 'Cash');
+                $('#receiptAmountPaid').text('TZS ' + (r.data?.amount_received || '0').toLocaleString());
+                
+                // Show receipt modal
+                const receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'));
+                receiptModal.show();
             } else {
                 Swal.fire('Error', r.message, 'error');
             }
@@ -681,6 +795,29 @@ $(function () {
             $btn.html('<i class="fa-solid fa-check-circle me-2"></i>Process Payment & Discharge');
         });
     });
+
+    // Print receipt
+    window.printReceipt = function() {
+        const receiptContent = document.getElementById('receiptContent').innerHTML;
+        const printWindow = window.open('', '', 'width=600,height=800');
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>Payment Receipt</title>
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+                <style>
+                    body { padding: 20px; }
+                    @media print { body { padding: 0; } }
+                </style>
+            </head>
+            <body>
+                ${receiptContent}
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
+    };
 });
 </script>
 @endpush
