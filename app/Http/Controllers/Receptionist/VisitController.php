@@ -41,7 +41,8 @@ class VisitController extends Controller
             'with_doctor'       => $visits->where('current_stage', Appointment::STAGE_WITH_DOCTOR)->count(),
             'awaiting_lab'      => $visits->where('current_stage', Appointment::STAGE_AWAITING_LAB)->count(),
             'awaiting_pharmacy' => $visits->where('current_stage', Appointment::STAGE_AWAITING_PHARMACY)->count(),
-            'done'              => $visits->where('current_stage', Appointment::STAGE_DONE)->count(),
+            'completed'         => $visits->where('status', 'completed')->count(),
+            'cancelled'         => $visits->where('status', 'cancelled')->count(),
         ];
 
         $doctors = Doctor::with('user')->where('status', 'active')->get();

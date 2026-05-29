@@ -24,7 +24,8 @@
             ['fa-stethoscope','blue','With Doctor',$stats['with_doctor']],
             ['fa-flask','amber','Awaiting Lab',$stats['awaiting_lab']],
             ['fa-pills','violet','Awaiting Pharmacy',$stats['awaiting_pharmacy']],
-            ['fa-circle-check','green','Completed',$stats['done']],
+            ['fa-circle-check','green','Completed',$stats['completed']],
+            ['fa-circle-xmark','rose','Cancelled',$stats['cancelled']],
         ] as [$icon,$color,$label,$value])
         <div class="col">
             <div class="stat-card-modern stat-card-{{ $color }}">
