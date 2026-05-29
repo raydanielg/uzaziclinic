@@ -264,6 +264,8 @@ function viewPatient(id) {
                 const p = data.data.patient;
                 const profile = data.data.patient_profile;
                 const files = data.data.files;
+                const appointments = data.data.appointments || [];
+                const stats = data.data.stats || {};
                 
                 let filesHtml = files.length > 0 
                     ? files.map(f => `
@@ -278,6 +280,18 @@ function viewPatient(id) {
                         </div>
                     `).join('')
                     : '<p class="text-muted small">No files uploaded</p>';
+                
+                let appointmentsHtml = appointments.length > 0
+                    ? appointments.map(a => `
+                        <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded mb-2">
+                            <div>
+                                <small class="fw-semibold">${a.doctor?.name || 'N/A'}</small>
+                                <br><small class="text-muted">${new Date(a.appointment_date).toLocaleDateString()}</small>
+                            </div>
+                            <span class="badge bg-${a.status === 'completed' ? 'success' : a.status === 'cancelled' ? 'danger' : 'warning'}">${a.status}</span>
+                        </div>
+                    `).join('')
+                    : '<p class="text-muted small">No appointment history</p>';
                 
                 content.innerHTML = `
                     <div class="row g-3">
@@ -317,6 +331,45 @@ function viewPatient(id) {
                             <label class="form-label small fw-bold text-muted">Registered Date</label>
                             <div>${new Date(p.created_at).toLocaleDateString()}</div>
                         </div>
+                        
+                        <!-- Counter Stats -->
+                        <div class="col-12 mt-4">
+                            <h6 class="fw-bold mb-3"><i class="fa-solid fa-chart-pie me-2"></i>Patient Statistics</h6>
+                            <div class="row g-2">
+                                <div class="col-6 col-md-3">
+                                    <div class="bg-primary bg-opacity-10 p-3 rounded text-center">
+                                        <div class="fs-4 fw-bold text-primary">${stats.total_visits || 0}</div>
+                                        <small class="text-muted">Total Visits</small>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="bg-success bg-opacity-10 p-3 rounded text-center">
+                                        <div class="fs-4 fw-bold text-success">${stats.completed_appointments || 0}</div>
+                                        <small class="text-muted">Completed</small>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="bg-warning bg-opacity-10 p-3 rounded text-center">
+                                        <div class="fs-4 fw-bold text-warning">${stats.pending_appointments || 0}</div>
+                                        <small class="text-muted">Pending</small>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="bg-danger bg-opacity-10 p-3 rounded text-center">
+                                        <div class="fs-4 fw-bold text-danger">${stats.cancelled_appointments || 0}</div>
+                                        <small class="text-muted">Cancelled</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Appointment History -->
+                        <div class="col-12 mt-4">
+                            <h6 class="fw-bold mb-3"><i class="fa-solid fa-history me-2"></i>Appointment History</h6>
+                            ${appointmentsHtml}
+                        </div>
+                        
+                        <!-- Patient Files -->
                         <div class="col-12 mt-4">
                             <h6 class="fw-bold mb-3"><i class="fa-solid fa-file-medical me-2"></i>Patient Files</h6>
                             ${filesHtml}
