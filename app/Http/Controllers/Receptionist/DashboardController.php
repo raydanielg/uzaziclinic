@@ -586,6 +586,12 @@ class DashboardController extends Controller
     public function sendPatientToDoctor(Request $request)
     {
         try {
+            \Log::info('Send to doctor request', [
+                'patient_id' => $request->patient_id,
+                'doctor_id' => $request->doctor_id,
+                'notes' => $request->notes
+            ]);
+
             $request->validate([
                 'patient_id' => 'required|exists:patients,id',
                 'doctor_id' => 'required|exists:doctors,id',
@@ -594,6 +600,11 @@ class DashboardController extends Controller
 
             $patient = Patient::findOrFail($request->patient_id);
             $doctor = Doctor::findOrFail($request->doctor_id);
+
+            \Log::info('Patient and doctor found', [
+                'patient' => $patient->id,
+                'doctor' => $doctor->id
+            ]);
 
             if (!$patient) {
                 return response()->json([
