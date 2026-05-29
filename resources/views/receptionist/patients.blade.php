@@ -408,6 +408,12 @@ function editPatient(id) {
     fetch(url)
         .then(response => {
             console.log('Response status:', response.status);
+            console.log('Response type:', response.headers.get('content-type'));
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             return response.json();
         })
         .then(data => {
@@ -502,7 +508,7 @@ document.getElementById('updatePatientBtn').addEventListener('click', function()
     this.disabled = true;
     this.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>Updating...';
     
-    fetch(`{{ route('receptionist.patients.update', ':id') }}`.replace(':id', patientId), {
+    fetch(`{{ route('receptionist.patients.update', ['id' => ':id']) }}`.replace(':id', patientId), {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
