@@ -353,21 +353,14 @@ class DashboardController extends Controller
     public function doctors()
     {
         try {
-            $doctors = User::whereHas('role', function($q) { $q->where('name', 'doctor'); })
+            $doctors = Doctor::with('user')
                 ->where('status', 'active')
                 ->latest()
-                ->get(['id', 'name', 'email', 'phone']);
+                ->get();
             
-            // Always return JSON for this endpoint
-            return response()->json([
-                'success' => true,
-                'doctors' => $doctors
-            ]);
+            return view('receptionist.doctors', compact('doctors'));
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to load doctors: ' . $e->getMessage()
-            ], 500);
+            return back()->with('error', 'Failed to load doctors: ' . $e->getMessage());
         }
     }
 
