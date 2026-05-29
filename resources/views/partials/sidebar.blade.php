@@ -44,6 +44,11 @@
                         <i class="fa-solid fa-user-shield me-2 text-info"></i> Access Control (Roles)
                     </a>
                 </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/hr*') ? 'active' : '' }}" href="{{ route('admin.hr.index') }}">
+                        <i class="fa-solid fa-users me-2 text-warning"></i> Human Resources (HR)
+                    </a>
+                </li>
 
                 {{-- Clinic Operations --}}
                 <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Clinic Management</li>
