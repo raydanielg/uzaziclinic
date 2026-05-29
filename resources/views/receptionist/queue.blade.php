@@ -152,11 +152,11 @@
                             <form id="registerForm">
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <label class="form-label small fw-bold">Jina Kamili *</label>
+                                        <label class="form-label small fw-bold">Full Name *</label>
                                         <input type="text" name="name" class="form-control shadow-none" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label small fw-bold">Simu *</label>
+                                        <label class="form-label small fw-bold">Phone *</label>
                                         <input type="text" name="phone" class="form-control shadow-none" required>
                                     </div>
                                     <div class="col-md-6">
@@ -164,16 +164,16 @@
                                         <input type="email" name="email" class="form-control shadow-none">
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label small fw-bold">Jinsia *</label>
+                                        <label class="form-label small fw-bold">Gender *</label>
                                         <select name="gender" class="form-select shadow-none" required>
                                             <option value="">--</option>
-                                            <option value="male">Mwanaume</option>
-                                            <option value="female">Mwanamke</option>
-                                            <option value="other">Nyingine</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
                                         </select>
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label small fw-bold">Damu</label>
+                                        <label class="form-label small fw-bold">Blood Type</label>
                                         <select name="blood_group" class="form-select shadow-none">
                                             <option value="">--</option>
                                             @foreach(['A+','A-','B+','B-','AB+','AB-','O+','O-'] as $bg)
@@ -182,16 +182,16 @@
                                         </select>
                                     </div>
                                     <div class="col-md-8">
-                                        <label class="form-label small fw-bold">Mawasiliano ya Dharura</label>
+                                        <label class="form-label small fw-bold">Emergency Contact</label>
                                         <input type="text" name="emergency_contact" class="form-control shadow-none">
                                     </div>
                                     <div class="col-12">
-                                        <label class="form-label small fw-bold">Allergies / Mzio</label>
+                                        <label class="form-label small fw-bold">Allergies</label>
                                         <textarea name="allergies" rows="2" class="form-control shadow-none"></textarea>
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-success fw-semibold mt-3 w-100">
-                                    <i class="fa-solid fa-floppy-disk me-2"></i>Sajili & Endelea
+                                    <i class="fa-solid fa-floppy-disk me-2"></i>Register & Continue
                                 </button>
                             </form>
                         </div>
