@@ -247,6 +247,36 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function testSMS(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|string|max:20',
+        ]);
+
+        try {
+            $smsService = new NextSMSService();
+            $result = $smsService->send($request->phone, 'Hii ni SMS ya majaribio kutoka Uzazi Clinic. System ya SMS inafanya kwa mafanikio!');
+
+            if ($result['success']) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'SMS ya majaribio imetumwa kwa mafanikio!',
+                    'data' => $result
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'SMS imeshindwa kutumwa: ' . $result['message']
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'SMS sending failed: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function resendPatientSMS(Request $request, $patientId)
     {
         $patient = Patient::find($patientId);
