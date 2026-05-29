@@ -521,7 +521,8 @@ document.getElementById('confirmSendBtn').addEventListener('click', function() {
 });
 
 // Register patient form submission
-document.getElementById('registerPatientBtn').addEventListener('click', function() {
+document.getElementById('registerPatientBtn').addEventListener('click', function(e) {
+    e.preventDefault();
     const form = document.getElementById('registerPatientForm');
     const formData = new FormData(form);
     
@@ -531,13 +532,20 @@ document.getElementById('registerPatientBtn').addEventListener('click', function
     fetch('{{ route('receptionist.patients.register') }}', {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
         },
         body: formData
     })
-    .then(response => response.json())
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url;
+            return;
+        }
+        return response.json();
+    })
     .then(result => {
-        if (result.success) {
+        if (result && result.success) {
             Swal.fire({
                 icon: 'success',
                 title: result.message,
