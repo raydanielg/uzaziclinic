@@ -114,6 +114,9 @@
                                     <i class="fa-solid fa-xmark text-rose"></i>
                                 </button>
                                 @else
+                                <button class="btn btn-sm btn-light rounded-2" onclick="viewMedicalDetails({{ $v->id }}, '{{ $v->patient->display_name ?? 'N/A' }}', '{{ $v->patient->patient_number ?? 'N/A' }}')" title="View Medical Details">
+                                    <i class="fa-solid fa-file-medical text-primary"></i>
+                                </button>
                                 <span class="badge bg-success">Completed</span>
                                 @endif
                             </div>
@@ -126,6 +129,107 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- Medical Details Modal -->
+<div class="modal fade" id="medicalDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 bg-primary text-white">
+                <h6 class="modal-title fw-bold"><i class="fa-solid fa-file-medical me-2"></i>Medical Details</h6>
+                <button type="button" class="btn-close btn-close-white btn-sm" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Patient Info -->
+                <div class="alert alert-info border-0 d-flex align-items-center gap-3 mb-4">
+                    <div class="user-avatar bg-white text-primary" style="width:50px;height:50px;font-size:1.2rem">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold" id="medicalPatientName">Patient Name</div>
+                        <div class="small text-muted" id="medicalPatientNumber">PT-001</div>
+                    </div>
+                </div>
+
+                <!-- Consultation Details -->
+                <div class="mb-4 p-3 bg-light rounded">
+                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-stethoscope me-2"></i>Consultation Details</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="small text-muted">Doctor:</label>
+                            <div class="fw-bold" id="medicalDoctor">-</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="small text-muted">Date:</label>
+                            <div class="fw-bold" id="medicalDate">-</div>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="small text-muted">Chief Complaint:</label>
+                        <div id="medicalComplaint" class="p-2 bg-white rounded small">-</div>
+                    </div>
+                    <div>
+                        <label class="small text-muted">Diagnosis:</label>
+                        <div id="medicalDiagnosis" class="p-2 bg-white rounded small">-</div>
+                    </div>
+                </div>
+
+                <!-- Prescription -->
+                <div class="mb-4 p-3 bg-light rounded">
+                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-prescription me-2"></i>Prescription</h6>
+                    <div id="medicalPrescription" class="p-2 bg-white rounded small">-</div>
+                </div>
+
+                <!-- Services -->
+                <div class="mb-4">
+                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-list-check me-2"></i>Services Received</h6>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th class="text-end">Cost (TZS)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="medicalServices">
+                            <tr>
+                                <td>Doctor Consultation</td>
+                                <td class="text-end">5,000</td>
+                            </tr>
+                            <tr>
+                                <td>Laboratory Tests</td>
+                                <td class="text-end">15,000</td>
+                            </tr>
+                            <tr>
+                                <td>Medication</td>
+                                <td class="text-end">25,000</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-primary">
+                                <th class="fw-bold">Total</th>
+                                <th class="text-end fw-bold" id="medicalTotal">45,000</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Payment Info -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="small text-muted">Payment Method:</label>
+                        <div class="fw-bold" id="medicalPaymentMethod">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small text-muted">Amount Paid:</label>
+                        <div class="fw-bold text-success" id="medicalAmountPaid">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button class="btn btn-light rounded-1" data-bs-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
