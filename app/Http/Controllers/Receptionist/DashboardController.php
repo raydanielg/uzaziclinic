@@ -276,25 +276,34 @@ class DashboardController extends Controller
             // Handle file uploads
             if ($request->hasFile('files')) {
                 foreach ($request->file('files') as $file) {
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $filePath = $file->storeAs('patient_files/' . $patient->id, $fileName, 'public');
-                
-                PatientFile::create([
-                    'patient_id' => $patient->id,
-                    'uploaded_by' => auth()->id(),
-                    'file_name' => $fileName,
-                    'file_path' => $filePath,
-                    'file_type' => $this->determineFileType($file),
-                    'file_size' => $this->formatFileSize($file->getSize()),
-                ]);
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $filePath = $file->storeAs('patient_files/' . $patient->id, $fileName, 'public');
+                    
+                    PatientFile::create([
+                        'patient_id' => $patient->id,
+                        'uploaded_by' => auth()->id(),
+                        'file_name' => $fileName,
+                        'file_path' => $filePath,
+                        'file_type' => $this->determineFileType($file),
+                        'file_size' => $this->formatFileSize($file->getSize()),
+                    ]);
+                }
             }
-        }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Mgonjwa ameshajiliwa kwa mafanikio!',
-            'data' => $patient->load('user'),
-        ]);
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Mgonjwa ameshajiliwa kwa mafanikio!',
+                'data' => $patient->load('user'),
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to register patient: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     private function determineFileType($file)
