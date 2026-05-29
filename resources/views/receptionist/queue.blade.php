@@ -107,8 +107,8 @@
                                 <button class="btn btn-sm btn-light rounded-2" onclick="changeDoctor({{ $v->id }}, {{ $v->doctor_id ?? 'null' }})" title="Change Doctor">
                                     <i class="fa-solid fa-user-doctor text-blue"></i>
                                 </button>
-                                <button class="btn btn-sm btn-light rounded-2" onclick="markCompleted({{ $v->id }})" title="Mark Completed">
-                                    <i class="fa-solid fa-check text-green"></i>
+                                <button class="btn btn-sm btn-light rounded-2" onclick="openPayment({{ $v->id }}, '{{ $v->patient->display_name ?? 'N/A' }}', '{{ $v->patient->patient_number ?? 'N/A' }}')" title="Payment & Discharge">
+                                    <i class="fa-solid fa-credit-card text-green"></i>
                                 </button>
                                 <button class="btn btn-sm btn-light rounded-2 cancel-visit" data-id="{{ $v->id }}" title="Cancel">
                                     <i class="fa-solid fa-xmark text-rose"></i>
@@ -126,6 +126,115 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 bg-success text-white">
+                <h6 class="modal-title fw-bold"><i class="fa-solid fa-credit-card me-2"></i>Payment & Discharge</h6>
+                <button type="button" class="btn-close btn-close-white btn-sm" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <input type="hidden" id="paymentVisitId">
+                
+                <!-- Patient Info -->
+                <div class="alert alert-info border-0 d-flex align-items-center gap-3 mb-4">
+                    <div class="user-avatar bg-white text-success" style="width:50px;height:50px;font-size:1.2rem">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold" id="paymentPatientName">Patient Name</div>
+                        <div class="small text-muted" id="paymentPatientNumber">PT-001</div>
+                    </div>
+                </div>
+
+                <!-- Services Received -->
+                <div class="mb-4">
+                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-list-check me-2"></i>Services Received</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th class="text-end">Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody id="servicesList">
+                                <tr>
+                                    <td>Doctor Consultation</td>
+                                    <td class="text-end">TZS 5,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Laboratory Tests</td>
+                                    <td class="text-end">TZS 15,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Medication</td>
+                                    <td class="text-end">TZS 25,000</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="table-success">
+                                    <th class="fw-bold">Total</th>
+                                    <th class="text-end fw-bold" id="totalCost">TZS 45,000</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="mb-4">
+                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-wallet me-2"></i>Payment Method</h6>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-check-label small fw-bold mb-2 d-block">Select Method</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="paymentMethod" id="payCash" value="cash" checked>
+                                <label class="btn btn-outline-success" for="payCash">
+                                    <i class="fa-solid fa-money-bill-wave me-1"></i>Cash
+                                </label>
+                                
+                                <input type="radio" class="btn-check" name="paymentMethod" id="payBank" value="bank">
+                                <label class="btn btn-outline-success" for="payBank">
+                                    <i class="fa-solid fa-building-columns me-1"></i>Bank
+                                </label>
+                                
+                                <input type="radio" class="btn-check" name="paymentMethod" id="payMobile" value="mobile">
+                                <label class="btn btn-outline-success" for="payMobile">
+                                    <i class="fa-solid fa-mobile-screen me-1"></i>Mobile
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label small fw-bold">Payment Details</label>
+                            <input type="text" id="paymentDetails" class="form-control" placeholder="Enter payment reference or notes...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Amount Received -->
+                <div class="mb-4">
+                    <label class="form-label small fw-bold">Amount Received</label>
+                    <div class="input-group">
+                        <span class="input-group-text">TZS</span>
+                        <input type="number" id="amountReceived" class="form-control" placeholder="Enter amount">
+                    </div>
+                    <div id="changeAmount" class="mt-2 text-success fw-bold" style="display:none">
+                        Change: TZS <span id="changeValue">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button class="btn btn-light rounded-1" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-success rounded-1 px-4" id="processPaymentBtn">
+                    <i class="fa-solid fa-check-circle me-2"></i>Process Payment & Discharge
+                </button>
+            </div>
         </div>
     </div>
 </div>
