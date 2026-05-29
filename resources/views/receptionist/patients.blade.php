@@ -482,7 +482,7 @@ function resendSMS(patientId, patientName) {
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
     btn.disabled = true;
 
-    fetch(`{{ route('receptionist.patients.resend-sms', ['patientId' => '']) }}${patientId}`, {
+    fetch(`/receptionist/patients/${patientId}/resend-sms`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
