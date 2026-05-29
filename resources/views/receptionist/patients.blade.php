@@ -432,6 +432,45 @@ document.getElementById('editFromViewBtn').addEventListener('click', function() 
     }
 });
 
+// Test SMS functionality
+function testSMS() {
+    const phone = prompt('Weka namba ya simu ya mtumaji (kwa majaribio):');
+    if (!phone) {
+        return;
+    }
+
+    const btn = event.target.closest('button');
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+    btn.disabled = true;
+
+    fetch('{{ route('receptionist.test-sms') }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ phone: phone })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('SMS ya majaribio imetumwa kwa mafanikio! Tafadhali angalia simu yako.');
+        } else {
+            alert('SMS imeshindwa kutumwa: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Kuna tatizo limetokea wakati wa kutuma SMS.');
+    })
+    .finally(() => {
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
+    });
+}
+
 // Resend SMS functionality
 function resendSMS(patientId, patientName) {
     if (!confirm(`Unahitaji kutuma SMS tena kwa ${patientName}?`)) {
