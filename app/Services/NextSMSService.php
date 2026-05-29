@@ -36,7 +36,7 @@ class NextSMSService
                 'Authorization' => 'Basic ' . $credentials,
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-            ])->post($this->url, [
+            ])->withoutVerifying()->post($this->url, [
                 'from' => $this->from,
                 'to' => $to,
                 'text' => $message,
