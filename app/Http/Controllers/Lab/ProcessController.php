@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Lab;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\LabRequest;
+use App\Models\LabResultFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Lab technician's request-processing workflow.
@@ -73,6 +75,8 @@ class ProcessController extends Controller
             'results.*.normal_range'   => 'nullable|string|max:100',
             'results.*.flag'           => 'nullable|in:normal,low,high,critical',
             'result_notes'             => 'nullable|string|max:5000',
+            'result_files'             => 'nullable|array|max:5',
+            'result_files.*'           => 'file|mimes:jpg,jpeg,png,pdf|max:5120',
         ]);
 
         try {
@@ -85,6 +89,23 @@ class ProcessController extends Controller
                 'result_notes'  => $data['result_notes'] ?? null,
                 'completed_at'  => now(),
             ]);
+
+            // Handle file uploads
+            if ($request->hasFile('result_files')) {
+                foreach ($request->file('result_files') as $file) {
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $filePath = $file->storeAs('lab_results/' . $labRequest->id, $fileName, 'public');
+                    
+                    LabResultFile::create([
+                        'lab_request_id' => $labRequest->id,
+                        'uploaded_by' => auth()->id(),
+                        'file_name' => $fileName,
+                        'file_path' => $filePath,
+                        'file_type' => $this->determineFileType($file),
+                        'file_size' => $this->formatFileSize($file->getSize()),
+                    ]);
+                }
+            }
 
             // Move the linked visit back to the doctor for review
             if ($labRequest->appointment_id) {
@@ -107,6 +128,64 @@ class ProcessController extends Controller
                 'message' => 'Imeshindwa: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+    private function determineFileType($file)
+    {
+        $extension = $file->getClientOriginalExtension();
+        $typeMap = [
+            'jpg' => 'image',
+            'jpeg' => 'image',
+            'png' => 'image',
+            'pdf' => 'pdf',
+        ];
+        return $typeMap[$extension] ?? 'document';
+    }
+
+    private function formatFileSize($bytes)
+    {
+        if ($bytes >= 1048576) {
+            return number_format($bytes / 1048576, 2) . ' MB';
+        } elseif ($bytes >= 1024) {
+            return number_format($bytes / 1024, 2) . ' KB';
+        }
+        return $bytes . ' bytes';
+    }
+
+    public function downloadLabResultFile(LabResultFile $file)
+    {
+        if (!Storage::disk('public')->exists($file->file_path)) {
+            return response()->json(['success' => false, 'message' => 'Faili halipo.'], 404);
+        }
+
+        return Storage::disk('public')->download($file->file_path, $file->file_name);
+    }
+
+    public function deleteLabResultFile(LabResultFile $file)
+    {
+        if (Storage::disk('public')->exists($file->file_path)) {
+            Storage::disk('public')->delete($file->file_path);
+        }
+
+        $file->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Faili limefutwa kwa mafanikio!',
+        ]);
+    }
+
+    public function getLabResultFiles(LabRequest $labRequest)
+    {
+        $files = LabResultFile::where('lab_request_id', $labRequest->id)
+            ->with('uploadedBy')
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $files,
+        ]);
     }
 
     public function cancel(LabRequest $labRequest)

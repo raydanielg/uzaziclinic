@@ -15,11 +15,11 @@
                             <i class="fa-solid fa-person-desk"></i>
                         </div>
                         <div>
-                            <p class="mb-0 opacity-75 small fw-semibold text-uppercase">Karani wa Mapokezi</p>
-                            <h4 class="mb-0 fw-bold">Karibu, {{ Auth::user()->name }}</h4>
+                            <p class="mb-0 opacity-75 small fw-semibold text-uppercase">Receptionist</p>
+                            <h4 class="mb-0 fw-bold">Welcome, {{ Auth::user()->name }}</h4>
                         </div>
                     </div>
-                    <p class="mb-0 opacity-75 small">{{ now()->format('l, d F Y') }} &bull; Miadi leo: <strong>{{ $stats['today_appointments'] }}</strong> &bull; Wagonjwa wapya: <strong>{{ $stats['pending_registrations'] }}</strong></p>
+                    <p class="mb-0 opacity-75 small">{{ now()->format('l, d F Y') }} &bull; Today's Appointments: <strong>{{ $stats['today_appointments'] }}</strong> &bull; New Patients: <strong>{{ $stats['pending_registrations'] }}</strong></p>
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="stat-icon stat-card-blue"><i class="fa-solid fa-calendar-day"></i></div>
                         <div>
-                            <div class="stat-label">Miadi Leo</div>
+                            <div class="stat-label">Today's Appointments</div>
                             <div class="stat-value" data-count="{{ $stats['today_appointments'] }}">0</div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="stat-icon stat-card-green"><i class="fa-solid fa-user-plus"></i></div>
                         <div>
-                            <div class="stat-label">Wagonjwa Wapya</div>
+                            <div class="stat-label">New Patients</div>
                             <div class="stat-value" data-count="{{ $stats['pending_registrations'] }}">0</div>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="stat-icon stat-card-cyan"><i class="fa-solid fa-user-doctor"></i></div>
                         <div>
-                            <div class="stat-label">Madaktari Wanaofanya Kazi</div>
+                            <div class="stat-label">Active Doctors</div>
                             <div class="stat-value" data-count="{{ $stats['active_doctors'] }}">0</div>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="stat-icon stat-card-amber"><i class="fa-solid fa-users"></i></div>
                         <div>
-                            <div class="stat-label">Jumla ya Wagonjwa</div>
+                            <div class="stat-label">Total Patients</div>
                             <div class="stat-value" data-count="{{ $stats['total_patients'] }}">0</div>
                         </div>
                     </div>
@@ -77,16 +77,16 @@
             <div class="col-lg-8 anim-5">
                 <div class="dash-table-card h-100">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0 fw-bold"><i class="fa-solid fa-calendar-clock me-2 text-blue"></i>Miadi ya Hivi Karibuni</h6>
-                        <a href="{{ route('receptionist.appointments') }}" class="btn btn-sm btn-light fw-semibold px-3">Zote</a>
+                        <h6 class="mb-0 fw-bold"><i class="fa-solid fa-calendar-clock me-2 text-blue"></i>Recent Appointments</h6>
+                        <a href="{{ route('receptionist.appointments') }}" class="btn btn-sm btn-light fw-semibold px-3">View All</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table align-middle mb-0">
                             <thead><tr>
-                                <th class="ps-3">Mgonjwa</th>
-                                <th>Daktari</th>
-                                <th>Muda</th>
-                                <th class="text-end pe-3">Hali</th>
+                                <th class="ps-3">Patient</th>
+                                <th>Doctor</th>
+                                <th>Time</th>
+                                <th class="text-end pe-3">Status</th>
                             </tr></thead>
                             <tbody>
                                 @forelse($recent_appointments as $app)
@@ -117,7 +117,7 @@
                                 </tr>
                                 @empty
                                 <tr><td colspan="4" class="text-center py-5 text-muted">
-                                    <i class="fa-solid fa-calendar-xmark fs-2 opacity-25 d-block mb-2"></i>Hakuna miadi
+                                    <i class="fa-solid fa-calendar-xmark fs-2 opacity-25 d-block mb-2"></i>No appointments
                                 </td></tr>
                                 @endforelse
                             </tbody>
@@ -130,18 +130,18 @@
             <div class="col-lg-4 anim-6">
                 {{-- Weekly Chart --}}
                 <div class="dash-chart-card mb-4">
-                    <div class="card-header"><h6 class="mb-0 fw-bold"><i class="fa-solid fa-chart-bar me-2 text-cyan"></i>Miadi ya Wiki Hii</h6></div>
+                    <div class="card-header"><h6 class="mb-0 fw-bold"><i class="fa-solid fa-chart-bar me-2 text-cyan"></i>This Week's Appointments</h6></div>
                     <div class="card-body"><canvas id="receptionistChart" height="185"></canvas></div>
                 </div>
                 {{-- Quick Actions --}}
                 <div class="dash-chart-card">
-                    <div class="card-header"><h6 class="mb-0 fw-bold"><i class="fa-solid fa-bolt me-2 text-amber"></i>Vitendo vya Haraka</h6></div>
+                    <div class="card-header"><h6 class="mb-0 fw-bold"><i class="fa-solid fa-bolt me-2 text-amber"></i>Quick Actions</h6></div>
                     <div class="card-body d-flex flex-column gap-2 pt-3">
                         @foreach([
-                            ['fa-calendar-check','bg-blue-soft text-blue',route('receptionist.appointments'),'Angalia Miadi'],
-                            ['fa-users','bg-green-soft text-green',route('receptionist.patients'),'Orodha ya Wagonjwa'],
-                            ['fa-user-doctor','bg-cyan-soft text-cyan',route('receptionist.doctors'),'Saraka ya Madaktari'],
-                            ['fa-user','bg-violet-soft text-violet',route('receptionist.profile'),'Wasifu Wangu'],
+                            ['fa-calendar-check','bg-blue-soft text-blue',route('receptionist.appointments'),'View Appointments'],
+                            ['fa-users','bg-green-soft text-green',route('receptionist.patients'),'Patient List'],
+                            ['fa-user-doctor','bg-cyan-soft text-cyan',route('receptionist.doctors'),'Doctor Directory'],
+                            ['fa-user','bg-violet-soft text-violet',route('receptionist.profile'),'My Profile'],
                         ] as [$icon,$cls,$href,$label])
                         <a href="{{ $href }}" class="quick-action-item">
                             <div class="qa-icon {{ $cls }}"><i class="fa-solid {{ $icon }}"></i></div>
@@ -164,9 +164,9 @@ document.addEventListener('DOMContentLoaded', function() {
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Jum','Jtatu','Jua','Alh','Iju','Jumam','Jmap'],
+                labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
                 datasets: [{
-                    label: 'Miadi',
+                    label: 'Appointments',
                     data: [8,12,9,15,11,5,3],
                     backgroundColor: 'rgba(14,116,144,0.8)',
                     borderRadius: 6, borderSkipped: false

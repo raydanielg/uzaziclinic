@@ -16,10 +16,10 @@
                         </div>
                         <div>
                             <p class="mb-0 opacity-75 small fw-semibold">ADMIN PANEL</p>
-                            <h4 class="mb-0 fw-bold">Karibu, {{ Auth::user()->name }}</h4>
+                            <h4 class="mb-0 fw-bold">Welcome, {{ Auth::user()->name }}</h4>
                         </div>
                     </div>
-                    <p class="mb-0 opacity-75 small">{{ now()->format('l, d F Y') }} &bull; Muhtasari kamili wa mfumo</p>
+                    <p class="mb-0 opacity-75 small">{{ now()->format('l, d F Y') }} &bull; Complete system overview</p>
                 </div>
             </div>
         </div>
@@ -78,7 +78,7 @@
             <div class="col-lg-8 anim-5">
                 <div class="dash-table-card h-100">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <h6 class="mb-0 fw-bold"><i class="fa-solid fa-calendar-clock me-2 text-blue"></i>Miadi ya Hivi Karibuni</h6>
+                        <h6 class="mb-0 fw-bold"><i class="fa-solid fa-calendar-clock me-2 text-blue"></i>Recent Appointments</h6>
                         <a href="{{ route('admin.appointments.index') }}" class="btn btn-sm btn-light fw-semibold px-3">View All</a>
                     </div>
                     <div class="table-responsive">
@@ -123,7 +123,7 @@
                                 </tr>
                                 @empty
                                 <tr><td colspan="5" class="text-center py-5 text-muted">
-                                    <i class="fa-solid fa-calendar-xmark fs-2 opacity-25 d-block mb-2"></i>Hakuna miadi kwa sasa
+                                    <i class="fa-solid fa-calendar-xmark fs-2 opacity-25 d-block mb-2"></i>No appointments currently
                                 </td></tr>
                                 @endforelse
                             </tbody>
@@ -137,14 +137,14 @@
                 {{-- Appointments Trend Chart --}}
                 <div class="dash-chart-card mb-4">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <h6 class="mb-0 fw-bold"><i class="fa-solid fa-chart-line me-2 text-blue"></i>Trend ya Miadi</h6>
+                        <h6 class="mb-0 fw-bold"><i class="fa-solid fa-chart-line me-2 text-blue"></i>Appointments Trend</h6>
                     </div>
                     <div class="card-body"><canvas id="appointmentsTrendChart" height="180"></canvas></div>
                 </div>
                 {{-- Orders Donut --}}
                 <div class="dash-chart-card">
                     <div class="card-header">
-                        <h6 class="mb-0 fw-bold"><i class="fa-solid fa-chart-donut me-2 text-violet"></i>Hali ya Maagizo</h6>
+                        <h6 class="mb-0 fw-bold"><i class="fa-solid fa-chart-donut me-2 text-violet"></i>Orders Status</h6>
                     </div>
                     <div class="card-body"><canvas id="ordersStatusChart" height="180"></canvas></div>
                 </div>
@@ -155,18 +155,18 @@
         <div class="row g-3 anim-6">
             <div class="col-12">
                 <div class="dash-chart-card">
-                    <div class="card-header"><h6 class="mb-0 fw-bold"><i class="fa-solid fa-bolt me-2 text-amber"></i>Vitendo vya Haraka</h6></div>
+                    <div class="card-header"><h6 class="mb-0 fw-bold"><i class="fa-solid fa-bolt me-2 text-amber"></i>Quick Actions</h6></div>
                     <div class="card-body">
                         <div class="row g-2">
                             @foreach([
-                                ['fa-users','bg-blue-soft text-blue', route('admin.users.index'), 'Watumiaji'],
-                                ['fa-user-injured','bg-green-soft text-green', route('admin.patients.index'), 'Wagonjwa'],
-                                ['fa-user-doctor','bg-cyan-soft text-cyan', route('admin.doctors.index'), 'Madaktari'],
-                                ['fa-calendar-check','bg-amber-soft text-amber', route('admin.appointments.index'), 'Miadi'],
-                                ['fa-pills','bg-violet-soft text-violet', route('admin.pharmacy.stock'), 'Duka la Dawa'],
-                                ['fa-flask-vial','bg-rose-soft text-rose', route('admin.lab.catalog'), 'Maabara'],
-                                ['fa-file-invoice-dollar','bg-green-soft text-green', route('admin.finance.invoices'), 'Fedha'],
-                                ['fa-chart-pie','bg-blue-soft text-blue', route('admin.reports.patients'), 'Ripoti'],
+                                ['fa-users','bg-blue-soft text-blue', route('admin.users.index'), 'Users'],
+                                ['fa-user-injured','bg-green-soft text-green', route('admin.patients.index'), 'Patients'],
+                                ['fa-user-doctor','bg-cyan-soft text-cyan', route('admin.doctors.index'), 'Doctors'],
+                                ['fa-calendar-check','bg-amber-soft text-amber', route('admin.appointments.index'), 'Appointments'],
+                                ['fa-pills','bg-violet-soft text-violet', route('admin.pharmacy.stock'), 'Pharmacy'],
+                                ['fa-flask-vial','bg-rose-soft text-rose', route('admin.lab.catalog'), 'Lab'],
+                                ['fa-file-invoice-dollar','bg-green-soft text-green', route('admin.finance.invoices'), 'Finance'],
+                                ['fa-chart-pie','bg-blue-soft text-blue', route('admin.reports.patients'), 'Reports'],
                             ] as [$icon, $cls, $href, $label])
                             <div class="col-6 col-md-3 col-xl-1-5">
                                 <a href="{{ $href }}" class="quick-action-item flex-column text-center py-3 justify-content-center">
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
             type: 'line',
             data: {
                 labels,
-                datasets: [{ label: 'Miadi', data, borderColor: '#3b82f6',
+                datasets: [{ label: 'Appointments', data, borderColor: '#3b82f6',
                     backgroundColor: 'rgba(59,130,246,0.1)', fill: true,
                     tension: 0.4, pointRadius: 4, pointBackgroundColor: '#3b82f6',
                     pointHoverRadius: 6 }]

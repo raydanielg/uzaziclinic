@@ -152,6 +152,9 @@ Route::middleware(['auth', 'role:lab_tech'])->prefix('lab')->name('lab.')->group
         Route::post('/{labRequest}/start',       [App\Http\Controllers\Lab\ProcessController::class, 'start'])->name('start');
         Route::post('/{labRequest}/complete',    [App\Http\Controllers\Lab\ProcessController::class, 'complete'])->name('complete');
         Route::post('/{labRequest}/cancel',      [App\Http\Controllers\Lab\ProcessController::class, 'cancel'])->name('cancel');
+        Route::get('/{labRequest}/files',        [App\Http\Controllers\Lab\ProcessController::class, 'getLabResultFiles'])->name('files.index');
+        Route::get('/files/{file}/download',     [App\Http\Controllers\Lab\ProcessController::class, 'downloadLabResultFile'])->name('files.download');
+        Route::delete('/files/{file}',            [App\Http\Controllers\Lab\ProcessController::class, 'deleteLabResultFile'])->name('files.delete');
     });
 });
 
@@ -171,6 +174,11 @@ Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('
     Route::post('/appointments/{appointment}/status', [App\Http\Controllers\Receptionist\DashboardController::class, 'updateAppointmentStatus'])->name('appointments.status');
     Route::delete('/appointments/{appointment}', [App\Http\Controllers\Receptionist\DashboardController::class, 'cancelAppointment'])->name('appointments.cancel');
     Route::get('/patients', [App\Http\Controllers\Receptionist\DashboardController::class, 'patients'])->name('patients');
+    Route::post('/patients/register', [App\Http\Controllers\Receptionist\DashboardController::class, 'registerPatient'])->name('patients.register');
+    Route::post('/patients/{patient}/files', [App\Http\Controllers\Receptionist\DashboardController::class, 'uploadPatientFile'])->name('patients.files.upload');
+    Route::get('/patients/{patient}/files', [App\Http\Controllers\Receptionist\DashboardController::class, 'getPatientFiles'])->name('patients.files.index');
+    Route::get('/files/{file}/download', [App\Http\Controllers\Receptionist\DashboardController::class, 'downloadPatientFile'])->name('files.download');
+    Route::delete('/files/{file}', [App\Http\Controllers\Receptionist\DashboardController::class, 'deletePatientFile'])->name('files.delete');
     Route::get('/doctors', [App\Http\Controllers\Receptionist\DashboardController::class, 'doctors'])->name('doctors');
     Route::get('/profile', [App\Http\Controllers\Receptionist\DashboardController::class, 'profile'])->name('profile');
     Route::get('/password', [App\Http\Controllers\Receptionist\DashboardController::class, 'password'])->name('password');

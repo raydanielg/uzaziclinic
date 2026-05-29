@@ -12,7 +12,7 @@
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 <div>
-                    <h4 class="fw-bold mb-0">Ombi la Majaribio ya Lab</h4>
+                    <h4 class="fw-bold mb-0">Lab Test Request</h4>
                     <p class="text-muted small mb-0">{{ $labRequest->test_names }}</p>
                 </div>
             </div>
@@ -28,7 +28,7 @@
             {{-- Patient Card --}}
             <div class="card border-0 shadow-sm mb-4 anim-2">
                 <div class="card-header bg-primary text-white py-3">
-                    <h6 class="mb-0 fw-bold"><i class="fa-solid fa-user me-2"></i>Mgonjwa</h6>
+                    <h6 class="mb-0 fw-bold"><i class="fa-solid fa-user me-2"></i>Patient</h6>
                 </div>
                 <div class="card-body">
                     <div class="d-flex align-items-center gap-3 mb-3">
@@ -46,23 +46,23 @@
             {{-- Request Details --}}
             <div class="card border-0 shadow-sm anim-2">
                 <div class="card-header py-3">
-                    <h6 class="mb-0 fw-bold"><i class="fa-solid fa-flask me-2 text-amber"></i>Maelezo ya Ombi</h6>
+                    <h6 class="mb-0 fw-bold"><i class="fa-solid fa-flask me-2 text-amber"></i>Request Details</h6>
                 </div>
                 <div class="card-body">
                     <div class="mb-2">
-                        <span class="text-muted small">Daktari:</span>
-                        <div class="fw-semibold small">Dkt. {{ $labRequest->doctor->name ?? 'N/A' }}</div>
+                        <span class="text-muted small">Doctor:</span>
+                        <div class="fw-semibold small">Dr. {{ $labRequest->doctor->name ?? 'N/A' }}</div>
                     </div>
                     <div class="mb-2">
-                        <span class="text-muted small">Kipaumbele:</span>
+                        <span class="text-muted small">Priority:</span>
                         <div><span class="status-badge {{ $labRequest->priority_badge }}">{{ ucfirst($labRequest->priority) }}</span></div>
                     </div>
                     <div class="mb-2">
-                        <span class="text-muted small">Majaribio:</span>
+                        <span class="text-muted small">Tests:</span>
                         <div class="small">{{ $labRequest->test_names }}</div>
                     </div>
                     <div>
-                        <span class="text-muted small">Maelezo ya Kliniki:</span>
+                        <span class="text-muted small">Clinical Notes:</span>
                         <div class="small">{{ $labRequest->clinical_notes ?? '—' }}</div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
             <div class="card border-0 shadow-sm mb-4 anim-2">
                 <div class="card-body text-center py-4">
                     <button class="btn btn-warning fw-semibold px-4" id="startBtn">
-                        <i class="fa-solid fa-play me-2"></i>Anza Kuchakata
+                        <i class="fa-solid fa-play me-2"></i>Start Processing
                     </button>
                 </div>
             </div>
@@ -85,7 +85,7 @@
             {{-- Results Form --}}
             <div class="card border-0 shadow-sm anim-2">
                 <div class="card-header py-3">
-                    <h6 class="mb-0 fw-bold"><i class="fa-solid fa-clipboard-list me-2 text-blue"></i>Weka Matokeo</h6>
+                    <h6 class="mb-0 fw-bold"><i class="fa-solid fa-clipboard-list me-2 text-blue"></i>Enter Results</h6>
                 </div>
                 <div class="card-body">
                     <form id="resultsForm">
@@ -100,12 +100,12 @@
                             @endphp
                             <div class="row g-2 mb-3 result-row">
                                 <div class="col-md-4">
-                                    <label class="form-label small fw-bold">Jina la Jaribio</label>
+                                    <label class="form-label small fw-bold">Test Name</label>
                                     <input type="text" name="results[{{ $idx }}][test_name]" class="form-control form-control-sm shadow-none"
                                         value="{{ $testName }}" readonly>
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="form-label small fw-bold">Thamani</label>
+                                    <label class="form-label small fw-bold">Value</label>
                                     <input type="text" name="results[{{ $idx }}][value]" class="form-control form-control-sm shadow-none"
                                         value="{{ $saved['value'] ?? '' }}" placeholder="—">
                                 </div>
@@ -115,7 +115,7 @@
                                         value="{{ $saved['unit'] ?? '' }}" placeholder="mg/dL">
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="form-label small fw-bold">Kawaida</label>
+                                    <label class="form-label small fw-bold">Normal Range</label>
                                     <input type="text" name="results[{{ $idx }}][normal_range]" class="form-control form-control-sm shadow-none"
                                         value="{{ $saved['normal_range'] ?? '' }}" placeholder="—">
                                 </div>
@@ -133,11 +133,16 @@
                             @endforeach
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">Maelezo ya Matokeo</label>
+                            <label class="form-label small fw-bold">Result Notes</label>
                             <textarea name="result_notes" rows="3" class="form-control shadow-none">{{ $labRequest->result_notes ?? '' }}</textarea>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Upload Result Images/Documents</label>
+                            <input type="file" name="result_files[]" class="form-control shadow-none" multiple accept=".jpg,.jpeg,.png,.pdf">
+                            <small class="text-muted">Upload result images or PDF (Max 5MB per file)</small>
+                        </div>
                         <button type="submit" class="btn btn-success fw-semibold w-100">
-                            <i class="fa-solid fa-check me-2"></i>Hifadhi Matokeo & Maliza
+                            <i class="fa-solid fa-check me-2"></i>Save Results & Complete
                         </button>
                     </form>
                 </div>
@@ -147,7 +152,7 @@
             <div class="card border-0 shadow-sm anim-2">
                 <div class="card-body">
                     <button class="btn btn-outline-danger w-100" id="cancelBtn">
-                        <i class="fa-solid fa-xmark me-2"></i>Futa Ombi hili
+                        <i class="fa-solid fa-xmark me-2"></i>Cancel This Request
                     </button>
                 </div>
             </div>
@@ -186,15 +191,15 @@ $(function () {
                         .then(() => location.href = '{{ route('lab.process.index') }}');
                 }
             })
-            .fail(xhr => Swal.fire('Hitilafu', xhr.responseJSON?.message ?? 'Imeshindika', 'error'))
+            .fail(xhr => Swal.fire('Error', xhr.responseJSON?.message ?? 'Failed', 'error'))
             .always(() => $btn.prop('disabled', false));
     });
 
     // ─── Cancel Request ───────────────────────────────────────
     $('#cancelBtn').on('click', function () {
         Swal.fire({
-            title:'Futa Ombi?', text:'Mgonjwa atarudi kwa daktari.', icon:'warning',
-            showCancelButton:true, confirmButtonText:'Ndiyo, Futa', cancelButtonText:'Hapana',
+            title:'Cancel Request?', text:'Patient will return to doctor.', icon:'warning',
+            showCancelButton:true, confirmButtonText:'Yes, Cancel', cancelButtonText:'No',
             confirmButtonColor:'#ef4444'
         }).then(r => {
             if (!r.isConfirmed) return;
@@ -205,7 +210,7 @@ $(function () {
                             .then(() => location.href = '{{ route('lab.process.index') }}');
                     }
                 })
-                .fail(() => Swal.fire('Hitilafu', 'Imeshindika', 'error'));
+                .fail(() => Swal.fire('Error', 'Failed', 'error'));
         });
     });
 });

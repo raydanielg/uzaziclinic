@@ -152,12 +152,17 @@
                         <label class="form-label small fw-bold">Emergency Contact</label>
                         <div class="row g-2">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" placeholder="Contact name">
+                                <input type="text" class="form-control" name="emergency_contact_name" placeholder="Contact name">
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control" placeholder="Contact phone">
+                                <input type="text" class="form-control" name="emergency_contact_phone" placeholder="Contact phone">
                             </div>
                         </div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label small fw-bold">Upload Files (Medical Reports, Insurance, etc.)</label>
+                        <input type="file" class="form-control" name="files[]" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                        <small class="text-muted">Allowed: PDF, Images, Word documents (Max 5MB each)</small>
                     </div>
                 </div>
             </div>

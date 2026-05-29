@@ -3,35 +3,36 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Carbon\Carbon;
+use App\Models\Blog;
+use App\Models\Service;
+use App\Models\Product;
 
 class SitemapController extends Controller
 {
     public function index()
     {
-        $now = Carbon::now()->toAtomString();
+        // Fetch dynamic content
+        $posts = Blog::where('status', 'published')
+            ->orderBy('updated_at', 'desc')
+            ->get(['slug', 'updated_at']);
         
-        $urls = [
-            ['loc' => url('/'), 'lastmod' => $now, 'changefreq' => 'daily', 'priority' => '1.0'],
-            ['loc' => url('/landing'), 'lastmod' => $now, 'changefreq' => 'daily', 'priority' => '0.9'],
-            ['loc' => url('/about-us'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.8'],
-            ['loc' => url('/services'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.8'],
-            ['loc' => url('/blog'), 'lastmod' => $now, 'changefreq' => 'weekly', 'priority' => '0.8'],
-            ['loc' => url('/appointments'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.8'],
-            ['loc' => url('/contact-us'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.7'],
-            ['loc' => url('/shop'), 'lastmod' => $now, 'changefreq' => 'daily', 'priority' => '0.9'],
-            ['loc' => url('/support/help-center'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.6'],
-            ['loc' => url('/support/faqs'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.6'],
-            ['loc' => url('/support/contact-support'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.6'],
-            ['loc' => url('/resources/guidelines'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.5'],
-            ['loc' => url('/resources/health-tips'), 'lastmod' => $now, 'changefreq' => 'weekly', 'priority' => '0.7'],
-            ['loc' => url('/resources/news'), 'lastmod' => $now, 'changefreq' => 'weekly', 'priority' => '0.6'],
-            ['loc' => url('/resources/research'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.5'],
-            ['loc' => url('/resources/staff-portal'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.4'],
-        ];
+        $services = Service::where('is_active', true)
+            ->orderBy('updated_at', 'desc')
+            ->get(['slug', 'updated_at']);
+        
+        $products = Product::where('is_active', true)
+            ->orderBy('updated_at', 'desc')
+            ->get(['slug', 'updated_at']);
 
-        return response()->view('sitemap', [
-            'urls' => $urls
-        ])->header('Content-Type', 'text/xml');
+        $content = view('sitemap', [
+            'posts' => $posts,
+            'services' => $services,
+            'products' => $products,
+        ])->render();
+
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" . $content;
+
+        return response($xml)
+            ->header('Content-Type', 'text/xml; charset=UTF-8');
     }
 }

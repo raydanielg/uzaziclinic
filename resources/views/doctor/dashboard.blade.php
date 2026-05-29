@@ -15,11 +15,11 @@
                             <i class="fa-solid fa-user-doctor"></i>
                         </div>
                         <div>
-                            <p class="mb-0 opacity-75 small fw-semibold text-uppercase">Daktari</p>
-                            <h4 class="mb-0 fw-bold">Karibu, Dkt. {{ Auth::user()->name }}</h4>
+                            <p class="mb-0 opacity-75 small fw-semibold text-uppercase">Doctor</p>
+                            <h4 class="mb-0 fw-bold">Welcome, Dr. {{ Auth::user()->name }}</h4>
                         </div>
                     </div>
-                    <p class="mb-0 opacity-75 small">{{ now()->format('l, d F Y') }} &bull; Miadi yako ya leo: <strong>{{ $stats['today_appointments'] }}</strong></p>
+                    <p class="mb-0 opacity-75 small">{{ now()->format('l, d F Y') }} &bull; Today's Appointments: <strong>{{ $stats['today_appointments'] }}</strong></p>
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="stat-icon stat-card-blue"><i class="fa-solid fa-calendar-check"></i></div>
                         <div>
-                            <div class="stat-label">Miadi ya Leo</div>
+                            <div class="stat-label">Today's Appointments</div>
                             <div class="stat-value" data-count="{{ $stats['today_appointments'] }}">0</div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="stat-icon stat-card-green"><i class="fa-solid fa-hospital-user"></i></div>
                         <div>
-                            <div class="stat-label">Wagonjwa Wangu</div>
+                            <div class="stat-label">My Patients</div>
                             <div class="stat-value" data-count="{{ $stats['total_patients'] }}">0</div>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="stat-icon stat-card-violet"><i class="fa-solid fa-chart-line"></i></div>
                         <div>
-                            <div class="stat-label">Utendaji</div>
+                            <div class="stat-label">Performance</div>
                             <div class="stat-value" data-count="94" data-suffix="%">0</div>
                         </div>
                     </div>
@@ -77,16 +77,16 @@
             <div class="col-lg-8 anim-5">
                 <div class="dash-table-card h-100">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0 fw-bold"><i class="fa-solid fa-clock me-2 text-blue"></i>Miadi ya Hivi Karibuni</h6>
-                        <a href="{{ route('doctor.schedule') }}" class="btn btn-sm btn-light fw-semibold px-3">Ratiba Yangu</a>
+                        <h6 class="mb-0 fw-bold"><i class="fa-solid fa-clock me-2 text-blue"></i>Recent Appointments</h6>
+                        <a href="{{ route('doctor.schedule') }}" class="btn btn-sm btn-light fw-semibold px-3">My Schedule</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table align-middle mb-0">
                             <thead><tr>
-                                <th class="ps-3">Mgonjwa</th>
-                                <th>Muda</th>
-                                <th class="text-center">Hali</th>
-                                <th class="text-end pe-3">Vitendo</th>
+                                <th class="ps-3">Patient</th>
+                                <th>Time</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-end pe-3">Actions</th>
                             </tr></thead>
                             <tbody>
                                 @forelse($recent_appointments as $appointment)
@@ -119,16 +119,16 @@
                                         <div class="dropdown">
                                             <button class="btn btn-sm btn-light border-0" data-bs-toggle="dropdown"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                                             <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
-                                                <li><a class="dropdown-item small" href="{{ route('doctor.prescriptions.add') }}"><i class="fa-solid fa-file-prescription me-2 text-cyan"></i>Maagizo</a></li>
+                                                <li><a class="dropdown-item small" href="{{ route('doctor.prescriptions.add') }}"><i class="fa-solid fa-file-prescription me-2 text-cyan"></i>Prescribe</a></li>
                                                 <li><a class="dropdown-item small" href="{{ route('doctor.lab.requests') }}"><i class="fa-solid fa-flask me-2 text-amber"></i>Lab Test</a></li>
-                                                <li><a class="dropdown-item small" href="{{ route('doctor.medical.records') }}"><i class="fa-solid fa-notes-medical me-2 text-violet"></i>Rekodi</a></li>
+                                                <li><a class="dropdown-item small" href="{{ route('doctor.medical.records') }}"><i class="fa-solid fa-notes-medical me-2 text-violet"></i>Records</a></li>
                                             </ul>
                                         </div>
                                     </td>
                                 </tr>
                                 @empty
                                 <tr><td colspan="4" class="text-center py-5 text-muted">
-                                    <i class="fa-solid fa-calendar-xmark fs-2 opacity-25 d-block mb-2"></i>Hakuna miadi kwa sasa
+                                    <i class="fa-solid fa-calendar-xmark fs-2 opacity-25 d-block mb-2"></i>No appointments currently
                                 </td></tr>
                                 @endforelse
                             </tbody>
@@ -141,15 +141,15 @@
             <div class="col-lg-4 anim-6">
                 {{-- Quick Actions --}}
                 <div class="dash-chart-card mb-4">
-                    <div class="card-header"><h6 class="mb-0 fw-bold"><i class="fa-solid fa-bolt me-2 text-amber"></i>Vitendo vya Haraka</h6></div>
+                    <div class="card-header"><h6 class="mb-0 fw-bold"><i class="fa-solid fa-bolt me-2 text-amber"></i>Quick Actions</h6></div>
                     <div class="card-body d-flex flex-column gap-2 pt-3">
                         @foreach([
-                            ['fa-file-prescription','bg-cyan-soft text-cyan',route('doctor.prescriptions.add'),'Andika Maagizo'],
-                            ['fa-microscope','bg-amber-soft text-amber',route('doctor.lab.requests'),'Omba Lab Test'],
-                            ['fa-notes-medical','bg-blue-soft text-blue',route('doctor.medical.records'),'Rekodi za Matibabu'],
-                            ['fa-calendar-days','bg-green-soft text-green',route('doctor.schedule'),'Ratiba Yangu'],
+                            ['fa-file-prescription','bg-cyan-soft text-cyan',route('doctor.prescriptions.add'),'Write Prescription'],
+                            ['fa-microscope','bg-amber-soft text-amber',route('doctor.lab.requests'),'Request Lab Test'],
+                            ['fa-notes-medical','bg-blue-soft text-blue',route('doctor.medical.records'),'Medical Records'],
+                            ['fa-calendar-days','bg-green-soft text-green',route('doctor.schedule'),'My Schedule'],
                             ['fa-comments','bg-violet-soft text-violet',route('doctor.chat'),'Chat'],
-                            ['fa-chart-bar','bg-rose-soft text-rose',route('doctor.reports'),'Ripoti'],
+                            ['fa-chart-bar','bg-rose-soft text-rose',route('doctor.reports'),'Reports'],
                         ] as [$icon,$cls,$href,$label])
                         <a href="{{ $href }}" class="quick-action-item">
                             <div class="qa-icon {{ $cls }}"><i class="fa-solid {{ $icon }}"></i></div>
@@ -161,7 +161,7 @@
 
                 {{-- Performance Chart --}}
                 <div class="dash-chart-card">
-                    <div class="card-header"><h6 class="mb-0 fw-bold"><i class="fa-solid fa-chart-bar me-2 text-blue"></i>Muhtasari wa Wiki</h6></div>
+                    <div class="card-header"><h6 class="mb-0 fw-bold"><i class="fa-solid fa-chart-bar me-2 text-blue"></i>Weekly Summary</h6></div>
                     <div class="card-body"><canvas id="doctorWeekChart" height="180"></canvas></div>
                 </div>
             </div>
@@ -178,10 +178,10 @@ document.addEventListener('DOMContentLoaded', function() {
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Juma','Jtatu','Juanne','Alh','Ijumaa','Jumam','Jumapili'],
+                labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
                 datasets: [
-                    { label: 'Miadi', data: [3,5,4,8,6,2,1], backgroundColor: 'rgba(59,130,246,0.8)', borderRadius: 6 },
-                    { label: 'Wagonjwa', data: [2,4,3,6,5,1,0], backgroundColor: 'rgba(16,185,129,0.8)', borderRadius: 6 }
+                    { label: 'Appointments', data: [3,5,4,8,6,2,1], backgroundColor: 'rgba(59,130,246,0.8)', borderRadius: 6 },
+                    { label: 'Patients', data: [2,4,3,6,5,1,0], backgroundColor: 'rgba(16,185,129,0.8)', borderRadius: 6 }
                 ]
             },
             options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10 } } },
