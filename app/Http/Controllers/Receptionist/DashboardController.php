@@ -277,9 +277,9 @@ class DashboardController extends Controller
         }
     }
 
-    public function resendPatientSMS(Request $request, $patientId)
+    public function resendPatientSMS(Request $request, $id)
     {
-        $patient = Patient::find($patientId);
+        $patient = Patient::find($id);
         
         if (!$patient) {
             return response()->json([
