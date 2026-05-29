@@ -353,7 +353,50 @@ class DashboardController extends Controller
     public function doctors()
     {
         $doctors = User::whereHas('role', function($q) { $q->where('name', 'doctor'); })->latest()->get();
+        
+        // Return JSON if it's an AJAX request
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'doctors' => $doctors
+            ]);
+        }
+        
         return view('receptionist.doctors', compact('doctors'));
+    }
+
+    public function sendPatientToDoctor(Request $request)
+    {
+        try {
+            $request->validate([
+                'patient_id' => 'required|exists:users,id',
+                'doctor_id' => 'required|exists:users,id',
+                'notes' => 'nullable|string|max:500',
+            ]);
+
+            $patient = User::findOrFail($request->patient_id);
+            $doctor = User::findOrFail($request->doctor_id);
+
+            // Create an appointment
+            $appointment = Appointment::create([
+                'user_id' => $patient->id,
+                'doctor_id' => $doctor->id,
+                'appointment_date' => now()->addMinutes(30),
+                'status' => 'pending',
+                'notes' => $request->notes,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Patient sent to doctor successfully!',
+                'appointment_id' => $appointment->id
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send patient to doctor: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function profile()
