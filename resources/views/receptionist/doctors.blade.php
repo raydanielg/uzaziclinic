@@ -112,7 +112,7 @@
 
                 <div class="mb-3">
                     <label class="form-label small fw-bold">Select Patient</label>
-                    <div id="patientList" class="border rounded-2 p-2" style="max-height:200px;overflow-y:auto">
+                    <div id="patientList" class="border rounded-2 p-2 bg-light" style="max-height:250px;overflow-y:auto">
                         <div class="text-center text-muted small py-3">Loading patients...</div>
                     </div>
                     <input type="hidden" id="patientSelect" required>
@@ -163,25 +163,47 @@ window.openSendPatientModal = function(doctorId, doctorName) {
 function loadPatients() {
     $.get('{{ route("receptionist.patients.json") }}')
         .done(function(data) {
-            const select = $('#patientSelect');
-            select.html('<option value="">Select a patient</option>');
+            const list = $('#patientList');
+            list.empty();
+            
+            if (data.length === 0) {
+                list.html('<div class="text-center text-muted small py-3">No patients found</div>');
+                return;
+            }
             
             data.forEach(function(patient) {
-                select.append(`<option value="${patient.id}">${patient.name} (${patient.patient_number})</option>`);
+                list.append(`
+                    <div class="patient-item p-2 rounded-1 cursor-pointer hover-bg-light" 
+                         data-id="${patient.id}" 
+                         data-name="${patient.name}"
+                         data-number="${patient.patient_number}">
+                        <div class="fw-semibold small">${patient.name}</div>
+                        <div class="text-muted" style="font-size:.75rem">${patient.patient_number}</div>
+                    </div>
+                `);
             });
         })
         .fail(function() {
-            Swal.fire('Error', 'Failed to load patients', 'error');
+            $('#patientList').html('<div class="text-center text-danger small py-3">Failed to load patients</div>');
         });
 }
 
 // Patient search
 $('#patientSearch').on('input', function() {
     const q = $(this).val().toLowerCase();
-    $('#patientSelect option').each(function() {
-        const text = $(this).text().toLowerCase();
-        $(this).toggle(text.includes(q) || $(this).val() === '');
+    $('.patient-item').each(function() {
+        const name = $(this).data('name').toLowerCase();
+        const number = $(this).data('number').toLowerCase();
+        const show = name.includes(q) || number.includes(q);
+        $(this).toggle(show);
     });
+});
+
+// Patient selection
+$(document).on('click', '.patient-item', function() {
+    $('.patient-item').removeClass('bg-primary text-white');
+    $(this).addClass('bg-primary text-white');
+    $('#patientSelect').val($(this).data('id'));
 });
 
 // Send patient to doctor
