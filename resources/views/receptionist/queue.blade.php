@@ -102,11 +102,21 @@
                         <td><span class="status-badge {{ $v->stage_badge }}">{{ $v->stage_label }}</span></td>
                         <td class="small text-muted">{{ $v->appointment_date->format('H:i') }}</td>
                         <td class="text-end pe-3">
-                            @if(!in_array($v->status, ['cancelled','completed']))
-                            <button class="btn btn-sm btn-light rounded-2 cancel-visit" data-id="{{ $v->id }}" title="Cancel">
-                                <i class="fa-solid fa-xmark text-rose"></i>
-                            </button>
-                            @endif
+                            <div class="btn-group">
+                                @if(!in_array($v->status, ['cancelled','completed']))
+                                <button class="btn btn-sm btn-light rounded-2" onclick="changeDoctor({{ $v->id }}, {{ $v->doctor_id ?? 'null' }})" title="Change Doctor">
+                                    <i class="fa-solid fa-user-doctor text-blue"></i>
+                                </button>
+                                <button class="btn btn-sm btn-light rounded-2" onclick="markCompleted({{ $v->id }})" title="Mark Completed">
+                                    <i class="fa-solid fa-check text-green"></i>
+                                </button>
+                                <button class="btn btn-sm btn-light rounded-2 cancel-visit" data-id="{{ $v->id }}" title="Cancel">
+                                    <i class="fa-solid fa-xmark text-rose"></i>
+                                </button>
+                                @else
+                                <span class="badge bg-success">Completed</span>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                     @empty
