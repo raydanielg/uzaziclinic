@@ -64,10 +64,10 @@
                                 </td>
                                 <td class="text-end pe-4">
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-outline-primary rounded-2 me-1" title="View">
+                                        <button class="btn btn-sm btn-outline-primary rounded-2 me-1" onclick="viewPatient({{ $patient->id }})" title="View">
                                             <i class="fa-solid fa-eye"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-outline-secondary rounded-2" title="Edit">
+                                        <button class="btn btn-sm btn-outline-secondary rounded-2" onclick="editPatient({{ $patient->id }})" title="Edit">
                                             <i class="fa-solid fa-pen"></i>
                                         </button>
                                     </div>
