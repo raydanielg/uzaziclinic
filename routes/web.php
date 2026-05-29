@@ -177,11 +177,11 @@ Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('
     Route::get('/patients/json', [App\Http\Controllers\Receptionist\DashboardController::class, 'getPatientsJson'])->name('patients.json');
     Route::post('/patients/register', [App\Http\Controllers\Receptionist\DashboardController::class, 'registerPatient'])->name('patients.register');
     Route::post('/test-sms', [App\Http\Controllers\Receptionist\DashboardController::class, 'testSMS'])->name('test-sms');
+    Route::post('/patients/send-to-doctor', [App\Http\Controllers\Receptionist\DashboardController::class, 'sendPatientToDoctor'])->name('patients.send-to-doctor');
     Route::get('/patients/{id}/view', [App\Http\Controllers\Receptionist\DashboardController::class, 'viewPatient'])->name('patients.view');
     Route::get('/patients/{id}/edit', [App\Http\Controllers\Receptionist\DashboardController::class, 'editPatient'])->name('patients.edit');
     Route::put('/patients/{id}/update', [App\Http\Controllers\Receptionist\DashboardController::class, 'updatePatient'])->name('patients.update');
     Route::post('/patients/{id}/resend-sms', [App\Http\Controllers\Receptionist\DashboardController::class, 'resendPatientSMS'])->name('patients.resend-sms');
-    Route::post('/patients/send-to-doctor', [App\Http\Controllers\Receptionist\DashboardController::class, 'sendPatientToDoctor'])->name('patients.send-to-doctor');
     Route::post('/patients/{patient}/files', [App\Http\Controllers\Receptionist\DashboardController::class, 'uploadPatientFile'])->name('patients.files.upload');
     Route::get('/patients/{patient}/files', [App\Http\Controllers\Receptionist\DashboardController::class, 'getPatientFiles'])->name('patients.files.index');
     Route::get('/files/{file}/download', [App\Http\Controllers\Receptionist\DashboardController::class, 'downloadPatientFile'])->name('files.download');
