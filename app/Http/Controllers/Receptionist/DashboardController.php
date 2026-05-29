@@ -352,17 +352,31 @@ class DashboardController extends Controller
 
     public function doctors()
     {
-        $doctors = User::whereHas('role', function($q) { $q->where('name', 'doctor'); })->latest()->get();
-        
-        // Return JSON if it's an AJAX request
-        if (request()->ajax() || request()->wantsJson()) {
-            return response()->json([
-                'success' => true,
-                'doctors' => $doctors
-            ]);
+        try {
+            $doctors = User::whereHas('role', function($q) { $q->where('name', 'doctor'); })
+                ->where('status', 'active')
+                ->latest()
+                ->get(['id', 'name', 'email', 'phone']);
+            
+            // Return JSON if it's an AJAX request
+            if (request()->ajax() || request()->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'doctors' => $doctors
+                ]);
+            }
+            
+            return view('receptionist.doctors', compact('doctors'));
+        } catch (\Exception $e) {
+            if (request()->ajax() || request()->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to load doctors: ' . $e->getMessage()
+                ], 500);
+            }
+            
+            return back()->with('error', 'Failed to load doctors');
         }
-        
-        return view('receptionist.doctors', compact('doctors'));
     }
 
     public function sendPatientToDoctor(Request $request)

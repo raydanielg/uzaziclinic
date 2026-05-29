@@ -446,13 +446,21 @@ function sendToDoctor(patientId) {
     
     // Load doctors
     fetch('{{ route('receptionist.doctors') }}')
-        .then(response => response.json())
+        .then(response => {
+            console.log('Doctors response status:', response.status);
+            console.log('Doctors response type:', response.headers.get('content-type'));
+            return response.json();
+        })
         .then(data => {
+            console.log('Doctors data received:', data);
             if (data.success && data.doctors) {
                 doctorSelect.innerHTML = '<option value="">Select a doctor</option>' +
                     data.doctors.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
             } else {
                 doctorSelect.innerHTML = '<option value="">No doctors available</option>';
+                if (data.message) {
+                    console.error('Doctors error:', data.message);
+                }
             }
         })
         .catch(error => {
