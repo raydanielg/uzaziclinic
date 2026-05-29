@@ -130,6 +130,35 @@
     </div>
 </div>
 
+<!-- Change Doctor Modal -->
+<div class="modal fade" id="changeDoctorModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 bg-primary text-white">
+                <h6 class="modal-title fw-bold"><i class="fa-solid fa-user-doctor me-2"></i>Change Doctor</h6>
+                <button type="button" class="btn-close btn-close-white btn-sm" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <input type="hidden" id="changeVisitId">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Select New Doctor</label>
+                    <select id="newDoctorSelect" class="form-select" required>
+                        <option value="">Loading doctors...</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Reason for Change (Optional)</label>
+                    <textarea id="changeReason" rows="3" class="form-control" placeholder="Explain why changing doctor..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button class="btn btn-light rounded-1" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary rounded-1 px-4" id="confirmChangeDoctorBtn"><i class="fa-solid fa-exchange-alt me-2"></i>Change Doctor</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{-- ─────────────────────────────────────────────────────────
      New Visit Modal — Search/Register patient → Send to doctor
      ───────────────────────────────────────────────────────── --}}
@@ -392,6 +421,89 @@ $(function () {
         });
     }
     $('#qSearch, #qStage, #qDoctor').on('input change', applyFilter);
+
+    // ─── Change Doctor ─────────────────────────────────────
+    window.changeDoctor = function(visitId, currentDoctorId) {
+        $('#changeVisitId').val(visitId);
+        const modal = new bootstrap.Modal(document.getElementById('changeDoctorModal'));
+        const doctorSelect = $('#newDoctorSelect');
+        
+        doctorSelect.html('<option value="">Loading doctors...</option>');
+        modal.show();
+        
+        // Load doctors
+        $.get('{{ route("receptionist.doctors") }}')
+            .done(function(data) {
+                if (data.success && data.doctors) {
+                    doctorSelect.html('<option value="">Select a doctor</option>' +
+                        data.doctors.map(function(d) {
+                            const selected = d.id === currentDoctorId ? 'selected' : '';
+                            return `<option value="${d.id}" ${selected}>Dr. ${d.name}</option>`;
+                        }).join(''));
+                } else {
+                    doctorSelect.html('<option value="">No doctors available</option>');
+                }
+            })
+            .fail(function() {
+                doctorSelect.html('<option value="">Failed to load doctors</option>');
+            });
+    };
+
+    $('#confirmChangeDoctorBtn').on('click', function() {
+        const visitId = $('#changeVisitId').val();
+        const newDoctorId = $('#newDoctorSelect').val();
+        const reason = $('#changeReason').val();
+        
+        if (!newDoctorId) {
+            return Swal.fire('Warning', 'Please select a doctor', 'warning');
+        }
+        
+        const $btn = $(this).prop('disabled', true);
+        $.post('{{ route("receptionist.visits.change-doctor") }}', {
+            _token: CSRF,
+            visit_id: visitId,
+            doctor_id: newDoctorId,
+            reason: reason
+        }).done(function(r) {
+            if (r.success) {
+                Swal.fire({icon:'success',title:r.message,timer:1500,showConfirmButton:false})
+                    .then(() => location.reload());
+            } else {
+                Swal.fire('Error', r.message, 'error');
+            }
+        }).fail(function(xhr) {
+            Swal.fire('Error', xhr.responseJSON?.message ?? 'Failed', 'error');
+        }).always(function() {
+            $btn.prop('disabled', false);
+        });
+    });
+
+    // ─── Mark Completed ─────────────────────────────────────
+    window.markCompleted = function(visitId) {
+        Swal.fire({
+            title:'Mark as completed?',
+            text:'This will mark the patient visit as completed',
+            icon:'question',
+            showCancelButton:true,
+            confirmButtonText:'Yes, Complete',
+            cancelButtonText:'No',
+            confirmButtonColor:'#22c55e'
+        }).then(function(r) {
+            if (!r.isConfirmed) return;
+            
+            $.post('{{ route("receptionist.visits.complete") }}', {
+                _token: CSRF,
+                visit_id: visitId
+            }).done(function(resp) {
+                if (resp.success) {
+                    Swal.fire({icon:'success',title:resp.message,timer:1400,showConfirmButton:false})
+                        .then(() => location.reload());
+                }
+            }).fail(function(xhr) {
+                Swal.fire('Error', xhr.responseJSON?.message ?? 'Failed', 'error');
+            });
+        });
+    };
 });
 </script>
 @endpush
