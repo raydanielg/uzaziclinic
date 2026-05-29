@@ -7,13 +7,73 @@ use Illuminate\Http\Request;
 use App\Models\Employee;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Doctor;
 
 class HRController extends Controller
 {
     public function index()
     {
-        $employees = Employee::with('user')->latest()->paginate(15);
-        return view('admin.hr.index', compact('employees'));
+        // Get regular employees
+        $regularEmployees = Employee::with('user')->get()->map(function($employee) {
+            return [
+                'id' => $employee->id,
+                'type' => 'employee',
+                'employee_number' => $employee->employee_number,
+                'name' => $employee->full_name,
+                'email' => $employee->email,
+                'phone' => $employee->phone,
+                'department' => $employee->department,
+                'position' => $employee->position,
+                'status' => $employee->status,
+                'created_at' => $employee->created_at,
+            ];
+        });
+
+        // Get doctors
+        $doctors = Doctor::with('user')->get()->map(function($doctor) {
+            return [
+                'id' => $doctor->id,
+                'type' => 'doctor',
+                'employee_number' => 'DOC-' . str_pad($doctor->id, 4, '0', STR_PAD_LEFT),
+                'name' => $doctor->display_name,
+                'email' => $doctor->user->email ?? 'N/A',
+                'phone' => $doctor->phone,
+                'department' => 'medical',
+                'position' => $doctor->specialization ?? 'Doctor',
+                'status' => $doctor->status,
+                'created_at' => $doctor->created_at,
+            ];
+        });
+
+        // Get nurses (users with nurse role)
+        $nurseRole = Role::where('name', 'nurse')->first();
+        $nurses = [];
+        if ($nurseRole) {
+            $nurses = User::where('role_id', $nurseRole->id)->get()->map(function($nurse) {
+                return [
+                    'id' => $nurse->id,
+                    'type' => 'nurse',
+                    'employee_number' => 'NUR-' . str_pad($nurse->id, 4, '0', STR_PAD_LEFT),
+                    'name' => $nurse->name,
+                    'email' => $nurse->email,
+                    'phone' => $nurse->phone ?? 'N/A',
+                    'department' => 'nursing',
+                    'position' => 'Nurse',
+                    'status' => $nurse->status ?? 'active',
+                    'created_at' => $nurse->created_at,
+                ];
+            });
+        }
+
+        // Combine all staff
+        $allStaff = collect()
+            ->concat($regularEmployees)
+            ->concat($doctors)
+            ->concat($nurses)
+            ->sortByDesc('created_at')
+            ->paginate(15);
+
+        return view('admin.hr.index', compact('allStaff'));
     }
 
     public function create()
