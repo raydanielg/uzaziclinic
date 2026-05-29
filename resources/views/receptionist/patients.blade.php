@@ -224,16 +224,36 @@
 let currentPatientId = null;
 
 function viewPatient(id) {
+    console.log('View patient called with ID:', id);
     currentPatientId = id;
-    const modal = new bootstrap.Modal(document.getElementById('viewPatientModal'));
+    
+    const modalElement = document.getElementById('viewPatientModal');
+    if (!modalElement) {
+        console.error('View modal not found');
+        return;
+    }
+    
+    const modal = new bootstrap.Modal(modalElement);
     const content = document.getElementById('viewPatientContent');
+    
+    if (!content) {
+        console.error('View content element not found');
+        return;
+    }
     
     content.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div></div>';
     modal.show();
     
-    fetch(`{{ route('receptionist.patients.view', ':id') }}`.replace(':id', id))
-        .then(response => response.json())
+    const url = `{{ route('receptionist.patients.view', ':id') }}`.replace(':id', id);
+    console.log('Fetching from:', url);
+    
+    fetch(url)
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
         .then(data => {
+            console.log('Data received:', data);
             if (data.success) {
                 const p = data.data.patient;
                 const profile = data.data.patient_profile;
