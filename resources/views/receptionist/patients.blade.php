@@ -9,6 +9,9 @@
                 <p class="text-muted small mb-0">Register new patients and manage existing patient records.</p>
             </div>
             <div class="col-auto">
+                <button class="btn btn-outline-warning rounded-2 me-2" onclick="testSMS()">
+                    <i class="fa-solid fa-sms me-2"></i>Test SMS
+                </button>
                 <button class="btn btn-primary rounded-2" data-bs-toggle="modal" data-bs-target="#registerModal">
                     <i class="fa-solid fa-user-plus me-2"></i>Register Patient
                 </button>
