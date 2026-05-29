@@ -188,6 +188,7 @@
                 </div>
             </div>
             <div class="modal-footer border-0">
+                <button class="btn btn-warning rounded-1 me-2" id="editFromViewBtn"><i class="fa-solid fa-pen me-2"></i>Edit Patient</button>
                 <button class="btn btn-light rounded-1" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -217,7 +218,10 @@
 
 @push('scripts')
 <script>
+let currentPatientId = null;
+
 function viewPatient(id) {
+    currentPatientId = id;
     const modal = new bootstrap.Modal(document.getElementById('viewPatientModal'));
     const content = document.getElementById('viewPatientContent');
     
@@ -296,6 +300,14 @@ function viewPatient(id) {
             content.innerHTML = '<div class="alert alert-danger">Failed to load patient details</div>';
         });
 }
+
+// Edit from view modal
+document.getElementById('editFromViewBtn').addEventListener('click', function() {
+    if (currentPatientId) {
+        bootstrap.Modal.getInstance(document.getElementById('viewPatientModal')).hide();
+        editPatient(currentPatientId);
+    }
+});
 
 function editPatient(id) {
     const modal = new bootstrap.Modal(document.getElementById('editPatientModal'));
