@@ -587,17 +587,13 @@ class DashboardController extends Controller
     {
         try {
             $request->validate([
-                'patient_id' => 'required|exists:users,id',
-                'doctor_id' => 'required|exists:users,id',
+                'patient_id' => 'required|exists:patients,id',
+                'doctor_id' => 'required|exists:doctors,id',
                 'notes' => 'nullable|string|max:500',
             ]);
 
-            $patientUser = User::findOrFail($request->patient_id);
-            $doctorUser = User::findOrFail($request->doctor_id);
-
-            // Get patient and doctor records
-            $patient = Patient::where('user_id', $patientUser->id)->first();
-            $doctor = Doctor::where('user_id', $doctorUser->id)->first();
+            $patient = Patient::findOrFail($request->patient_id);
+            $doctor = Doctor::findOrFail($request->doctor_id);
 
             if (!$patient) {
                 return response()->json([
