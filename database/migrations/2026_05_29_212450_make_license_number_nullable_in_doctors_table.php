@@ -14,7 +14,7 @@ class MakeLicenseNumberNullableInDoctorsTable extends Migration
     public function up()
     {
         Schema::table('doctors', function (Blueprint $table) {
-            //
+            $table->string('license_number', 50)->nullable()->change();
         });
     }
 
@@ -26,7 +26,7 @@ class MakeLicenseNumberNullableInDoctorsTable extends Migration
     public function down()
     {
         Schema::table('doctors', function (Blueprint $table) {
-            //
+            $table->string('license_number', 50)->nullable(false)->change();
         });
     }
 }
