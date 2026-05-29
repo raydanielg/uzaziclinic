@@ -922,6 +922,32 @@ $(function () {
         printWindow.document.close();
         printWindow.print();
     };
+
+    // ─── View Medical Details ───────────────────────────────
+    window.viewMedicalDetails = function(visitId, patientName, patientNumber) {
+        $('#medicalPatientName').text(patientName);
+        $('#medicalPatientNumber').text(patientNumber);
+        
+        const modal = new bootstrap.Modal(document.getElementById('medicalDetailsModal'));
+        modal.show();
+        
+        // Load medical details
+        $.get('{{ route("receptionist.visits.medical-details") }}', { visit_id: visitId })
+            .done(function(data) {
+                if (data.success) {
+                    $('#medicalDoctor').text(data.data?.doctor || 'N/A');
+                    $('#medicalDate').text(data.data?.date || 'N/A');
+                    $('#medicalComplaint').text(data.data?.complaint || 'N/A');
+                    $('#medicalDiagnosis').text(data.data?.diagnosis || 'N/A');
+                    $('#medicalPrescription').text(data.data?.prescription || 'N/A');
+                    $('#medicalPaymentMethod').text(data.data?.payment_method || 'N/A');
+                    $('#medicalAmountPaid').text('TZS ' + (data.data?.amount_paid || '0').toLocaleString());
+                }
+            })
+            .fail(function() {
+                Swal.fire('Error', 'Failed to load medical details', 'error');
+            });
+    };
 });
 </script>
 @endpush

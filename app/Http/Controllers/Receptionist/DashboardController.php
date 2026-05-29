@@ -521,6 +521,43 @@ class DashboardController extends Controller
         }
     }
 
+    public function getMedicalDetails(Request $request)
+    {
+        try {
+            $appointment = Appointment::with(['doctor', 'patient'])->findOrFail($request->visit_id);
+            
+            // Extract payment info from prescription
+            $prescription = $appointment->prescription ?? '';
+            $paymentMethod = 'N/A';
+            $amountPaid = 0;
+            
+            if (preg_match('/Payment Method: (\w+)/', $prescription, $matches)) {
+                $paymentMethod = ucfirst($matches[1]);
+            }
+            if (preg_match('/Amount Received: TZS ([\d,]+)/', $prescription, $matches)) {
+                $amountPaid = (int)str_replace(',', '', $matches[1]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'doctor' => $appointment->doctor->display_name ?? 'N/A',
+                    'date' => $appointment->appointment_date->format('d M Y H:i'),
+                    'complaint' => $appointment->symptoms ?? 'N/A',
+                    'diagnosis' => $appointment->diagnosis ?? 'N/A',
+                    'prescription' => $appointment->prescription ?? 'N/A',
+                    'payment_method' => $paymentMethod,
+                    'amount_paid' => $amountPaid,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load medical details: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function profile()
     {
         return view('receptionist.profile');
