@@ -33,8 +33,8 @@ class DoctorSeeder extends Seeder
                 'phone' => '+255 712 345 678',
                 'password' => Hash::make('password123'),
                 'specialization' => 'General Physician',
-                'qualification' => 'MBBS, MD',
-                'experience' => 10,
+                'license_number' => 'LIC-2024-001',
+                'bio' => 'Experienced general physician with 10 years of practice.',
             ],
             [
                 'name' => 'Dr. Sarah Johnson',
@@ -42,8 +42,8 @@ class DoctorSeeder extends Seeder
                 'phone' => '+255 713 456 789',
                 'password' => Hash::make('password123'),
                 'specialization' => 'Pediatrician',
-                'qualification' => 'MBBS, DCH',
-                'experience' => 8,
+                'license_number' => 'LIC-2024-002',
+                'bio' => 'Specialized in pediatric care with 8 years of experience.',
             ],
             [
                 'name' => 'Dr. Michael Williams',
@@ -51,8 +51,8 @@ class DoctorSeeder extends Seeder
                 'phone' => '+255 714 567 890',
                 'password' => Hash::make('password123'),
                 'specialization' => 'Cardiologist',
-                'qualification' => 'MBBS, MD, DM',
-                'experience' => 15,
+                'license_number' => 'LIC-2024-003',
+                'bio' => 'Expert cardiologist with 15 years of experience in heart care.',
             ],
             [
                 'name' => 'Dr. Emily Brown',
@@ -60,8 +60,8 @@ class DoctorSeeder extends Seeder
                 'phone' => '+255 715 678 901',
                 'password' => Hash::make('password123'),
                 'specialization' => 'Dermatologist',
-                'qualification' => 'MBBS, MD',
-                'experience' => 6,
+                'license_number' => 'LIC-2024-004',
+                'bio' => 'Dermatology specialist with 6 years of practice.',
             ],
             [
                 'name' => 'Dr. David Davis',
@@ -69,8 +69,8 @@ class DoctorSeeder extends Seeder
                 'phone' => '+255 716 789 012',
                 'password' => Hash::make('password123'),
                 'specialization' => 'Orthopedic Surgeon',
-                'qualification' => 'MBBS, MS',
-                'experience' => 12,
+                'license_number' => 'LIC-2024-005',
+                'bio' => 'Orthopedic surgeon with 12 years of experience in bone and joint care.',
             ],
         ];
 
@@ -89,9 +89,8 @@ class DoctorSeeder extends Seeder
             Doctor::create([
                 'user_id' => $user->id,
                 'specialization' => $doctorData['specialization'],
-                'qualification' => $doctorData['qualification'],
-                'experience' => $doctorData['experience'],
-                'consultation_fee' => 5000,
+                'license_number' => $doctorData['license_number'],
+                'bio' => $doctorData['bio'],
             ]);
 
             $this->command->info("Doctor created: {$doctorData['name']}");
