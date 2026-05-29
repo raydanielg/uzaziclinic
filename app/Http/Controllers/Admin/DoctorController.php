@@ -85,6 +85,7 @@ class DoctorController extends Controller
                 'phone' => $user->phone,
                 'status' => $user->status ?? 'active',
                 'specialization' => 'General',
+                'license_number' => 'LIC-' . str_pad($user->id, 6, '0', STR_PAD_LEFT),
             ]
         );
 

@@ -83,6 +83,7 @@ return array(
     'App\\Models\\Cart' => $baseDir . '/app/Models/Cart.php',
     'App\\Models\\ContactMessage' => $baseDir . '/app/Models/ContactMessage.php',
     'App\\Models\\Doctor' => $baseDir . '/app/Models/Doctor.php',
+    'App\\Models\\Employee' => $baseDir . '/app/Models/Employee.php',
     'App\\Models\\Insurance' => $baseDir . '/app/Models/Insurance.php',
     'App\\Models\\Invoice' => $baseDir . '/app/Models/Invoice.php',
     'App\\Models\\LabEquipment' => $baseDir . '/app/Models/LabEquipment.php',
