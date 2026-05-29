@@ -541,8 +541,28 @@ class DashboardController extends Controller
                     ->count();
             }
             
+            // Return JSON for AJAX requests
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'doctors' => $doctors->map(function($doctor) {
+                        return [
+                            'id' => $doctor->id,
+                            'name' => $doctor->display_name,
+                            'queue_count' => $doctor->queue_count
+                        ];
+                    })
+                ]);
+            }
+            
             return view('receptionist.doctors', compact('doctors'));
         } catch (\Exception $e) {
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to load doctors: ' . $e->getMessage()
+                ], 500);
+            }
             return back()->with('error', 'Failed to load doctors: ' . $e->getMessage());
         }
     }
