@@ -180,6 +180,35 @@
     </div>
 </div>
 
+<!-- Send to Doctor Modal -->
+<div class="modal fade" id="sendToDoctorModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 bg-success text-white">
+                <h5 class="modal-title fw-bold"><i class="fa-solid fa-user-doctor me-2"></i>Send to Doctor</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <input type="hidden" id="sendPatientId">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Select Doctor</label>
+                    <select class="form-select" id="doctorSelect" required>
+                        <option value="">Loading doctors...</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Notes (Optional)</label>
+                    <textarea class="form-control" id="sendNotes" rows="3" placeholder="Add any notes for the doctor..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button class="btn btn-light rounded-1" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-success rounded-1 px-4" id="confirmSendBtn"><i class="fa-solid fa-paper-plane me-2"></i>Send to Doctor</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- View Patient Modal -->
 <div class="modal fade" id="viewPatientModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
@@ -395,6 +424,92 @@ document.getElementById('editFromViewBtn').addEventListener('click', function() 
         bootstrap.Modal.getInstance(document.getElementById('viewPatientModal')).hide();
         editPatient(currentPatientId);
     }
+});
+
+// Send to doctor functionality
+function sendToDoctor(patientId) {
+    console.log('Send to doctor called with patient ID:', patientId);
+    
+    const modalElement = document.getElementById('sendToDoctorModal');
+    if (!modalElement) {
+        console.error('Send to doctor modal not found');
+        return;
+    }
+    
+    const modal = new bootstrap.Modal(modalElement);
+    const doctorSelect = document.getElementById('doctorSelect');
+    
+    document.getElementById('sendPatientId').value = patientId;
+    doctorSelect.innerHTML = '<option value="">Loading doctors...</option>';
+    
+    modal.show();
+    
+    // Load doctors
+    fetch('{{ route('receptionist.doctors') }}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.doctors) {
+                doctorSelect.innerHTML = '<option value="">Select a doctor</option>' +
+                    data.doctors.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+            } else {
+                doctorSelect.innerHTML = '<option value="">No doctors available</option>';
+            }
+        })
+        .catch(error => {
+            console.error('Error loading doctors:', error);
+            doctorSelect.innerHTML = '<option value="">Failed to load doctors</option>';
+        });
+}
+
+document.getElementById('confirmSendBtn').addEventListener('click', function() {
+    const patientId = document.getElementById('sendPatientId').value;
+    const doctorId = document.getElementById('doctorSelect').value;
+    const notes = document.getElementById('sendNotes').value;
+    
+    if (!doctorId) {
+        Swal.fire('Error', 'Please select a doctor', 'error');
+        return;
+    }
+    
+    this.disabled = true;
+    this.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>Sending...';
+    
+    fetch('{{ route('receptionist.patients.send-to-doctor') }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            patient_id: patientId,
+            doctor_id: doctorId,
+            notes: notes
+        })
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            Swal.fire({
+                icon: 'success',
+                title: result.message,
+                timer: 1500,
+                showConfirmButton: false
+            }).then(() => {
+                bootstrap.Modal.getInstance(document.getElementById('sendToDoctorModal')).hide();
+                document.getElementById('sendNotes').value = '';
+                document.getElementById('doctorSelect').value = '';
+            });
+        } else {
+            Swal.fire('Error', result.message || 'Failed to send patient to doctor', 'error');
+        }
+    })
+    .catch(error => {
+        Swal.fire('Error', 'Failed to send patient to doctor', 'error');
+    })
+    .finally(() => {
+        this.disabled = false;
+        this.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>Send to Doctor';
+    });
 });
 
 // Register patient form submission
