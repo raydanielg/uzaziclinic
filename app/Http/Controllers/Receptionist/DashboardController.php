@@ -423,6 +423,66 @@ class DashboardController extends Controller
         }
     }
 
+    public function changeDoctor(Request $request)
+    {
+        try {
+            $request->validate([
+                'visit_id' => 'required|exists:appointments,id',
+                'doctor_id' => 'required|exists:users,id',
+                'reason' => 'nullable|string|max:500',
+            ]);
+
+            $appointment = Appointment::findOrFail($request->visit_id);
+            $doctorUser = User::findOrFail($request->doctor_id);
+            $doctor = Doctor::where('user_id', $doctorUser->id)->first();
+
+            if (!$doctor) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Doctor profile not found'
+                ], 404);
+            }
+
+            // Update appointment doctor
+            $appointment->update([
+                'doctor_id' => $doctor->id,
+                'symptoms' => ($appointment->symptoms ?? '') . "\n\n[Doctor Change: " . ($request->reason ?? 'No reason provided') . "]",
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Doctor changed successfully!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to change doctor: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function markVisitCompleted(Request $request)
+    {
+        try {
+            $request->validate([
+                'visit_id' => 'required|exists:appointments,id',
+            ]);
+
+            $appointment = Appointment::findOrFail($request->visit_id);
+            $appointment->update(['status' => 'completed']);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Visit marked as completed!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to mark as completed: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function profile()
     {
         return view('receptionist.profile');
