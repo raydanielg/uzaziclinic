@@ -101,52 +101,54 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4">
-                <div class="row g-3">
+                <form id="registerPatientForm">
+                    <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label small fw-bold">Full Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" placeholder="Patient full name" required>
+                        <input type="text" class="form-control" name="name" placeholder="Patient full name" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small fw-bold">Date of Birth</label>
-                        <input type="date" class="form-control">
+                        <input type="date" class="form-control" name="date_of_birth">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small fw-bold">Gender</label>
-                        <select class="form-select">
+                        <select class="form-select" name="gender">
                             <option value="">Select Gender</option>
-                            <option>Male</option>
-                            <option>Female</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small fw-bold">Phone Number <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" placeholder="+255 7XX XXX XXX" required>
+                        <input type="text" class="form-control" name="phone" placeholder="+255 7XX XXX XXX" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small fw-bold">Email Address</label>
-                        <input type="email" class="form-control" placeholder="patient@email.com">
+                        <input type="email" class="form-control" name="email" placeholder="patient@email.com">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small fw-bold">National ID / Passport</label>
-                        <input type="text" class="form-control" placeholder="ID number">
+                        <input type="text" class="form-control" name="national_id" placeholder="ID number">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small fw-bold">Blood Type</label>
-                        <select class="form-select">
+                        <select class="form-select" name="blood_type">
                             <option value="">Unknown</option>
-                            <option>A+</option><option>A-</option>
-                            <option>B+</option><option>B-</option>
-                            <option>O+</option><option>O-</option>
-                            <option>AB+</option><option>AB-</option>
+                            <option value="A+">A+</option><option value="A-">A-</option>
+                            <option value="B+">B+</option><option value="B-">B-</option>
+                            <option value="O+">O+</option><option value="O-">O-</option>
+                            <option value="AB+">AB+</option><option value="AB-">AB-</option>
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small fw-bold">Insurance Provider</label>
-                        <input type="text" class="form-control" placeholder="NHIF, Jubilee, etc.">
+                        <input type="text" class="form-control" name="insurance_provider" placeholder="NHIF, Jubilee, etc.">
                     </div>
                     <div class="col-12">
                         <label class="form-label small fw-bold">Address</label>
-                        <textarea class="form-control" rows="2" placeholder="Physical address..."></textarea>
+                        <textarea class="form-control" rows="2" name="address" placeholder="Physical address..."></textarea>
                     </div>
                     <div class="col-12">
                         <label class="form-label small fw-bold">Emergency Contact</label>
