@@ -247,6 +247,50 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function resendPatientSMS(Request $request, $patientId)
+    {
+        $patient = Patient::find($patientId);
+        
+        if (!$patient) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Patient not found'
+            ], 404);
+        }
+
+        try {
+            $smsService = new NextSMSService();
+            
+            // Check if this is a returning patient (phone exists in patients table)
+            $existingPatient = Patient::where('phone', $patient->phone)->where('id', '!=', $patient->id)->first();
+            
+            if ($existingPatient) {
+                // Returning patient - send service info
+                $result = $smsService->sendServiceInfo($patient->phone, 'huduma ya afya');
+            } else {
+                // New patient - send welcome message
+                $result = $smsService->sendWelcomeMessage($patient->phone, $patient->name);
+            }
+
+            if ($result['success']) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'SMS imetumwa kwa mafanikio!'
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'SMS imeshindwa kutumwa: ' . $result['message']
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'SMS sending failed: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function registerPatient(Request $request)
     {
         $request->validate([
