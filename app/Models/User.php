@@ -56,6 +56,11 @@ class User extends Authenticatable
         return $this->hasOne(Doctor::class);
     }
 
+    public function patient()
+    {
+        return $this->hasOne(Patient::class);
+    }
+
     /**
      * Check if user has a specific role
      */
