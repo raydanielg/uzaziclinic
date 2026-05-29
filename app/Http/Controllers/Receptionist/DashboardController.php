@@ -90,33 +90,47 @@ class DashboardController extends Controller
 
     public function viewPatient($id)
     {
-        $patient = User::with(['role', 'patient'])->findOrFail($id);
-        $patientFiles = PatientFile::where('patient_id', $patient->patient->id ?? null)
-            ->with('uploadedBy')
-            ->latest()
-            ->get();
-        
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'patient' => $patient,
-                'patient_profile' => $patient->patient,
-                'files' => $patientFiles,
-            ]
-        ]);
+        try {
+            $patient = User::with(['role', 'patient'])->findOrFail($id);
+            $patientFiles = PatientFile::where('patient_id', $patient->patient->id ?? null)
+                ->with('uploadedBy')
+                ->latest()
+                ->get();
+            
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'patient' => $patient,
+                    'patient_profile' => $patient->patient,
+                    'files' => $patientFiles,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load patient: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function editPatient($id)
     {
-        $patient = User::with(['role', 'patient'])->findOrFail($id);
-        
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'patient' => $patient,
-                'patient_profile' => $patient->patient,
-            ]
-        ]);
+        try {
+            $patient = User::with(['role', 'patient'])->findOrFail($id);
+            
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'patient' => $patient,
+                    'patient_profile' => $patient->patient,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load patient: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function updatePatient(Request $request, $id)
