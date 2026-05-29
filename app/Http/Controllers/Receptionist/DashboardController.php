@@ -380,16 +380,34 @@ class DashboardController extends Controller
                 'notes' => 'nullable|string|max:500',
             ]);
 
-            $patient = User::findOrFail($request->patient_id);
-            $doctor = User::findOrFail($request->doctor_id);
+            $patientUser = User::findOrFail($request->patient_id);
+            $doctorUser = User::findOrFail($request->doctor_id);
+
+            // Get patient and doctor records
+            $patient = Patient::where('user_id', $patientUser->id)->first();
+            $doctor = Doctor::where('user_id', $doctorUser->id)->first();
+
+            if (!$patient) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Patient profile not found'
+                ], 404);
+            }
+
+            if (!$doctor) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Doctor profile not found'
+                ], 404);
+            }
 
             // Create an appointment
             $appointment = Appointment::create([
-                'user_id' => $patient->id,
+                'patient_id' => $patient->id,
                 'doctor_id' => $doctor->id,
                 'appointment_date' => now()->addMinutes(30),
                 'status' => 'pending',
-                'notes' => $request->notes,
+                'symptoms' => $request->notes,
             ]);
 
             return response()->json([
