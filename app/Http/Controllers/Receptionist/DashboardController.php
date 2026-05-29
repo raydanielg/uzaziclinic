@@ -279,9 +279,12 @@ class DashboardController extends Controller
 
     public function resendPatientSMS(Request $request, $id)
     {
+        \Log::info('Resend SMS requested for patient ID: ' . $id);
+        
         $patient = Patient::find($id);
         
         if (!$patient) {
+            \Log::error('Patient not found with ID: ' . $id);
             return response()->json([
                 'success' => false,
                 'message' => 'Patient not found'
