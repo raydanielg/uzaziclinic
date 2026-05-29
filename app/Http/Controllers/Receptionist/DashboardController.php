@@ -358,24 +358,16 @@ class DashboardController extends Controller
                 ->latest()
                 ->get(['id', 'name', 'email', 'phone']);
             
-            // Return JSON if it's an AJAX request
-            if (request()->ajax() || request()->wantsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'doctors' => $doctors
-                ]);
-            }
-            
-            return view('receptionist.doctors', compact('doctors'));
+            // Always return JSON for this endpoint
+            return response()->json([
+                'success' => true,
+                'doctors' => $doctors
+            ]);
         } catch (\Exception $e) {
-            if (request()->ajax() || request()->wantsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Failed to load doctors: ' . $e->getMessage()
-                ], 500);
-            }
-            
-            return back()->with('error', 'Failed to load doctors');
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load doctors: ' . $e->getMessage()
+            ], 500);
         }
     }
 
