@@ -67,6 +67,9 @@
                                         <button class="btn btn-sm btn-outline-primary rounded-2 me-1" onclick="viewPatient({{ $patient->id }})" title="View">
                                             <i class="fa-solid fa-eye"></i>
                                         </button>
+                                        <button class="btn btn-sm btn-outline-warning rounded-2 me-1" onclick="resendSMS({{ $patient->id }}, '{{ $patient->name }}')" title="Resend SMS">
+                                            <i class="fa-solid fa-sms"></i>
+                                        </button>
                                         <button class="btn btn-sm btn-outline-success rounded-2 me-1" onclick="sendToDoctor({{ $patient->id }})" title="Send to Doctor">
                                             <i class="fa-solid fa-user-doctor"></i>
                                         </button>

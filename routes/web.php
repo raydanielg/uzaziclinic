@@ -176,6 +176,7 @@ Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('
     Route::get('/patients', [App\Http\Controllers\Receptionist\DashboardController::class, 'patients'])->name('patients');
     Route::get('/patients/json', [App\Http\Controllers\Receptionist\DashboardController::class, 'getPatientsJson'])->name('patients.json');
     Route::post('/patients/register', [App\Http\Controllers\Receptionist\DashboardController::class, 'registerPatient'])->name('patients.register');
+    Route::post('/patients/{patientId}/resend-sms', [App\Http\Controllers\Receptionist\DashboardController::class, 'resendPatientSMS'])->name('patients.resend-sms');
     Route::get('/patients/{id}/view', [App\Http\Controllers\Receptionist\DashboardController::class, 'viewPatient'])->name('patients.view');
     Route::get('/patients/{id}/edit', [App\Http\Controllers\Receptionist\DashboardController::class, 'editPatient'])->name('patients.edit');
     Route::put('/patients/{id}/update', [App\Http\Controllers\Receptionist\DashboardController::class, 'updatePatient'])->name('patients.update');
