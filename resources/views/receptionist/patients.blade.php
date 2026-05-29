@@ -173,4 +173,259 @@
         </div>
     </div>
 </div>
+
+<!-- View Patient Modal -->
+<div class="modal fade" id="viewPatientModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 bg-primary text-white">
+                <h5 class="modal-title fw-bold"><i class="fa-solid fa-user me-2"></i>Patient Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4" id="viewPatientContent">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button class="btn btn-light rounded-1" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Patient Modal -->
+<div class="modal fade" id="editPatientModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 bg-warning text-white">
+                <h5 class="modal-title fw-bold"><i class="fa-solid fa-pen me-2"></i>Edit Patient</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4" id="editPatientContent">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-warning" role="status"></div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button class="btn btn-light rounded-1" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-warning rounded-1 px-4" id="updatePatientBtn"><i class="fa-solid fa-save me-2"></i>Update Patient</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+function viewPatient(id) {
+    const modal = new bootstrap.Modal(document.getElementById('viewPatientModal'));
+    const content = document.getElementById('viewPatientContent');
+    
+    content.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div></div>';
+    modal.show();
+    
+    fetch(`{{ route('receptionist.patients.view', ':id') }}`.replace(':id', id))
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const p = data.data.patient;
+                const profile = data.data.patient_profile;
+                const files = data.data.files;
+                
+                let filesHtml = files.length > 0 
+                    ? files.map(f => `
+                        <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded mb-2">
+                            <div>
+                                <small class="fw-semibold">${f.file_name}</small>
+                                <br><small class="text-muted">${f.file_type_label} • ${f.file_size}</small>
+                            </div>
+                            <a href="{{ route('receptionist.files.download', ':file') }}".replace(':file', f.id) class="btn btn-sm btn-primary">
+                                <i class="fa-solid fa-download"></i>
+                            </a>
+                        </div>
+                    `).join('')
+                    : '<p class="text-muted small">No files uploaded</p>';
+                
+                content.innerHTML = `
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Full Name</label>
+                            <div class="fw-semibold">${p.name}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Patient ID</label>
+                            <div class="fw-semibold">#PT-${String(p.id).padStart(4, '0')}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Email</label>
+                            <div>${p.email}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Phone</label>
+                            <div>${p.phone}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Gender</label>
+                            <div>${profile?.gender ? profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1) : 'N/A'}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Blood Type</label>
+                            <div>${profile?.blood_group || 'N/A'}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Emergency Contact</label>
+                            <div>${profile?.emergency_contact || 'N/A'}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Status</label>
+                            <span class="badge bg-${p.status === 'active' ? 'success' : 'secondary'}">${p.status.charAt(0).toUpperCase() + p.status.slice(1)}</span>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-muted">Registered Date</label>
+                            <div>${new Date(p.created_at).toLocaleDateString()}</div>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <h6 class="fw-bold mb-3"><i class="fa-solid fa-file-medical me-2"></i>Patient Files</h6>
+                            ${filesHtml}
+                        </div>
+                    </div>
+                `;
+            }
+        })
+        .catch(error => {
+            content.innerHTML = '<div class="alert alert-danger">Failed to load patient details</div>';
+        });
+}
+
+function editPatient(id) {
+    const modal = new bootstrap.Modal(document.getElementById('editPatientModal'));
+    const content = document.getElementById('editPatientContent');
+    
+    content.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning" role="status"></div></div>';
+    modal.show();
+    
+    fetch(`{{ route('receptionist.patients.edit', ':id') }}`.replace(':id', id))
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const p = data.data.patient;
+                const profile = data.data.patient_profile;
+                
+                content.innerHTML = `
+                    <form id="editPatientForm">
+                        <input type="hidden" name="patient_id" value="${p.id}">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Full Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="name" value="${p.name}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Phone Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="phone" value="${p.phone}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Email Address <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" name="email" value="${p.email}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Gender</label>
+                                <select class="form-select" name="gender">
+                                    <option value="">Select Gender</option>
+                                    <option value="male" ${profile?.gender === 'male' ? 'selected' : ''}>Male</option>
+                                    <option value="female" ${profile?.gender === 'female' ? 'selected' : ''}>Female</option>
+                                    <option value="other" ${profile?.gender === 'other' ? 'selected' : ''}>Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Blood Type</label>
+                                <select class="form-select" name="blood_type">
+                                    <option value="">Unknown</option>
+                                    <option value="A+" ${profile?.blood_group === 'A+' ? 'selected' : ''}>A+</option>
+                                    <option value="A-" ${profile?.blood_group === 'A-' ? 'selected' : ''}>A-</option>
+                                    <option value="B+" ${profile?.blood_group === 'B+' ? 'selected' : ''}>B+</option>
+                                    <option value="B-" ${profile?.blood_group === 'B-' ? 'selected' : ''}>B-</option>
+                                    <option value="O+" ${profile?.blood_group === 'O+' ? 'selected' : ''}>O+</option>
+                                    <option value="O-" ${profile?.blood_group === 'O-' ? 'selected' : ''}>O-</option>
+                                    <option value="AB+" ${profile?.blood_group === 'AB+' ? 'selected' : ''}>AB+</option>
+                                    <option value="AB-" ${profile?.blood_group === 'AB-' ? 'selected' : ''}>AB-</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Status</label>
+                                <select class="form-select" name="status" required>
+                                    <option value="active" ${p.status === 'active' ? 'selected' : ''}>Active</option>
+                                    <option value="inactive" ${p.status === 'inactive' ? 'selected' : ''}>Inactive</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Emergency Contact Name</label>
+                                <input type="text" class="form-control" name="emergency_contact_name" value="${profile?.emergency_contact?.split(' - ')[0] || ''}">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Emergency Contact Phone</label>
+                                <input type="text" class="form-control" name="emergency_contact_phone" value="${profile?.emergency_contact?.split(' - ')[1] || ''}">
+                            </div>
+                        </div>
+                    </form>
+                `;
+            }
+        })
+        .catch(error => {
+            content.innerHTML = '<div class="alert alert-danger">Failed to load patient details</div>';
+        });
+}
+
+document.getElementById('updatePatientBtn').addEventListener('click', function() {
+    const form = document.getElementById('editPatientForm');
+    const formData = new FormData(form);
+    const patientId = formData.get('patient_id');
+    
+    const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        gender: formData.get('gender'),
+        blood_type: formData.get('blood_type'),
+        status: formData.get('status'),
+        emergency_contact_name: formData.get('emergency_contact_name'),
+        emergency_contact_phone: formData.get('emergency_contact_phone'),
+    };
+    
+    this.disabled = true;
+    this.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>Updating...';
+    
+    fetch(`{{ route('receptionist.patients.update', ':id') }}`.replace(':id', patientId), {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            Swal.fire({
+                icon: 'success',
+                title: result.message,
+                timer: 1500,
+                showConfirmButton: false
+            }).then(() => {
+                bootstrap.Modal.getInstance(document.getElementById('editPatientModal')).hide();
+                location.reload();
+            });
+        } else {
+            Swal.fire('Error', 'Failed to update patient', 'error');
+        }
+    })
+    .catch(error => {
+        Swal.fire('Error', 'Failed to update patient', 'error');
+    })
+    .finally(() => {
+        this.disabled = false;
+        this.innerHTML = '<i class="fa-solid fa-save me-2"></i>Update Patient';
+    });
+});
+</script>
+@endpush
 @endsection
