@@ -842,16 +842,56 @@ $(function () {
         $('#amountReceived').val('');
         $('#paymentDetails').val('');
         $('#changeAmount').hide();
+        $('.service-checkbox').prop('checked', false);
+        updateServicesTable();
     };
+
+    // Update services table based on checkboxes
+    function updateServicesTable() {
+        const selectedServices = [];
+        let total = 0;
+        
+        $('.service-checkbox:checked').each(function() {
+            const name = $(this).data('name');
+            const price = parseFloat($(this).data('price'));
+            selectedServices.push({ name, price });
+            total += price;
+        });
+        
+        if (selectedServices.length === 0) {
+            $('#servicesList').html('<tr class="text-muted"><td colspan="2" class="text-center">Select services above</td></tr>');
+        } else {
+            let html = selectedServices.map(s => `
+                <tr>
+                    <td>${s.name}</td>
+                    <td class="text-end">${number_format(s.price, 2)}</td>
+                </tr>
+            `).join('');
+            $('#servicesList').html(html);
+        }
+        
+        $('#totalCost').text('TZS ' + number_format(total, 2));
+    }
+
+    // Number format helper
+    function number_format(num, decimals) {
+        return num.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+    }
+
+    // Service checkbox change handler
+    $(document).on('change', '.service-checkbox', function() {
+        updateServicesTable();
+    });
 
     // Calculate change
     $('#amountReceived').on('input', function() {
-        const total = 45000; // This should be dynamic
+        const totalText = $('#totalCost').text().replace('TZS ', '').replace(/,/g, '');
+        const total = parseFloat(totalText) || 0;
         const received = parseFloat($(this).val()) || 0;
         const change = received - total;
         
         if (change >= 0) {
-            $('#changeValue').text(change.toLocaleString());
+            $('#changeValue').text(number_format(change, 2));
             $('#changeAmount').show();
         } else {
             $('#changeAmount').hide();
