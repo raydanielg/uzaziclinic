@@ -46,8 +46,9 @@ class VisitController extends Controller
         ];
 
         $doctors = Doctor::with('user')->where('status', 'active')->get();
+        $services = \App\Models\Service::where('status', 'active')->get();
 
-        return view('receptionist.queue', compact('visits', 'stats', 'doctors'));
+        return view('receptionist.queue', compact('visits', 'stats', 'doctors', 'services'));
     }
 
     /* ──────────────────────────────────────────────────────────

@@ -364,33 +364,38 @@
 
                 <!-- Services Received -->
                 <div class="mb-4">
-                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-list-check me-2"></i>Services Received</h6>
+                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-list-check me-2"></i>Select Services</h6>
+                    <div id="servicesCheckboxes" class="mb-3">
+                        @foreach($services as $service)
+                        <div class="form-check mb-2">
+                            <input class="form-check-input service-checkbox" type="checkbox" 
+                                   value="{{ $service->id }}" 
+                                   data-price="{{ $service->price }}" 
+                                   data-name="{{ $service->name }}"
+                                   id="service_{{ $service->id }}">
+                            <label class="form-check-label" for="service_{{ $service->id }}">
+                                {{ $service->name }} - TZS {{ number_format($service->price, 2) }}
+                            </label>
+                        </div>
+                        @endforeach
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-sm">
                             <thead>
                                 <tr>
                                     <th>Service</th>
-                                    <th class="text-end">Cost</th>
+                                    <th class="text-end">Cost (TZS)</th>
                                 </tr>
                             </thead>
                             <tbody id="servicesList">
-                                <tr>
-                                    <td>Doctor Consultation</td>
-                                    <td class="text-end">TZS 5,000</td>
-                                </tr>
-                                <tr>
-                                    <td>Laboratory Tests</td>
-                                    <td class="text-end">TZS 15,000</td>
-                                </tr>
-                                <tr>
-                                    <td>Medication</td>
-                                    <td class="text-end">TZS 25,000</td>
+                                <tr class="text-muted">
+                                    <td colspan="2" class="text-center">Select services above</td>
                                 </tr>
                             </tbody>
                             <tfoot>
                                 <tr class="table-success">
                                     <th class="fw-bold">Total</th>
-                                    <th class="text-end fw-bold" id="totalCost">TZS 45,000</th>
+                                    <th class="text-end fw-bold" id="totalCost">TZS 0</th>
                                 </tr>
                             </tfoot>
                         </table>
