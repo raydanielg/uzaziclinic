@@ -168,7 +168,7 @@
             </div>
             <div class="modal-footer border-0">
                 <button class="btn btn-light rounded-1" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn btn-primary rounded-1 px-4"><i class="fa-solid fa-save me-2"></i>Register Patient</button>
+                <button class="btn btn-primary rounded-1 px-4" id="registerPatientBtn"><i class="fa-solid fa-save me-2"></i>Register Patient</button>
             </div>
         </div>
     </div>
