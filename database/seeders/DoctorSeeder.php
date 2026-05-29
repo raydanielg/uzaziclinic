@@ -75,6 +75,32 @@ class DoctorSeeder extends Seeder
         ];
 
         foreach ($doctors as $doctorData) {
+            // Check if user already exists
+            $existingUser = User::where('email', $doctorData['email'])->first();
+            
+            if ($existingUser) {
+                $this->command->warn("Doctor already exists: {$doctorData['name']} ({$doctorData['email']})");
+                
+                // Update existing user to doctor role if not already
+                if ($existingUser->role_id != $doctorRole->id) {
+                    $existingUser->update(['role_id' => $doctorRole->id, 'status' => 'active']);
+                    $this->command->info("Updated role to doctor: {$doctorData['name']}");
+                }
+                
+                // Check if doctor profile exists
+                if (!$existingUser->doctor) {
+                    Doctor::create([
+                        'user_id' => $existingUser->id,
+                        'specialization' => $doctorData['specialization'],
+                        'license_number' => $doctorData['license_number'],
+                        'bio' => $doctorData['bio'],
+                    ]);
+                    $this->command->info("Created doctor profile: {$doctorData['name']}");
+                }
+                
+                continue;
+            }
+            
             // Create user
             $user = User::create([
                 'name' => $doctorData['name'],
