@@ -932,6 +932,10 @@ $(function () {
                 $('#receiptPaymentMethod').text(r.data?.payment_method || 'Cash');
                 $('#receiptAmountPaid').text('TZS ' + (r.data?.amount_received || '0').toLocaleString());
                 
+                // Copy services from payment modal to receipt
+                $('#receiptServices').html($('#servicesList').html());
+                $('#receiptTotal').text($('#totalCost').text());
+                
                 // Show receipt modal
                 const receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'));
                 receiptModal.show();
