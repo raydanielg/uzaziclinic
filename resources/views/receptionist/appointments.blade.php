@@ -181,7 +181,7 @@
                                 <option value="">-- Chagua Daktari --</option>
                                 @foreach($doctors as $d)
                                 <option value="{{ $d->id }}">
-                                    Dkt. {{ $d->display_name }} — {{ $d->specialization ?? 'General' }}
+                                    Dkt. {{ $d->user->name }} — {{ $d->specialization ?? 'General' }}
                                 </option>
                                 @endforeach
                             </select>
