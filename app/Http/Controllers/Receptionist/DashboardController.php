@@ -11,6 +11,7 @@ use App\Models\Doctor;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Services\NextSMSService;
 
 class DashboardController extends Controller
 {
