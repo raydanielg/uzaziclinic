@@ -23,35 +23,35 @@
                 <div class="stat-card-modern stat-card-blue">
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="stat-icon stat-card-blue"><i class="fa-solid fa-users"></i></div>
-                        <div><div class="stat-label">Total Employees</div>
-                        <div class="stat-value">{{ \App\Models\Employee::count() }}</div></div>
+                        <div><div class="stat-label">Total Staff</div>
+                        <div class="stat-value">{{ $allStaff->total() }}</div></div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-card-modern stat-card-green">
                     <div class="card-body d-flex align-items-center gap-3">
-                        <div class="stat-icon stat-card-green"><i class="fa-solid fa-user-check"></i></div>
-                        <div><div class="stat-label">Active</div>
-                        <div class="stat-value">{{ \App\Models\Employee::where('status', 'active')->count() }}</div></div>
+                        <div class="stat-icon stat-card-green"><i class="fa-solid fa-user-doctor"></i></div>
+                        <div><div class="stat-label">Doctors</div>
+                        <div class="stat-value">{{ \App\Models\Doctor::count() }}</div></div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-card-modern stat-card-amber">
                     <div class="card-body d-flex align-items-center gap-3">
-                        <div class="stat-icon stat-card-amber"><i class="fa-solid fa-user-clock"></i></div>
-                        <div><div class="stat-label">On Leave</div>
-                        <div class="stat-value">{{ \App\Models\Employee::where('status', 'on_leave')->count() }}</div></div>
+                        <div class="stat-icon stat-card-amber"><i class="fa-solid fa-user-nurse"></i></div>
+                        <div><div class="stat-label">Nurses</div>
+                        <div class="stat-value">{{ \App\Models\User::whereHas('role', fn($q) => $q->where('name', 'nurse'))->count() }}</div></div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-card-modern stat-card-cyan">
                     <div class="card-body d-flex align-items-center gap-3">
-                        <div class="stat-icon stat-card-cyan"><i class="fa-solid fa-briefcase"></i></div>
-                        <div><div class="stat-label">Departments</div>
-                        <div class="stat-value">{{ \App\Models\Employee::distinct('department')->count('department') }}</div></div>
+                        <div class="stat-icon stat-card-cyan"><i class="fa-solid fa-user-tie"></i></div>
+                        <div><div class="stat-label">Other Staff</div>
+                        <div class="stat-value">{{ \App\Models\Employee::count() }}</div></div>
                     </div>
                 </div>
             </div>
@@ -97,16 +97,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($employees as $employee)
-                        <tr data-department="{{ $employee->department }}" data-status="{{ $employee->status }}">
-                            <td class="ps-3 text-muted small">{{ $employee->employee_number }}</td>
-                            <td>
-                                <div class="fw-semibold small">{{ $employee->full_name }}</div>
+                        @forelse($allStaff as $staff)
+                        <tr data-department="{{ $staff['department'] }}" data-status="{{ $staff['status'] }}">
+                            <td class="ps-3 text-muted small">
+                                {{ $staff['employee_number'] }}
+                                @if($staff['type'] === 'doctor')
+                                    <span class="badge bg-green-soft text-green ms-1" style="font-size:0.65rem">DR</span>
+                                @elseif($staff['type'] === 'nurse')
+                                    <span class="badge bg-pink-soft text-pink ms-1" style="font-size:0.65rem">NR</span>
+                                @endif
                             </td>
-                            <td class="small text-muted">{{ $employee->email }}</td>
-                            <td class="small">{{ $employee->phone }}</td>
-                            <td class="small">{{ ucfirst($employee->department) }}</td>
-                            <td class="small text-muted">{{ $employee->position ?? 'N/A' }}</td>
+                            <td>
+                                <div class="fw-semibold small">{{ $staff['name'] }}</div>
+                            </td>
+                            <td class="small text-muted">{{ $staff['email'] }}</td>
+                            <td class="small">{{ $staff['phone'] }}</td>
+                            <td class="small">{{ ucfirst($staff['department']) }}</td>
+                            <td class="small text-muted">{{ $staff['position'] ?? 'N/A' }}</td>
                             <td>
                                 @php
                                     $statusColors = [
@@ -122,32 +129,45 @@
                                         'terminated' => 'fa-ban',
                                     ];
                                 @endphp
-                                <span class="status-badge {{ $statusColors[$employee->status] ?? 'bg-gray-soft text-gray' }}">
-                                    <i class="fa-solid {{ $statusIcon[$employee->status] ?? 'fa-circle' }} me-1"></i>
-                                    {{ ucfirst(str_replace('_', ' ', $employee->status)) }}
+                                <span class="status-badge {{ $statusColors[$staff['status']] ?? 'bg-gray-soft text-gray' }}">
+                                    <i class="fa-solid {{ $statusIcon[$staff['status']] ?? 'fa-circle' }} me-1"></i>
+                                    {{ ucfirst(str_replace('_', ' ', $staff['status'])) }}
                                 </span>
                             </td>
                             <td class="text-end pe-3">
-                                <a href="{{ route('admin.hr.show', $employee) }}" class="btn btn-sm btn-light me-1 rounded-2" title="View">
-                                    <i class="fa-solid fa-eye text-blue"></i>
-                                </a>
-                                <a href="{{ route('admin.hr.edit', $employee) }}" class="btn btn-sm btn-light me-1 rounded-2" title="Edit">
-                                    <i class="fa-solid fa-pen text-amber"></i>
-                                </a>
-                                <form action="{{ route('admin.hr.destroy', $employee) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-light rounded-2" title="Delete" onclick="return confirm('Are you sure you want to delete this employee?')">
-                                        <i class="fa-solid fa-trash text-rose"></i>
-                                    </button>
-                                </form>
+                                @if($staff['type'] === 'employee')
+                                    <a href="{{ route('admin.hr.show', $staff['id']) }}" class="btn btn-sm btn-light me-1 rounded-2" title="View">
+                                        <i class="fa-solid fa-eye text-blue"></i>
+                                    </a>
+                                    <a href="{{ route('admin.hr.edit', $staff['id']) }}" class="btn btn-sm btn-light me-1 rounded-2" title="Edit">
+                                        <i class="fa-solid fa-pen text-amber"></i>
+                                    </a>
+                                    <form action="{{ route('admin.hr.destroy', $staff['id']) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-light rounded-2" title="Delete" onclick="return confirm('Are you sure you want to delete this employee?')">
+                                            <i class="fa-solid fa-trash text-rose"></i>
+                                        </button>
+                                    </form>
+                                @elseif($staff['type'] === 'doctor')
+                                    <a href="{{ route('admin.doctors.show', $staff['id']) }}" class="btn btn-sm btn-light me-1 rounded-2" title="View">
+                                        <i class="fa-solid fa-eye text-blue"></i>
+                                    </a>
+                                    <a href="{{ route('admin.doctors.edit', $staff['id']) }}" class="btn btn-sm btn-light me-1 rounded-2" title="Edit">
+                                        <i class="fa-solid fa-pen text-amber"></i>
+                                    </a>
+                                @else
+                                    <span class="text-muted small" title="Manage via User Accounts">
+                                        <i class="fa-solid fa-user-gear text-secondary"></i>
+                                    </span>
+                                @endif
                             </td>
                         </tr>
                         @empty
                         <tr>
                             <td colspan="8" class="text-center py-5 text-muted">
                                 <i class="fa-solid fa-users-slash fs-2 d-block mb-2 opacity-25"></i>
-                                No employees found
+                                No staff found
                             </td>
                         </tr>
                         @endforelse
