@@ -112,9 +112,10 @@
 
                 <div class="mb-3">
                     <label class="form-label small fw-bold">Select Patient</label>
-                    <select id="patientSelect" class="form-select" required>
-                        <option value="">Select a patient</option>
-                    </select>
+                    <div id="patientList" class="border rounded-2 p-2" style="max-height:200px;overflow-y:auto">
+                        <div class="text-center text-muted small py-3">Loading patients...</div>
+                    </div>
+                    <input type="hidden" id="patientSelect" required>
                 </div>
 
                 <div class="mb-3">
