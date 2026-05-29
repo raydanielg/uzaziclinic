@@ -7,12 +7,12 @@
     {{-- Header --}}
     <div class="row mb-4 anim-1">
         <div class="col">
-            <h4 class="fw-bold mb-0"><i class="fa-solid fa-users-line me-2 text-blue"></i>Foleni ya Wagonjwa — Leo</h4>
-            <p class="text-muted small mb-0">{{ now()->format('l, d F Y') }} · Pokea mgonjwa, msajili, na umpeleke kwa daktari</p>
+            <h4 class="fw-bold mb-0"><i class="fa-solid fa-users-line me-2 text-blue"></i>Patient Queue — Today</h4>
+            <p class="text-muted small mb-0">{{ now()->format('l, d F Y') }} · Receive patient, register, and send to doctor</p>
         </div>
         <div class="col-auto">
             <button class="btn btn-primary fw-semibold rounded-2 shadow-sm px-4" data-bs-toggle="modal" data-bs-target="#newVisitModal">
-                <i class="fa-solid fa-user-plus me-2"></i>Pokea Mgonjwa
+                <i class="fa-solid fa-user-plus me-2"></i>Receive Patient
             </button>
         </div>
     </div>
@@ -20,11 +20,11 @@
     {{-- Stats --}}
     <div class="row g-3 mb-4 anim-2">
         @foreach([
-            ['fa-users','blue','Jumla',$stats['total']],
-            ['fa-stethoscope','blue','Kwa Daktari',$stats['with_doctor']],
-            ['fa-flask','amber','Kwa Lab',$stats['awaiting_lab']],
-            ['fa-pills','violet','Kwa Pharmacy',$stats['awaiting_pharmacy']],
-            ['fa-circle-check','green','Wamemaliza',$stats['done']],
+            ['fa-users','blue','Total',$stats['total']],
+            ['fa-stethoscope','blue','With Doctor',$stats['with_doctor']],
+            ['fa-flask','amber','Awaiting Lab',$stats['awaiting_lab']],
+            ['fa-pills','violet','Awaiting Pharmacy',$stats['awaiting_pharmacy']],
+            ['fa-circle-check','green','Completed',$stats['done']],
         ] as [$icon,$color,$label,$value])
         <div class="col">
             <div class="stat-card-modern stat-card-{{ $color }}">
@@ -43,11 +43,17 @@
     {{-- Queue Table --}}
     <div class="dash-table-card anim-3">
         <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <h6 class="mb-0 fw-bold"><i class="fa-solid fa-list-check me-2 text-blue"></i>Foleni ya Sasa</h6>
+            <h6 class="mb-0 fw-bold"><i class="fa-solid fa-list-check me-2 text-blue"></i>Current Queue</h6>
             <div class="d-flex gap-2">
-                <input type="text" id="qSearch" class="form-control form-control-sm" placeholder="Tafuta jina au namba..." style="width:200px">
+                <input type="text" id="qSearch" class="form-control form-control-sm" placeholder="Search name or number..." style="width:200px">
+                <select id="qDoctor" class="form-select form-select-sm" style="width:170px">
+                    <option value="">All Doctors</option>
+                    @foreach($doctors as $d)
+                    <option value="{{ $d->id }}">Dr. {{ $d->display_name }}</option>
+                    @endforeach
+                </select>
                 <select id="qStage" class="form-select form-select-sm" style="width:170px">
-                    <option value="">Hatua Zote</option>
+                    <option value="">All Stages</option>
                     @foreach(\App\Models\Appointment::STAGES as $key => $label)
                         <option value="{{ $key }}">{{ $label }}</option>
                     @endforeach
@@ -58,12 +64,12 @@
             <table class="table align-middle mb-0" id="queueTable">
                 <thead><tr>
                     <th class="ps-3">Q#</th>
-                    <th>Mgonjwa</th>
-                    <th>Daktari</th>
-                    <th>Aina</th>
-                    <th>Hatua</th>
-                    <th>Muda</th>
-                    <th class="text-end pe-3">Vitendo</th>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Type</th>
+                    <th>Stage</th>
+                    <th>Time</th>
+                    <th class="text-end pe-3">Actions</th>
                 </tr></thead>
                 <tbody>
                     @forelse($visits as $v)
@@ -80,13 +86,24 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="small">Dkt. {{ $v->doctor->display_name ?? 'N/A' }}</td>
+                        <td class="small">
+                            @if($v->doctor)
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="user-avatar bg-green-soft text-green" style="width:28px;height:28px;font-size:.7rem">
+                                    {{ strtoupper(substr($v->doctor->display_name ?? '?', 0, 1)) }}
+                                </div>
+                                <span>Dr. {{ $v->doctor->display_name }}</span>
+                            </div>
+                            @else
+                            <span class="text-muted">Not Assigned</span>
+                            @endif
+                        </td>
                         <td class="small text-muted">{{ $v->type ?? 'General' }}</td>
                         <td><span class="status-badge {{ $v->stage_badge }}">{{ $v->stage_label }}</span></td>
                         <td class="small text-muted">{{ $v->appointment_date->format('H:i') }}</td>
                         <td class="text-end pe-3">
                             @if(!in_array($v->status, ['cancelled','completed']))
-                            <button class="btn btn-sm btn-light rounded-2 cancel-visit" data-id="{{ $v->id }}" title="Futa">
+                            <button class="btn btn-sm btn-light rounded-2 cancel-visit" data-id="{{ $v->id }}" title="Cancel">
                                 <i class="fa-solid fa-xmark text-rose"></i>
                             </button>
                             @endif
@@ -94,7 +111,7 @@
                     </tr>
                     @empty
                     <tr><td colspan="7" class="text-center py-5 text-muted">
-                        <i class="fa-solid fa-users-slash fs-2 opacity-25 d-block mb-2"></i>Hakuna mgonjwa kwenye foleni leo
+                        <i class="fa-solid fa-users-slash fs-2 opacity-25 d-block mb-2"></i>No patients in queue today
                     </td></tr>
                     @endforelse
                 </tbody>
@@ -110,7 +127,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow">
             <div class="modal-header border-0 bg-primary text-white py-3">
-                <h6 class="modal-title fw-bold"><i class="fa-solid fa-user-plus me-2"></i>Pokea Mgonjwa Mpya</h6>
+                <h6 class="modal-title fw-bold"><i class="fa-solid fa-user-plus me-2"></i>Receive New Patient</h6>
                 <button type="button" class="btn-close btn-close-white btn-sm" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4">
@@ -118,15 +135,15 @@
                 {{-- Step 1: Find or register --}}
                 <div id="stepFind">
                     <ul class="nav nav-pills nav-fill mb-3 small" id="patientTabs">
-                        <li class="nav-item"><button type="button" class="nav-link active" data-bs-toggle="pill" data-bs-target="#tabExisting"><i class="fa-solid fa-magnifying-glass me-1"></i>Mgonjwa Aliyepo</button></li>
-                        <li class="nav-item"><button type="button" class="nav-link" data-bs-toggle="pill" data-bs-target="#tabNew"><i class="fa-solid fa-user-plus me-1"></i>Mgonjwa Mpya</button></li>
+                        <li class="nav-item"><button type="button" class="nav-link active" data-bs-toggle="pill" data-bs-target="#tabExisting"><i class="fa-solid fa-magnifying-glass me-1"></i>Existing Patient</button></li>
+                        <li class="nav-item"><button type="button" class="nav-link" data-bs-toggle="pill" data-bs-target="#tabNew"><i class="fa-solid fa-user-plus me-1"></i>New Patient</button></li>
                     </ul>
 
                     <div class="tab-content">
                         {{-- Existing --}}
                         <div class="tab-pane fade show active" id="tabExisting">
-                            <label class="form-label small fw-bold">Tafuta kwa Jina, Simu au Namba (PT-001)</label>
-                            <input type="text" id="patientSearch" class="form-control shadow-none" placeholder="Andika jina au simu...">
+                            <label class="form-label small fw-bold">Search by Name, Phone or Number (PT-001)</label>
+                            <input type="text" id="patientSearch" class="form-control shadow-none" placeholder="Type name or phone...">
                             <div id="searchResults" class="mt-2" style="max-height:280px;overflow-y:auto"></div>
                         </div>
 
@@ -186,26 +203,26 @@
                     <div class="alert alert-success border-0 d-flex align-items-center gap-2 mb-3">
                         <i class="fa-solid fa-circle-check"></i>
                         <div>
-                            <div class="fw-bold small">Mgonjwa Amechaguliwa:</div>
+                            <div class="fw-bold small">Patient Selected:</div>
                             <div id="selectedPatientName" class="small"></div>
                         </div>
-                        <button type="button" class="btn btn-sm btn-light ms-auto" id="changePatientBtn">Badilisha</button>
+                        <button type="button" class="btn btn-sm btn-light ms-auto" id="changePatientBtn">Change</button>
                     </div>
 
                     <input type="hidden" id="selPatientId">
 
                     <div class="row g-3">
                         <div class="col-md-12">
-                            <label class="form-label small fw-bold">Daktari *</label>
+                            <label class="form-label small fw-bold">Doctor *</label>
                             <select id="sendDoctor" class="form-select shadow-none" required>
-                                <option value="">-- Chagua Daktari --</option>
+                                <option value="">-- Select Doctor --</option>
                                 @foreach($doctors as $d)
-                                <option value="{{ $d->id }}">Dkt. {{ $d->display_name }} — {{ $d->specialization ?? 'General' }}</option>
+                                <option value="{{ $d->id }}">Dr. {{ $d->display_name }} — {{ $d->specialization ?? 'General' }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label small fw-bold">Aina ya Huduma</label>
+                            <label class="form-label small fw-bold">Service Type</label>
                             <select id="sendType" class="form-select shadow-none">
                                 <option>General Consultation</option>
                                 <option>Follow-up</option>
@@ -215,12 +232,12 @@
                             </select>
                         </div>
                         <div class="col-12">
-                            <label class="form-label small fw-bold">Sababu ya Kuja (Chief Complaint)</label>
-                            <textarea id="sendComplaint" rows="3" class="form-control shadow-none" placeholder="Mfano: Maumivu ya tumbo kwa siku 3..."></textarea>
+                            <label class="form-label small fw-bold">Reason for Visit (Chief Complaint)</label>
+                            <textarea id="sendComplaint" rows="3" class="form-control shadow-none" placeholder="Example: Stomach pain for 3 days..."></textarea>
                         </div>
                     </div>
                     <button type="button" id="sendToDoctorBtn" class="btn btn-primary fw-semibold mt-3 w-100">
-                        <i class="fa-solid fa-paper-plane me-2"></i>Peleka kwa Daktari
+                        <i class="fa-solid fa-paper-plane me-2"></i>Send to Doctor
                     </button>
                 </div>
             </div>
@@ -245,7 +262,7 @@ $(function () {
                 .done(resp => {
                     const list = resp.data || [];
                     if (!list.length) {
-                        $('#searchResults').html('<div class="text-center py-3 text-muted small"><i class="fa-solid fa-circle-question me-1"></i>Hakuna matokeo. Sajili kama mpya.</div>');
+                        $('#searchResults').html('<div class="text-center py-3 text-muted small"><i class="fa-solid fa-circle-question me-1"></i>No results. Register as new.</div>');
                         return;
                     }
                     let html = '';
@@ -296,11 +313,11 @@ $(function () {
                 Swal.fire({icon:'success',title:r.message,timer:1400,showConfirmButton:false});
                 $('#registerForm')[0].reset();
             } else {
-                Swal.fire('Hitilafu', r.message || 'Imeshindwa', 'error');
+                Swal.fire('Error', r.message || 'Failed', 'error');
             }
         }).fail(xhr => {
             const msg = xhr.responseJSON?.message ?? Object.values(xhr.responseJSON?.errors ?? {}).flat().join('\n') ?? 'Imeshindwa';
-            Swal.fire('Hitilafu', msg, 'error');
+            Swal.fire('Error', msg, 'error');
         }).always(() => $btn.prop('disabled', false));
     });
 
@@ -309,7 +326,7 @@ $(function () {
         const patient_id = $('#selPatientId').val();
         const doctor_id  = $('#sendDoctor').val();
         if (!patient_id || !doctor_id) {
-            return Swal.fire('Tahadhari', 'Chagua mgonjwa na daktari', 'warning');
+            return Swal.fire('Warning', 'Please select patient and doctor', 'warning');
         }
         const $btn = $(this).prop('disabled', true);
         $.post('{{ route("receptionist.visits.send") }}', {
@@ -325,7 +342,7 @@ $(function () {
                 Swal.fire('Hitilafu', r.message, 'error');
             }
         }).fail(xhr => {
-            Swal.fire('Hitilafu', xhr.responseJSON?.message ?? 'Imeshindwa', 'error');
+            Swal.fire('Error', xhr.responseJSON?.message ?? 'Failed', 'error');
         }).always(() => $btn.prop('disabled', false));
     });
 
@@ -333,8 +350,8 @@ $(function () {
     $(document).on('click', '.cancel-visit', function () {
         const id = $(this).data('id');
         Swal.fire({
-            title:'Futa miadi?', icon:'warning', showCancelButton:true,
-            confirmButtonText:'Ndiyo, Futa', cancelButtonText:'Hapana',
+            title:'Cancel appointment?', icon:'warning', showCancelButton:true,
+            confirmButtonText:'Yes, Cancel', cancelButtonText:'No',
             confirmButtonColor:'#ef4444'
         }).then(r => {
             if (!r.isConfirmed) return;
@@ -352,16 +369,19 @@ $(function () {
     function applyFilter() {
         const q = $('#qSearch').val().toLowerCase();
         const s = $('#qStage').val();
+        const d = $('#qDoctor').val();
         $('#queueTable tbody tr').each(function () {
             const txt = $(this).text().toLowerCase();
             const stg = $(this).data('stage') ?? '';
+            const doc = $(this).data('doctor') ?? '';
             let show = true;
             if (q && !txt.includes(q)) show = false;
             if (s && stg !== s) show = false;
+            if (d && doc !== d) show = false;
             $(this).toggle(show);
         });
     }
-    $('#qSearch, #qStage').on('input change', applyFilter);
+    $('#qSearch, #qStage, #qDoctor').on('input change', applyFilter);
 });
 </script>
 @endpush
