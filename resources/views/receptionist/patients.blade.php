@@ -527,7 +527,12 @@ function sendToDoctor(patientId) {
     modal.show();
     
     // Load doctors
-    fetch('{{ route('receptionist.doctors') }}')
+    fetch('{{ route('receptionist.doctors') }}', {
+        headers: {
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
         .then(response => {
             console.log('Doctors response status:', response.status);
             console.log('Doctors response type:', response.headers.get('content-type'));
