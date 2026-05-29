@@ -505,7 +505,13 @@ class DashboardController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Payment processed successfully! Patient discharged.'
+                'message' => 'Payment processed successfully! Patient discharged.',
+                'data' => [
+                    'complaint' => $appointment->symptoms ?? 'General Consultation',
+                    'diagnosis' => $appointment->diagnosis ?? 'Completed consultation',
+                    'payment_method' => ucfirst($request->payment_method),
+                    'amount_received' => $request->amount_received,
+                ]
             ]);
         } catch (\Exception $e) {
             return response()->json([
