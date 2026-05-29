@@ -167,6 +167,7 @@
                         <small class="text-muted">Allowed: PDF, Images, Word documents (Max 5MB each)</small>
                     </div>
                 </div>
+                </form>
             </div>
             <div class="modal-footer border-0">
                 <button class="btn btn-light rounded-1" data-bs-dismiss="modal">Cancel</button>
@@ -309,6 +310,47 @@ document.getElementById('editFromViewBtn').addEventListener('click', function() 
         bootstrap.Modal.getInstance(document.getElementById('viewPatientModal')).hide();
         editPatient(currentPatientId);
     }
+});
+
+// Register patient form submission
+document.getElementById('registerPatientBtn').addEventListener('click', function() {
+    const form = document.getElementById('registerPatientForm');
+    const formData = new FormData(form);
+    
+    this.disabled = true;
+    this.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>Registering...';
+    
+    fetch('{{ route('receptionist.patients.register') }}', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            Swal.fire({
+                icon: 'success',
+                title: result.message,
+                timer: 1500,
+                showConfirmButton: false
+            }).then(() => {
+                bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
+                form.reset();
+                location.reload();
+            });
+        } else {
+            Swal.fire('Error', result.message || 'Failed to register patient', 'error');
+        }
+    })
+    .catch(error => {
+        Swal.fire('Error', 'Failed to register patient', 'error');
+    })
+    .finally(() => {
+        this.disabled = false;
+        this.innerHTML = '<i class="fa-solid fa-save me-2"></i>Register Patient';
+    });
 });
 
 function editPatient(id) {
