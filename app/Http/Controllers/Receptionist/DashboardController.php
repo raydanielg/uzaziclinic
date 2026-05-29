@@ -61,24 +61,32 @@ class DashboardController extends Controller
             'status'           => 'pending',
         ]);
 
-        // Send SMS confirmation
-        $smsService = new NextSMSService();
-        $patient = Patient::with('user')->find($request->patient_id);
-        $doctor = Doctor::with('user')->find($request->doctor_id);
-        
-        if ($patient && $doctor) {
-            $patientName = $patient->name;
-            $doctorName = $doctor->display_name;
-            $appointmentDate = date('d M Y', strtotime($request->appointment_date));
-            $appointmentTime = date('H:i', strtotime($request->appointment_time));
+        // Send SMS confirmation (non-blocking)
+        try {
+            $smsService = new NextSMSService();
+            $patient = Patient::with('user')->find($request->patient_id);
+            $doctor = Doctor::with('user')->find($request->doctor_id);
             
-            $smsService->sendAppointmentConfirmation(
-                $patient->phone,
-                $patientName,
-                $doctorName,
-                $appointmentDate,
-                $appointmentTime
-            );
+            if ($patient && $doctor) {
+                $patientName = $patient->name;
+                $doctorName = $doctor->display_name;
+                $appointmentDate = date('d M Y', strtotime($request->appointment_date));
+                $appointmentTime = date('H:i', strtotime($request->appointment_time));
+                
+                $smsService->sendAppointmentConfirmation(
+                    $patient->phone,
+                    $patientName,
+                    $doctorName,
+                    $appointmentDate,
+                    $appointmentTime
+                );
+            }
+        } catch (\Exception $e) {
+            // Log SMS error but don't fail the appointment booking
+            \Log::error('SMS sending failed during appointment booking', [
+                'error' => $e->getMessage(),
+                'appointment_id' => $appointment->id,
+            ]);
         }
 
         return response()->json([
