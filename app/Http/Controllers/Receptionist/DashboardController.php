@@ -97,12 +97,30 @@ class DashboardController extends Controller
                 ->latest()
                 ->get();
             
+            // Get patient history
+            $appointments = Appointment::where('user_id', $id)
+                ->with(['doctor', 'status'])
+                ->latest()
+                ->limit(10)
+                ->get();
+            
+            // Get counter data
+            $stats = [
+                'total_visits' => Appointment::where('user_id', $id)->count(),
+                'completed_appointments' => Appointment::where('user_id', $id)->where('status', 'completed')->count(),
+                'pending_appointments' => Appointment::where('user_id', $id)->where('status', 'pending')->count(),
+                'cancelled_appointments' => Appointment::where('user_id', $id)->where('status', 'cancelled')->count(),
+                'total_files' => PatientFile::where('patient_id', $patient->patient->id ?? null)->count(),
+            ];
+            
             return response()->json([
                 'success' => true,
                 'data' => [
                     'patient' => $patient,
                     'patient_profile' => $patient->patient,
                     'files' => $patientFiles,
+                    'appointments' => $appointments,
+                    'stats' => $stats,
                 ]
             ]);
         } catch (\Exception $e) {
