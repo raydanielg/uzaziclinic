@@ -317,10 +317,13 @@ function viewPatient(id) {
                         </div>
                     </div>
                 `;
+            } else {
+                content.innerHTML = '<div class="alert alert-danger">Failed to load patient details: ' + (data.message || 'Unknown error') + '</div>';
             }
         })
         .catch(error => {
-            content.innerHTML = '<div class="alert alert-danger">Failed to load patient details</div>';
+            console.error('Error loading patient:', error);
+            content.innerHTML = '<div class="alert alert-danger">Failed to load patient details: ' + error.message + '</div>';
         });
 }
 
@@ -374,15 +377,35 @@ document.getElementById('registerPatientBtn').addEventListener('click', function
 });
 
 function editPatient(id) {
-    const modal = new bootstrap.Modal(document.getElementById('editPatientModal'));
+    console.log('Edit patient called with ID:', id);
+    
+    const modalElement = document.getElementById('editPatientModal');
+    if (!modalElement) {
+        console.error('Edit modal not found');
+        return;
+    }
+    
+    const modal = new bootstrap.Modal(modalElement);
     const content = document.getElementById('editPatientContent');
+    
+    if (!content) {
+        console.error('Edit content element not found');
+        return;
+    }
     
     content.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning" role="status"></div></div>';
     modal.show();
     
-    fetch(`{{ route('receptionist.patients.edit', ':id') }}`.replace(':id', id))
-        .then(response => response.json())
+    const url = `{{ route('receptionist.patients.edit', ':id') }}`.replace(':id', id);
+    console.log('Fetching from:', url);
+    
+    fetch(url)
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
         .then(data => {
+            console.log('Data received:', data);
             if (data.success) {
                 const p = data.data.patient;
                 const profile = data.data.patient_profile;
@@ -444,10 +467,13 @@ function editPatient(id) {
                         </div>
                     </form>
                 `;
+            } else {
+                content.innerHTML = '<div class="alert alert-danger">Failed to load patient details: ' + (data.message || 'Unknown error') + '</div>';
             }
         })
         .catch(error => {
-            content.innerHTML = '<div class="alert alert-danger">Failed to load patient details</div>';
+            console.error('Error loading patient:', error);
+            content.innerHTML = '<div class="alert alert-danger">Failed to load patient details: ' + error.message + '</div>';
         });
 }
 
