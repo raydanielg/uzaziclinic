@@ -113,7 +113,7 @@
                 <div class="mb-3">
                     <label class="form-label small fw-bold">Select Patient</label>
                     <div id="patientList" class="border rounded-2 p-2 bg-light" style="max-height:250px;overflow-y:auto">
-                        <div class="text-center text-muted small py-3">Loading patients...</div>
+                        <div class="text-center text-muted small py-3">Type to search patients...</div>
                     </div>
                     <input type="hidden" id="patientSelect" required>
                 </div>
