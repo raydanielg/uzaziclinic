@@ -88,6 +88,32 @@ class DashboardController extends Controller
         return view('receptionist.patients', compact('patients'));
     }
 
+    public function getPatientsJson()
+    {
+        try {
+            $patients = \App\Models\Patient::with('user')
+                ->whereHas('user', function($q) {
+                    $q->whereHas('role', function($r) {
+                        $r->where('name', 'customer');
+                    });
+                })
+                ->latest()
+                ->get();
+            
+            $data = $patients->map(function($patient) {
+                return [
+                    'id' => $patient->id,
+                    'name' => $patient->user->name,
+                    'patient_number' => 'PT-' . $patient->id,
+                ];
+            });
+            
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to load patients'], 500);
+        }
+    }
+
     public function viewPatient($id)
     {
         try {

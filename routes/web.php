@@ -174,6 +174,7 @@ Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('
     Route::post('/appointments/{appointment}/status', [App\Http\Controllers\Receptionist\DashboardController::class, 'updateAppointmentStatus'])->name('appointments.status');
     Route::delete('/appointments/{appointment}', [App\Http\Controllers\Receptionist\DashboardController::class, 'cancelAppointment'])->name('appointments.cancel');
     Route::get('/patients', [App\Http\Controllers\Receptionist\DashboardController::class, 'patients'])->name('patients');
+    Route::get('/patients/json', [App\Http\Controllers\Receptionist\DashboardController::class, 'getPatientsJson'])->name('patients.json');
     Route::post('/patients/register', [App\Http\Controllers\Receptionist\DashboardController::class, 'registerPatient'])->name('patients.register');
     Route::get('/patients/{id}/view', [App\Http\Controllers\Receptionist\DashboardController::class, 'viewPatient'])->name('patients.view');
     Route::get('/patients/{id}/edit', [App\Http\Controllers\Receptionist\DashboardController::class, 'editPatient'])->name('patients.edit');
