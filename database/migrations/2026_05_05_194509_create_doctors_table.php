@@ -17,7 +17,7 @@ class CreateDoctorsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('specialization', 100)->nullable();
-            $table->string('license_number', 50)->unique();
+            $table->string('license_number', 50)->nullable()->unique();
             $table->text('bio')->nullable();
             $table->timestamps();
         });
