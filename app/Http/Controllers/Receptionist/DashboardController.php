@@ -61,6 +61,26 @@ class DashboardController extends Controller
             'status'           => 'pending',
         ]);
 
+        // Send SMS confirmation
+        $smsService = new NextSMSService();
+        $patient = Patient::with('user')->find($request->patient_id);
+        $doctor = Doctor::with('user')->find($request->doctor_id);
+        
+        if ($patient && $doctor) {
+            $patientName = $patient->name;
+            $doctorName = $doctor->display_name;
+            $appointmentDate = date('d M Y', strtotime($request->appointment_date));
+            $appointmentTime = date('H:i', strtotime($request->appointment_time));
+            
+            $smsService->sendAppointmentConfirmation(
+                $patient->phone,
+                $patientName,
+                $doctorName,
+                $appointmentDate,
+                $appointmentTime
+            );
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Miadi imewekwa!',
@@ -293,6 +313,20 @@ class DashboardController extends Controller
             }
 
             DB::commit();
+
+            // Send SMS notification
+            $smsService = new NextSMSService();
+            
+            // Check if this is a returning patient (phone exists in patients table)
+            $existingPatient = Patient::where('phone', $request->phone)->where('id', '!=', $patient->id)->first();
+            
+            if ($existingPatient) {
+                // Returning patient - send service info
+                $smsService->sendServiceInfo($request->phone, 'huduma ya afya');
+            } else {
+                // New patient - send welcome message
+                $smsService->sendWelcomeMessage($request->phone, $request->name);
+            }
 
             return response()->json([
                 'success' => true,
