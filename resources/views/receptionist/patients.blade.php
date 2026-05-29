@@ -527,7 +527,7 @@ function sendToDoctor(patientId) {
     modal.show();
     
     // Load doctors
-    fetch('{{ route('receptionist.doctors') }}', {
+    fetch('{{ route('receptionist.doctors.json') }}', {
         headers: {
             'Accept': 'application/json',
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content

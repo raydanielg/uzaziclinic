@@ -541,29 +541,45 @@ class DashboardController extends Controller
                     ->count();
             }
             
-            // Return JSON for AJAX requests
-            if (request()->expectsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'doctors' => $doctors->map(function($doctor) {
-                        return [
-                            'id' => $doctor->id,
-                            'name' => $doctor->display_name,
-                            'queue_count' => $doctor->queue_count
-                        ];
-                    })
-                ]);
-            }
-            
             return view('receptionist.doctors', compact('doctors'));
         } catch (\Exception $e) {
-            if (request()->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Failed to load doctors: ' . $e->getMessage()
-                ], 500);
-            }
             return back()->with('error', 'Failed to load doctors: ' . $e->getMessage());
+        }
+    }
+
+    public function getDoctorsJson()
+    {
+        try {
+            $doctors = Doctor::with('user')
+                ->where('status', 'active')
+                ->latest()
+                ->get();
+            
+            // Get queue count for each doctor
+            $today = today();
+            foreach ($doctors as $doctor) {
+                $doctor->queue_count = \App\Models\Appointment::where('doctor_id', $doctor->id)
+                    ->whereDate('appointment_date', $today)
+                    ->where('status', '!=', 'cancelled')
+                    ->where('status', '!=', 'completed')
+                    ->count();
+            }
+            
+            return response()->json([
+                'success' => true,
+                'doctors' => $doctors->map(function($doctor) {
+                    return [
+                        'id' => $doctor->id,
+                        'name' => $doctor->display_name,
+                        'queue_count' => $doctor->queue_count
+                    ];
+                })
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load doctors: ' . $e->getMessage()
+            ], 500);
         }
     }
 
