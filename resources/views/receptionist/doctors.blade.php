@@ -151,29 +151,53 @@ window.openSendPatientModal = function(doctorId, doctorName) {
     $('#selectedDoctorName').text(doctorName);
     $('#patientSelect').val('');
     $('#sendNotes').val('');
+    $('#patientSearch').val('');
+    $('#patientList').html('<div class="text-center text-muted small py-3">Type to search patients...</div>');
     
     const modal = new bootstrap.Modal(document.getElementById('sendPatientModal'));
     modal.show();
-    
-    // Load patients
-    loadPatients();
 };
 
-// Load patients for dropdown
-function loadPatients() {
+// Load patients with search
+let searchTimeout;
+$('#patientSearch').on('input', function() {
+    clearTimeout(searchTimeout);
+    const q = $(this).val();
+    
+    if (q.length < 2) {
+        $('#patientList').html('<div class="text-center text-muted small py-3">Type at least 2 characters to search...</div>');
+        return;
+    }
+    
+    $('#patientList').html('<div class="text-center text-muted small py-3"><i class="fa-solid fa-spinner fa-spin"></i> Searching...</div>');
+    
+    searchTimeout = setTimeout(function() {
+        searchPatients(q);
+    }, 300);
+});
+
+function searchPatients(query) {
     $.get('{{ route("receptionist.patients.json") }}')
         .done(function(data) {
             const list = $('#patientList');
             list.empty();
             
-            if (data.length === 0) {
+            const filtered = data.filter(function(patient) {
+                const name = patient.name.toLowerCase();
+                const number = patient.patient_number.toLowerCase();
+                const q = query.toLowerCase();
+                return name.includes(q) || number.includes(q);
+            });
+            
+            if (filtered.length === 0) {
                 list.html('<div class="text-center text-muted small py-3">No patients found</div>');
                 return;
             }
             
-            data.forEach(function(patient) {
+            filtered.forEach(function(patient) {
                 list.append(`
-                    <div class="patient-item p-2 rounded-1 cursor-pointer hover-bg-light" 
+                    <div class="patient-item p-2 rounded-1 cursor-pointer mb-1" 
+                         style="background:#fff;border:1px solid #e5e7eb"
                          data-id="${patient.id}" 
                          data-name="${patient.name}"
                          data-number="${patient.patient_number}">
@@ -187,17 +211,6 @@ function loadPatients() {
             $('#patientList').html('<div class="text-center text-danger small py-3">Failed to load patients</div>');
         });
 }
-
-// Patient search
-$('#patientSearch').on('input', function() {
-    const q = $(this).val().toLowerCase();
-    $('.patient-item').each(function() {
-        const name = $(this).data('name').toLowerCase();
-        const number = $(this).data('number').toLowerCase();
-        const show = name.includes(q) || number.includes(q);
-        $(this).toggle(show);
-    });
-});
 
 // Patient selection
 $(document).on('click', '.patient-item', function() {
