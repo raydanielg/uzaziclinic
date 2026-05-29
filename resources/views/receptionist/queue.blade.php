@@ -613,6 +613,74 @@ $(function () {
             });
         });
     };
+
+    // ─── Payment & Discharge ───────────────────────────────
+    window.openPayment = function(visitId, patientName, patientNumber) {
+        $('#paymentVisitId').val(visitId);
+        $('#paymentPatientName').text(patientName);
+        $('#paymentPatientNumber').text(patientNumber);
+        
+        const modal = new bootstrap.Modal(document.getElementById('paymentModal'));
+        modal.show();
+        
+        // Reset form
+        $('#amountReceived').val('');
+        $('#paymentDetails').val('');
+        $('#changeAmount').hide();
+    };
+
+    // Calculate change
+    $('#amountReceived').on('input', function() {
+        const total = 45000; // This should be dynamic
+        const received = parseFloat($(this).val()) || 0;
+        const change = received - total;
+        
+        if (change >= 0) {
+            $('#changeValue').text(change.toLocaleString());
+            $('#changeAmount').show();
+        } else {
+            $('#changeAmount').hide();
+        }
+    });
+
+    $('#processPaymentBtn').on('click', function() {
+        const visitId = $('#paymentVisitId').val();
+        const paymentMethod = $('input[name="paymentMethod"]:checked').val();
+        const paymentDetails = $('#paymentDetails').val();
+        const amountReceived = $('#amountReceived').val();
+        
+        if (!amountReceived) {
+            return Swal.fire('Warning', 'Please enter amount received', 'warning');
+        }
+        
+        const $btn = $(this).prop('disabled', true);
+        $btn.html('<i class="fa-solid fa-spinner fa-spin me-2"></i>Processing...');
+        
+        $.post('{{ route("receptionist.visits.payment") }}', {
+            _token: CSRF,
+            visit_id: visitId,
+            payment_method: paymentMethod,
+            payment_details: paymentDetails,
+            amount_received: amountReceived
+        }).done(function(r) {
+            if (r.success) {
+                Swal.fire({
+                    icon:'success',
+                    title:'Payment Processed Successfully!',
+                    text:'Patient has been discharged',
+                    timer:2000,
+                    showConfirmButton:false
+                }).then(() => location.reload());
+            } else {
+                Swal.fire('Error', r.message, 'error');
+            }
+        }).fail(function(xhr) {
+            Swal.fire('Error', xhr.responseJSON?.message ?? 'Failed', 'error');
+        }).always(function() {
+            $btn.prop('disabled', false);
+            $btn.html('<i class="fa-solid fa-check-circle me-2"></i>Process Payment & Discharge');
+        });
+    });
 });
 </script>
 @endpush

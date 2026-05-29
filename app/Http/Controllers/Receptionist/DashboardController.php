@@ -483,6 +483,38 @@ class DashboardController extends Controller
         }
     }
 
+    public function processPayment(Request $request)
+    {
+        try {
+            $request->validate([
+                'visit_id' => 'required|exists:appointments,id',
+                'payment_method' => 'required|in:cash,bank,mobile',
+                'payment_details' => 'nullable|string|max:500',
+                'amount_received' => 'required|numeric|min:0',
+            ]);
+
+            $appointment = Appointment::findOrFail($request->visit_id);
+            
+            // Update appointment status to completed and record payment
+            $appointment->update([
+                'status' => 'completed',
+                'prescription' => 'Payment Method: ' . $request->payment_method . 
+                                "\nAmount Received: TZS " . number_format($request->amount_received) .
+                                "\nDetails: " . ($request->payment_details ?? 'N/A')
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Payment processed successfully! Patient discharged.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to process payment: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function profile()
     {
         return view('receptionist.profile');

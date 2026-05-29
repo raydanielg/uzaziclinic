@@ -195,6 +195,7 @@ Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('
         Route::post('/send-to-doctor',             [App\Http\Controllers\Receptionist\VisitController::class, 'sendToDoctor'])->name('send');
         Route::post('/change-doctor',              [App\Http\Controllers\Receptionist\DashboardController::class, 'changeDoctor'])->name('change-doctor');
         Route::post('/complete',                   [App\Http\Controllers\Receptionist\DashboardController::class, 'markVisitCompleted'])->name('complete');
+        Route::post('/payment',                    [App\Http\Controllers\Receptionist\DashboardController::class, 'processPayment'])->name('payment');
         Route::post('/{appointment}/cancel',       [App\Http\Controllers\Receptionist\VisitController::class, 'cancelVisit'])->name('cancel');
     });
 });
