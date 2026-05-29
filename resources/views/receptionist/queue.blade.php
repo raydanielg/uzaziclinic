@@ -73,7 +73,7 @@
                 </tr></thead>
                 <tbody>
                     @forelse($visits as $v)
-                    <tr data-stage="{{ $v->current_stage }}" data-id="{{ $v->id }}">
+                    <tr data-stage="{{ $v->current_stage }}" data-id="{{ $v->id }}" data-doctor="{{ $v->doctor_id ?? '' }}">
                         <td class="ps-3 fw-bold">{{ $v->queue_number ?? '—' }}</td>
                         <td>
                             <div class="d-flex align-items-center gap-2">
