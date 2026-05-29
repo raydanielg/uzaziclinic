@@ -49,6 +49,13 @@
                         <small class="opacity-75">{{ $doctor->specialization ?? 'General Practitioner' }}</small>
                     </div>
                     <div class="card-body p-3">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-solid fa-users me-2 text-muted small" style="width:16px;"></i>
+                                <span class="small">Queue:</span>
+                            </div>
+                            <span class="badge bg-primary">{{ $doctor->queue_count ?? 0 }}</span>
+                        </div>
                         <div class="d-flex align-items-center mb-2">
                             <i class="fa-solid fa-phone me-2 text-muted small" style="width:16px;"></i>
                             <span class="small">{{ $doctor->user->phone ?? 'N/A' }}</span>
@@ -62,9 +69,9 @@
                             <span class="small text-muted">{{ ucfirst($doctor->status ?? 'Active') }}</span>
                         </div>
                         <div class="d-grid">
-                            <a href="{{ route('receptionist.visits.queue') }}" class="btn btn-sm btn-primary rounded-2">
-                                <i class="fa-solid fa-calendar-plus me-1"></i>Send Patient
-                            </a>
+                            <button class="btn btn-sm btn-primary rounded-2" onclick="openSendPatientModal({{ $doctor->id }}, 'Dr. {{ $doctor->user->name }}')">
+                                <i class="fa-solid fa-user-plus me-1"></i>Send Patient
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -82,12 +89,138 @@
     </div>
 </div>
 
+<!-- Send Patient Modal -->
+<div class="modal fade" id="sendPatientModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 bg-primary text-white">
+                <h6 class="modal-title fw-bold"><i class="fa-solid fa-user-plus me-2"></i>Send Patient to Doctor</h6>
+                <button type="button" class="btn-close btn-close-white btn-sm" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <input type="hidden" id="selectedDoctorId">
+                
+                <div class="alert alert-info border-0 mb-4">
+                    <div class="fw-bold" id="selectedDoctorName">Doctor Name</div>
+                    <div class="small text-muted">Assign a patient to this doctor</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Search Patient</label>
+                    <input type="text" id="patientSearch" class="form-control" placeholder="Search by name or patient number...">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Select Patient</label>
+                    <select id="patientSelect" class="form-select" required>
+                        <option value="">Select a patient</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Reason / Notes</label>
+                    <textarea id="sendNotes" rows="2" class="form-control" placeholder="Enter reason for visit..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button class="btn btn-light rounded-1" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary rounded-1 px-4" id="sendPatientBtn">
+                    <i class="fa-solid fa-paper-plane me-2"></i>Send to Doctor
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
+const CSRF = '{{ csrf_token() }}';
+
+// Doctor search
 document.getElementById('doctorSearch')?.addEventListener('input', function() {
     const q = this.value.toLowerCase();
     document.querySelectorAll('.doctor-card').forEach(card => {
         card.style.display = card.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+});
+
+// Open send patient modal
+window.openSendPatientModal = function(doctorId, doctorName) {
+    $('#selectedDoctorId').val(doctorId);
+    $('#selectedDoctorName').text(doctorName);
+    $('#patientSelect').val('');
+    $('#sendNotes').val('');
+    
+    const modal = new bootstrap.Modal(document.getElementById('sendPatientModal'));
+    modal.show();
+    
+    // Load patients
+    loadPatients();
+};
+
+// Load patients for dropdown
+function loadPatients() {
+    $.get('{{ route("receptionist.patients") }}')
+        .done(function(data) {
+            const select = $('#patientSelect');
+            select.html('<option value="">Select a patient</option>');
+            
+            data.forEach(function(patient) {
+                select.append(`<option value="${patient.id}">${patient.name} (PT-${patient.id})</option>`);
+            });
+        })
+        .fail(function() {
+            Swal.fire('Error', 'Failed to load patients', 'error');
+        });
+}
+
+// Patient search
+$('#patientSearch').on('input', function() {
+    const q = $(this).val().toLowerCase();
+    $('#patientSelect option').each(function() {
+        const text = $(this).text().toLowerCase();
+        $(this).toggle(text.includes(q) || $(this).val() === '');
+    });
+});
+
+// Send patient to doctor
+$('#sendPatientBtn').on('click', function() {
+    const doctorId = $('#selectedDoctorId').val();
+    const patientId = $('#patientSelect').val();
+    const notes = $('#sendNotes').val();
+    
+    if (!patientId) {
+        return Swal.fire('Warning', 'Please select a patient', 'warning');
+    }
+    
+    const $btn = $(this).prop('disabled', true);
+    $btn.html('<i class="fa-solid fa-spinner fa-spin me-2"></i>Sending...');
+    
+    $.post('{{ route("receptionist.visits.send") }}', {
+        _token: CSRF,
+        patient_id: patientId,
+        doctor_id: doctorId,
+        notes: notes
+    }).done(function(r) {
+        if (r.success) {
+            Swal.fire({
+                icon:'success',
+                title:'Patient Sent Successfully!',
+                text:'Patient has been assigned to the doctor',
+                timer:2000,
+                showConfirmButton:false
+            }).then(() => {
+                bootstrap.Modal.getInstance(document.getElementById('sendPatientModal')).hide();
+                location.reload();
+            });
+        } else {
+            Swal.fire('Error', r.message, 'error');
+        }
+    }).fail(function(xhr) {
+        Swal.fire('Error', xhr.responseJSON?.message ?? 'Failed', 'error');
+    }).always(function() {
+        $btn.prop('disabled', false);
+        $btn.html('<i class="fa-solid fa-paper-plane me-2"></i>Send to Doctor');
     });
 });
 </script>
