@@ -358,6 +358,16 @@ class DashboardController extends Controller
                 ->latest()
                 ->get();
             
+            // Get queue count for each doctor
+            $today = today();
+            foreach ($doctors as $doctor) {
+                $doctor->queue_count = \App\Models\Appointment::where('doctor_id', $doctor->id)
+                    ->whereDate('appointment_date', $today)
+                    ->where('status', '!=', 'cancelled')
+                    ->where('status', '!=', 'completed')
+                    ->count();
+            }
+            
             return view('receptionist.doctors', compact('doctors'));
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to load doctors: ' . $e->getMessage());
