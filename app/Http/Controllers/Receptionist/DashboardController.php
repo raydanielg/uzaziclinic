@@ -314,18 +314,26 @@ class DashboardController extends Controller
 
             DB::commit();
 
-            // Send SMS notification
-            $smsService = new NextSMSService();
-            
-            // Check if this is a returning patient (phone exists in patients table)
-            $existingPatient = Patient::where('phone', $request->phone)->where('id', '!=', $patient->id)->first();
-            
-            if ($existingPatient) {
-                // Returning patient - send service info
-                $smsService->sendServiceInfo($request->phone, 'huduma ya afya');
-            } else {
-                // New patient - send welcome message
-                $smsService->sendWelcomeMessage($request->phone, $request->name);
+            // Send SMS notification (non-blocking)
+            try {
+                $smsService = new NextSMSService();
+                
+                // Check if this is a returning patient (phone exists in patients table)
+                $existingPatient = Patient::where('phone', $request->phone)->where('id', '!=', $patient->id)->first();
+                
+                if ($existingPatient) {
+                    // Returning patient - send service info
+                    $smsService->sendServiceInfo($request->phone, 'huduma ya afya');
+                } else {
+                    // New patient - send welcome message
+                    $smsService->sendWelcomeMessage($request->phone, $request->name);
+                }
+            } catch (\Exception $e) {
+                // Log SMS error but don't fail the registration
+                \Log::error('SMS sending failed during patient registration', [
+                    'error' => $e->getMessage(),
+                    'patient_id' => $patient->id,
+                ]);
             }
 
             return response()->json([
