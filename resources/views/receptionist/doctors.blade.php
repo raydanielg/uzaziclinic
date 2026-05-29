@@ -45,25 +45,25 @@
                             style="width:70px;height:70px;font-size:1.8rem;">
                             <i class="fa-solid fa-user-doctor"></i>
                         </div>
-                        <h6 class="fw-bold mb-0">Dr. {{ $doctor->name }}</h6>
+                        <h6 class="fw-bold mb-0">Dr. {{ $doctor->user->name }}</h6>
                         <small class="opacity-75">{{ $doctor->specialization ?? 'General Practitioner' }}</small>
                     </div>
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
                             <i class="fa-solid fa-phone me-2 text-muted small" style="width:16px;"></i>
-                            <span class="small">{{ $doctor->phone ?? 'N/A' }}</span>
+                            <span class="small">{{ $doctor->user->phone ?? 'N/A' }}</span>
                         </div>
                         <div class="d-flex align-items-center mb-2">
                             <i class="fa-solid fa-envelope me-2 text-muted small" style="width:16px;"></i>
-                            <span class="small text-truncate">{{ $doctor->email }}</span>
+                            <span class="small text-truncate">{{ $doctor->user->email }}</span>
                         </div>
                         <div class="d-flex align-items-center mb-3">
                             <i class="fa-solid fa-circle me-2 text-{{ ($doctor->status ?? 'active') === 'active' ? 'success' : 'secondary' }} small" style="width:16px;font-size:0.5rem;"></i>
                             <span class="small text-muted">{{ ucfirst($doctor->status ?? 'Active') }}</span>
                         </div>
                         <div class="d-grid">
-                            <a href="{{ route('receptionist.appointments') }}" class="btn btn-sm btn-primary rounded-2">
-                                <i class="fa-solid fa-calendar-plus me-1"></i>Book Appointment
+                            <a href="{{ route('receptionist.visits.queue') }}" class="btn btn-sm btn-primary rounded-2">
+                                <i class="fa-solid fa-calendar-plus me-1"></i>Send Patient
                             </a>
                         </div>
                     </div>
