@@ -244,12 +244,18 @@ function viewPatient(id) {
     content.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div></div>';
     modal.show();
     
-    const url = `{{ route('receptionist.patients.view', ':id') }}`.replace(':id', id);
+    const url = `{{ route('receptionist.patients.view', ['id' => ':id']) }}`.replace(':id', id);
     console.log('Fetching from:', url);
     
     fetch(url)
         .then(response => {
             console.log('Response status:', response.status);
+            console.log('Response type:', response.headers.get('content-type'));
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             return response.json();
         })
         .then(data => {
@@ -396,7 +402,7 @@ function editPatient(id) {
     content.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-warning" role="status"></div></div>';
     modal.show();
     
-    const url = `{{ route('receptionist.patients.edit', ':id') }}`.replace(':id', id);
+    const url = `{{ route('receptionist.patients.edit', ['id' => ':id']) }}`.replace(':id', id);
     console.log('Fetching from:', url);
     
     fetch(url)
