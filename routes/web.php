@@ -209,6 +209,7 @@ Route::middleware(['auth', 'role:customer'])->prefix('patient')->name('patient.'
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
     Route::resource('services', App\Http\Controllers\Admin\ServiceController::class);
+    Route::resource('hr', App\Http\Controllers\Admin\HRController::class);
     Route::get('/analytics', [App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('analytics');
     
     // Calendar & Appointments
