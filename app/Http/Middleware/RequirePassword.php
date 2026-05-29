@@ -21,6 +21,15 @@ class RequirePassword
         if (!Session::has('password_confirmed_at') || 
             now()->diffInMinutes(Session::get('password_confirmed_at')) > 180) {
             
+            // If this is an AJAX request, return JSON response
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'require_password' => true,
+                    'message' => 'Please confirm your password to continue'
+                ], 403);
+            }
+            
             // Store the intended URL
             Session::put('url.intended', $request->fullUrl());
             
