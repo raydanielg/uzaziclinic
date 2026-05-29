@@ -209,6 +209,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
     Route::resource('services', App\Http\Controllers\Admin\ServiceController::class);
     Route::get('/analytics', [App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('analytics');
+    
+    // Calendar & Appointments
+    Route::prefix('calendar')->name('calendar.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\CalendarController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Admin\CalendarController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\Admin\CalendarController::class, 'store'])->name('store');
+        Route::delete('/{appointment}', [App\Http\Controllers\Admin\CalendarController::class, 'destroy'])->name('destroy');
+        Route::get('/user/{userId}', [App\Http\Controllers\Admin\CalendarController::class, 'userSchedule'])->name('user');
+    });
 
     // User Management
     Route::prefix('users')->name('users.')->group(function () {
