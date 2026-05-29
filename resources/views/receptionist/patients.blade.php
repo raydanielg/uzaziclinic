@@ -429,6 +429,43 @@ document.getElementById('editFromViewBtn').addEventListener('click', function() 
     }
 });
 
+// Resend SMS functionality
+function resendSMS(patientId, patientName) {
+    if (!confirm(`Unahitaji kutuma SMS tena kwa ${patientName}?`)) {
+        return;
+    }
+
+    const btn = event.target.closest('button');
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+    btn.disabled = true;
+
+    fetch(`{{ route('receptionist.patients.resend-sms', ['patientId' => '']) }}${patientId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('SMS imetumwa kwa mafanikio!');
+        } else {
+            alert('SMS imeshindwa kutumwa: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Kuna tatizo limetokea wakati wa kutuma SMS.');
+    })
+    .finally(() => {
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
+    });
+}
+
 // Send to doctor functionality
 function sendToDoctor(patientId) {
     console.log('Send to doctor called with patient ID:', patientId);
