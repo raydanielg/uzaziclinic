@@ -47,6 +47,13 @@ Route::view('/blog', 'pages.blog.index')->name('blog.index');
 
 Route::view('/about-us', 'pages.core.about')->name('about');
 Route::view('/services', 'pages.core.services')->name('services');
+Route::prefix('services')->name('services.')->group(function () {
+    Route::view('/family-planning-counseling', 'pages.core.services.family-planning-counseling')->name('family-planning-counseling');
+    Route::view('/maternal-health', 'pages.core.services.maternal-health')->name('maternal-health');
+    Route::view('/pregnancy-care', 'pages.core.services.pregnancy-care')->name('pregnancy-care');
+    Route::view('/health-education', 'pages.core.services.health-education')->name('health-education');
+    Route::view('/confidential-counseling', 'pages.core.services.confidential-counseling')->name('confidential-counseling');
+});
 Route::view('/appointments', 'pages.core.appointments')->name('appointments');
 Route::view('/contact-us', 'pages.core.contact')->name('contact');
 

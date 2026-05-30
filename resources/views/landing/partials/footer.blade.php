@@ -6,14 +6,14 @@
             <div class="col-lg-4 animate__animated animate__fadeInLeft">
                 <div class="footer-badge mb-3">
                     <span class="badge rounded-pill px-3 py-2 fw-bold footer-badge-pill">
-                        <i class="fas fa-shield-alt me-2"></i>TRUSTED HEALTHCARE PLATFORM
+                        <i class="fas fa-shield-alt me-2"></i>TRUSTED REPRODUCTIVE HEALTH CLINIC
                     </span>
                 </div>
                 <div class="d-flex align-items-center mb-3 footer-logo-box">
                     <h3 class="mb-0 text-white fw-bold tracking-tight">{{ config('app.name', 'UzaziClinic') }}</h3>
                 </div>
                 <p class="mb-4 footer-desc">
-                    Smart, secure, and patient-focused care. Built for modern clinics with fast service delivery and reliable medical support.
+                    Specialized reproductive health and family planning clinic delivering confidential, compassionate, and quality care. Empowering informed choices for individuals and families.
                 </p>
                 <div class="social-links-modern d-flex gap-2 mb-5">
                     <a href="#" class="social-circle-btn"><i class="fab fa-facebook-f"></i></a>
