@@ -57,11 +57,11 @@
                                 <h5 class="fw-bold mb-2">What we offer</h5>
                                 <p class="text-muted mb-3">Our specialized reproductive health and family planning services are designed to support you at every stage of your reproductive journey with dignity and respect.</p>
                                 <ul class="text-muted mb-0">
-                                    <li>Family planning counseling and contraceptive methods</li>
-                                    <li>Maternal and reproductive health consultations</li>
-                                    <li>Pregnancy testing and prenatal care support</li>
-                                    <li>Reproductive health education and counseling</li>
-                                    <li>Confidential counseling and follow-up support</li>
+                                    <li><a href="{{ url('/services/family-planning-counseling') }}" class="text-decoration-none">Family planning counseling and contraceptive methods</a></li>
+                                    <li><a href="{{ url('/services/maternal-health') }}" class="text-decoration-none">Maternal and reproductive health consultations</a></li>
+                                    <li><a href="{{ url('/services/pregnancy-care') }}" class="text-decoration-none">Pregnancy testing and prenatal care support</a></li>
+                                    <li><a href="{{ url('/services/health-education') }}" class="text-decoration-none">Reproductive health education and counseling</a></li>
+                                    <li><a href="{{ url('/services/confidential-counseling') }}" class="text-decoration-none">Confidential counseling and follow-up support</a></li>
                                 </ul>
 
                                 <div class="mt-4 d-flex flex-column flex-sm-row gap-2">
