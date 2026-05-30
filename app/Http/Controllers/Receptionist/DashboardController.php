@@ -42,69 +42,109 @@ class DashboardController extends Controller
 
     public function appointments()
     {
-        $appointments = Appointment::with(['patient.user', 'doctor'])->latest()->paginate(15);
-        $patients = Patient::orderBy('name')->get();
-        $doctors  = Doctor::with('user')->where('status', 'active')->get();
-        return view('receptionist.appointments', compact('appointments', 'patients', 'doctors'));
+        try {
+            $appointments = Appointment::with(['patient', 'doctor'])
+                ->whereDate('appointment_date', '>=', today()->subDays(30))
+                ->latest()
+                ->paginate(15);
+            $patients = Patient::where('status', 'active')->orderBy('name')->get();
+            $doctors  = Doctor::with('user')->where('status', 'active')->get();
+            return view('receptionist.appointments', compact('appointments', 'patients', 'doctors'));
+        } catch (\Exception $e) {
+            \Log::error('Receptionist appointments error', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Failed to load appointments');
+        }
     }
 
     public function storeAppointment(Request $request)
     {
-        $request->validate([
-            'patient_id'       => 'required|exists:patients,id',
-            'doctor_id'        => 'required|exists:doctors,id',
-            'appointment_date' => 'required|date',
-            'appointment_time' => 'required',
-            'type'             => 'nullable|string',
-            'notes'            => 'nullable|string',
-        ]);
-
-        $datetime = $request->appointment_date . ' ' . $request->appointment_time;
-
-        $appointment = Appointment::create([
-            'patient_id'       => $request->patient_id,
-            'doctor_id'        => $request->doctor_id,
-            'appointment_date' => $datetime,
-            'type'             => $request->type ?? 'General Consultation',
-            'notes'            => $request->notes,
-            'status'           => 'pending',
-        ]);
-
-        // Send SMS confirmation (non-blocking)
         try {
-            $smsService = new NextSMSService();
-            $patient = Patient::with('user')->find($request->patient_id);
-            $doctor = Doctor::with('user')->find($request->doctor_id);
-
-            if ($patient && $doctor) {
-                $patientName = $patient->name;
-                $patientId = $patient->id;
-                $doctorName = $doctor->display_name;
-                $appointmentDate = date('d M Y', strtotime($request->appointment_date));
-                $appointmentTime = date('H:i', strtotime($request->appointment_time));
-
-                $smsService->sendAppointmentConfirmation(
-                    $patient->phone,
-                    $patientName,
-                    $patientId,
-                    $doctorName,
-                    $appointmentDate,
-                    $appointmentTime
-                );
-            }
-        } catch (\Exception $e) {
-            // Log SMS error but don't fail the appointment booking
-            \Log::error('SMS sending failed during appointment booking', [
-                'error' => $e->getMessage(),
-                'appointment_id' => $appointment->id,
+            $request->validate([
+                'patient_id'       => 'required|exists:patients,id',
+                'doctor_id'        => 'required|exists:doctors,id',
+                'appointment_date' => 'required|date|after_or_equal:today',
+                'appointment_time' => 'required',
+                'type'             => 'nullable|string|max:255',
+                'notes'            => 'nullable|string|max:1000',
+            ], [
+                'appointment_date.after_or_equal' => 'Appointment date must be today or in the future',
             ]);
-        }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Miadi imewekwa!',
-            'data'    => $appointment->load(['patient', 'doctor']),
-        ]);
+            $datetime = $request->appointment_date . ' ' . $request->appointment_time;
+
+            // Check if doctor is available at that time
+            $existingAppointment = Appointment::where('doctor_id', $request->doctor_id)
+                ->where('appointment_date', $datetime)
+                ->where('status', '!=', 'cancelled')
+                ->first();
+
+            if ($existingAppointment) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Doctor already has an appointment at this time'
+                ], 409);
+            }
+
+            $appointment = Appointment::create([
+                'patient_id'       => $request->patient_id,
+                'doctor_id'        => $request->doctor_id,
+                'appointment_date' => $datetime,
+                'type'             => $request->type ?? 'General Consultation',
+                'notes'            => $request->notes,
+                'status'           => 'pending',
+            ]);
+
+            // Send SMS confirmation (non-blocking)
+            try {
+                $smsService = new NextSMSService();
+                $patient = Patient::find($request->patient_id);
+                $doctor = Doctor::find($request->doctor_id);
+
+                if ($patient && $doctor && $patient->phone) {
+                    $patientName = $patient->name;
+                    $patientId = $patient->id;
+                    $doctorName = $doctor->display_name;
+                    $appointmentDate = date('d M Y', strtotime($request->appointment_date));
+                    $appointmentTime = date('H:i', strtotime($request->appointment_time));
+
+                    $smsService->sendAppointmentConfirmation(
+                        $patient->phone,
+                        $patientName,
+                        $patientId,
+                        $doctorName,
+                        $appointmentDate,
+                        $appointmentTime
+                    );
+                }
+            } catch (\Exception $e) {
+                // Log SMS error but don't fail the appointment booking
+                \Log::error('SMS sending failed during appointment booking', [
+                    'error' => $e->getMessage(),
+                    'appointment_id' => $appointment->id,
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Miadi imewekwa kwa mafanikio!',
+                'data'    => $appointment->load(['patient', 'doctor']),
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            \Log::error('Appointment creation error', [
+                'error' => $e->getMessage(),
+                'request' => $request->all()
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create appointment: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function updateAppointmentStatus(Request $request, Appointment $appointment)
