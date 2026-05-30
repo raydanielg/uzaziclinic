@@ -98,9 +98,9 @@ class AppointmentBookingController extends Controller
                 $patient->phone,
                 $patient->name,
                 $patient->id,
-                $appointment->id,
-                $appointmentDateTime->format('d M Y H:i'),
-                $doctor->display_name ?? 'Doctor'
+                $doctor->display_name ?? 'Doctor',
+                $appointmentDateTime->format('d M Y'),
+                $appointmentDateTime->format('H:i')
             );
 
             DB::commit();
