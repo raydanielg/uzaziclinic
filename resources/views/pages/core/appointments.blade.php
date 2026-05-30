@@ -25,7 +25,7 @@
                                 <hr class="my-4" style="opacity: 0.08;">
 
                                 <h6 class="fw-bold mb-2">Need urgent help?</h6>
-                                <p class="text-muted mb-0">Call: <span class="fw-semibold">+255 700 000 000</span></p>
+                                <p class="text-muted mb-0">Call: <span class="fw-semibold">+255 678 233 736</span></p>
                                 <p class="text-muted mb-0">Email: <span class="fw-semibold">info@uzaziclinic.com</span></p>
                             </div>
                         </div>
