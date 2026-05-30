@@ -35,6 +35,7 @@
             border-color: var(--dark-green);
         }
         .text-success { color: var(--primary-green) !important; }
+        .text-green-600 { color: #16a34a !important; }
         .shadow-2xl {
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
