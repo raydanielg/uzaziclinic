@@ -57,6 +57,9 @@ Route::prefix('services')->name('services.')->group(function () {
 Route::view('/appointments', 'pages.core.appointments')->name('appointments');
 Route::view('/contact-us', 'pages.core.contact')->name('contact');
 
+// Front-end appointment booking
+Route::post('/api/appointment/book', [App\Http\Controllers\AppointmentBookingController::class, 'bookAppointment'])->name('appointment.book');
+
 Route::prefix('shop')->name('shop.')->group(function () {
     Route::get('/', function() { return view('pages.shop.index'); })->name('index');
     Route::get('/cart', function() { return view('pages.shop.cart'); })->name('cart');
