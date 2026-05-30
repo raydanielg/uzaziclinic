@@ -70,12 +70,74 @@ class DashboardController extends Controller
         if ($appointment->doctor_id !== $doctorId) {
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
+        
+        $oldStatus = $appointment->status;
         $appointment->update([
             'status'    => $request->status,
             'diagnosis' => $request->diagnosis ?? $appointment->diagnosis,
             'notes'     => $request->notes ?? $appointment->notes,
         ]);
+
+        // If appointment is being completed, create payment request
+        if ($request->status === 'completed' && $oldStatus !== 'completed') {
+            try {
+                $patient = $appointment->patient;
+                $serviceName = $appointment->type ?? 'General Consultation';
+                
+                // Get service price from env or use default
+                $amount = $this->getServicePrice($serviceName);
+                
+                // Create payment record
+                $payment = \App\Models\Payment::create([
+                    'appointment_id' => $appointment->id,
+                    'patient_id' => $patient->id,
+                    'amount' => $amount,
+                    'service_name' => $serviceName,
+                    'status' => 'pending',
+                    'sms_sent' => false,
+                ]);
+
+                // Send payment request SMS
+                if ($patient->phone) {
+                    $smsService = new \App\Services\NextSMSService();
+                    $result = $smsService->sendPaymentRequest(
+                        $patient->phone,
+                        $patient->name,
+                        $patient->id,
+                        $amount,
+                        $serviceName
+                    );
+
+                    if ($result['success']) {
+                        $payment->update(['sms_sent' => true]);
+                    }
+                }
+            } catch (\Exception $e) {
+                \Log::error('Payment request creation failed', [
+                    'error' => $e->getMessage(),
+                    'appointment_id' => $appointment->id,
+                ]);
+            }
+        }
+
         return response()->json(['success' => true, 'message' => 'Hali imebadilishwa: ' . ucfirst($request->status)]);
+    }
+
+    private function getServicePrice($serviceName)
+    {
+        $serviceName = strtolower($serviceName);
+        
+        if (str_contains($serviceName, 'general') || str_contains($serviceName, 'consultation')) {
+            return env('PAYMENT_GENERAL_CONSULTATION_PRICE', 50000);
+        } elseif (str_contains($serviceName, 'specialist')) {
+            return env('PAYMENT_SPECIALIST_CONSULTATION_PRICE', 80000);
+        } elseif (str_contains($serviceName, 'lab') || str_contains($serviceName, 'test')) {
+            return env('PAYMENT_LAB_TEST_PRICE', 30000);
+        } elseif (str_contains($serviceName, 'ultrasound') || str_contains($serviceName, 'scan')) {
+            return env('PAYMENT_ULTRASOUND_PRICE', 60000);
+        }
+        
+        return 50000; // Default price
     }
 
     public function patients()
