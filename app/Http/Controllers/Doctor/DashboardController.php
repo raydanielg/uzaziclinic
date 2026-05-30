@@ -26,25 +26,32 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $doctorId = $this->getDoctorId();
+        try {
+            $doctorId = $this->getDoctorId();
 
-        $stats = [
-            'today_appointments' => Appointment::forDoctor($doctorId)->today()->count(),
-            'total_patients'     => Appointment::forDoctor($doctorId)->distinct('patient_id')->count('patient_id'),
-            'pending_reviews'    => Appointment::forDoctor($doctorId)->pending()->count(),
-            'performance'        => $doctorId
-                ? round(Appointment::forDoctor($doctorId)->where('status','completed')->count() /
-                    max(1, Appointment::forDoctor($doctorId)->count()) * 100)
-                : 0,
-        ];
+            $stats = [
+                'today_appointments' => Appointment::forDoctor($doctorId)->today()->count(),
+                'total_patients'     => Appointment::forDoctor($doctorId)->distinct('patient_id')->count('patient_id'),
+                'pending_reviews'    => Appointment::forDoctor($doctorId)->pending()->count(),
+                'completed_today'    => Appointment::forDoctor($doctorId)->where('status','completed')->whereDate('appointment_date', today())->count(),
+                'performance'        => $doctorId
+                    ? round(Appointment::forDoctor($doctorId)->where('status','completed')->count() /
+                        max(1, Appointment::forDoctor($doctorId)->count()) * 100)
+                    : 0,
+            ];
 
-        $recent_appointments = Appointment::with(['patient.user', 'doctor'])
-            ->forDoctor($doctorId)
-            ->latest()
-            ->limit(6)
-            ->get();
+            $recent_appointments = Appointment::with(['patient', 'doctor'])
+                ->forDoctor($doctorId)
+                ->whereDate('appointment_date', '>=', today()->subDays(7))
+                ->latest()
+                ->limit(6)
+                ->get();
 
-        return view('doctor.dashboard', compact('stats', 'recent_appointments'));
+            return view('doctor.dashboard', compact('stats', 'recent_appointments'));
+        } catch (\Exception $e) {
+            \Log::error('Doctor dashboard error', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Failed to load dashboard data');
+        }
     }
 
     public function appointments()
