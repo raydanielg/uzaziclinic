@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Patient;
+use App\Models\Role;
 use App\Models\User;
 use App\Services\NextSMSService;
 use Carbon\Carbon;
