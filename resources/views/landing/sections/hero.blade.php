@@ -17,12 +17,12 @@
 
                 <!-- Headline (1 line) -->
                 <h1 class="display-1 fw-bold mb-4 text-dark tracking-tight main-headline" style="font-family: 'Georgia', serif;">
-                    Professional <span class="text-green-600">Healthcare</span> For Your Family
+                    Your <span class="text-green-600">Reproductive Health</span>, Our Priority
                 </h1>
 
                 <!-- Sub-headline (1-2 lines) -->
                 <p class="lead mb-5 text-dark fw-bold mx-auto shadow-text sub-headline" style="max-width: 800px; font-size: 1.6rem; line-height: 1.4;">
-                    Experience world-class medical services with our team of expert doctors and state-of-the-art facilities dedicated to your wellbeing.
+                    Specialized reproductive health and family planning services — confidential, compassionate, and designed to empower your informed choices.
                 </p>
 
                 <!-- Buttons -->
