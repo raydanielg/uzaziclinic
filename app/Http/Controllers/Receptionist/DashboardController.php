@@ -17,18 +17,27 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $stats = [
-            'today_appointments' => Appointment::whereDate('appointment_date', today())->count(),
-            'pending_registrations' => User::whereHas('role', function($q) { $q->where('name', 'customer'); })
-                ->whereDate('created_at', today())->count(),
-            'active_doctors' => User::whereHas('role', function($q) { $q->where('name', 'doctor'); })
-                ->where('status', 'active')->count(),
-            'total_patients' => User::whereHas('role', function($q) { $q->where('name', 'customer'); })->count(),
-        ];
+        try {
+            $stats = [
+                'today_appointments' => Appointment::whereDate('appointment_date', today())->count(),
+                'pending_appointments' => Appointment::where('status', 'pending')->count(),
+                'completed_appointments' => Appointment::where('status', 'completed')->whereDate('appointment_date', today())->count(),
+                'active_doctors' => Doctor::where('status', 'active')->count(),
+                'total_patients' => Patient::count(),
+                'pending_payments' => \App\Models\Payment::where('status', 'pending')->count(),
+            ];
 
-        $recent_appointments = Appointment::with(['patient.user', 'doctor'])->latest()->limit(10)->get();
+            $recent_appointments = Appointment::with(['patient', 'doctor'])
+                ->whereDate('appointment_date', '>=', today()->subDays(7))
+                ->latest()
+                ->limit(10)
+                ->get();
 
-        return view('receptionist.dashboard', compact('stats', 'recent_appointments'));
+            return view('receptionist.dashboard', compact('stats', 'recent_appointments'));
+        } catch (\Exception $e) {
+            \Log::error('Receptionist dashboard error', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Failed to load dashboard data');
+        }
     }
 
     public function appointments()
