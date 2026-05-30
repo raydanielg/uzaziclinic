@@ -66,16 +66,18 @@ class DashboardController extends Controller
             $smsService = new NextSMSService();
             $patient = Patient::with('user')->find($request->patient_id);
             $doctor = Doctor::with('user')->find($request->doctor_id);
-            
+
             if ($patient && $doctor) {
                 $patientName = $patient->name;
+                $patientId = $patient->id;
                 $doctorName = $doctor->display_name;
                 $appointmentDate = date('d M Y', strtotime($request->appointment_date));
                 $appointmentTime = date('H:i', strtotime($request->appointment_time));
-                
+
                 $smsService->sendAppointmentConfirmation(
                     $patient->phone,
                     $patientName,
+                    $patientId,
                     $doctorName,
                     $appointmentDate,
                     $appointmentTime
@@ -293,16 +295,16 @@ class DashboardController extends Controller
 
         try {
             $smsService = new NextSMSService();
-            
+
             // Check if this is a returning patient (phone exists in patients table)
             $existingPatient = Patient::where('phone', $patient->phone)->where('id', '!=', $patient->id)->first();
-            
+
             if ($existingPatient) {
                 // Returning patient - send service info
-                $result = $smsService->sendServiceInfo($patient->phone, 'huduma ya afya');
+                $result = $smsService->sendServiceInfo($patient->phone, 'huduma ya afya', $patient->id);
             } else {
                 // New patient - send welcome message
-                $result = $smsService->sendWelcomeMessage($patient->phone, $patient->name);
+                $result = $smsService->sendWelcomeMessage($patient->phone, $patient->name, $patient->id);
             }
 
             if ($result['success']) {
