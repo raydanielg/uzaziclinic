@@ -6,38 +6,39 @@
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="mb-4 animate__animated animate__fadeInUp">
-                    <h1 class="fw-bold mb-2">Services</h1>
-                    <p class="text-muted mb-0">Comprehensive healthcare services designed for quality, safety, and convenience.</p>
+                    <h1 class="fw-bold mb-2">Our Services</h1>
+                    <p class="text-muted mb-0">Specialized reproductive health and family planning services — confidential, comprehensive, and designed for you.</p>
                 </div>
 
                 @php
                     $services = [
-                        ['icon' => 'fa-stethoscope', 'title' => 'General Consultation', 'desc' => 'Clinical assessment, diagnosis, and treatment plan with professional guidance.'],
-                        ['icon' => 'fa-user-doctor', 'title' => 'Specialist Care', 'desc' => 'Access specialist services with proper referrals and coordinated care.'],
-                        ['icon' => 'fa-flask', 'title' => 'Laboratory Testing', 'desc' => 'Reliable lab tests with clear results and clinical interpretation support.'],
-                        ['icon' => 'fa-heart-pulse', 'title' => 'Emergency Support', 'desc' => 'Fast response for urgent cases and referrals to emergency care when needed.'],
-                        ['icon' => 'fa-person-pregnant', 'title' => 'Maternal Health', 'desc' => 'Prenatal and postnatal support with safe monitoring and follow-up.'],
-                        ['icon' => 'fa-syringe', 'title' => 'Vaccination', 'desc' => 'Preventive vaccines guidance and administration based on recommendations.'],
-                        ['icon' => 'fa-pills', 'title' => 'Pharmacy & Prescriptions', 'desc' => 'Medication support, prescription guidance, and safe usage instructions.'],
-                        ['icon' => 'fa-notes-medical', 'title' => 'Medical Records', 'desc' => 'Organized documentation to support continuity of care and follow-up visits.'],
-                        ['icon' => 'fa-hand-holding-medical', 'title' => 'Health Counseling', 'desc' => 'Education and counseling to help patients manage health conditions better.'],
+                        ['icon' => 'fa-hand-holding-heart', 'slug' => 'family-planning-counseling', 'title' => 'Family Planning Counseling', 'desc' => 'Expert guidance on contraceptive methods, fertility awareness, and family planning options tailored to your reproductive goals.'],
+                        ['icon' => 'fa-person-pregnant', 'slug' => 'maternal-health', 'title' => 'Maternal & Reproductive Health', 'desc' => 'Comprehensive consultations for reproductive health concerns, preconception care, and maternal well-being.'],
+                        ['icon' => 'fa-baby', 'slug' => 'pregnancy-care', 'title' => 'Pregnancy Testing & Prenatal Care', 'desc' => 'Reliable pregnancy testing services and thorough prenatal care support for a healthy pregnancy journey.'],
+                        ['icon' => 'fa-book-open', 'slug' => 'health-education', 'title' => 'Reproductive Health Education', 'desc' => 'Empowering individuals and couples with knowledge about reproductive health, fertility, and informed family planning decisions.'],
+                        ['icon' => 'fa-comments', 'slug' => 'confidential-counseling', 'title' => 'Confidential Counseling & Support', 'desc' => 'Private, non-judgmental counseling sessions addressing reproductive health concerns with complete confidentiality.'],
                     ];
                 @endphp
 
                 <div class="row g-4">
                     @foreach($services as $i => $service)
-                        <div class="col-md-6 animate__animated animate__fadeInUp" style="animation-delay: {{ 0.05 * ($i + 1) }}s;">
-                            <div class="card border-0 shadow-sm rounded-4 h-100 service-card">
-                                <div class="card-body p-4 p-md-5">
-                                    <div class="d-flex align-items-center gap-3 mb-3">
-                                        <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 46px; height: 46px; background: rgba(22,163,74,0.10);">
-                                            <i class="fas {{ $service['icon'] }}" style="color:#16a34a;"></i>
+                        <div class="col-md-6 animate__animated animate__fadeInUp" style="animation-delay: {{ 0.1 * ($i + 1) }}s;">
+                            <a href="{{ url('/services/' . $service['slug']) }}" class="text-decoration-none">
+                                <div class="card border-0 shadow-sm rounded-4 h-100 service-card">
+                                    <div class="card-body p-4 p-md-5">
+                                        <div class="d-flex align-items-center gap-3 mb-3">
+                                            <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 46px; height: 46px; background: rgba(22,163,74,0.10);">
+                                                <i class="fas {{ $service['icon'] }}" style="color:#16a34a;"></i>
+                                            </div>
+                                            <h5 class="fw-bold mb-0 text-dark">{{ $service['title'] }}</h5>
                                         </div>
-                                        <h5 class="fw-bold mb-0">{{ $service['title'] }}</h5>
+                                        <p class="text-muted mb-0">{{ $service['desc'] }}</p>
+                                        <span class="service-link fw-bold text-uppercase small mt-3 d-inline-flex align-items-center">
+                                            Learn more <i class="fas fa-arrow-right ms-2"></i>
+                                        </span>
                                     </div>
-                                    <p class="text-muted mb-0">{{ $service['desc'] }}</p>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     @endforeach
                 </div>
@@ -68,6 +69,11 @@
     .service-card:hover {
         transform: translateY(-6px);
         box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+    }
+    .service-link {
+        color: #16a34a;
+        letter-spacing: 0.5px;
+        font-size: 0.8rem;
     }
 </style>
 @endsection
