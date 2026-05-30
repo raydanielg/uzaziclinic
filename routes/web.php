@@ -43,7 +43,8 @@ Route::prefix('resources')->name('resources.')->group(function () {
     Route::view('/staff-portal', 'pages.resources.staff-portal')->name('staff-portal');
 });
 
-Route::view('/blog', 'pages.blog.index')->name('blog.index');
+Route::get('/blog', [App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
 
 Route::view('/about-us', 'pages.core.about')->name('about');
 Route::view('/services', 'pages.core.services')->name('services');
@@ -368,6 +369,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/gateways', [App\Http\Controllers\Admin\SettingController::class, 'gateways'])->name('gateways');
         Route::get('/backup', [App\Http\Controllers\Admin\SettingController::class, 'backup'])->name('backup');
         Route::post('/update', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('update');
+    });
+
+    // Blog Management
+    Route::prefix('blog')->name('blog.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\BlogController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Admin\BlogController::class, 'create'])->name('create');
+        Route::post('/store', [App\Http\Controllers\Admin\BlogController::class, 'store'])->name('store');
+        Route::get('/{blog}/edit', [App\Http\Controllers\Admin\BlogController::class, 'edit'])->name('edit');
+        Route::put('/{blog}', [App\Http\Controllers\Admin\BlogController::class, 'update'])->name('update');
+        Route::delete('/{blog}', [App\Http\Controllers\Admin\BlogController::class, 'destroy'])->name('destroy');
     });
 
     // Notifications
