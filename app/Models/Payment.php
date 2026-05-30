@@ -10,22 +10,30 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'invoice_id',
-        'user_id',
+        'appointment_id',
+        'patient_id',
         'amount',
+        'service_name',
         'method',
         'status',
         'paid_at',
         'reference',
+        'sms_sent',
     ];
 
     protected $casts = [
         'paid_at' => 'datetime',
+        'sms_sent' => 'boolean',
     ];
 
-    public function invoice()
+    public function appointment()
     {
-        return $this->belongsTo(Invoice::class);
+        return $this->belongsTo(Appointment::class);
+    }
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
     }
 
     public function user()
