@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             DoctorSeeder::class,
             ServiceSeeder::class,
+            BlogSeeder::class,
         ]);
     }
 }
