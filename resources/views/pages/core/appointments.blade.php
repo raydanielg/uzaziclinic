@@ -34,54 +34,66 @@
                     <div class="col-md-7 animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
                         <div class="card border-0 shadow-sm rounded-4">
                             <div class="card-body p-4 p-md-5">
-                                <h5 class="fw-bold mb-2">Appointment Request</h5>
-                                <p class="text-muted mb-4">This is a sample request form (UI). You can connect it to your appointment system next.</p>
+                                <h5 class="fw-bold mb-2">Book Your Appointment</h5>
+                                <p class="text-muted mb-4">Fill in your details and we'll confirm your appointment via SMS.</p>
 
-                                <form>
+                                <form id="appointmentPageForm">
+                                    @csrf
                                     <div class="row g-3">
                                         <div class="col-md-6">
-                                            <label class="form-label fw-semibold">Full Name</label>
-                                            <input type="text" class="form-control" placeholder="Your name">
+                                            <label class="form-label fw-semibold">Full Name *</label>
+                                            <input type="text" name="name" class="form-control" placeholder="Your full name" required>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label fw-semibold">Phone Number</label>
-                                            <input type="text" class="form-control" placeholder="+255...">
+                                            <label class="form-label fw-semibold">Phone Number *</label>
+                                            <input type="tel" name="phone" class="form-control" placeholder="e.g. 0678233736" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label fw-semibold">Email Address</label>
-                                            <input type="email" class="form-control" placeholder="you@example.com">
+                                            <input type="email" name="email" class="form-control" placeholder="you@example.com">
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label fw-semibold">Department</label>
-                                            <select class="form-select">
-                                                <option selected>Select department</option>
-                                                <option>General Consultation</option>
-                                                <option>Maternal Health</option>
-                                                <option>Laboratory</option>
-                                                <option>Vaccination</option>
-                                                <option>Pharmacy</option>
+                                            <label class="form-label fw-semibold">Date of Birth</label>
+                                            <input type="date" name="date_of_birth" class="form-control">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Service Type *</label>
+                                            <select name="service_type" class="form-select" required>
+                                                <option value="">Select service</option>
+                                                <option value="family-planning">Family Planning Counseling</option>
+                                                <option value="maternal-health">Maternal Health Consultation</option>
+                                                <option value="pregnancy-care">Pregnancy Care</option>
+                                                <option value="health-education">Health Education</option>
+                                                <option value="confidential-counseling">Confidential Counseling</option>
+                                                <option value="general">General Consultation</option>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label fw-semibold">Preferred Date</label>
-                                            <input type="date" class="form-control">
+                                            <label class="form-label fw-semibold">Preferred Date *</label>
+                                            <input type="date" name="appointment_date" class="form-control" required>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label fw-semibold">Preferred Time</label>
-                                            <select class="form-select">
-                                                <option selected>Select time</option>
-                                                <option>Morning</option>
-                                                <option>Afternoon</option>
-                                                <option>Evening</option>
+                                            <label class="form-label fw-semibold">Preferred Time *</label>
+                                            <select name="appointment_time" class="form-select" required>
+                                                <option value="">Select time</option>
+                                                <option value="08:00">08:00 AM</option>
+                                                <option value="09:00">09:00 AM</option>
+                                                <option value="10:00">10:00 AM</option>
+                                                <option value="11:00">11:00 AM</option>
+                                                <option value="12:00">12:00 PM</option>
+                                                <option value="13:00">01:00 PM</option>
+                                                <option value="14:00">02:00 PM</option>
+                                                <option value="15:00">03:00 PM</option>
+                                                <option value="16:00">04:00 PM</option>
                                             </select>
                                         </div>
                                         <div class="col-12">
-                                            <label class="form-label fw-semibold">Reason / Notes</label>
-                                            <textarea class="form-control" rows="4" placeholder="Describe your concern"></textarea>
+                                            <label class="form-label fw-semibold">Reason for Visit</label>
+                                            <textarea name="reason" class="form-control" rows="4" placeholder="Briefly describe your reason for visit..."></textarea>
                                         </div>
                                         <div class="col-12 d-flex flex-column flex-md-row gap-2 justify-content-between align-items-md-center">
-                                            <p class="text-muted mb-0 small">We will contact you to confirm the appointment time.</p>
-                                            <button type="button" class="btn btn-success px-4 py-2 fw-bold rounded-3">Submit Request</button>
+                                            <p class="text-muted mb-0 small">You will receive SMS confirmation after booking.</p>
+                                            <button type="submit" id="appointmentPageSubmitBtn" class="btn btn-success px-4 py-2 fw-bold rounded-3">Book Appointment</button>
                                         </div>
                                     </div>
                                 </form>
@@ -95,4 +107,77 @@
         </div>
     </div>
 </section>
+
+@push('js')
+<script>
+document.getElementById('appointmentPageForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const form = this;
+    const submitBtn = document.getElementById('appointmentPageSubmitBtn');
+    const originalText = submitBtn.textContent;
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Booking...';
+    
+    const formData = new FormData(form);
+    
+    fetch('{{ url("/api/appointment/book") }}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (window.Swal) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Appointment Booked!',
+                    text: data.message,
+                    confirmButtonColor: '#16a34a',
+                    timer: 4000
+                });
+            } else {
+                alert('Appointment booked successfully! You will receive SMS confirmation.');
+            }
+            form.reset();
+        } else {
+            if (window.Swal) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Booking Failed',
+                    text: data.message || 'Something went wrong!',
+                    confirmButtonColor: '#16a34a'
+                });
+            } else {
+                alert('Failed to book appointment: ' + (data.message || 'Unknown error'));
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        if (window.Swal) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'There was an error booking your appointment. Please try again.',
+                confirmButtonColor: '#16a34a'
+            });
+        } else {
+            alert('Error booking appointment. Please try again.');
+        }
+    })
+    .finally(() => {
+        // Reset button
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+    });
+});
+</script>
+@endpush
 @endsection
