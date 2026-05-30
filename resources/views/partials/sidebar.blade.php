@@ -86,7 +86,15 @@
                     </a>
                 </li>
 
-                {{-- Platform Maintenance --}}
+                {{-- Content Management --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Content Management</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/blog*') ? 'active' : '' }}" href="{{ route('admin.blog.index') }}">
+                        <i class="fa-solid fa-newspaper me-2 text-info"></i> Blog Management
+                    </a>
+                </li>
+
+                {{-- System Health --}}
                 <li class="nav-item-header mt-4 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">System Health</li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/analytics*') ? 'active' : '' }}" href="{{ route('admin.analytics') }}">
