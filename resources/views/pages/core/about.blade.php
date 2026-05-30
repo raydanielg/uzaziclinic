@@ -34,20 +34,20 @@
                                 <div class="row g-4">
                                     <div class="col-md-4">
                                         <div class="p-3 rounded-4" style="background: rgba(22,163,74,0.08); border: 1px solid rgba(22,163,74,0.15);">
-                                            <div class="fw-bold mb-1">Patient Safety</div>
-                                            <div class="text-muted small">We follow safe processes and protect patient privacy.</div>
+                                            <div class="fw-bold mb-1">Confidential Care</div>
+                                            <div class="text-muted small">We ensure complete privacy and confidentiality for all reproductive health services.</div>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="p-3 rounded-4" style="background: rgba(22,163,74,0.08); border: 1px solid rgba(22,163,74,0.15);">
-                                            <div class="fw-bold mb-1">Professional Team</div>
-                                            <div class="text-muted small">Qualified staff and clear communication at every step.</div>
+                                            <div class="fw-bold mb-1">Expert Team</div>
+                                            <div class="text-muted small">Specialized healthcare professionals in reproductive health and family planning.</div>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="p-3 rounded-4" style="background: rgba(22,163,74,0.08); border: 1px solid rgba(22,163,74,0.15);">
-                                            <div class="fw-bold mb-1">Modern Care</div>
-                                            <div class="text-muted small">Efficient digital support and continuous improvement.</div>
+                                            <div class="fw-bold mb-1">Comprehensive Services</div>
+                                            <div class="text-muted small">Full range of family planning methods and reproductive health support.</div>
                                         </div>
                                     </div>
                                 </div>
@@ -55,13 +55,13 @@
                                 <hr class="my-4" style="opacity: 0.08;">
 
                                 <h5 class="fw-bold mb-2">What we offer</h5>
-                                <p class="text-muted mb-3">Our services support patients before, during, and after treatment with structured workflows and reliable follow-up.</p>
+                                <p class="text-muted mb-3">Our specialized reproductive health and family planning services are designed to support you at every stage of your reproductive journey with dignity and respect.</p>
                                 <ul class="text-muted mb-0">
-                                    <li>Consultations and clinical assessments</li>
-                                    <li>Lab tests and diagnostics</li>
-                                    <li>Maternal and reproductive health support</li>
-                                    <li>Pharmacy services and prescriptions guidance</li>
-                                    <li>Secure storage of messages and patient inquiries</li>
+                                    <li>Family planning counseling and contraceptive methods</li>
+                                    <li>Maternal and reproductive health consultations</li>
+                                    <li>Pregnancy testing and prenatal care support</li>
+                                    <li>Reproductive health education and counseling</li>
+                                    <li>Confidential counseling and follow-up support</li>
                                 </ul>
 
                                 <div class="mt-4 d-flex flex-column flex-sm-row gap-2">
