@@ -408,10 +408,10 @@ class DashboardController extends Controller
                 
                 if ($existingPatient) {
                     // Returning patient - send service info
-                    $smsService->sendServiceInfo($request->phone, 'huduma ya afya');
+                    $smsService->sendServiceInfo($request->phone, 'huduma ya afya', $patient->id);
                 } else {
                     // New patient - send welcome message
-                    $smsService->sendWelcomeMessage($request->phone, $request->name);
+                    $smsService->sendWelcomeMessage($request->phone, $request->name, $patient->id);
                 }
             } catch (\Exception $e) {
                 // Log SMS error but don't fail the registration
