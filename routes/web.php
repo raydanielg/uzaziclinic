@@ -213,6 +213,9 @@ Route::middleware(['auth', 'role:customer'])->prefix('patient')->name('patient.'
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/payments', [App\Http\Controllers\Admin\DashboardController::class, 'getAllPayments'])->name('payments');
+    Route::get('/payments/pending', [App\Http\Controllers\Admin\DashboardController::class, 'getPendingPayments'])->name('payments.pending');
+    Route::post('/payments/{paymentId}/confirm', [App\Http\Controllers\Admin\DashboardController::class, 'confirmPayment'])->name('payments.confirm');
     Route::resource('services', App\Http\Controllers\Admin\ServiceController::class);
     Route::resource('hr', App\Http\Controllers\Admin\HRController::class);
     Route::get('/analytics', [App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('analytics');

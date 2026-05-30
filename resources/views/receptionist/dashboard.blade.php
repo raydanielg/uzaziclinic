@@ -40,10 +40,10 @@
             <div class="col-xl-3 col-md-6 anim-3">
                 <div class="stat-card-modern stat-card-green h-100">
                     <div class="card-body d-flex align-items-center gap-3">
-                        <div class="stat-icon stat-card-green"><i class="fa-solid fa-user-plus"></i></div>
+                        <div class="stat-icon stat-card-green"><i class="fa-solid fa-clock"></i></div>
                         <div>
-                            <div class="stat-label">New Patients</div>
-                            <div class="stat-value" data-count="{{ $stats['pending_registrations'] }}">0</div>
+                            <div class="stat-label">Pending Appointments</div>
+                            <div class="stat-value" data-count="{{ $stats['pending_appointments'] }}">0</div>
                         </div>
                     </div>
                 </div>
@@ -70,6 +70,17 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xl-3 col-md-6 anim-6">
+                <div class="stat-card-modern stat-card-rose h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="stat-icon stat-card-rose"><i class="fa-solid fa-money-bill-wave"></i></div>
+                        <div>
+                            <div class="stat-label">Pending Payments</div>
+                            <div class="stat-value" data-count="{{ $stats['pending_payments'] }}">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row g-4">
@@ -91,7 +102,7 @@
                             <tbody>
                                 @forelse($recent_appointments as $app)
                                 @php
-                                    $pName = $app->user->name ?? 'N/A';
+                                    $pName = $app->patient->name ?? 'N/A';
                                     $sc = match($app->status ?? 'pending') {
                                         'confirmed' => ['bg-blue-soft text-blue','fa-circle-check'],
                                         'completed' => ['bg-green-soft text-green','fa-check-double'],
@@ -105,11 +116,11 @@
                                             <div class="user-avatar bg-blue-soft text-blue">{{ strtoupper(substr($pName,0,1)) }}</div>
                                             <div>
                                                 <div class="fw-semibold small">{{ $pName }}</div>
-                                                <div class="text-muted" style="font-size:.7rem">#PT-{{ $app->user_id }}</div>
+                                                <div class="text-muted" style="font-size:.7rem">#PT-{{ $app->patient_id }}</div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="small fw-semibold">Dkt. {{ $app->doctor->name ?? 'N/A' }}</td>
+                                    <td class="small fw-semibold">Dkt. {{ $app->doctor->display_name ?? 'N/A' }}</td>
                                     <td class="small text-muted">{{ \Carbon\Carbon::parse($app->appointment_date)->format('H:i, d M') }}</td>
                                     <td class="text-end pe-3">
                                         <span class="status-badge {{ $sc[0] }}"><i class="fa-solid {{ $sc[1] }} me-1"></i>{{ ucfirst($app->status ?? 'pending') }}</span>

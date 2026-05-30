@@ -33,7 +33,9 @@
                                     <i class="fas fa-phone mt-1" style="color:#16a34a;"></i>
                                     <div>
                                         <div class="fw-semibold">Phone</div>
-                                        <div class="text-muted">+255 700 000 000</div>
+                                        <div class="text-muted">+255 678 233 736</div>
+                                        <div class="text-muted">+255 741 064 572</div>
+                                        <div class="text-muted">+255 767 825 843</div>
                                     </div>
                                 </div>
 

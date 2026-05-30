@@ -14,7 +14,9 @@
                         </div>
                         <div>
                             <h6 class="mb-1 fw-bold text-dark">Phone Number</h6>
-                            <p class="mb-0 text-muted">+255 700 000 000</p>
+                            <p class="mb-0 text-muted">+255 678 233 736</p>
+                            <p class="mb-0 text-muted">+255 741 064 572</p>
+                            <p class="mb-0 text-muted">+255 767 825 843</p>
                         </div>
                     </div>
                     <div class="d-flex align-items-center mb-4 gap-4 p-4 rounded-4 shadow-sm info-card">

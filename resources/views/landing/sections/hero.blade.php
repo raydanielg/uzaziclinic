@@ -12,7 +12,7 @@
                 <!-- Emergency Number -->
                 <div class="emergency-badge d-inline-flex align-items-center bg-green-600 text-white px-4 py-2 rounded-pill mb-4 shadow-sm fw-bold">
                     <i class="fas fa-phone-alt me-2 animate__animated animate__pulse animate__infinite"></i>
-                    EMERGENCY: +255 700 000 000
+                    EMERGENCY: <span id="rotating-phone">+255 678 233 736</span>
                 </div>
 
                 <!-- Headline (1 line) -->
@@ -96,3 +96,28 @@
         .hero-section { padding-top: 60px; }
     }
 </style>
+
+<script>
+// Rotate phone numbers in hero section
+document.addEventListener('DOMContentLoaded', function() {
+    const phoneNumbers = [
+        '+255 678 233 736',
+        '+255 741 064 572',
+        '+255 767 825 843'
+    ];
+    let currentIndex = 0;
+    const phoneElement = document.getElementById('rotating-phone');
+    
+    if (phoneElement) {
+        setInterval(function() {
+            currentIndex = (currentIndex + 1) % phoneNumbers.length;
+            phoneElement.style.opacity = '0';
+            
+            setTimeout(function() {
+                phoneElement.textContent = phoneNumbers[currentIndex];
+                phoneElement.style.opacity = '1';
+            }, 300);
+        }, 4000);
+    }
+});
+</script>

@@ -70,6 +70,17 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xl-3 col-md-6 anim-6">
+                <div class="stat-card-modern stat-card-cyan h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="stat-icon stat-card-cyan"><i class="fa-solid fa-money-bill-wave"></i></div>
+                        <div class="flex-grow-1">
+                            <div class="stat-label">Pending Payments</div>
+                            <div class="stat-value" data-count="{{ $stats['pending_payments'] ?? 0 }}">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         {{-- Main Content Row --}}
@@ -93,8 +104,8 @@
                             <tbody>
                                 @forelse($recentAppointments as $appt)
                                 @php
-                                    $patientName = $appt->user->name ?? ($appt->patient->name ?? 'Patient');
-                                    $doctorName  = $appt->doctor->name ?? 'Doctor';
+                                    $patientName = $appt->patient->name ?? 'Patient';
+                                    $doctorName  = $appt->doctor->display_name ?? 'Doctor';
                                     $status      = $appt->status ?? 'pending';
                                     $sc = match($status) {
                                         'confirmed' => ['bg-blue-soft text-blue', 'fa-circle-check'],
@@ -110,7 +121,7 @@
                                             <div class="user-avatar bg-blue-soft text-blue">{{ $initials }}</div>
                                             <div>
                                                 <div class="fw-semibold text-dark small">{{ $patientName }}</div>
-                                                <div class="text-muted" style="font-size:0.7rem">#{{ $appt->id }}</div>
+                                                <div class="text-muted" style="font-size:0.7rem">#PT-{{ $appt->patient_id }}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -163,9 +174,9 @@
                                 ['fa-user-injured','bg-green-soft text-green', route('admin.patients.index'), 'Patients'],
                                 ['fa-user-doctor','bg-cyan-soft text-cyan', route('admin.doctors.index'), 'Doctors'],
                                 ['fa-calendar-check','bg-amber-soft text-amber', route('admin.appointments.index'), 'Appointments'],
+                                ['fa-money-bill-wave','bg-rose-soft text-rose', route('admin.payments'), 'Payments'],
                                 ['fa-pills','bg-violet-soft text-violet', route('admin.pharmacy.stock'), 'Pharmacy'],
-                                ['fa-flask-vial','bg-rose-soft text-rose', route('admin.lab.catalog'), 'Lab'],
-                                ['fa-file-invoice-dollar','bg-green-soft text-green', route('admin.finance.invoices'), 'Finance'],
+                                ['fa-flask-vial','bg-cyan-soft text-cyan', route('admin.lab.catalog'), 'Lab'],
                                 ['fa-chart-pie','bg-blue-soft text-blue', route('admin.reports.patients'), 'Reports'],
                             ] as [$icon, $cls, $href, $label])
                             <div class="col-6 col-md-3 col-xl-1-5">
