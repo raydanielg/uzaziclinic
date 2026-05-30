@@ -79,36 +79,36 @@ class NextSMSService
     /**
      * Send welcome SMS to new patient
      */
-    public function sendWelcomeMessage($phone, $patientName)
+    public function sendWelcomeMessage($phone, $patientName, $patientId)
     {
-        $message = "Karibu Uzazi Clinic! Asante kwa kujiunga nasi. Tuna furaha kukuhudumia. Kwa msaada piga simu: 255XXXXXXXX.";
+        $message = "Karibu Uzazi Clinic! Asante kwa kujiunga nasi. Patient ID yako ni: PT-{$patientId}. Tuna furaha kukuhudumia. Kwa msaada piga simu: 255XXXXXXXX.";
         return $this->send($phone, $message);
     }
 
     /**
      * Send appointment confirmation SMS
      */
-    public function sendAppointmentConfirmation($phone, $patientName, $doctorName, $appointmentDate, $appointmentTime)
+    public function sendAppointmentConfirmation($phone, $patientName, $patientId, $doctorName, $appointmentDate, $appointmentTime)
     {
-        $message = "Habari {$patientName}, umefanikiwa ku-book appointment na Dr. {$doctorName} kwa tarehe {$appointmentDate} saa {$appointmentTime}. Tafadhali fika mapema. Asante.";
+        $message = "Habari {$patientName} (ID: PT-{$patientId}), umefanikiwa ku-book appointment na Dr. {$doctorName} kwa tarehe {$appointmentDate} saa {$appointmentTime}. Tafadhali fika mapema. Asante.";
         return $this->send($phone, $message);
     }
 
     /**
      * Send appointment reminder SMS
      */
-    public function sendAppointmentReminder($phone, $patientName, $doctorName, $appointmentDate, $appointmentTime)
+    public function sendAppointmentReminder($phone, $patientName, $patientId, $doctorName, $appointmentDate, $appointmentTime)
     {
-        $message = "Kumbuka: Unakaribia appointment yako na Dr. {$doctorName} kesho tarehe {$appointmentDate} saa {$appointmentTime}. Tafadhali fika mapema. Asante.";
+        $message = "Kumbuka {$patientName} (ID: PT-{$patientId}): Unakaribia appointment yako na Dr. {$doctorName} kesho tarehe {$appointmentDate} saa {$appointmentTime}. Tafadhali fika mapema. Asante.";
         return $this->send($phone, $message);
     }
 
     /**
      * Send service information SMS (for returning patients)
      */
-    public function sendServiceInfo($phone, $serviceName)
+    public function sendServiceInfo($phone, $serviceName, $patientId)
     {
-        $message = "Asante kwa kuja Uzazi Clinic. Leo utapata huduma ya: {$serviceName}. Tuna furaha kukuhudumia.";
+        $message = "Asante kwa kuja Uzazi Clinic. Patient ID yako ni: PT-{$patientId}. Leo utapata huduma ya: {$serviceName}. Tuna furaha kukuhudumia.";
         return $this->send($phone, $message);
     }
 
