@@ -2,7 +2,7 @@
     <div class="container">
         <div class="text-center mb-10">
             <h6 class="text-uppercase mb-3 fw-bold" style="color: #16a34a; letter-spacing: 2px;">WHY CHOOSE US?</h6>
-            <h2 class="display-5 fw-bold mb-4 text-dark" style="font-family: 'Georgia', serif;">Exceptional Healthcare Standards</h2>
+            <h2 class="display-5 fw-bold mb-4 text-dark" style="font-family: 'Georgia', serif;">Specialized Reproductive Health Care</h2>
             <div class="mx-auto" style="width: 80px; height: 3px; background-color: #16a34a; border-radius: 2px;"></div>
         </div>
 
@@ -11,11 +11,11 @@
             <div class="col-lg-4">
                 <div class="feature-box-modern mb-5 d-flex align-items-start gap-3 p-4 rounded-4 shadow-sm bg-light hover-lift">
                     <div class="feature-icon-wrapper bg-white shadow-sm p-3 rounded-circle">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3589/3589030.png" alt="Icon" width="40">
+                        <i class="fas fa-shield-alt fs-3 text-green-600"></i>
                     </div>
                     <div>
-                        <h5 class="fw-bold mb-2">Modern Facilities</h5>
-                        <p class="text-muted small mb-0">Equipped with state-of-the-art medical technology for accurate diagnosis and treatment.</p>
+                        <h5 class="fw-bold mb-2">Confidential Care</h5>
+                        <p class="text-muted small mb-0">Complete privacy and confidentiality for all reproductive health services — your trust is our foundation.</p>
                     </div>
                 </div>
                 <div class="feature-box-modern d-flex align-items-start gap-3 p-4 rounded-4 shadow-sm bg-light hover-lift">
@@ -23,8 +23,8 @@
                         <i class="fas fa-user-md fs-3 text-green-600"></i>
                     </div>
                     <div>
-                        <h5 class="fw-bold mb-2">Expert Doctors</h5>
-                        <p class="text-muted small mb-0">Our team consists of highly qualified specialists with years of clinical experience.</p>
+                        <h5 class="fw-bold mb-2">Expert Team</h5>
+                        <p class="text-muted small mb-0">Specialized healthcare professionals in reproductive health and family planning dedicated to your wellbeing.</p>
                     </div>
                 </div>
             </div>
@@ -41,20 +41,20 @@
             <div class="col-lg-4">
                 <div class="feature-box-modern mb-5 d-flex align-items-start gap-3 p-4 rounded-4 shadow-sm bg-light hover-lift">
                     <div class="feature-icon-wrapper bg-white shadow-sm p-3 rounded-circle">
-                        <i class="fas fa-clock fs-3 text-green-600"></i>
+                        <i class="fas fa-hand-holding-heart fs-3 text-green-600"></i>
                     </div>
                     <div>
-                        <h5 class="fw-bold mb-2">24/7 Availability</h5>
-                        <p class="text-muted small mb-0">We provide around-the-clock emergency services and patient support anytime you need us.</p>
+                        <h5 class="fw-bold mb-2">Comprehensive Services</h5>
+                        <p class="text-muted small mb-0">Full range of family planning methods and reproductive health support tailored to your unique needs.</p>
                     </div>
                 </div>
                 <div class="feature-box-modern d-flex align-items-start gap-3 p-4 rounded-4 shadow-sm bg-light hover-lift">
                     <div class="feature-icon-wrapper bg-white shadow-sm p-3 rounded-circle">
-                        <i class="fas fa-shield-alt fs-3 text-green-600"></i>
+                        <i class="fas fa-heart fs-3 text-green-600"></i>
                     </div>
                     <div>
-                        <h5 class="fw-bold mb-2">Safe & Secure</h5>
-                        <p class="text-muted small mb-0">Your medical records and privacy are protected with our advanced digital security systems.</p>
+                        <h5 class="fw-bold mb-2">Compassionate Support</h5>
+                        <p class="text-muted small mb-0">Empathetic care and counseling to support you and your family through every stage of your reproductive journey.</p>
                     </div>
                 </div>
             </div>
