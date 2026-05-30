@@ -441,17 +441,21 @@ class DashboardController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|unique:users,email',
-            'phone' => 'required|string|max:20',
-            'date_of_birth' => 'nullable|date',
+            'phone' => 'required|string|max:20|min:10',
+            'date_of_birth' => 'nullable|date|before:today',
             'gender' => 'nullable|in:male,female,other',
             'national_id' => 'nullable|string|max:50',
             'blood_type' => 'nullable|string|max:5',
             'insurance_provider' => 'nullable|string|max:255',
-            'address' => 'nullable|string',
+            'address' => 'nullable|string|max:500',
             'emergency_contact_name' => 'nullable|string|max:255',
-            'emergency_contact_phone' => 'nullable|string|max:20',
+            'emergency_contact_phone' => 'nullable|string|max:20|min:10',
             'files' => 'nullable|array|max:5',
             'files.*' => 'file|mimes:pdf,jpg,jpeg,png,doc,docx|max:5120',
+        ], [
+            'phone.min' => 'Phone number must be at least 10 digits',
+            'date_of_birth.before' => 'Date of birth must be in the past',
+            'emergency_contact_phone.min' => 'Emergency contact phone must be at least 10 digits',
         ]);
 
         try {
