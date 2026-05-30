@@ -9,6 +9,9 @@
                 <p class="text-muted small mb-0">Register new patients and manage existing patient records.</p>
             </div>
             <div class="col-auto">
+                <button class="btn btn-outline-success rounded-2 me-2" onclick="loadPendingPayments()">
+                    <i class="fa-solid fa-money-bill-wave me-2"></i>Pending Payments
+                </button>
                 <button class="btn btn-outline-warning rounded-2 me-2" onclick="testSMS()">
                     <i class="fa-solid fa-sms me-2"></i>Test SMS
                 </button>

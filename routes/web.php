@@ -188,6 +188,8 @@ Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('
     Route::delete('/files/{file}', [App\Http\Controllers\Receptionist\DashboardController::class, 'deletePatientFile'])->name('files.delete');
     Route::get('/doctors', [App\Http\Controllers\Receptionist\DashboardController::class, 'doctors'])->name('doctors');
     Route::get('/doctors/json', [App\Http\Controllers\Receptionist\DashboardController::class, 'getDoctorsJson'])->name('doctors.json');
+    Route::get('/payments/pending', [App\Http\Controllers\Receptionist\DashboardController::class, 'getPendingPayments'])->name('payments.pending');
+    Route::post('/payments/{paymentId}/confirm', [App\Http\Controllers\Receptionist\DashboardController::class, 'confirmPayment'])->name('payments.confirm');
     Route::get('/profile', [App\Http\Controllers\Receptionist\DashboardController::class, 'profile'])->name('profile');
     Route::get('/password', [App\Http\Controllers\Receptionist\DashboardController::class, 'password'])->name('password');
 
