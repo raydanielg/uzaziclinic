@@ -113,6 +113,31 @@ class NextSMSService
     }
 
     /**
+     * Send payment request SMS
+     */
+    public function sendPaymentRequest($phone, $patientName, $patientId, $amount, $serviceName)
+    {
+        $bankName = env('PAYMENT_BANK_NAME', 'CRDB Bank');
+        $accountNumber = env('PAYMENT_ACCOUNT_NUMBER', '01512345678900');
+        $accountName = env('PAYMENT_ACCOUNT_NAME', 'Uzazi Clinic Ltd');
+        $whatsappNumber = env('PAYMENT_WHATSAPP_NUMBER', '255712345678');
+
+        $message = "Asante {$patientName} (ID: PT-{$patientId}) kwa huduma ya {$serviceName}. Tafadhali lipa TSh {$amount}. Bank: {$bankName}, Akaunti: {$accountNumber}, Jina: {$accountName}. Baada ya malipo tuma ujumbe kwa WhatsApp {$whatsappNumber} au report ofisini. Asante.";
+
+        return $this->send($phone, $message);
+    }
+
+    /**
+     * Send payment confirmation SMS
+     */
+    public function sendPaymentConfirmation($phone, $patientName, $patientId, $amount)
+    {
+        $message = "Asante {$patientName} (ID: PT-{$patientId}). Malipo yako ya TSh {$amount} yamepokelewa. Tunakushukuru kwa kutumia huduma zetu.";
+
+        return $this->send($phone, $message);
+    }
+
+    /**
      * Format phone number to ensure it starts with 255
      */
     protected function formatPhoneNumber($phone)
