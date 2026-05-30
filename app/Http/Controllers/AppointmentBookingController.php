@@ -54,9 +54,10 @@ class AppointmentBookingController extends Controller
                 ]);
 
                 // Assign customer role
-                $customerRole = \Spatie\Permission\Models\Role::where('name', 'customer')->first();
+                $customerRole = Role::where('name', 'customer')->first();
                 if ($customerRole) {
-                    $user->assignRole($customerRole);
+                    $user->role_id = $customerRole->id;
+                    $user->save();
                 }
 
                 $patient = Patient::create([
