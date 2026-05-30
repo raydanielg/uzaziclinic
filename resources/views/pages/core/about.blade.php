@@ -7,7 +7,7 @@
             <div class="col-lg-10">
                 <div class="mb-4 animate__animated animate__fadeInUp">
                     <h1 class="fw-bold mb-2">About Us</h1>
-                    <p class="text-muted mb-0">UzaziClinic is a patient-first healthcare platform designed to deliver safe, fast, and reliable clinical services.</p>
+                    <p class="text-muted mb-0">UzaziClinic is a specialized reproductive health and family planning clinic dedicated to providing comprehensive, confidential, and compassionate care for all your reproductive health needs.</p>
                 </div>
 
                 <div class="row g-4">
@@ -15,7 +15,7 @@
                         <div class="card border-0 shadow-sm rounded-4 h-100">
                             <div class="card-body p-4 p-md-5">
                                 <h5 class="fw-bold mb-2">Our Mission</h5>
-                                <p class="text-muted mb-0">To improve access to quality healthcare through professional service delivery, modern clinical processes, and secure patient communication—so every patient gets care that is respectful, timely, and effective.</p>
+                                <p class="text-muted mb-0">To provide accessible, confidential, and quality reproductive health and family planning services that empower individuals and families to make informed decisions about their reproductive health and family size.</p>
                             </div>
                         </div>
                     </div>
@@ -23,7 +23,7 @@
                         <div class="card border-0 shadow-sm rounded-4 h-100">
                             <div class="card-body p-4 p-md-5">
                                 <h5 class="fw-bold mb-2">Our Vision</h5>
-                                <p class="text-muted mb-0">To become a trusted healthcare partner for families and communities by maintaining high standards of care, patient safety, and continuous improvement in every clinical interaction.</p>
+                                <p class="text-muted mb-0">To be the leading reproductive health and family planning clinic in Tanzania, known for excellence in patient care, confidentiality, and empowering individuals to achieve their desired family size through informed choices.</p>
                             </div>
                         </div>
                     </div>
