@@ -117,12 +117,14 @@ class NextSMSService
      */
     public function sendPaymentRequest($phone, $patientName, $patientId, $amount, $serviceName)
     {
-        $bankName = env('PAYMENT_BANK_NAME', 'CRDB Bank');
-        $accountNumber = env('PAYMENT_ACCOUNT_NUMBER', '01512345678900');
-        $accountName = env('PAYMENT_ACCOUNT_NAME', 'Uzazi Clinic Ltd');
+        $accountName = env('PAYMENT_ACCOUNT_NAME', 'Issa Rashid Paulo');
+        $tigoYas = env('PAYMENT_TIGO_YAS', '15329940');
+        $tigoPesa = env('PAYMENT_TIGO_PESA', '0678233736');
+        $mpesa = env('PAYMENT_MPESA', '0767825843');
+        $crdbBank = env('PAYMENT_CRDB_BANK', '0152537335900');
         $whatsappNumber = env('PAYMENT_WHATSAPP_NUMBER', '255712345678');
 
-        $message = "Asante {$patientName} (ID: PT-{$patientId}) kwa huduma ya {$serviceName}. Tafadhali lipa TSh {$amount}. Bank: {$bankName}, Akaunti: {$accountNumber}, Jina: {$accountName}. Baada ya malipo tuma ujumbe kwa WhatsApp {$whatsappNumber} au report ofisini. Asante.";
+        $message = "Asante {$patientName} (ID: PT-{$patientId}) kwa huduma ya {$serviceName}. Tafadhali lipa TSh {$amount}. NAMBA ZA MALIPO: JINA: {$accountName}. Tigo/Yas: {$tigoYas}. Mixx By Yas/Tigo Pesa: {$tigoPesa}. M-PESA: {$mpesa}. CRDB BANK: {$crdbBank}. Ukishalipia Tuma majina Yako Na uthibitisho wa Muamala wako hapa Mpendwa.";
 
         return $this->send($phone, $message);
     }
