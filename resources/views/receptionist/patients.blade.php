@@ -817,6 +817,96 @@ document.getElementById('updatePatientBtn').addEventListener('click', function()
         this.innerHTML = '<i class="fa-solid fa-save me-2"></i>Update Patient';
     });
 });
+
+// Load pending payments
+function loadPendingPayments() {
+    fetch('{{ route('receptionist.payments.pending') }}', {
+        headers: {
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.payments.length > 0) {
+            let html = '<div class="list-group">';
+            data.payments.forEach(payment => {
+                html += `
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-bold">${payment.patient.name} (PT-${payment.patient.id})</div>
+                            <small class="text-muted">${payment.service_name} - TSh ${payment.amount.toLocaleString()}</small>
+                        </div>
+                        <button class="btn btn-sm btn-success" onclick="confirmPayment(${payment.id}, ${payment.amount}, '${payment.patient.name}')">
+                            <i class="fa-solid fa-check"></i> Confirm
+                        </button>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            Swal.fire({
+                title: 'Pending Payments',
+                html: html,
+                width: '600px',
+                showConfirmButton: false
+            });
+        } else {
+            Swal.fire('Info', 'No pending payments', 'info');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire('Error', 'Failed to load payments', 'error');
+    });
+}
+
+// Confirm payment
+function confirmPayment(paymentId, amount, patientName) {
+    Swal.fire({
+        title: 'Confirm Payment',
+        text: `Confirm payment of TSh ${amount.toLocaleString()} from ${patientName}?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Confirm',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/receptionist/payments/${paymentId}/confirm`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    method: 'bank_transfer',
+                    reference: 'MANUAL_CONFIRM'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Payment Confirmed',
+                        text: data.message,
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        loadPendingPayments(); // Reload the list
+                    });
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire('Error', 'Failed to confirm payment', 'error');
+            });
+        }
+    });
+}
 </script>
 @endpush
 @endsection
