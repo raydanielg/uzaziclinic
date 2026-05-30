@@ -279,6 +279,67 @@ class DashboardController extends Controller
         }
     }
 
+    public function getPendingPayments()
+    {
+        $payments = Payment::with(['patient', 'appointment'])
+            ->where('status', 'pending')
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'payments' => $payments
+        ]);
+    }
+
+    public function confirmPayment(Request $request, $paymentId)
+    {
+        $payment = Payment::with('patient')->find($paymentId);
+
+        if (!$payment) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Payment not found'
+            ], 404);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // Update payment status
+            $payment->update([
+                'status' => 'paid',
+                'paid_at' => now(),
+                'method' => $request->method ?? 'bank_transfer',
+                'reference' => $request->reference ?? null,
+            ]);
+
+            // Send payment confirmation SMS
+            if ($payment->patient->phone) {
+                $smsService = new NextSMSService();
+                $smsService->sendPaymentConfirmation(
+                    $payment->patient->phone,
+                    $payment->patient->name,
+                    $payment->patient->id,
+                    $payment->amount
+                );
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Payment confirmed successfully!'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Payment confirmation failed: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function resendPatientSMS(Request $request, $id)
     {
         \Log::info('Resend SMS requested for patient ID: ' . $id);
