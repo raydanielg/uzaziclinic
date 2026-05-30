@@ -15,13 +15,16 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('invoice_id')->constrained('invoices')->onDelete('cascade');
+            $table->foreignId('appointment_id')->nullable()->constrained('appointments')->nullOnDelete();
+            $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->decimal('amount', 10, 2);
+            $table->string('service_name')->nullable();
             $table->string('method', 50)->nullable();
-            $table->string('status', 50)->default('paid');
+            $table->string('status', 50)->default('pending');
             $table->dateTime('paid_at')->nullable();
             $table->string('reference')->nullable();
+            $table->boolean('sms_sent')->default(false);
             $table->timestamps();
         });
     }
