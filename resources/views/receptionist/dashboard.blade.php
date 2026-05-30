@@ -19,7 +19,7 @@
                             <h4 class="mb-0 fw-bold">Welcome, {{ Auth::user()->name }}</h4>
                         </div>
                     </div>
-                    <p class="mb-0 opacity-75 small">{{ now()->format('l, d F Y') }} &bull; Today's Appointments: <strong>{{ $stats['today_appointments'] }}</strong> &bull; New Patients: <strong>{{ $stats['pending_registrations'] }}</strong></p>
+                    <p class="mb-0 opacity-75 small">{{ now()->format('l, d F Y') }} &bull; Today's Appointments: <strong>{{ $stats['today_appointments'] }}</strong> &bull; Total Patients: <strong>{{ $stats['total_patients'] }}</strong></p>
                 </div>
             </div>
         </div>
