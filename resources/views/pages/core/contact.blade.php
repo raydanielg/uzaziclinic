@@ -130,13 +130,14 @@
         e.preventDefault();
 
         const btn = document.getElementById('contactPageSubmitBtn');
-        const original = btn ? btn.innerHTML : '';
+        const btnText = btn.querySelector('.btn-text');
+        const spinner = btn.querySelector('.spinner-border');
+        const originalText = btnText.textContent;
 
         try {
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Sending...';
-            }
+            btn.disabled = true;
+            btnText.classList.add('d-none');
+            spinner.classList.remove('d-none');
 
             const res = await fetch(form.action, {
                 method: 'POST',
@@ -153,10 +154,13 @@
                 if (window.Swal) {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Message Sent',
+                        title: 'Message Sent!',
                         text: data.message || 'Thank you! Your message has been sent successfully.',
-                        confirmButtonColor: '#16a34a'
+                        confirmButtonColor: '#16a34a',
+                        timer: 3000
                     });
+                } else {
+                    alert('Message sent successfully!');
                 }
                 form.reset();
             } else {
@@ -167,6 +171,8 @@
                         text: data.message || 'Sorry, something went wrong. Please try again.',
                         confirmButtonColor: '#16a34a'
                     });
+                } else {
+                    alert('Failed to send message: ' + (data.message || 'Unknown error'));
                 }
             }
         } catch (err) {
@@ -177,15 +183,58 @@
                     text: 'Please check your internet connection and try again.',
                     confirmButtonColor: '#16a34a'
                 });
+            } else {
+                alert('Network error. Please try again.');
             }
         } finally {
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = original;
-            }
+            btn.disabled = false;
+            btnText.classList.remove('d-none');
+            spinner.classList.add('d-none');
         }
     });
 })();
 </script>
 @endpush
+
+<style>
+    .contact-icon {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+    
+    .custom-input {
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 12px 16px;
+        transition: all 0.3s ease;
+        background-color: #f8fafc;
+    }
+    
+    .custom-input:focus {
+        border-color: #16a34a;
+        background-color: white;
+        box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.1);
+    }
+    
+    .btn-success {
+        background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+        border: none;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(22, 163, 74, 0.3);
+    }
+    
+    .btn-success:disabled {
+        opacity: 0.7;
+        transform: none;
+    }
+</style>
 @endsection
