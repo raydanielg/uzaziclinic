@@ -202,16 +202,45 @@ Uzazi Clinic Team',
             ],
         ];
 
+        $sampleData = [
+            'patient_name' => 'John',
+            'patient_ID' => 'UZC-001234',
+            'doctor_name' => 'Mlay',
+            'appointment_date' => '15/06/2026',
+            'appointment_time' => '10:30 AM',
+            'service_name' => 'General Checkup',
+            'amount' => '25,000',
+            'payment_date' => '01/06/2026',
+            'receipt_number' => 'RCP-006789',
+            'next_appointment_date' => '15/06/2026',
+            'account_name' => 'Uzazi Clinic Account',
+            'tigo_yas' => '0623123456',
+            'tigo_pesa' => '0623123456',
+            'mpesa' => '0712123456',
+            'crdb_bank' => '0151234567890',
+            'queue_number' => 'Q-042',
+            'lab_section' => 'Hematology',
+            'test_name' => 'Blood Count',
+            'test_date' => '01/06/2026',
+        ];
+
         $realTemplates = [];
         foreach ($templates as $key => $meta) {
+            $value = Setting::get($key, $meta['default']);
+            $renderedPreview = $value;
+            foreach ($sampleData as $ph => $sample) {
+                $renderedPreview = str_replace("[$ph]", $sample, $renderedPreview);
+            }
+
             $realTemplates[$key] = [
                 'key' => $key,
                 'title' => $meta['title'],
                 'description' => $meta['description'],
                 'placeholders' => $meta['placeholders'],
                 'default' => $meta['default'],
-                'value' => Setting::get($key, $meta['default']),
-                'enabled' => Setting::get($key . '_enabled', true)
+                'value' => $value,
+                'enabled' => Setting::get($key . '_enabled', true),
+                'sample' => $renderedPreview,
             ];
         }
 
