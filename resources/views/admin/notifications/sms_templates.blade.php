@@ -13,91 +13,113 @@
         $charPercent = min(100, ($textLen / 160) * 100);
         $barColor = $charPercent > 90 ? 'danger' : ($charPercent > 75 ? 'warning' : 'success');
     @endphp
-    <div class="col-md-6 col-lg-4">
+    <div class="col-md-6 col-lg-4 mb-2">
         <div class="card h-100 border-0 shadow-hover rounded-4 overflow-hidden">
-            <div class="card-body p-4">
-                <!-- Header: Icon + Toggle -->
+            <div class="card-body p-4 d-flex flex-column">
+                <!-- Header -->
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div class="d-flex align-items-center gap-3">
                         <div class="icon-circle">
                             <i class="fa-solid fa-comment-sms"></i>
                         </div>
                         <div>
-                            <h6 class="fw-bold mb-1 text-dark">{{ $template['title'] }}</h6>
-                            <span class="badge bg-soft-{{ $barColor }} fw-normal px-2 py-1">
+                            <h6 class="fw-bold mb-1 text-dark" style="font-size:0.9rem;">{{ $template['title'] }}</h6>
+                            <span class="badge bg-soft-{{ $barColor }} fw-normal px-2 py-1 rounded-pill" style="font-size:0.65rem;">
                                 <i class="fa-regular fa-clock me-1"></i>{{ $segmentLabel }}
                             </span>
                         </div>
                     </div>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" 
-                               id="toggle_{{ $key }}" 
+                    <div class="form-check form-switch" style="min-width: 70px;">
+                        <input class="form-check-input" type="checkbox"
+                               id="toggle_{{ $key }}"
                                onchange="toggleTemplate('{{ $key }}', this.checked)"
                                {{ ($template['enabled'] ?? true) ? 'checked' : '' }}>
-                        <label class="form-check-label small fw-medium" for="toggle_{{ $key }}">
+                        <label class="form-check-label small fw-medium d-block text-center" for="toggle_{{ $key }}" style="font-size:0.6rem;">
                             {{ ($template['enabled'] ?? true) ? 'Enabled' : 'Disabled' }}
                         </label>
                     </div>
                 </div>
-                
+
                 <!-- Description -->
-                <p class="text-muted small mb-3" style="font-size:0.8rem;">{{ $template['description'] }}</p>
-                
-                <!-- SMS Preview -->
-                <div class="sms-preview mb-3">
-                    <div class="preview-header d-flex justify-content-between align-items-center">
-                        <small class="fw-bold text-uppercase tracking-wide">Message Preview</small>
-                        <small class="text-muted">{{ $textLen }} / 160 chars</small>
-                    </div>
-                    <div class="preview-body">
-                        <small class="text-muted" style="white-space: pre-line;">{{ Str::limit($template['value'], 180) }}</small>
-                    </div>
-                </div>
-                
-                <!-- Character Progress Bar -->
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between small text-muted mb-1">
-                        <span><i class="fa-regular fa-file-lines me-1"></i> Characters: <strong class="text-dark">{{ $textLen }}</strong></span>
-                        <span><i class="fa-regular fa-rectangle-ad me-1"></i> Segments: <strong class="text-{{ $barColor }}">{{ $segmentLabel }}</strong></span>
-                    </div>
-                    <div class="progress" style="height: 4px;">
-                        <div class="progress-bar bg-{{ $barColor }}" role="progressbar" 
-                             style="width: {{ $charPercent }}%;" 
-                             aria-valuenow="{{ $charPercent }}" aria-valuemin="0" aria-valuemax="100">
+                <p class="text-muted mb-3" style="font-size:0.78rem; line-height:1.4;">{{ $template['description'] }}</p>
+
+                <!-- Preview Tabs -->
+                <div class="preview-tabs mb-3">
+                    <ul class="nav nav-pills nav-fill gap-1 mb-2" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active py-1 px-2" data-bs-toggle="tab"
+                                    data-bs-target="#raw-{{ Str::slug($key) }}" type="button" role="tab"
+                                    style="font-size:0.7rem;">
+                                <i class="fa-regular fa-code me-1"></i> Template
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link py-1 px-2" data-bs-toggle="tab"
+                                    data-bs-target="#sample-{{ Str::slug($key) }}" type="button" role="tab"
+                                    style="font-size:0.7rem;">
+                                <i class="fa-regular fa-eye me-1"></i> Sample
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="raw-{{ Str::slug($key) }}" role="tabpanel">
+                            <div class="preview-box">
+                                <small class="text-muted" style="white-space: pre-line; font-size:0.75rem; line-height:1.4;">{{ Str::limit($template['value'], 200) }}</small>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="sample-{{ Str::slug($key) }}" role="tabpanel">
+                            <div class="preview-box preview-sample">
+                                <small style="white-space: pre-line; font-size:0.75rem; line-height:1.4;">{{ Str::limit($template['sample'], 200) }}</small>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
+
+                <!-- Progress Bar -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between small text-muted mb-1" style="font-size:0.7rem;">
+                        <span><i class="fa-regular fa-file-lines me-1"></i> <strong class="text-dark">{{ $textLen }}</strong> chars</span>
+                        <span><i class="fa-regular fa-rectangle-ad me-1"></i> <strong class="text-{{ $barColor }}">{{ $segmentLabel }}</strong></span>
+                    </div>
+                    <div class="progress" style="height: 4px;">
+                        <div class="progress-bar bg-{{ $barColor }}" role="progressbar"
+                             style="width: {{ $charPercent }}%;" aria-valuenow="{{ $charPercent }}" aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Placeholders -->
                 <div class="mb-3">
-                    <small class="text-muted fw-bold text-uppercase tracking-wide" style="font-size:0.65rem;">
-                        <i class="fa-solid fa-tags me-1"></i> Placeholders:
+                    <small class="text-muted fw-bold text-uppercase d-block mb-1" style="font-size:0.6rem; letter-spacing:0.5px;">
+                        <i class="fa-solid fa-tags me-1"></i> Placeholders
                     </small>
-                    <div class="d-flex flex-wrap gap-1 mt-1">
+                    <div class="d-flex flex-wrap gap-1">
                         @foreach($template['placeholders'] as $ph)
-                        <span class="badge bg-soft-secondary rounded-pill">[{{ $ph }}]</span>
+                        <span class="ph-badge">{{ $ph }}</span>
                         @endforeach
                     </div>
                 </div>
-                
-                <!-- Actions -->
-                <div class="d-flex gap-2">
-                    <button class="btn btn-primary flex-fill" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#editSmsModal" 
-                            data-key="{{ $key }}"
-                            data-title="{{ $template['title'] }}"
-                            data-description="{{ $template['description'] }}"
-                            data-value="{{ $template['value'] }}"
-                            data-placeholders='@json($template['placeholders'])'>
-                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit
-                    </button>
-                    <button class="btn btn-outline-danger reset-template" 
-                            data-key="{{ $key }}"
-                            data-title="{{ $template['title'] }}"
-                            title="Reset to default">
-                        <i class="fa-solid fa-rotate-left"></i>
-                    </button>
+
+                <!-- Spacer + Actions -->
+                <div class="mt-auto">
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary flex-fill"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editSmsModal"
+                                data-key="{{ $key }}"
+                                data-title="{{ $template['title'] }}"
+                                data-description="{{ $template['description'] }}"
+                                data-value="{{ $template['value'] }}"
+                                data-placeholders='@json($template['placeholders'])'>
+                            <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                        </button>
+                        <button class="btn btn-outline-danger reset-template"
+                                data-key="{{ $key }}"
+                                data-title="{{ $template['title'] }}"
+                                title="Reset to default">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -107,9 +129,9 @@
 
 <!-- Edit SMS Template Modal -->
 <div class="modal fade" id="editSmsModal" tabindex="-1" aria-labelledby="editSmsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
         <div class="modal-content border-0 shadow-lg rounded-4">
-            <div class="modal-header border-0 pb-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+            <div class="modal-header border-0 pb-0 pt-4 px-4">
                 <div>
                     <h5 class="modal-title fw-bold text-dark" id="editSmsModalLabel">Edit SMS Template</h5>
                     <p class="text-muted small mb-0" id="smsModalDescription"></p>
@@ -119,53 +141,66 @@
             <form id="editSmsForm">
                 @csrf
                 <input type="hidden" name="key" id="smsTemplateKey">
-                
+
                 <div class="modal-body p-4">
                     <div class="mb-3">
                         <label class="form-label fw-bold mb-2 text-dark">SMS Content *</label>
-                        <textarea class="form-control font-monospace border-2 rounded-3 p-3 shadow-none" 
-                                  name="value" 
-                                  id="smsTemplateValue" 
-                                  rows="6" 
-                                  style="resize: vertical; font-size: 0.95rem; border-color: #e5e7eb; transition: border-color 0.2s;" 
+                        <textarea class="form-control font-monospace border-2 rounded-3 p-3 shadow-none"
+                                  name="value"
+                                  id="smsTemplateValue"
+                                  rows="5"
+                                  style="resize: vertical; font-size: 0.9rem; border-color: #e5e7eb;"
                                   required></textarea>
                     </div>
 
-                    <!-- Insert Placeholders Widget -->
-                    <div class="mb-3 bg-light p-3 rounded-3 border">
-                        <span class="form-label d-block mb-2 fw-bold text-dark text-uppercase small" style="font-size: 0.75rem;"><i class="fa-solid fa-wand-magic-sparkles text-success me-1"></i> Quick Insert Placeholders</span>
-                        <p class="text-muted small mb-2">Click on any placeholder below to insert it at your cursor's current position:</p>
-                        <div class="d-flex flex-wrap gap-1.5" id="placeholdersContainer">
-                            <!-- Populated dynamically via JS -->
-                        </div>
-                    </div>
-
-                    <!-- Live character & segment count -->
-                    <div class="bg-light p-3 rounded-3 border">
+                    <!-- Stats Card -->
+                    <div class="stats-card mb-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="form-label d-block mb-0 fw-bold text-dark text-uppercase small" style="font-size:0.7rem;">
-                                <i class="fa-regular fa-file-lines me-1"></i> Message Stats
+                            <span class="fw-bold text-uppercase small" style="font-size:0.65rem; letter-spacing:0.5px; color:#64748b;">
+                                <i class="fa-regular fa-chart-bar me-1"></i> Message Stats
                             </span>
                             <span id="charPercent" class="fw-bold text-success small">0 / 160 chars</span>
                         </div>
-                        <div class="progress mb-2" style="height: 5px;">
+                        <div class="progress mb-2" style="height: 6px;">
                             <div id="charProgress" class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
                         </div>
-                        <div class="d-flex justify-content-between text-muted small">
-                            <div>
-                                Characters: <span id="charCount" class="fw-bold text-dark">0</span>
-                            </div>
-                            <div>
-                                Segments: <span id="segmentCount" class="fw-bold text-success">1 Segment</span>
-                            </div>
+                        <div class="d-flex justify-content-between text-muted small" style="font-size:0.75rem;">
+                            <div>Characters: <span id="charCount" class="fw-bold text-dark">0</span></div>
+                            <div>Segments: <span id="segmentCount" class="fw-bold text-success">1 Segment</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Insert Placeholders -->
+                    <div class="mb-3 p-3 rounded-3" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="fw-bold text-uppercase small" style="font-size:0.65rem; letter-spacing:0.5px; color:#64748b;">
+                                <i class="fa-solid fa-wand-magic-sparkles text-success me-1"></i> Quick Insert
+                            </span>
+                            <small class="text-muted" style="font-size:0.65rem;">Click to insert at cursor</small>
+                        </div>
+                        <div class="d-flex flex-wrap gap-1" id="placeholdersContainer"></div>
+                    </div>
+
+                    <!-- Live Sample Preview -->
+                    <div class="live-preview p-3 rounded-3" style="background:#fefce8; border:1px solid #fde68a;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="fw-bold text-uppercase small" style="font-size:0.65rem; letter-spacing:0.5px; color:#92400e;">
+                                <i class="fa-regular fa-eye me-1"></i> Live Preview
+                            </span>
+                            <button type="button" id="copyPreviewBtn" class="btn btn-sm py-0 px-2" style="font-size:0.65rem; background:#fef3c7; color:#92400e; border:1px solid #fcd34d;">
+                                <i class="fa-regular fa-copy me-1"></i> Copy
+                            </button>
+                        </div>
+                        <div id="livePreview" class="small" style="font-size:0.78rem; line-height:1.5; color:#78350f; white-space:pre-line;">
+                            Start typing to see a preview with sample data...
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="modal-footer border-0 pb-4 px-4 pt-0 d-flex gap-2">
-                    <button type="button" class="btn btn-light rounded-3 fw-bold px-4 py-2.5" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" id="saveTemplateBtn" class="btn btn-success rounded-3 fw-bold px-4 py-2.5">
-                        <span class="btn-text">Save Changes</span>
+                    <button type="button" class="btn btn-light rounded-3 fw-bold px-4 py-2" data-bs-dismiss="modal" style="font-size:0.85rem;">Cancel</button>
+                    <button type="submit" id="saveTemplateBtn" class="btn btn-success rounded-3 fw-bold px-4 py-2" style="font-size:0.85rem;">
+                        <span class="btn-text"><i class="fa-regular fa-floppy-disk me-1"></i> Save Changes</span>
                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                     </button>
                 </div>
@@ -177,43 +212,78 @@
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-// Toggle template enabled/disabled
+const sampleData = {
+    patient_name: 'John',
+    patient_ID: 'UZC-001234',
+    doctor_name: 'Mlay',
+    appointment_date: '15/06/2026',
+    appointment_time: '10:30 AM',
+    service_name: 'General Checkup',
+    amount: '25,000',
+    payment_date: '01/06/2026',
+    receipt_number: 'RCP-006789',
+    next_appointment_date: '15/06/2026',
+    account_name: 'Uzazi Clinic Account',
+    tigo_yas: '0623123456',
+    tigo_pesa: '0623123456',
+    mpesa: '0712123456',
+    crdb_bank: '0151234567890',
+    queue_number: 'Q-042',
+    lab_section: 'Hematology',
+    test_name: 'Blood Count',
+    test_date: '01/06/2026',
+};
+
+function renderPreview(text) {
+    let rendered = text;
+    Object.keys(sampleData).forEach(ph => {
+        const regex = new RegExp('\\[' + ph + '\\]', 'g');
+        rendered = rendered.replace(regex, '<span class="sample-val">' + sampleData[ph] + '</span>');
+    });
+    return rendered || '<span style="color:#94a3b8;font-style:italic;">Start typing to see a preview with sample data...</span>';
+}
+
 function toggleTemplate(key, enabled) {
-    fetch('/admin/notifications/sms-templates/toggle', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ key: key, enabled: enabled })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const label = document.querySelector('label[for="toggle_' + key + '"]');
-            if (label) {
-                label.textContent = enabled ? 'Enabled' : 'Disabled';
-            }
+    Swal.fire({
+        title: enabled ? 'Enable Template?' : 'Disable Template?',
+        text: 'Are you sure you want to ' + (enabled ? 'enable' : 'disable') + ' this SMS template?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: enabled ? '#16a34a' : '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Yes, ' + (enabled ? 'enable' : 'disable') + ' it',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('/admin/notifications/sms-templates/toggle', {
+                method: 'POST',
+                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key: key, enabled: enabled })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({ icon: 'success', title: 'Updated!', text: data.message, confirmButtonColor: '#16a34a', timer: 2000, showConfirmButton: false });
+                    const label = document.querySelector('label[for="toggle_' + key + '"]');
+                    if (label) label.textContent = enabled ? 'Enabled' : 'Disabled';
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Failed', text: data.message || 'Something went wrong.', confirmButtonColor: '#dc2626' });
+                    const toggle = document.getElementById('toggle_' + key);
+                    if (toggle) toggle.checked = !enabled;
+                }
+            })
+            .catch(() => {
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to toggle template.', confirmButtonColor: '#dc2626' });
+                const toggle = document.getElementById('toggle_' + key);
+                if (toggle) toggle.checked = !enabled;
+            });
         } else {
-            throw new Error(data.message || 'Failed to toggle template');
-        }
-    })
-    .catch(error => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.message || 'Failed to toggle template',
-            confirmButtonColor: '#dc2626'
-        });
-        const toggle = document.getElementById('toggle_' + key);
-        if (toggle) {
-            toggle.checked = !enabled;
+            const toggle = document.getElementById('toggle_' + key);
+            if (toggle) toggle.checked = !enabled;
         }
     });
 }
 
-// Reset template to default
 document.querySelectorAll('.reset-template').forEach(btn => {
     btn.addEventListener('click', function() {
         const key = this.getAttribute('data-key');
@@ -221,7 +291,7 @@ document.querySelectorAll('.reset-template').forEach(btn => {
 
         Swal.fire({
             title: 'Reset "' + title + '"?',
-            text: 'This will restore the default message. Your custom message will be lost.',
+            html: 'This will restore the <strong>default message</strong>.<br>Your custom changes will be lost.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#dc2626',
@@ -232,40 +302,19 @@ document.querySelectorAll('.reset-template').forEach(btn => {
             if (result.isConfirmed) {
                 fetch('/admin/notifications/sms-templates/reset', {
                     method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json', 'Content-Type': 'application/json' },
                     body: JSON.stringify({ key: key })
                 })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Reset Complete',
-                            text: data.message,
-                            confirmButtonColor: '#16a34a'
-                        }).then(() => {
-                            window.location.reload();
-                        });
+                        Swal.fire({ icon: 'success', title: 'Reset Complete!', text: data.message, confirmButtonColor: '#16a34a' }).then(() => { window.location.reload(); });
                     } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Reset Failed',
-                            text: data.message || 'Something went wrong.',
-                            confirmButtonColor: '#dc2626'
-                        });
+                        Swal.fire({ icon: 'error', title: 'Reset Failed', text: data.message || 'Something went wrong.', confirmButtonColor: '#dc2626' });
                     }
                 })
                 .catch(() => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'An error occurred while resetting the template.',
-                        confirmButtonColor: '#dc2626'
-                    });
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred while resetting.', confirmButtonColor: '#dc2626' });
                 });
             }
         });
@@ -280,6 +329,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const segmentCountEl = document.getElementById('segmentCount');
     const charProgressEl = document.getElementById('charProgress');
     const charPercentEl = document.getElementById('charPercent');
+    const livePreviewEl = document.getElementById('livePreview');
+    const copyBtn = document.getElementById('copyPreviewBtn');
 
     function updateCounts() {
         const text = templateValueInput.value;
@@ -287,9 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
         charCountEl.textContent = len;
 
         let segments = 1;
-        if (len > 160) {
-            segments = Math.ceil(len / 153);
-        }
+        if (len > 160) segments = Math.ceil(len / 153);
         const segmentText = segments + (segments === 1 ? ' Segment' : ' Segments');
         segmentCountEl.textContent = segmentText;
 
@@ -303,16 +352,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (charPercentEl) {
             charPercentEl.textContent = len + ' / 160 chars';
-            charPercentEl.className = 'fw-bold';
+            charPercentEl.className = 'fw-bold small';
             if (pct > 90) charPercentEl.classList.add('text-danger');
             else if (pct > 75) charPercentEl.classList.add('text-warning');
             else charPercentEl.classList.add('text-success');
         }
 
-        segmentCountEl.classList.remove('text-success', 'text-warning');
+        segmentCountEl.classList.remove('text-success', 'text-warning', 'text-danger');
         if (pct > 90) segmentCountEl.classList.add('text-danger');
         else if (pct > 75) segmentCountEl.classList.add('text-warning');
         else segmentCountEl.classList.add('text-success');
+
+        if (livePreviewEl) livePreviewEl.innerHTML = renderPreview(text);
     }
 
     templateValueInput.addEventListener('input', updateCounts);
@@ -335,16 +386,17 @@ document.addEventListener('DOMContentLoaded', function() {
             placeholders.forEach(ph => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = 'btn btn-xs btn-outline-secondary font-monospace rounded-pill';
+                btn.className = 'ph-insert-btn';
                 btn.textContent = '[' + ph + ']';
+                btn.title = 'Insert [' + ph + ']';
 
                 btn.addEventListener('click', function() {
                     const startPos = templateValueInput.selectionStart;
                     const endPos = templateValueInput.selectionEnd;
-                    const placeholderText = '[' + ph + ']';
-                    templateValueInput.value = templateValueInput.value.substring(0, startPos) + placeholderText + templateValueInput.value.substring(endPos);
+                    const phText = '[' + ph + ']';
+                    templateValueInput.value = templateValueInput.value.substring(0, startPos) + phText + templateValueInput.value.substring(endPos);
                     templateValueInput.focus();
-                    templateValueInput.selectionStart = templateValueInput.selectionEnd = startPos + placeholderText.length;
+                    templateValueInput.selectionStart = templateValueInput.selectionEnd = startPos + phText.length;
                     updateCounts();
                 });
 
@@ -352,6 +404,17 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             updateCounts();
+        });
+    }
+
+    if (copyBtn) {
+        copyBtn.addEventListener('click', function() {
+            const text = livePreviewEl.innerText || livePreviewEl.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                Swal.fire({ icon: 'success', title: 'Copied!', text: 'Sample preview copied to clipboard.', timer: 1500, showConfirmButton: false });
+            }).catch(() => {
+                Swal.fire({ icon: 'error', title: 'Failed', text: 'Could not copy to clipboard.', confirmButtonColor: '#dc2626' });
+            });
         });
     }
 
@@ -373,38 +436,18 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch('/admin/notifications/sms-templates/update', {
                 method: 'POST',
                 body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Accept': 'application/json'
-                }
+                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
             })
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: data.message,
-                        confirmButtonColor: '#16a34a'
-                    }).then(() => {
-                        window.location.reload();
-                    });
+                    Swal.fire({ icon: 'success', title: 'Saved!', text: data.message, confirmButtonColor: '#16a34a' }).then(() => { window.location.reload(); });
                 } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Update Failed',
-                        text: data.message || 'Something went wrong.',
-                        confirmButtonColor: '#16a34a'
-                    });
+                    Swal.fire({ icon: 'error', title: 'Failed', text: data.message || 'Something went wrong.', confirmButtonColor: '#dc2626' });
                 }
             })
             .catch(() => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'An error occurred while saving the template. Please try again.',
-                    confirmButtonColor: '#16a34a'
-                });
+                Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred while saving.', confirmButtonColor: '#dc2626' });
             })
             .finally(() => {
                 btnText.classList.remove('d-none');
@@ -418,7 +461,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <style>
     .tracking-wide { letter-spacing: 0.5px; }
-    .btn-xs { padding: 0.15rem 0.4rem; font-size: 0.75rem; }
 
     .icon-circle {
         width: 40px; height: 40px;
@@ -427,7 +469,6 @@ document.addEventListener('DOMContentLoaded', function() {
         color: #fff; border-radius: 12px; font-size: 1.1rem;
         flex-shrink: 0;
     }
-
     .shadow-hover {
         transition: all 0.25s ease;
         box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
@@ -437,76 +478,81 @@ document.addEventListener('DOMContentLoaded', function() {
         box-shadow: 0 12px 24px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
     }
 
-    .sms-preview {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 10px;
-        overflow: hidden;
+    .preview-tabs .nav-pills .nav-link {
+        color: #64748b; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px;
+        font-size: 0.7rem; font-weight: 500; transition: all 0.2s;
     }
-    .sms-preview .preview-header {
-        background: #f1f5f9;
-        padding: 6px 12px;
-        border-bottom: 1px solid #e2e8f0;
-        font-size: 0.65rem;
+    .preview-tabs .nav-pills .nav-link.active {
+        background: #2563eb; color: #fff; border-color: #2563eb;
     }
-    .sms-preview .preview-body {
-        padding: 10px 12px;
-        min-height: 48px;
-        max-height: 80px;
-        overflow-y: auto;
+    .preview-tabs .nav-pills .nav-link:hover:not(.active) {
+        background: #e2e8f0;
     }
-    .sms-preview .preview-body small {
-        font-size: 0.78rem !important;
-        line-height: 1.4;
+    .preview-box {
+        background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;
+        padding: 10px 12px; min-height: 50px; max-height: 90px; overflow-y: auto;
     }
+    .preview-sample {
+        background: #fefce8; border-color: #fde68a;
+    }
+    .preview-sample small { color: #78350f !important; }
 
     .progress { background-color: #e2e8f0; border-radius: 99px; }
     .progress-bar { border-radius: 99px; transition: width 0.3s ease; }
 
-    .badge.bg-soft-secondary {
-        background-color: #f1f5f9 !important;
-        color: #475569 !important;
-        font-size: 0.65rem;
-        font-weight: 500;
+    .ph-badge {
+        display: inline-block;
+        background: #eef2ff; color: #4338ca;
+        font-size: 0.65rem; font-weight: 500;
+        padding: 2px 8px; border-radius: 20px;
+        border: 1px solid #c7d2fe;
+        font-family: 'Courier New', monospace;
+        transition: all 0.15s;
     }
-    .badge.bg-soft-success {
-        background-color: #dcfce7 !important;
-        color: #16a34a !important;
+    .ph-badge:hover {
+        background: #4338ca; color: #fff; border-color: #4338ca;
     }
-    .badge.bg-soft-warning {
-        background-color: #fef3c7 !important;
-        color: #d97706 !important;
-    }
-    .badge.bg-soft-danger {
-        background-color: #fee2e2 !important;
-        color: #dc2626 !important;
-    }
+
+    .badge.bg-soft-success { background-color: #dcfce7 !important; color: #16a34a !important; }
+    .badge.bg-soft-warning { background-color: #fef3c7 !important; color: #d97706 !important; }
+    .badge.bg-soft-danger { background-color: #fee2e2 !important; color: #dc2626 !important; }
 
     .btn-outline-danger {
-        border-color: #e2e8f0;
-        color: #94a3b8;
-        transition: all 0.2s;
+        border-color: #e2e8f0; color: #94a3b8; transition: all 0.2s;
     }
     .btn-outline-danger:hover {
-        background-color: #fef2f2;
-        border-color: #fecaca;
-        color: #dc2626;
-    }
-    .btn-outline-danger i { font-size: 0.9rem; }
-
-    .form-check-input:checked {
-        background-color: #16a34a;
-        border-color: #16a34a;
-    }
-    .card .form-check-label {
-        font-size: 0.7rem;
-        color: #64748b;
+        background-color: #fef2f2; border-color: #fecaca; color: #dc2626;
     }
 
-    /* Custom scrollbar for preview */
-    .preview-body::-webkit-scrollbar { width: 3px; }
-    .preview-body::-webkit-scrollbar-track { background: transparent; }
-    .preview-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+    .form-check-input:checked { background-color: #16a34a; border-color: #16a34a; }
+    .card .form-check-label { font-size: 0.6rem; color: #64748b; }
+
+    .ph-insert-btn {
+        border: 1px solid #c7d2fe; background: #eef2ff; color: #4338ca;
+        font-family: 'Courier New', monospace; font-size: 0.72rem; font-weight: 500;
+        padding: 3px 10px; border-radius: 20px; cursor: pointer; transition: all 0.15s;
+    }
+    .ph-insert-btn:hover {
+        background: #4338ca; color: #fff; border-color: #4338ca;
+    }
+
+    .sample-val {
+        display: inline; background: #fef9c3; color: #92400e; padding: 0 3px; border-radius: 3px;
+        border-bottom: 1px dashed #f59e0b;
+    }
+
+    .live-preview { max-height: 120px; overflow-y: auto; }
+
+    .stats-card {
+        background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px;
+    }
+
+    .preview-box::-webkit-scrollbar { width: 3px; }
+    .preview-box::-webkit-scrollbar-track { background: transparent; }
+    .preview-box::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+    .live-preview::-webkit-scrollbar { width: 3px; }
+    .live-preview::-webkit-scrollbar-track { background: transparent; }
+    .live-preview::-webkit-scrollbar-thumb { background: #d4a017; border-radius: 99px; }
 </style>
 @endpush
 @endsection
