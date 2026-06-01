@@ -6,7 +6,7 @@
     <title>Admin Dashboard - {{ config('app.name') }}</title>
     
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- SweetAlert2 -->
@@ -32,7 +32,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-light);
             overflow-x: hidden;
         }
@@ -191,57 +191,6 @@
             width: 100%;
             z-index: 1001;
         }
-
-        /* Dashboard Cards */
-        .stat-card {
-            background: #ffffff !important;
-            border-radius: 12px;
-            padding: 1.25rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            border: 1px solid #f1f5f9;
-            display: flex;
-            align-items: center;
-            height: 100%;
-            transition: transform 0.2s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 0.75rem;
-            font-size: 1.1rem;
-            flex-shrink: 0;
-        }
-
-        .stat-title {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--text-muted);
-            margin-bottom: 0.15rem;
-            line-height: 1.2;
-        }
-
-        .stat-value {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #1e293b;
-        }
-
-        /* Colors */
-        .bg-indigo-light { background-color: #e0e7ff !important; color: #4338ca !important; }
-        .bg-green-light { background-color: #dcfce7 !important; color: #15803d !important; }
-        .bg-orange-light { background-color: #ffedd5 !important; color: #c2410c !important; }
-        .bg-purple-light { background-color: #f3e8ff !important; color: #7e22ce !important; }
-        .bg-blue-light { background-color: #dbeafe !important; color: #1d4ed8 !important; }
     </style>
 </head>
 <body>
