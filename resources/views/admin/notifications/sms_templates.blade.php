@@ -137,7 +137,7 @@ function resetTemplate(key, title) {
         cancelButtonText: 'Cancel'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch('{{ route("admin.notifications.resetSmsTemplate") }}', {
+            fetch('{{ route("admin.notifications.smsTemplates.reset") }}', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
