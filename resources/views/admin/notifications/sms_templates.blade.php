@@ -12,6 +12,29 @@
         $segmentLabel = $segments . ($segments === 1 ? ' Segment' : ' Segments');
         $charPercent = min(100, ($textLen / 160) * 100);
         $barColor = $charPercent > 90 ? 'danger' : ($charPercent > 75 ? 'warning' : 'success');
+
+        // Icon based on template type
+        $icon = 'fa-comment-sms';
+        $iconBg = 'linear-gradient(135deg, #6366f1, #4f46e5)';
+        if (str_contains($key, 'welcome')) {
+            $icon = 'fa-hand-sparkles';
+            $iconBg = 'linear-gradient(135deg, #10b981, #059669)';
+        } elseif (str_contains($key, 'confirmation')) {
+            $icon = 'fa-calendar-check';
+            $iconBg = 'linear-gradient(135deg, #3b82f6, #2563eb)';
+        } elseif (str_contains($key, 'reminder')) {
+            $icon = 'fa-bell';
+            $iconBg = 'linear-gradient(135deg, #f59e0b, #d97706)';
+        } elseif (str_contains($key, 'payment')) {
+            $icon = 'fa-credit-card';
+            $iconBg = 'linear-gradient(135deg, #8b5cf6, #7c3aed)';
+        } elseif (str_contains($key, 'lab')) {
+            $icon = 'fa-flask';
+            $iconBg = 'linear-gradient(135deg, #ec4899, #db2777)';
+        } elseif (str_contains($key, 'service')) {
+            $icon = 'fa-stethoscope';
+            $iconBg = 'linear-gradient(135deg, #06b6d4, #0891b2)';
+        }
     @endphp
     <div class="col-md-6 col-lg-4 mb-2">
         <div class="card h-100 border-0 shadow-hover rounded-4 overflow-hidden">
@@ -19,8 +42,8 @@
                 <!-- Header -->
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="icon-circle">
-                            <i class="fa-solid fa-comment-sms"></i>
+                        <div class="icon-circle" style="background: {{ $iconBg }};">
+                            <i class="fa-solid {{ $icon }}"></i>
                         </div>
                         <div>
                             <h6 class="fw-bold mb-1 text-dark" style="font-size:0.9rem;">{{ $template['title'] }}</h6>
@@ -102,21 +125,22 @@
 
                 <!-- Spacer + Actions -->
                 <div class="mt-auto">
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-primary flex-fill btn-open-editor"
-                                data-key="{{ $key }}"
-                                data-title="{{ $template['title'] }}"
-                                data-description="{{ $template['description'] }}"
-                                data-value="{{ $template['value'] }}"
-                                data-placeholders='@json($template['placeholders'])'>
-                            <i class="fa-solid fa-pen-to-square me-1"></i> Edit
-                        </button>
-                        <button class="btn btn-outline-danger reset-template"
-                                data-key="{{ $key }}"
-                                data-title="{{ $template['title'] }}"
-                                title="Reset to default">
-                            <i class="fa-solid fa-rotate-left"></i>
-                        </button>
+                    <button class="btn btn-primary w-100 btn-open-editor rounded-3 fw-bold py-2.5"
+                            data-key="{{ $key }}"
+                            data-title="{{ $template['title'] }}"
+                            data-description="{{ $template['description'] }}"
+                            data-value="{{ $template['value'] }}"
+                            data-placeholders='@json($template['placeholders'])'
+                            style="background: linear-gradient(135deg, #6366f1, #4f46e5); border: none; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);">
+                        <i class="fa-solid fa-pen-to-square me-2"></i> Edit Template
+                    </button>
+                    <button class="btn btn-outline-danger w-100 mt-2 reset-template rounded-3 py-2"
+                            data-key="{{ $key }}"
+                            data-title="{{ $template['title'] }}"
+                            title="Reset to default"
+                            style="font-size: 0.85rem;">
+                        <i class="fa-solid fa-rotate-left me-1"></i> Reset to Default
+                    </button>
                     </div>
                 </div>
             </div>
