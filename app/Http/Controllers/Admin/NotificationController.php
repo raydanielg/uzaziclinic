@@ -10,7 +10,144 @@ class NotificationController extends Controller
 {
     public function send() { return view('admin.notifications.send'); }
     public function history() { return view('admin.notifications.history'); }
-    public function emailTemplates() { return view('admin.notifications.email_templates'); }
+    public function emailTemplates()
+    {
+        $templates = [
+            'email_template_welcome' => [
+                'title' => 'Welcome Email',
+                'subject' => 'Welcome to Uzazi Clinic - Your Journey to Better Health',
+                'body' => 'Dear {patient_name},
+
+Welcome to Uzazi Clinic! We are delighted to have you as part of our healthcare family.
+
+Your Patient ID: {patient_ID}
+
+At Uzazi Clinic, we are committed to providing you with exceptional healthcare services. Our team of experienced doctors and medical staff are here to ensure you receive the best possible care.
+
+For any questions or assistance, please feel free to contact us:
+Phone: +255 678 233 736
+Email: info@uzaziclinic.co.tz
+
+We look forward to serving you.
+
+Best regards,
+Uzazi Clinic Team',
+                'description' => 'Sent to new patients upon registration.',
+                'placeholders' => ['patient_name', 'patient_ID']
+            ],
+            'email_template_appointment_confirmation' => [
+                'title' => 'Appointment Confirmation',
+                'subject' => 'Appointment Confirmed - {appointment_date} at {appointment_time}',
+                'body' => 'Dear {patient_name},
+
+Your appointment has been successfully confirmed!
+
+Appointment Details:
+- Date: {appointment_date}
+- Time: {appointment_time}
+- Doctor: Dr. {doctor_name}
+- Patient ID: {patient_ID}
+
+Please arrive 15 minutes before your scheduled time. If you need to reschedule, please contact us at least 24 hours in advance.
+
+For any questions, call us at: +255 678 233 736
+
+We look forward to seeing you!
+
+Best regards,
+Uzazi Clinic Team',
+                'description' => 'Sent after a successful appointment booking.',
+                'placeholders' => ['patient_name', 'patient_ID', 'doctor_name', 'appointment_date', 'appointment_time']
+            ],
+            'email_template_appointment_reminder' => [
+                'title' => 'Appointment Reminder',
+                'subject' => 'Reminder: Your Appointment Tomorrow',
+                'body' => 'Dear {patient_name},
+
+This is a friendly reminder about your upcoming appointment tomorrow.
+
+Appointment Details:
+- Date: {appointment_date}
+- Time: {appointment_time}
+- Doctor: Dr. {doctor_name}
+- Patient ID: {patient_ID}
+
+Please remember to:
+- Arrive 15 minutes early
+- Bring your ID and any relevant medical documents
+- Take any prescribed medications as usual
+
+If you need to reschedule, please contact us immediately.
+
+See you tomorrow!
+
+Best regards,
+Uzazi Clinic Team',
+                'description' => 'Sent to remind patients about upcoming appointments.',
+                'placeholders' => ['patient_name', 'patient_ID', 'doctor_name', 'appointment_date', 'appointment_time']
+            ],
+            'email_template_payment_confirmation' => [
+                'title' => 'Payment Confirmation',
+                'subject' => 'Payment Received - Receipt #{receipt_number}',
+                'body' => 'Dear {patient_name},
+
+Thank you for your payment!
+
+Payment Details:
+- Amount: TSh {amount}
+- Receipt Number: {receipt_number}
+- Patient ID: {patient_ID}
+- Service: {service_name}
+- Date: {payment_date}
+
+Your payment has been successfully processed and recorded in our system.
+
+For any questions about this payment, please contact our billing department.
+
+Thank you for choosing Uzazi Clinic!
+
+Best regards,
+Uzazi Clinic Team',
+                'description' => 'Sent when payment is confirmed.',
+                'placeholders' => ['patient_name', 'patient_ID', 'amount', 'service_name', 'payment_date', 'receipt_number']
+            ],
+            'email_template_lab_results' => [
+                'title' => 'Lab Results Ready',
+                'subject' => 'Your Lab Results Are Ready',
+                'body' => 'Dear {patient_name},
+
+Your lab test results are now available.
+
+Test Details:
+- Test Name: {test_name}
+- Test Date: {test_date}
+- Patient ID: {patient_ID}
+
+Please log in to your patient portal to view your detailed results, or visit the clinic to discuss them with your doctor.
+
+If you have any questions, please contact us.
+
+Best regards,
+Uzazi Clinic Team',
+                'description' => 'Sent when lab results are ready for patient review.',
+                'placeholders' => ['patient_name', 'patient_ID', 'test_name', 'test_date']
+            ],
+        ];
+
+        $emailTemplates = [];
+        foreach ($templates as $key => $meta) {
+            $emailTemplates[$key] = [
+                'key' => $key,
+                'title' => $meta['title'],
+                'description' => $meta['description'],
+                'placeholders' => $meta['placeholders'],
+                'subject' => Setting::get($key . '_subject', $meta['subject']),
+                'body' => Setting::get($key . '_body', $meta['body'])
+            ];
+        }
+
+        return view('admin.notifications.email_templates', compact('emailTemplates'));
+    }
     
     public function smsTemplates()
     {
@@ -92,6 +229,23 @@ class NotificationController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'SMS Template updated successfully!'
+        ]);
+    }
+
+    public function updateEmailTemplate(Request $request)
+    {
+        $request->validate([
+            'key' => 'required|string',
+            'subject' => 'required|string|max:255',
+            'body' => 'required|string'
+        ]);
+
+        Setting::set($request->key . '_subject', $request->subject, 'email');
+        Setting::set($request->key . '_body', $request->body, 'email');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Email Template updated successfully!'
         ]);
     }
 }
