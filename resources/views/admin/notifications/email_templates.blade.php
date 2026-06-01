@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(this);
         formData.append('_method', 'PUT');
 
-        fetch('{{ route("admin.notifications.updateEmailTemplate") }}', {
+        fetch('{{ route("admin.notifications.emailTemplates.update") }}', {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
