@@ -140,13 +140,24 @@
                         </div>
                     </div>
 
-                    <!-- Live word & segment count -->
-                    <div class="d-flex justify-content-between align-items-center bg-gray-50 p-2 rounded-2 border border-gray-100 text-muted small">
-                        <div>
-                            Characters: <span id="charCount" class="fw-bold text-dark">0</span>
+                    <!-- Live character & segment count -->
+                    <div class="bg-light p-3 rounded-3 border">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="form-label d-block mb-0 fw-bold text-dark text-uppercase small" style="font-size:0.7rem;">
+                                <i class="fa-regular fa-file-lines me-1"></i> Message Stats
+                            </span>
+                            <span id="charPercent" class="fw-bold text-success small">0 / 160 chars</span>
                         </div>
-                        <div>
-                            Estimated Segments: <span id="segmentCount" class="fw-bold text-success">1 Segment</span> (160 chars max per segment)
+                        <div class="progress mb-2" style="height: 5px;">
+                            <div id="charProgress" class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted small">
+                            <div>
+                                Characters: <span id="charCount" class="fw-bold text-dark">0</span>
+                            </div>
+                            <div>
+                                Segments: <span id="segmentCount" class="fw-bold text-success">1 Segment</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -180,7 +191,6 @@ function toggleTemplate(key, enabled) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Update label
             const label = document.querySelector('label[for="toggle_' + key + '"]');
             if (label) {
                 label.textContent = enabled ? 'Enabled' : 'Disabled';
@@ -196,7 +206,6 @@ function toggleTemplate(key, enabled) {
             text: error.message || 'Failed to toggle template',
             confirmButtonColor: '#dc2626'
         });
-        // Revert toggle
         const toggle = document.getElementById('toggle_' + key);
         if (toggle) {
             toggle.checked = !enabled;
@@ -204,35 +213,108 @@ function toggleTemplate(key, enabled) {
     });
 }
 
+// Reset template to default
+document.querySelectorAll('.reset-template').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const key = this.getAttribute('data-key');
+        const title = this.getAttribute('data-title');
+
+        Swal.fire({
+            title: 'Reset "' + title + '"?',
+            text: 'This will restore the default message. Your custom message will be lost.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Yes, reset it',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('/admin/notifications/sms-templates/reset', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ key: key })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Reset Complete',
+                            text: data.message,
+                            confirmButtonColor: '#16a34a'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Reset Failed',
+                            text: data.message || 'Something went wrong.',
+                            confirmButtonColor: '#dc2626'
+                        });
+                    }
+                })
+                .catch(() => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while resetting the template.',
+                        confirmButtonColor: '#dc2626'
+                    });
+                });
+            }
+        });
+    });
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     const editModal = document.getElementById('editSmsModal');
     const placeholdersContainer = document.getElementById('placeholdersContainer');
     const templateValueInput = document.getElementById('smsTemplateValue');
     const charCountEl = document.getElementById('charCount');
     const segmentCountEl = document.getElementById('segmentCount');
-    
-    // Live count updates
+    const charProgressEl = document.getElementById('charProgress');
+    const charPercentEl = document.getElementById('charPercent');
+
     function updateCounts() {
         const text = templateValueInput.value;
         const len = text.length;
         charCountEl.textContent = len;
-        
-        // SMS segment logic: 1st segment is 160. Multipart SMS segment is 153 chars.
+
         let segments = 1;
         if (len > 160) {
             segments = Math.ceil(len / 153);
         }
-        segmentCountEl.textContent = segments + (segments === 1 ? ' Segment' : ' Segments');
-        
-        if (len > 160) {
-            segmentCountEl.classList.remove('text-success');
-            segmentCountEl.classList.add('text-warning');
-        } else {
-            segmentCountEl.classList.remove('text-warning');
-            segmentCountEl.classList.add('text-success');
+        const segmentText = segments + (segments === 1 ? ' Segment' : ' Segments');
+        segmentCountEl.textContent = segmentText;
+
+        const pct = Math.min(100, (len / 160) * 100);
+        if (charProgressEl) {
+            charProgressEl.style.width = pct + '%';
+            charProgressEl.className = 'progress-bar';
+            if (pct > 90) charProgressEl.classList.add('bg-danger');
+            else if (pct > 75) charProgressEl.classList.add('bg-warning');
+            else charProgressEl.classList.add('bg-success');
         }
+        if (charPercentEl) {
+            charPercentEl.textContent = len + ' / 160 chars';
+            charPercentEl.className = 'fw-bold';
+            if (pct > 90) charPercentEl.classList.add('text-danger');
+            else if (pct > 75) charPercentEl.classList.add('text-warning');
+            else charPercentEl.classList.add('text-success');
+        }
+
+        segmentCountEl.classList.remove('text-success', 'text-warning');
+        if (pct > 90) segmentCountEl.classList.add('text-danger');
+        else if (pct > 75) segmentCountEl.classList.add('text-warning');
+        else segmentCountEl.classList.add('text-success');
     }
-    
+
     templateValueInput.addEventListener('input', updateCounts);
 
     if (editModal) {
@@ -243,61 +325,51 @@ document.addEventListener('DOMContentLoaded', function() {
             const description = button.getAttribute('data-description');
             const value = button.getAttribute('data-value');
             const placeholders = JSON.parse(button.getAttribute('data-placeholders'));
-            
-            // Populate modal fields
+
             document.getElementById('editSmsModalLabel').textContent = 'Edit: ' + title;
             document.getElementById('smsModalDescription').textContent = description;
             document.getElementById('smsTemplateKey').value = key;
             templateValueInput.value = value;
-            
-            // Generate quick-insert placeholder buttons
+
             placeholdersContainer.innerHTML = '';
             placeholders.forEach(ph => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = 'btn btn-xs btn-outline-dark font-monospace rounded-pill text-dark border-gray-300 hover-bg-success hover-text-white transition';
-                btn.style.fontSize = '0.75rem';
-                btn.style.padding = '3px 10px';
-                btn.style.margin = '2px';
+                btn.className = 'btn btn-xs btn-outline-secondary font-monospace rounded-pill';
                 btn.textContent = '[' + ph + ']';
-                
+
                 btn.addEventListener('click', function() {
-                    // Insert at current cursor position in textarea
                     const startPos = templateValueInput.selectionStart;
                     const endPos = templateValueInput.selectionEnd;
-                    const text = templateValueInput.value;
                     const placeholderText = '[' + ph + ']';
-                    
-                    templateValueInput.value = text.substring(0, startPos) + placeholderText + text.substring(endPos);
+                    templateValueInput.value = templateValueInput.value.substring(0, startPos) + placeholderText + templateValueInput.value.substring(endPos);
                     templateValueInput.focus();
                     templateValueInput.selectionStart = templateValueInput.selectionEnd = startPos + placeholderText.length;
-                    
                     updateCounts();
                 });
-                
+
                 placeholdersContainer.appendChild(btn);
             });
-            
+
             updateCounts();
         });
     }
 
-    // Handle form submit via AJAX
     const editForm = document.getElementById('editSmsForm');
     if (editForm) {
         editForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const submitBtn = document.getElementById('saveTemplateBtn');
             const btnText = submitBtn.querySelector('.btn-text');
             const spinner = submitBtn.querySelector('.spinner-border');
-            
+
             btnText.classList.add('d-none');
             spinner.classList.remove('d-none');
             submitBtn.disabled = true;
-            
+
             const formData = new FormData(editForm);
-            
+
             fetch('/admin/notifications/sms-templates/update', {
                 method: 'POST',
                 body: formData,
@@ -326,8 +398,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 }
             })
-            .catch(error => {
-                console.error(error);
+            .catch(() => {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -346,21 +417,96 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
-    .btn-xs {
-        padding: 0.15rem 0.4rem;
-        font-size: 0.75rem;
+    .tracking-wide { letter-spacing: 0.5px; }
+    .btn-xs { padding: 0.15rem 0.4rem; font-size: 0.75rem; }
+
+    .icon-circle {
+        width: 40px; height: 40px;
+        display: flex; align-items: center; justify-content: center;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: #fff; border-radius: 12px; font-size: 1.1rem;
+        flex-shrink: 0;
     }
-    .hover-bg-success:hover {
-        background-color: #16a34a !important;
-        border-color: #16a34a !important;
+
+    .shadow-hover {
+        transition: all 0.25s ease;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
     }
-    .hover-text-white:hover {
-        color: white !important;
+    .shadow-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
     }
-    .card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+
+    .sms-preview {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        overflow: hidden;
     }
+    .sms-preview .preview-header {
+        background: #f1f5f9;
+        padding: 6px 12px;
+        border-bottom: 1px solid #e2e8f0;
+        font-size: 0.65rem;
+    }
+    .sms-preview .preview-body {
+        padding: 10px 12px;
+        min-height: 48px;
+        max-height: 80px;
+        overflow-y: auto;
+    }
+    .sms-preview .preview-body small {
+        font-size: 0.78rem !important;
+        line-height: 1.4;
+    }
+
+    .progress { background-color: #e2e8f0; border-radius: 99px; }
+    .progress-bar { border-radius: 99px; transition: width 0.3s ease; }
+
+    .badge.bg-soft-secondary {
+        background-color: #f1f5f9 !important;
+        color: #475569 !important;
+        font-size: 0.65rem;
+        font-weight: 500;
+    }
+    .badge.bg-soft-success {
+        background-color: #dcfce7 !important;
+        color: #16a34a !important;
+    }
+    .badge.bg-soft-warning {
+        background-color: #fef3c7 !important;
+        color: #d97706 !important;
+    }
+    .badge.bg-soft-danger {
+        background-color: #fee2e2 !important;
+        color: #dc2626 !important;
+    }
+
+    .btn-outline-danger {
+        border-color: #e2e8f0;
+        color: #94a3b8;
+        transition: all 0.2s;
+    }
+    .btn-outline-danger:hover {
+        background-color: #fef2f2;
+        border-color: #fecaca;
+        color: #dc2626;
+    }
+    .btn-outline-danger i { font-size: 0.9rem; }
+
+    .form-check-input:checked {
+        background-color: #16a34a;
+        border-color: #16a34a;
+    }
+    .card .form-check-label {
+        font-size: 0.7rem;
+        color: #64748b;
+    }
+
+    /* Custom scrollbar for preview */
+    .preview-body::-webkit-scrollbar { width: 3px; }
+    .preview-body::-webkit-scrollbar-track { background: transparent; }
+    .preview-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
 </style>
 @endpush
 @endsection
