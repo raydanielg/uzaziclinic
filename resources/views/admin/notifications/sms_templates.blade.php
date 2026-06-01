@@ -119,7 +119,7 @@
 <script>
 // Toggle template enabled/disabled
 function toggleTemplate(key, enabled) {
-    fetch('{{ route("admin.notifications.smsTemplates.toggle") }}', {
+    fetch('/admin/notifications/sms-templates/toggle', {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const formData = new FormData(editForm);
             
-            fetch('{{ route("admin.notifications.smsTemplates.update") }}', {
+            fetch('/admin/notifications/sms-templates/update', {
                 method: 'POST',
                 body: formData,
                 headers: {
