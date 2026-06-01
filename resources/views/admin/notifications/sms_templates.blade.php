@@ -4,63 +4,56 @@
 @section('notification_subtitle', 'Manage and customize your automated SMS messages')
 
 @section('notification_content')
-<div class="card border-0 shadow-sm rounded-4">
-    <div class="card-body p-4">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="bg-light">
-                    <tr>
-                        <th class="fw-bold text-dark small text-uppercase">Template Name</th>
-                        <th class="fw-bold text-dark small text-uppercase">Description</th>
-                        <th class="fw-bold text-dark small text-uppercase">Preview</th>
-                        <th class="fw-bold text-dark small text-uppercase">Placeholders</th>
-                        <th class="fw-bold text-dark small text-uppercase text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($realTemplates as $key => $template)
-                    <tr>
-                        <td>
-                            <div class="fw-bold text-dark">{{ $template['title'] }}</div>
-                            <small class="text-muted">{{ strtoupper(str_replace('sms_template_', '', $key)) }}</small>
-                        </td>
-                        <td>
-                            <small class="text-muted">{{ $template['description'] }}</small>
-                        </td>
-                        <td>
-                            <div class="text-muted small" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                {{ Str::limit($template['value'], 50) }}
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex flex-wrap gap-1">
-                                @foreach($template['placeholders'] as $ph)
-                                <span class="badge bg-light text-dark border font-monospace" style="font-size: 0.7rem;">[{{ $ph }}]</span>
-                                @endforeach
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-primary rounded-2 me-1" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#editSmsModal" 
-                                    data-key="{{ $key }}"
-                                    data-title="{{ $template['title'] }}"
-                                    data-description="{{ $template['description'] }}"
-                                    data-value="{{ $template['value'] }}"
-                                    data-placeholders='@json($template['placeholders'])'>
-                                <i class="fa-solid fa-pencil"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger rounded-2" 
-                                    onclick="resetTemplate('{{ $key }}', '{{ $template['title'] }}')">
-                                <i class="fa-solid fa-rotate-left"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+<div class="row g-4">
+    @foreach($realTemplates as $key => $template)
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="bg-primary text-white p-2 rounded">
+                        <i class="fa-solid fa-comment-sms"></i>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" 
+                               id="toggle_{{ $key }}" 
+                               onchange="toggleTemplate('{{ $key }}', this.checked)"
+                               {{ ($template['enabled'] ?? true) ? 'checked' : '' }}>
+                        <label class="form-check-label small" for="toggle_{{ $key }}">
+                            {{ ($template['enabled'] ?? true) ? 'Enabled' : 'Disabled' }}
+                        </label>
+                    </div>
+                </div>
+                
+                <h6 class="fw-bold mb-2">{{ $template['title'] }}</h6>
+                <p class="text-muted small mb-3">{{ $template['description'] }}</p>
+                
+                <div class="bg-light p-2 rounded mb-3" style="max-height: 100px; overflow-y: auto;">
+                    <small class="text-muted" style="white-space: pre-line;">{{ Str::limit($template['value'], 150) }}</small>
+                </div>
+                
+                <div class="mb-3">
+                    <small class="text-muted fw-bold">Placeholders:</small>
+                    <div class="d-flex flex-wrap gap-1 mt-1">
+                        @foreach($template['placeholders'] as $ph)
+                        <span class="badge bg-secondary">[{{ $ph }}]</span>
+                        @endforeach
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary btn-sm w-100" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#editSmsModal" 
+                        data-key="{{ $key }}"
+                        data-title="{{ $template['title'] }}"
+                        data-description="{{ $template['description'] }}"
+                        data-value="{{ $template['value'] }}"
+                        data-placeholders='@json($template['placeholders'])'>
+                    <i class="fa-solid fa-edit me-1"></i> Edit Template
+                </button>
+            </div>
         </div>
     </div>
+    @endforeach
 </div>
 
 <!-- Edit SMS Template Modal -->
