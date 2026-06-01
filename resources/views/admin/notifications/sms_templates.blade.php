@@ -249,6 +249,8 @@ function updateInlineCounts(key) {
     const segmentCountEl = document.getElementById('segment-count-' + key);
     const progressBar = document.getElementById('progress-bar-' + key);
     const previewBox = document.getElementById('preview-' + key);
+    const saveBtn = document.getElementById('save-btn-' + key);
+    const btnText = document.getElementById('btn-text-' + key);
 
     if (!textarea) return;
 
@@ -278,6 +280,26 @@ function updateInlineCounts(key) {
 
     // Render Preview
     previewBox.innerHTML = renderPreviewText(textarea.value);
+
+    // Detect Changes & Update Button state
+    const isChanged = (textarea.value !== textarea.getAttribute('data-original'));
+    if (saveBtn && btnText) {
+        if (isChanged) {
+            saveBtn.disabled = false;
+            saveBtn.classList.remove('btn-secondary');
+            saveBtn.classList.add('btn-success');
+            saveBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            saveBtn.style.pointerEvents = 'auto';
+            btnText.innerHTML = '<i class="fa-solid fa-cloud-arrow-up me-1"></i> Update Template';
+        } else {
+            saveBtn.disabled = true;
+            saveBtn.classList.remove('btn-success');
+            saveBtn.classList.add('btn-secondary');
+            saveBtn.style.background = '#94a3b8';
+            saveBtn.style.pointerEvents = 'none';
+            btnText.innerHTML = '<i class="fa-solid fa-check me-1"></i> Up to Date';
+        }
+    }
 }
 
 // Insert Placeholders in textareas
@@ -309,24 +331,25 @@ function saveInlineTemplate(key) {
     spinner.classList.remove('d-none');
     saveBtn.disabled = true;
 
+    // Use FormData for standard, bulletproof Laravel POST parsing
+    const formData = new FormData();
+    formData.append('key', key);
+    formData.append('value', textarea.value);
+
     fetch('/admin/notifications/sms-templates/update', {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Accept': 'application/json'
         },
-        body: JSON.stringify({
-            key: key,
-            value: textarea.value
-        })
+        body: formData
     })
     .then(res => res.json())
     .then(data => {
         if (data.success) {
             Swal.fire({
                 icon: 'success',
-                title: 'Template Saved!',
+                title: 'Template Updated!',
                 text: data.message,
                 confirmButtonColor: '#6366f1',
                 timer: 2000
