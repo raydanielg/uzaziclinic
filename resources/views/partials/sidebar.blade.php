@@ -102,14 +102,43 @@
                     </a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a class="nav-link {{ Request::is('admin/settings*') ? 'active' : '' }}" href="{{ route('admin.settings.general') }}">
-                        <i class="fa-solid fa-sliders me-2 text-secondary"></i> Global Configurations
+                    <a class="nav-link {{ Request::is('admin/logs*') ? 'active' : '' }}" href="{{ route('admin.users.logs') }}">
+                        <i class="fa-solid fa-shield-virus me-2 text-danger"></i> Security Audit Logs
+                    </a>
+                </li>
+
+                {{-- System Settings --}}
+                <li class="nav-item-header mt-4 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">System Settings</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/settings/general') ? 'active' : '' }}" href="{{ route('admin.settings.general') }}">
+                        <i class="fa-solid fa-gear me-2 text-primary"></i> General Settings
                     </a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a class="nav-link {{ Request::is('admin/logs*') ? 'active' : '' }}" href="{{ route('admin.users.logs') }}">
-                        <i class="fa-solid fa-shield-virus me-2 text-dark"></i> Security Audit Logs
+                    <a class="nav-link {{ Request::is('admin/settings/email') ? 'active' : '' }}" href="{{ route('admin.settings.email') }}">
+                        <i class="fa-solid fa-envelope me-2 text-info"></i> Email Config
                     </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/settings/sms') ? 'active' : '' }}" href="{{ route('admin.settings.sms') }}">
+                        <i class="fa-solid fa-comment-sms me-2 text-success"></i> SMS Gateway
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/settings/gateways') ? 'active' : '' }}" href="{{ route('admin.settings.gateways') }}">
+                        <i class="fa-solid fa-credit-card me-2 text-warning"></i> Payment Gateways
+                    </a>
+                </li>
+
+                {{-- Logout --}}
+                <li class="nav-item-header mt-4 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Account</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
                 </li>
             @endif
 
