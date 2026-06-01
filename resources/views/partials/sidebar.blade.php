@@ -714,12 +714,6 @@
                     <a class="nav-link" href="#"><i class="fa-solid fa-shield-heart me-2"></i> Insurance Info</a>
                 </li>
             @endif
-
-            <li class="nav-item mt-4 border-top pt-3">
-                <a class="nav-link text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
-                </a>
-            </li>
         </ul>
     </div>
 </div>
