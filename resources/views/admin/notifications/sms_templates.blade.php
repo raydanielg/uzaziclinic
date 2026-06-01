@@ -1,53 +1,66 @@
 @extends('admin.notifications.layout')
 
 @section('notification_title', 'SMS Templates Management')
-@section('notification_subtitle', 'Manage automated reproductive health and payment SMS templates with dynamic placeholders')
+@section('notification_subtitle', 'Manage and customize your automated SMS messages')
 
 @section('notification_content')
-<div class="row g-4">
-    @foreach($realTemplates as $key => $template)
-    <div class="col-md-6 col-lg-4">
-        <div class="card border border-light shadow-sm rounded-4 h-100 d-flex flex-column" style="background-color: #fdfdfd; transition: transform 0.2s; border-left: 4px solid #16a34a !important;">
-            <div class="card-body p-4 d-flex flex-column h-100">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-1.5 small fw-bold">Active</span>
-                    <span class="small text-muted fw-semibold">ID: {{ strtoupper(str_replace('sms_template_', '', $key)) }}</span>
-                </div>
-                
-                <h5 class="fw-bold text-dark mb-2" style="font-size: 1.1rem;">{{ $template['title'] }}</h5>
-                <p class="text-muted small mb-3 flex-grow-0" style="line-height: 1.4; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-                    {{ $template['description'] }}
-                </p>
-
-                <div class="bg-white p-3 rounded-3 border border-gray-100 mb-3 flex-grow-1" style="min-height: 100px; max-height: 150px; overflow-y: auto; background-color: #fafbfc !important;">
-                    <p class="small mb-0 text-dark fw-medium italic" style="white-space: pre-line; line-height: 1.5; font-family: 'Courier New', Courier, monospace;">"{{ $template['value'] }}"</p>
-                </div>
-
-                <div class="mt-auto">
-                    <div class="mb-3">
-                        <span class="form-label d-block mb-1.5 fs-xs fw-bold text-uppercase text-muted" style="font-size: 0.7rem; letter-spacing: 0.5px;">Placeholders:</span>
-                        <div class="d-flex flex-wrap gap-1">
-                            @foreach($template['placeholders'] as $ph)
-                            <span class="badge bg-light text-dark border border-gray-200 rounded-pill font-monospace" style="font-size: 0.72rem; padding: 2px 8px;">[{{ $ph }}]</span>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <button class="btn btn-sm btn-outline-success rounded-3 w-100 fw-bold py-2" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#editSmsModal" 
-                            data-key="{{ $key }}"
-                            data-title="{{ $template['title'] }}"
-                            data-description="{{ $template['description'] }}"
-                            data-value="{{ $template['value'] }}"
-                            data-placeholders='@json($template['placeholders'])'>
-                        <i class="fa-solid fa-pencil me-1.5"></i> Edit Template
-                    </button>
-                </div>
-            </div>
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-body p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="fw-bold text-dark small text-uppercase">Template Name</th>
+                        <th class="fw-bold text-dark small text-uppercase">Description</th>
+                        <th class="fw-bold text-dark small text-uppercase">Preview</th>
+                        <th class="fw-bold text-dark small text-uppercase">Placeholders</th>
+                        <th class="fw-bold text-dark small text-uppercase text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($realTemplates as $key => $template)
+                    <tr>
+                        <td>
+                            <div class="fw-bold text-dark">{{ $template['title'] }}</div>
+                            <small class="text-muted">{{ strtoupper(str_replace('sms_template_', '', $key)) }}</small>
+                        </td>
+                        <td>
+                            <small class="text-muted">{{ $template['description'] }}</small>
+                        </td>
+                        <td>
+                            <div class="text-muted small" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                {{ Str::limit($template['value'], 50) }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-1">
+                                @foreach($template['placeholders'] as $ph)
+                                <span class="badge bg-light text-dark border font-monospace" style="font-size: 0.7rem;">[{{ $ph }}]</span>
+                                @endforeach
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-primary rounded-2 me-1" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#editSmsModal" 
+                                    data-key="{{ $key }}"
+                                    data-title="{{ $template['title'] }}"
+                                    data-description="{{ $template['description'] }}"
+                                    data-value="{{ $template['value'] }}"
+                                    data-placeholders='@json($template['placeholders'])'>
+                                <i class="fa-solid fa-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger rounded-2" 
+                                    onclick="resetTemplate('{{ $key }}', '{{ $template['title'] }}')">
+                                <i class="fa-solid fa-rotate-left"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
-    @endforeach
 </div>
 
 <!-- Edit SMS Template Modal -->
@@ -111,6 +124,55 @@
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+// Reset template to default value
+function resetTemplate(key, title) {
+    Swal.fire({
+        title: 'Reset Template?',
+        text: 'This will reset "' + title + '" to its default message. This action cannot be undone.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Yes, Reset It',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('{{ route("admin.notifications.resetSmsTemplate") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ key: key })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Reset Complete',
+                        text: 'Template has been reset to default',
+                        confirmButtonColor: '#3b82f6'
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    throw new Error(data.message || 'Failed to reset template');
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message || 'Failed to reset template',
+                    confirmButtonColor: '#dc2626'
+                });
+            });
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const editModal = document.getElementById('editSmsModal');
     const placeholdersContainer = document.getElementById('placeholdersContainer');
