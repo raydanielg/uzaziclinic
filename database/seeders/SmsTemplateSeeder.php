@@ -20,11 +20,11 @@ class SmsTemplateSeeder extends Seeder
                 'group' => 'sms'
             ],
             'sms_template_confirmation' => [
-                'value' => 'Habari [patient_name] (ID: [patient_ID]), umefanikiwa ku-book appointment na Dr. [doctor_name] kwa tarehe [appointment_date] saa [appointment_time]. Tafadhali fika mapema. Asante.',
+                'value' => 'Habari [patient_name] (ID: [patient_ID]), umefanikiwa ku-book appointment tarehe [appointment_date] saa [appointment_time]. Fika mapema. Asante.',
                 'group' => 'sms'
             ],
             'sms_template_reminder' => [
-                'value' => 'Kumbuka [patient_name] (ID: [patient_ID]): Unakaribia appointment yako na Dr. [doctor_name] kesho tarehe [appointment_date] saa [appointment_time]. Tafadhali fika mapema. Asante.',
+                'value' => 'Kumbuka [patient_name] (ID: [patient_ID]): Unakaribia appointment yako kesho tarehe [appointment_date] saa [appointment_time]. Fika mapema. Asante.',
                 'group' => 'sms'
             ],
             'sms_template_service_info' => [
@@ -40,7 +40,7 @@ class SmsTemplateSeeder extends Seeder
                 'group' => 'sms'
             ],
             'sms_template_payment_with_appointment' => [
-                'value' => 'Karibu Uzazi Clinic! [patient_name] (ID: [patient_ID]), malipo yako ya TSh [amount] yamepokelewa. Asante! Miadi yako inayofuata ni tarehe [next_appointment_date] na Dr. [doctor_name]. Tafadhali fika mapema. Maswali: +255 678 233 736.',
+                'value' => 'Karibu Uzazi Clinic! [patient_name] (ID: [patient_ID]), malipo yako ya TSh [amount] yamepokelewa. Asante! Miadi yako inayofuata ni tarehe [next_appointment_date]. Fika mapema. Maswali: +255 678 233 736.',
                 'group' => 'sms'
             ],
             'sms_template_lab_directions' => [
