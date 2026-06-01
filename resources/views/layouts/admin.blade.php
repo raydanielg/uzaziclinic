@@ -83,8 +83,8 @@
         /* Main Content Styles */
         #main-content {
             flex-grow: 1;
-            margin-left: var(--sidebar-width);
-            width: calc(100% - var(--sidebar-width));
+            margin-left: 260px;
+            width: calc(100% - 260px);
             min-height: 100vh;
             transition: all 0.3s;
         }
@@ -106,15 +106,10 @@
             padding: 30px;
         }
 
-        /* Logout button */
-        .logout-container {
-            padding: 1rem 1.5rem;
-            background: #fff;
-            border-top: 1px solid #f1f5f9;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            z-index: 1001;
+        @media (max-width: 991.98px) {
+            .sidebar { margin-left: -260px; }
+            .sidebar.active { margin-left: 0; }
+            #main-content { margin-left: 0; width: 100%; }
         }
     </style>
     @include('partials.dashboard-styles')
@@ -122,225 +117,7 @@
 <body>
 
     <!-- Sidebar -->
-    <div id="sidebar" class="animate__animated animate__slideInLeft">
-        <div class="sidebar-brand">
-            Admin Panel
-        </div>
-        
-        <div class="sidebar-content">
-            <div class="sidebar-nav">
-                <!-- Dashboard -->
-                <div class="nav-item {{ request()->routeIs('admin.dashboard') ? 'show' : '' }}">
-                    <a href="javascript:void(0)" class="nav-link dropdown-btn {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                        <span class="nav-link-content">
-                            <i class="fa-solid fa-gauge-high menu-icon"></i> Dashboard
-                        </span>
-                        <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
-                    </a>
-                    <ul class="sidebar-dropdown">
-                        <li><a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">Main Dashboard</a></li>
-                        <li><a href="{{ route('admin.analytics') }}" class="nav-link {{ request()->routeIs('admin.analytics') ? 'active' : '' }}">Analytics Dashboard</a></li>
-                    </ul>
-                </div>
-
-                <!-- User Management -->
-                <div class="nav-section-title">Administration</div>
-                <div class="nav-item">
-                    <a href="javascript:void(0)" class="nav-link dropdown-btn">
-                        <span class="nav-link-content">
-                            <i class="fa-solid fa-users-gear menu-icon"></i> User Management
-                        </span>
-                        <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
-                    </a>
-                    <ul class="sidebar-dropdown">
-                        <li><a href="{{ route('admin.users.index') }}" class="nav-link">All Users</a></li>
-                        <li><a href="{{ route('admin.users.create') }}" class="nav-link">Add New User</a></li>
-                        <li><a href="{{ route('admin.users.roles') }}" class="nav-link">Roles & Permissions</a></li>
-                        <li><a href="{{ route('admin.users.logs') }}" class="nav-link">Activity Logs</a></li>
-                    </ul>
-                </div>
-
-                <!-- Patient Management -->
-                <div class="nav-section-title">Medical Services</div>
-                <div class="nav-item">
-                    <a href="javascript:void(0)" class="nav-link dropdown-btn">
-                        <span class="nav-link-content">
-                            <i class="fa-solid fa-user-nurse menu-icon"></i> Patient Management
-                        </span>
-                        <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
-                    </a>
-                    <ul class="sidebar-dropdown">
-                        <li><a href="{{ route('admin.patients.index') }}" class="nav-link">All Patients</a></li>
-                        <li><a href="{{ route('admin.patients.create') }}" class="nav-link">Add New Patient</a></li>
-                        <li><a href="{{ route('admin.patients.categories') }}" class="nav-link">Patient Categories</a></li>
-                        <li><a href="{{ route('admin.patients.history') }}" class="nav-link">Medical History Archive</a></li>
-                    </ul>
-                </div>
-
-                <!-- Doctor Management -->
-                <div class="nav-item">
-                    <a href="javascript:void(0)" class="nav-link dropdown-btn">
-                        <span class="nav-link-content">
-                            <i class="fa-solid fa-user-doctor menu-icon"></i> Doctor Management
-                        </span>
-                        <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
-                    </a>
-                    <ul class="sidebar-dropdown">
-                        <li><a href="{{ route('admin.doctors.index') }}" class="nav-link">All Doctors</a></li>
-                        <li><a href="{{ route('admin.doctors.create') }}" class="nav-link">Add New Doctor</a></li>
-                        <li><a href="{{ route('admin.doctors.schedules') }}" class="nav-link">Doctor Schedules</a></li>
-                        <li><a href="{{ route('admin.doctors.specializations') }}" class="nav-link">Doctor Specializations</a></li>
-                    </ul>
-                </div>
-
-                <!-- Appointment Management -->
-                <div class="nav-item">
-                    <a href="javascript:void(0)" class="nav-link dropdown-btn">
-                        <span class="nav-link-content">
-                            <i class="fa-solid fa-calendar-check menu-icon"></i> Appointments
-                        </span>
-                        <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
-                    </a>
-                    <ul class="sidebar-dropdown">
-                        <li><a href="{{ route('admin.appointments.index') }}" class="nav-link">All Appointments</a></li>
-                        <li><a href="{{ route('admin.appointments.today') }}" class="nav-link">Today's Appointments</a></li>
-                        <li><a href="{{ route('admin.appointments.upcoming') }}" class="nav-link">Upcoming Appointments</a></li>
-                        <li><a href="{{ route('admin.appointments.cancelled') }}" class="nav-link">Cancelled Appointments</a></li>
-                    </ul>
-                </div>
-
-                <!-- Pharmacy & Inventory -->
-                <div class="nav-section-title">Operations</div>
-                <div class="nav-item">
-                    <a href="javascript:void(0)" class="nav-link dropdown-btn">
-                        <span class="nav-link-content">
-                            <i class="fa-solid fa-pills menu-icon"></i> Pharmacy & Inventory
-                        </span>
-                        <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
-                    </a>
-                    <ul class="sidebar-dropdown">
-                        <li><a href="{{ route('admin.pharmacy.stock') }}" class="nav-link">Medicines Stock</a></li>
-                        <li><a href="{{ route('admin.pharmacy.create') }}" class="nav-link">Add New Medicine</a></li>
-                        <li><a href="{{ route('admin.pharmacy.alerts') }}" class="nav-link">Stock Alerts</a></li>
-                        <li><a href="{{ route('admin.pharmacy.suppliers') }}" class="nav-link">Suppliers List</a></li>
-                        <li><a href="{{ route('admin.pharmacy.orders') }}" class="nav-link">Purchase Orders</a></li>
-                        <li><a href="{{ route('admin.pharmacy.expiry') }}" class="nav-link">Expiry Tracking</a></li>
-                    </ul>
-                </div>
-
-                <!-- Lab Management -->
-                <div class="nav-item">
-                    <a href="javascript:void(0)" class="nav-link dropdown-btn">
-                        <span class="nav-link-content">
-                            <i class="fa-solid fa-microscope menu-icon"></i> Lab Management
-                        </span>
-                        <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
-                    </a>
-                    <ul class="sidebar-dropdown">
-                        <li><a href="{{ route('admin.lab.catalog') }}" class="nav-link">Lab Tests Catalog</a></li>
-                        <li><a href="{{ route('admin.lab.results') }}" class="nav-link">Test Results</a></li>
-                        <li><a href="{{ route('admin.lab.equipment') }}" class="nav-link">Lab Equipment</a></li>
-                        <li><a href="{{ route('admin.lab.reports') }}" class="nav-link">Lab Reports</a></li>
-                    </ul>
-                </div>
-
-                <!-- E-commerce Store -->
-                <div class="nav-item">
-                    <a href="javascript:void(0)" class="nav-link dropdown-btn">
-                        <span class="nav-link-content">
-                            <i class="fa-solid fa-cart-shopping menu-icon"></i> E-commerce Store
-                        </span>
-                        <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
-                    </a>
-                    <ul class="sidebar-dropdown">
-                        <li><a href="{{ route('admin.store.index') }}" class="nav-link">All Products</a></li>
-                        <li><a href="{{ route('admin.store.create') }}" class="nav-link">Add New Product</a></li>
-                        <li><a href="{{ route('admin.store.categories') }}" class="nav-link">Product Categories</a></li>
-                        <li><a href="{{ route('admin.store.orders') }}" class="nav-link">Orders List</a></li>
-                        <li><a href="{{ route('admin.store.reviews') }}" class="nav-link">Product Reviews</a></li>
-                    </ul>
-                </div>
-
-                <!-- Billing & Finance -->
-                <div class="nav-section-title">Financials</div>
-                <div class="nav-item">
-                    <a href="javascript:void(0)" class="nav-link dropdown-btn">
-                        <span class="nav-link-content">
-                            <i class="fa-solid fa-file-invoice-dollar menu-icon"></i> Billing & Finance
-                        </span>
-                        <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
-                    </a>
-                    <ul class="sidebar-dropdown">
-                        <li><a href="{{ route('admin.finance.invoices') }}" class="nav-link">All Invoices</a></li>
-                        <li><a href="{{ route('admin.finance.receipts') }}" class="nav-link">Receipts</a></li>
-                        <li><a href="{{ route('admin.finance.payments') }}" class="nav-link">Payment History</a></li>
-                        <li><a href="{{ route('admin.insurance.index') }}" class="nav-link">Insurance Claims</a></li>
-                        <li><a href="{{ route('admin.settings.gateways') }}" class="nav-link">Tax Settings</a></li>
-                    </ul>
-                </div>
-
-                <!-- Reports -->
-                <div class="nav-item">
-                    <a href="javascript:void(0)" class="nav-link dropdown-btn">
-                        <span class="nav-link-content">
-                            <i class="fa-solid fa-chart-line menu-icon"></i> Reports
-                        </span>
-                        <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
-                    </a>
-                    <ul class="sidebar-dropdown">
-                        <li><a href="{{ route('admin.reports.sales') }}" class="nav-link">Sales Report</a></li>
-                        <li><a href="{{ route('admin.reports.patients') }}" class="nav-link">Patient Report</a></li>
-                        <li><a href="{{ route('admin.reports.doctors') }}" class="nav-link">Doctor Performance</a></li>
-                        <li><a href="{{ route('admin.reports.stock') }}" class="nav-link">Stock Report</a></li>
-                        <li><a href="{{ route('admin.reports.revenue') }}" class="nav-link">Revenue Report</a></li>
-                        <li><a href="{{ route('admin.reports.appointments') }}" class="nav-link">Appointment Report</a></li>
-                    </ul>
-                </div>
-
-                <!-- System & Notifications -->
-                <div class="nav-section-title">System</div>
-                <div class="nav-item">
-                    <a href="javascript:void(0)" class="nav-link dropdown-btn">
-                        <span class="nav-link-content">
-                            <i class="fa-solid fa-gears menu-icon"></i> System Settings
-                        </span>
-                        <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
-                    </a>
-                    <ul class="sidebar-dropdown">
-                        <li><a href="{{ route('admin.settings.general') }}" class="nav-link">General Settings</a></li>
-                        <li><a href="{{ route('admin.settings.email') }}" class="nav-link">Email Configuration</a></li>
-                        <li><a href="{{ route('admin.settings.sms') }}" class="nav-link">SMS Configuration</a></li>
-                        <li><a href="{{ route('admin.settings.gateways') }}" class="nav-link">Payment Gateways</a></li>
-                        <li><a href="{{ route('admin.settings.backup') }}" class="nav-link">Backup & Restore</a></li>
-                    </ul>
-                </div>
-
-                <div class="nav-item">
-                    <a href="javascript:void(0)" class="nav-link dropdown-btn">
-                        <span class="nav-link-content">
-                            <i class="fa-solid fa-bell menu-icon"></i> Notifications
-                        </span>
-                        <i class="fa-solid fa-chevron-down dropdown-toggle-icon"></i>
-                    </a>
-                    <ul class="sidebar-dropdown">
-                        <li><a href="{{ route('admin.notifications.send') }}" class="nav-link">Send Notification</a></li>
-                        <li><a href="{{ route('admin.notifications.history') }}" class="nav-link">Notification History</a></li>
-                        <li><a href="{{ route('admin.notifications.emailTemplates') }}" class="nav-link">Email Templates</a></li>
-                        <li><a href="{{ route('admin.notifications.smsTemplates') }}" class="nav-link">SMS Templates</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="logout-container">
-            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-outline-danger w-100 text-start border-0">
-                <i class="fa-solid fa-right-from-bracket me-2"></i> Sign Out
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-            </form>
-        </div>
-    </div>
+    @include('partials.sidebar')
 
     <!-- Main Content -->
     <div id="main-content">
