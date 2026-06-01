@@ -121,36 +121,34 @@
 
     <!-- Main Content -->
     <div id="main-content">
-        <div class="topbar">
-            <h5 class="mb-0 fw-bold">@yield('page_title', 'Dashboard')</h5>
-            <div class="d-flex align-items-center">
-                <button class="btn btn-light position-relative me-3 rounded-circle">
-                    <i class="fa-regular fa-bell"></i>
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm sticky-top">
+            <div class="container-fluid px-4">
+                <button class="btn btn-light me-3" id="sidebarToggle">
+                    <i class="fa-solid fa-bars"></i>
                 </button>
-                <div class="dropdown">
-                    <div class="d-flex align-items-center bg-light px-3 py-1 rounded-pill cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-                        <div class="avatar me-2 bg-secondary rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px;">
-                            {{ substr(auth()->user()->name, 0, 1) }}
-                        </div>
-                        <div class="me-2">
-                            <div class="small fw-bold">{{ auth()->user()->name }}</div>
-                            <div class="text-muted" style="font-size: 0.65rem;">Administrator</div>
-                        </div>
-                        <i class="fa-solid fa-chevron-down small text-muted"></i>
-                    </div>
-                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
-                        <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user me-2"></i> Profile</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-gears me-2"></i> Settings</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                <i class="fa-solid fa-right-from-bracket me-2"></i> Sign Out
+                <span class="navbar-brand d-none d-md-block fw-bold text-primary">@yield('page_title', 'Dashboard')</span>
+                
+                <div class="ms-auto d-flex align-items-center">
+                    <div class="dropdown">
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-circle-user me-1 text-primary"></i> {{ auth()->user()->name }}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                            <a class="dropdown-item py-2" href="#"><i class="fa-solid fa-user me-2"></i> Profile</a>
+                            <a class="dropdown-item py-2" href="#"><i class="fa-solid fa-key me-2"></i> Password</a>
+                            <hr class="dropdown-divider">
+                            <a class="dropdown-item py-2 text-danger" href="#"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fa-solid fa-right-from-bracket me-2"></i> {{ __('Logout') }}
                             </a>
-                        </li>
-                    </ul>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </nav>
 
         <div class="content-body">
             @yield('content')
@@ -174,21 +172,30 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Dropdown toggle logic
-            const dropdownBtns = document.querySelectorAll('.dropdown-btn');
-            dropdownBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const parent = this.parentElement;
-                    const isOpen = parent.classList.contains('show');
-                    
-                    // Close other open dropdowns in the same section if desired
-                    // (Optional: comment out if you want multiple open)
-                    // document.querySelectorAll('.nav-item.show').forEach(item => {
-                    //     if (item !== parent) item.classList.remove('show');
-                    // });
-
-                    parent.classList.toggle('show');
+            const toggle = document.getElementById('sidebarToggle');
+            const close = document.getElementById('sidebarClose');
+            const sidebar = document.getElementById('sidebar');
+            
+            if(toggle && sidebar) {
+                toggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('active');
                 });
+            }
+
+            if(close && sidebar) {
+                close.addEventListener('click', () => {
+                    sidebar.classList.remove('active');
+                });
+            }
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth < 992 && sidebar && sidebar.classList.contains('active')) {
+                    if (!sidebar.contains(e.target) && e.target !== toggle) {
+                        sidebar.classList.remove('active');
+                    }
+                }
             });
         });
     </script>
