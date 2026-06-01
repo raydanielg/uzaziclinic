@@ -76,6 +76,11 @@
                     </a>
                 </li>
                 <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/pharmacy*') ? 'active' : '' }}" href="{{ route('admin.pharmacy.stock') }}">
+                        <i class="fa-solid fa-pills me-2 text-success"></i> Pharmacy & Inventory
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/medical*') ? 'active' : '' }}" href="{{ route('admin.medical.records') }}">
                         <i class="fa-solid fa-file-medical me-2 text-info"></i> Clinical Records Rx
                     </a>
@@ -86,11 +91,80 @@
                     </a>
                 </li>
 
+                {{-- Lab & Diagnostics --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Lab & Diagnostics</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/lab*') ? 'active' : '' }}" href="{{ route('admin.lab.catalog') }}">
+                        <i class="fa-solid fa-microscope me-2 text-primary"></i> Lab Management
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/lab/results') ? 'active' : '' }}" href="{{ route('admin.lab.results') }}">
+                        <i class="fa-solid fa-vial-circle-check me-2 text-success"></i> Test Results
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/lab/equipment') ? 'active' : '' }}" href="{{ route('admin.lab.equipment') }}">
+                        <i class="fa-solid fa-flask me-2 text-info"></i> Lab Equipment
+                    </a>
+                </li>
+
                 {{-- Content Management --}}
                 <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Content Management</li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/blog*') ? 'active' : '' }}" href="{{ route('admin.blog.index') }}">
                         <i class="fa-solid fa-newspaper me-2 text-info"></i> Blog Management
+                    </a>
+                </li>
+
+                {{-- Communications --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Communications</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/notifications/send') ? 'active' : '' }}" href="{{ route('admin.notifications.send') }}">
+                        <i class="fa-solid fa-paper-plane me-2 text-primary"></i> Send Notification
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/notifications/history') ? 'active' : '' }}" href="{{ route('admin.notifications.history') }}">
+                        <i class="fa-solid fa-clock-rotate-left me-2 text-info"></i> Notification History
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/notifications/email*') ? 'active' : '' }}" href="{{ route('admin.notifications.emailTemplates') }}">
+                        <i class="fa-solid fa-envelope-open-text me-2 text-warning"></i> Email Templates
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/notifications/sms*') ? 'active' : '' }}" href="{{ route('admin.notifications.smsTemplates') }}">
+                        <i class="fa-solid fa-message me-2 text-success"></i> SMS Templates
+                    </a>
+                </li>
+
+                {{-- Reports --}}
+                <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Reports</li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/reports/sales') ? 'active' : '' }}" href="{{ route('admin.reports.sales') }}">
+                        <i class="fa-solid fa-chart-pie me-2 text-primary"></i> Sales Report
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/reports/patients') ? 'active' : '' }}" href="{{ route('admin.reports.patients') }}">
+                        <i class="fa-solid fa-users me-2 text-info"></i> Patient Report
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/reports/doctors') ? 'active' : '' }}" href="{{ route('admin.reports.doctors') }}">
+                        <i class="fa-solid fa-user-doctor me-2 text-success"></i> Doctor Performance
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/reports/stock') ? 'active' : '' }}" href="{{ route('admin.reports.stock') }}">
+                        <i class="fa-solid fa-boxes-stacked me-2 text-warning"></i> Stock Report
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/reports/revenue') ? 'active' : '' }}" href="{{ route('admin.reports.revenue') }}">
+                        <i class="fa-solid fa-money-bill-wave me-2 text-success"></i> Revenue Report
                     </a>
                 </li>
 
