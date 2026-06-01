@@ -331,7 +331,12 @@ document.querySelectorAll('.reset-template').forEach(btn => {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    const editModal = document.getElementById('editSmsModal');
+    const sidebar = document.getElementById('editSmsSidebar');
+    const panel = document.getElementById('smsEditorPanel');
+    const overlay = document.getElementById('smsEditorOverlay');
+    const closeBtn = document.getElementById('smsEditorClose');
+    const cancelBtn = document.getElementById('smsEditorCancel');
+    const openBtns = document.querySelectorAll('.btn-open-editor');
     const placeholdersContainer = document.getElementById('placeholdersContainer');
     const templateValueInput = document.getElementById('smsTemplateValue');
     const charCountEl = document.getElementById('charCount');
@@ -341,6 +346,67 @@ document.addEventListener('DOMContentLoaded', function() {
     const livePreviewEl = document.getElementById('livePreview');
     const copyBtn = document.getElementById('copyPreviewBtn');
 
+    // ---- Sidebar Open/Close ----
+    function openEditor() {
+        sidebar.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeEditor() {
+        sidebar.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    if (closeBtn) closeBtn.addEventListener('click', closeEditor);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeEditor);
+    if (overlay) overlay.addEventListener('click', closeEditor);
+
+    // Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && sidebar.classList.contains('active')) closeEditor();
+    });
+
+    // ---- Open buttons ----
+    openBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const key = this.getAttribute('data-key');
+            const title = this.getAttribute('data-title');
+            const description = this.getAttribute('data-description');
+            const value = this.getAttribute('data-value');
+            const placeholders = JSON.parse(this.getAttribute('data-placeholders'));
+
+            document.getElementById('editSmsModalLabel').textContent = 'Edit: ' + title;
+            document.getElementById('smsModalDescription').textContent = description;
+            document.getElementById('smsTemplateKey').value = key;
+            templateValueInput.value = value;
+
+            placeholdersContainer.innerHTML = '';
+            placeholders.forEach(ph => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'ph-insert-btn';
+                btn.textContent = '[' + ph + ']';
+                btn.title = 'Insert [' + ph + ']';
+
+                btn.addEventListener('click', function() {
+                    const startPos = templateValueInput.selectionStart;
+                    const endPos = templateValueInput.selectionEnd;
+                    const phText = '[' + ph + ']';
+                    templateValueInput.value = templateValueInput.value.substring(0, startPos) + phText + templateValueInput.value.substring(endPos);
+                    templateValueInput.focus();
+                    templateValueInput.selectionStart = templateValueInput.selectionEnd = startPos + phText.length;
+                    updateCounts();
+                });
+
+                placeholdersContainer.appendChild(btn);
+            });
+
+            updateCounts();
+            openEditor();
+        });
+    });
+
+    // ---- Live character count ----
     function updateCounts() {
         const text = templateValueInput.value;
         const len = text.length;
@@ -377,45 +443,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     templateValueInput.addEventListener('input', updateCounts);
 
-    if (editModal) {
-        editModal.addEventListener('show.bs.modal', function(event) {
-            const button = event.relatedTarget;
-            const key = button.getAttribute('data-key');
-            const title = button.getAttribute('data-title');
-            const description = button.getAttribute('data-description');
-            const value = button.getAttribute('data-value');
-            const placeholders = JSON.parse(button.getAttribute('data-placeholders'));
-
-            document.getElementById('editSmsModalLabel').textContent = 'Edit: ' + title;
-            document.getElementById('smsModalDescription').textContent = description;
-            document.getElementById('smsTemplateKey').value = key;
-            templateValueInput.value = value;
-
-            placeholdersContainer.innerHTML = '';
-            placeholders.forEach(ph => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'ph-insert-btn';
-                btn.textContent = '[' + ph + ']';
-                btn.title = 'Insert [' + ph + ']';
-
-                btn.addEventListener('click', function() {
-                    const startPos = templateValueInput.selectionStart;
-                    const endPos = templateValueInput.selectionEnd;
-                    const phText = '[' + ph + ']';
-                    templateValueInput.value = templateValueInput.value.substring(0, startPos) + phText + templateValueInput.value.substring(endPos);
-                    templateValueInput.focus();
-                    templateValueInput.selectionStart = templateValueInput.selectionEnd = startPos + phText.length;
-                    updateCounts();
-                });
-
-                placeholdersContainer.appendChild(btn);
-            });
-
-            updateCounts();
-        });
-    }
-
     if (copyBtn) {
         copyBtn.addEventListener('click', function() {
             const text = livePreviewEl.innerText || livePreviewEl.textContent;
@@ -427,6 +454,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // ---- Form submit ----
     const editForm = document.getElementById('editSmsForm');
     if (editForm) {
         editForm.addEventListener('submit', function(e) {
