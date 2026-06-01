@@ -103,9 +103,7 @@
                 <!-- Spacer + Actions -->
                 <div class="mt-auto">
                     <div class="d-flex gap-2">
-                        <button class="btn btn-primary flex-fill"
-                                data-bs-toggle="modal"
-                                data-bs-target="#editSmsModal"
+                        <button class="btn btn-primary flex-fill btn-open-editor"
                                 data-key="{{ $key }}"
                                 data-title="{{ $template['title'] }}"
                                 data-description="{{ $template['description'] }}"
@@ -127,85 +125,96 @@
     @endforeach
 </div>
 
-<!-- Edit SMS Template Modal -->
-<div class="modal fade" id="editSmsModal" tabindex="-1" aria-labelledby="editSmsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-        <div class="modal-content border-0 shadow-lg rounded-4">
-            <div class="modal-header border-0 pb-0 pt-4 px-4">
+<!-- Edit SMS Template - Slide-in Sidebar Panel -->
+<div id="editSmsSidebar" class="sms-editor-sidebar">
+    <div class="sms-editor-overlay" id="smsEditorOverlay"></div>
+    <div class="sms-editor-panel" id="smsEditorPanel">
+        <div class="sms-editor-header">
+            <div class="d-flex align-items-center gap-3">
+                <div class="editor-icon">
+                    <i class="fa-regular fa-message"></i>
+                </div>
                 <div>
-                    <h5 class="modal-title fw-bold text-dark" id="editSmsModalLabel">Edit SMS Template</h5>
-                    <p class="text-muted small mb-0" id="smsModalDescription"></p>
+                    <h5 class="fw-bold mb-0 text-white" id="editSmsModalLabel">Edit SMS Template</h5>
+                    <p class="small mb-0 text-white-50" id="smsModalDescription" style="font-size:0.75rem;"></p>
                 </div>
-                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="editSmsForm">
-                @csrf
-                <input type="hidden" name="key" id="smsTemplateKey">
-
-                <div class="modal-body p-4">
-                    <div class="mb-3">
-                        <label class="form-label fw-bold mb-2 text-dark">SMS Content *</label>
-                        <textarea class="form-control font-monospace border-2 rounded-3 p-3 shadow-none"
-                                  name="value"
-                                  id="smsTemplateValue"
-                                  rows="5"
-                                  style="resize: vertical; font-size: 0.9rem; border-color: #e5e7eb;"
-                                  required></textarea>
-                    </div>
-
-                    <!-- Stats Card -->
-                    <div class="stats-card mb-3">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="fw-bold text-uppercase small" style="font-size:0.65rem; letter-spacing:0.5px; color:#64748b;">
-                                <i class="fa-regular fa-chart-bar me-1"></i> Message Stats
-                            </span>
-                            <span id="charPercent" class="fw-bold text-success small">0 / 160 chars</span>
-                        </div>
-                        <div class="progress mb-2" style="height: 6px;">
-                            <div id="charProgress" class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
-                        </div>
-                        <div class="d-flex justify-content-between text-muted small" style="font-size:0.75rem;">
-                            <div>Characters: <span id="charCount" class="fw-bold text-dark">0</span></div>
-                            <div>Segments: <span id="segmentCount" class="fw-bold text-success">1 Segment</span></div>
-                        </div>
-                    </div>
-
-                    <!-- Quick Insert Placeholders -->
-                    <div class="mb-3 p-3 rounded-3" style="background:#f8fafc; border:1px solid #e2e8f0;">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="fw-bold text-uppercase small" style="font-size:0.65rem; letter-spacing:0.5px; color:#64748b;">
-                                <i class="fa-solid fa-wand-magic-sparkles text-success me-1"></i> Quick Insert
-                            </span>
-                            <small class="text-muted" style="font-size:0.65rem;">Click to insert at cursor</small>
-                        </div>
-                        <div class="d-flex flex-wrap gap-1" id="placeholdersContainer"></div>
-                    </div>
-
-                    <!-- Live Sample Preview -->
-                    <div class="live-preview p-3 rounded-3" style="background:#fefce8; border:1px solid #fde68a;">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="fw-bold text-uppercase small" style="font-size:0.65rem; letter-spacing:0.5px; color:#92400e;">
-                                <i class="fa-regular fa-eye me-1"></i> Live Preview
-                            </span>
-                            <button type="button" id="copyPreviewBtn" class="btn btn-sm py-0 px-2" style="font-size:0.65rem; background:#fef3c7; color:#92400e; border:1px solid #fcd34d;">
-                                <i class="fa-regular fa-copy me-1"></i> Copy
-                            </button>
-                        </div>
-                        <div id="livePreview" class="small" style="font-size:0.78rem; line-height:1.5; color:#78350f; white-space:pre-line;">
-                            Start typing to see a preview with sample data...
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer border-0 pb-4 px-4 pt-0 d-flex gap-2">
-                    <button type="button" class="btn btn-light rounded-3 fw-bold px-4 py-2" data-bs-dismiss="modal" style="font-size:0.85rem;">Cancel</button>
-                    <button type="submit" id="saveTemplateBtn" class="btn btn-success rounded-3 fw-bold px-4 py-2" style="font-size:0.85rem;">
-                        <span class="btn-text"><i class="fa-regular fa-floppy-disk me-1"></i> Save Changes</span>
-                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                    </button>
-                </div>
-            </form>
+            <button type="button" class="editor-close" id="smsEditorClose" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
+
+        <form id="editSmsForm" class="sms-editor-body">
+            @csrf
+            <input type="hidden" name="key" id="smsTemplateKey">
+
+            <div class="px-4 py-3">
+                <div class="mb-3">
+                    <label class="form-label fw-bold mb-2 text-dark d-flex align-items-center gap-2">
+                        <i class="fa-regular fa-pen-to-square text-primary"></i> SMS Content <span class="text-danger">*</span>
+                    </label>
+                    <textarea class="form-control font-monospace border-2 rounded-3 p-3 shadow-none"
+                              name="value"
+                              id="smsTemplateValue"
+                              rows="6"
+                              style="resize: vertical; font-size: 0.9rem; border-color: #e5e7eb;"
+                              required></textarea>
+                </div>
+
+                <!-- Stats Card -->
+                <div class="stats-card mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-bold text-uppercase small" style="font-size:0.65rem; letter-spacing:0.5px; color:#64748b;">
+                            <i class="fa-regular fa-chart-bar me-1"></i> Message Stats
+                        </span>
+                        <span id="charPercent" class="fw-bold text-success small">0 / 160 chars</span>
+                    </div>
+                    <div class="progress mb-2" style="height: 6px;">
+                        <div id="charProgress" class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
+                    </div>
+                    <div class="d-flex justify-content-between text-muted small" style="font-size:0.75rem;">
+                        <div>Characters: <span id="charCount" class="fw-bold text-dark">0</span></div>
+                        <div>Segments: <span id="segmentCount" class="fw-bold text-success">1 Segment</span></div>
+                    </div>
+                </div>
+
+                <!-- Quick Insert Placeholders -->
+                <div class="mb-3 p-3 rounded-3" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-bold text-uppercase small" style="font-size:0.65rem; letter-spacing:0.5px; color:#64748b;">
+                            <i class="fa-solid fa-wand-magic-sparkles text-primary me-1"></i> Quick Insert
+                        </span>
+                        <small class="text-muted" style="font-size:0.65rem;">Click to insert at cursor</small>
+                    </div>
+                    <div class="d-flex flex-wrap gap-1" id="placeholdersContainer"></div>
+                </div>
+
+                <!-- Live Sample Preview -->
+                <div class="live-preview p-3 rounded-3" style="background:#fefce8; border:1px solid #fde68a;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-bold text-uppercase small" style="font-size:0.65rem; letter-spacing:0.5px; color:#92400e;">
+                            <i class="fa-regular fa-eye me-1"></i> Live Preview
+                        </span>
+                        <button type="button" id="copyPreviewBtn" class="btn btn-sm py-0 px-2" style="font-size:0.65rem; background:#fef3c7; color:#92400e; border:1px solid #fcd34d;">
+                            <i class="fa-regular fa-copy me-1"></i> Copy
+                        </button>
+                    </div>
+                    <div id="livePreview" class="small" style="font-size:0.78rem; line-height:1.5; color:#78350f; white-space:pre-line;">
+                        Start typing to see a preview with sample data...
+                    </div>
+                </div>
+            </div>
+
+            <div class="sms-editor-footer">
+                <button type="button" class="btn btn-light rounded-3 fw-bold px-4 py-2" id="smsEditorCancel" style="font-size:0.85rem;">
+                    <i class="fa-regular fa-xmark me-1"></i> Cancel
+                </button>
+                <button type="submit" id="saveTemplateBtn" class="btn btn-success rounded-3 fw-bold px-4 py-2" style="font-size:0.85rem;">
+                    <span class="btn-text"><i class="fa-regular fa-floppy-disk me-1"></i> Save Changes</span>
+                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
