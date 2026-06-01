@@ -124,6 +124,7 @@
                     <div class="mb-3 position-relative">
                         <textarea class="form-control font-monospace border-2 rounded-3 p-3 shadow-none text-dark inline-editor-textarea"
                                   id="textarea-{{ $key }}"
+                                  data-original="{{ $template['value'] }}"
                                   rows="5"
                                   style="resize: none; font-size: 0.825rem; border-color: #cbd5e1; background: #fff; line-height: 1.45;"
                                   oninput="updateInlineCounts('{{ $key }}')">{{ $template['value'] }}</textarea>
@@ -171,8 +172,12 @@
 
                     <!-- Save & Cancel Actions -->
                     <div class="mt-auto d-flex gap-2">
-                        <button class="btn btn-success flex-fill rounded-3 fw-bold py-2.5 shadow-sm transition-all" onclick="saveInlineTemplate('{{ $key }}')" id="save-btn-{{ $key }}" style="font-size: 0.825rem; background: linear-gradient(135deg, #10b981, #059669); border: none;">
-                            <span class="btn-text" id="btn-text-{{ $key }}"><i class="fa-regular fa-floppy-disk me-1"></i> Save Changes</span>
+                        <button class="btn btn-secondary flex-fill rounded-3 fw-bold py-2.5 shadow-sm transition-all" 
+                                onclick="saveInlineTemplate('{{ $key }}')" 
+                                id="save-btn-{{ $key }}" 
+                                disabled 
+                                style="font-size: 0.825rem; background: #94a3b8; border: none; pointer-events: none;">
+                            <span class="btn-text" id="btn-text-{{ $key }}"><i class="fa-solid fa-check me-1"></i> Up to Date</span>
                             <span class="spinner-border spinner-border-sm d-none" id="spinner-{{ $key }}" role="status" aria-hidden="true"></span>
                         </button>
                         <button class="btn btn-light rounded-3 fw-bold py-2.5 px-3.5 transition-all" onclick="cancelInlineEdit('{{ $key }}')" style="font-size: 0.825rem; border: 2px solid #e2e8f0; background: #fff;">
