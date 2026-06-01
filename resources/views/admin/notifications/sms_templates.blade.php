@@ -6,50 +6,99 @@
 @section('notification_content')
 <div class="row g-4">
     @foreach($realTemplates as $key => $template)
+    @php
+        $textLen = strlen($template['value']);
+        $segments = $textLen > 160 ? ceil($textLen / 153) : 1;
+        $segmentLabel = $segments . ($segments === 1 ? ' Segment' : ' Segments');
+        $charPercent = min(100, ($textLen / 160) * 100);
+        $barColor = $charPercent > 90 ? 'danger' : ($charPercent > 75 ? 'warning' : 'success');
+    @endphp
     <div class="col-md-6 col-lg-4">
-        <div class="card h-100">
-            <div class="card-body">
+        <div class="card h-100 border-0 shadow-hover rounded-4 overflow-hidden">
+            <div class="card-body p-4">
+                <!-- Header: Icon + Toggle -->
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div class="bg-primary text-white p-2 rounded">
-                        <i class="fa-solid fa-comment-sms"></i>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-circle">
+                            <i class="fa-solid fa-comment-sms"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1 text-dark">{{ $template['title'] }}</h6>
+                            <span class="badge bg-soft-{{ $barColor }} fw-normal px-2 py-1">
+                                <i class="fa-regular fa-clock me-1"></i>{{ $segmentLabel }}
+                            </span>
+                        </div>
                     </div>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" 
                                id="toggle_{{ $key }}" 
                                onchange="toggleTemplate('{{ $key }}', this.checked)"
                                {{ ($template['enabled'] ?? true) ? 'checked' : '' }}>
-                        <label class="form-check-label small" for="toggle_{{ $key }}">
+                        <label class="form-check-label small fw-medium" for="toggle_{{ $key }}">
                             {{ ($template['enabled'] ?? true) ? 'Enabled' : 'Disabled' }}
                         </label>
                     </div>
                 </div>
                 
-                <h6 class="fw-bold mb-2">{{ $template['title'] }}</h6>
-                <p class="text-muted small mb-3">{{ $template['description'] }}</p>
+                <!-- Description -->
+                <p class="text-muted small mb-3" style="font-size:0.8rem;">{{ $template['description'] }}</p>
                 
-                <div class="bg-light p-2 rounded mb-3" style="max-height: 100px; overflow-y: auto;">
-                    <small class="text-muted" style="white-space: pre-line;">{{ Str::limit($template['value'], 150) }}</small>
+                <!-- SMS Preview -->
+                <div class="sms-preview mb-3">
+                    <div class="preview-header d-flex justify-content-between align-items-center">
+                        <small class="fw-bold text-uppercase tracking-wide">Message Preview</small>
+                        <small class="text-muted">{{ $textLen }} / 160 chars</small>
+                    </div>
+                    <div class="preview-body">
+                        <small class="text-muted" style="white-space: pre-line;">{{ Str::limit($template['value'], 180) }}</small>
+                    </div>
                 </div>
                 
+                <!-- Character Progress Bar -->
                 <div class="mb-3">
-                    <small class="text-muted fw-bold">Placeholders:</small>
+                    <div class="d-flex justify-content-between small text-muted mb-1">
+                        <span><i class="fa-regular fa-file-lines me-1"></i> Characters: <strong class="text-dark">{{ $textLen }}</strong></span>
+                        <span><i class="fa-regular fa-rectangle-ad me-1"></i> Segments: <strong class="text-{{ $barColor }}">{{ $segmentLabel }}</strong></span>
+                    </div>
+                    <div class="progress" style="height: 4px;">
+                        <div class="progress-bar bg-{{ $barColor }}" role="progressbar" 
+                             style="width: {{ $charPercent }}%;" 
+                             aria-valuenow="{{ $charPercent }}" aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Placeholders -->
+                <div class="mb-3">
+                    <small class="text-muted fw-bold text-uppercase tracking-wide" style="font-size:0.65rem;">
+                        <i class="fa-solid fa-tags me-1"></i> Placeholders:
+                    </small>
                     <div class="d-flex flex-wrap gap-1 mt-1">
                         @foreach($template['placeholders'] as $ph)
-                        <span class="badge bg-secondary">[{{ $ph }}]</span>
+                        <span class="badge bg-soft-secondary rounded-pill">[{{ $ph }}]</span>
                         @endforeach
                     </div>
                 </div>
                 
-                <button class="btn btn-primary btn-sm w-100" 
-                        data-bs-toggle="modal" 
-                        data-bs-target="#editSmsModal" 
-                        data-key="{{ $key }}"
-                        data-title="{{ $template['title'] }}"
-                        data-description="{{ $template['description'] }}"
-                        data-value="{{ $template['value'] }}"
-                        data-placeholders='@json($template['placeholders'])'>
-                    <i class="fa-solid fa-edit me-1"></i> Edit Template
-                </button>
+                <!-- Actions -->
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary flex-fill" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#editSmsModal" 
+                            data-key="{{ $key }}"
+                            data-title="{{ $template['title'] }}"
+                            data-description="{{ $template['description'] }}"
+                            data-value="{{ $template['value'] }}"
+                            data-placeholders='@json($template['placeholders'])'>
+                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                    </button>
+                    <button class="btn btn-outline-danger reset-template" 
+                            data-key="{{ $key }}"
+                            data-title="{{ $template['title'] }}"
+                            title="Reset to default">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
