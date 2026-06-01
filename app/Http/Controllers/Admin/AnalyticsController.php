@@ -61,8 +61,10 @@ class AnalyticsController extends Controller
         ->orderBy('month')
         ->get();
 
-        // Top doctors by appointments
-        $topDoctors = Doctor::withCount('appointments')
+        // Top doctors by appointments (direct query to avoid relationship dependency)
+        $topDoctors = Doctor::select('doctors.*', DB::raw('COUNT(appointments.id) as appointments_count'))
+            ->leftJoin('appointments', 'doctors.id', '=', 'appointments.doctor_id')
+            ->groupBy('doctors.id')
             ->orderBy('appointments_count', 'desc')
             ->limit(5)
             ->get();
