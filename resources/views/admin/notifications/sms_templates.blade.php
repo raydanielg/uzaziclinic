@@ -77,7 +77,7 @@
                             <i class="fa-solid fa-circle-check text-primary me-1"></i>UZAZI CLINIC
                         </div>
                         <div class="sms-bubble">
-                            <span class="sms-bubble-text text-dark font-monospace" style="font-size: 0.8rem; line-height: 1.5; white-space: pre-line;">
+                            <span class="sms-bubble-text text-dark font-monospace" style="font-size: 0.8rem; line-height: 1.5; white-space: pre-line;" id="sms-bubble-text-{{ $key }}">
                                 {!! preg_replace('/\[(.*?)\]/', '<span class="sample-val-highlight">$1</span>', $template['value']) !!}
                             </span>
                         </div>
@@ -89,11 +89,11 @@
                     <!-- Progress Stats -->
                     <div class="mb-3">
                         <div class="d-flex justify-content-between small text-muted mb-1" style="font-size: 0.7rem;">
-                            <span><i class="fa-regular fa-file-lines me-1"></i> Characters: <strong class="text-dark">{{ $textLen }}</strong></span>
-                            <span><i class="fa-regular fa-clone me-1"></i> Segments: <strong class="text-{{ $barColor }}">{{ $segmentLabel }}</strong></span>
+                            <span><i class="fa-regular fa-file-lines me-1"></i> Characters: <strong class="text-dark" id="char-count-display-{{ $key }}">{{ $textLen }}</strong></span>
+                            <span><i class="fa-regular fa-clone me-1"></i> Segments: <strong class="text-{{ $barColor }}" id="segment-count-display-{{ $key }}">{{ $segmentLabel }}</strong></span>
                         </div>
                         <div class="progress" style="height: 5px; border-radius: 10px;">
-                            <div class="progress-bar bg-{{ $barColor }}" role="progressbar" style="width: {{ $charPercent }}%;"></div>
+                            <div class="progress-bar bg-{{ $barColor }}" id="progress-bar-display-{{ $key }}" role="progressbar" style="width: {{ $charPercent }}%;"></div>
                         </div>
                     </div>
 
@@ -109,7 +109,9 @@
 
                     <!-- View Action Buttons -->
                     <div class="mt-auto d-flex gap-2">
-                        <button class="btn btn-primary flex-fill rounded-3 fw-bold py-2.5 shadow-sm transition-all" onclick="startInlineEdit('{{ $key }}')" style="background: linear-gradient(135deg, #6366f1, #4f46e5); border: none; font-size: 0.825rem;">
+                        <button class="btn btn-primary flex-fill rounded-3 fw-bold py-2.5 shadow-sm transition-all" 
+                                onclick="openEditSidebar('{{ $key }}', '{{ addslashes($template['title']) }}', '{{ addslashes($template['description']) }}', '{{ addslashes($template['value']) }}', '{{ json_encode($template['placeholders']) }}')"
+                                style="background: linear-gradient(135deg, #6366f1, #4f46e5); border: none; font-size: 0.825rem;">
                             <i class="fa-solid fa-pen-to-square me-1"></i> Edit Template
                         </button>
                         <button class="btn btn-outline-danger rounded-3 py-2.5 px-3 reset-template border-2" data-key="{{ $key }}" data-title="{{ $template['title'] }}" title="Reset to Default" style="font-size: 0.825rem;">
@@ -117,78 +119,95 @@
                         </button>
                     </div>
                 </div>
-
-                <!-- EDIT CONTAINER (Hidden by default) -->
-                <div class="edit-container flex-grow-1 d-none flex-column" id="edit-container-{{ $key }}">
-                    <!-- Textarea Editor -->
-                    <div class="mb-3 position-relative">
-                        <textarea class="form-control font-monospace border-2 rounded-3 p-3 shadow-none text-dark inline-editor-textarea"
-                                  id="textarea-{{ $key }}"
-                                  data-original="{{ $template['value'] }}"
-                                  rows="5"
-                                  style="resize: none; font-size: 0.825rem; border-color: #cbd5e1; background: #fff; line-height: 1.45;"
-                                  oninput="updateInlineCounts('{{ $key }}')">{{ $template['value'] }}</textarea>
-                    </div>
-
-                    <!-- Edit Stats -->
-                    <div class="stats-card p-2.5 rounded-3 mb-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                        <div class="d-flex justify-content-between text-muted mb-1" style="font-size: 0.7rem;">
-                            <span>Chars: <strong class="text-dark" id="char-count-{{ $key }}">0</strong> / 160</span>
-                            <span id="segment-count-{{ $key }}" class="fw-bold text-success">1 Segment</span>
-                        </div>
-                        <div class="progress" style="height: 4px; border-radius: 10px;">
-                            <div id="progress-bar-{{ $key }}" class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
-                        </div>
-                    </div>
-
-                    <!-- Insert Placeholders Widget -->
-                    <div class="mb-3">
-                        <span class="d-block text-uppercase text-muted fw-bold mb-1.5" style="font-size: 0.6rem; letter-spacing: 0.5px;">Click to Insert Placeholder:</span>
-                        <div class="d-flex flex-wrap gap-1.5">
-                            @foreach($template['placeholders'] as $ph)
-                            <button type="button" class="btn btn-xs ph-insert-button rounded-3 bg-white border font-monospace transition-all" 
-                                    style="font-size: 0.68rem; font-weight: 600; border-color: #6366f1; color: #4338ca; padding: 4px 10px;"
-                                    onclick="insertPlaceholder('{{ $key }}', '{{ $ph }}')">
-                                <i class="fa-solid fa-plus small me-1"></i>[{{ $ph }}]
-                            </button>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <!-- Live Sample Preview Bubble Mockup -->
-                    <div class="sms-thread-container mb-3 flex-grow-1" style="background-color: #fffef2 !important; border: 1px solid #fef08a;">
-                        <div class="sms-bubble-sender" style="color: #a16207;">
-                            <i class="fa-solid fa-circle-notch fa-spin text-warning me-1"></i>UZAZI CLINIC • LIVE PREVIEW
-                        </div>
-                        <div class="sms-bubble" style="background: #fef9c3; border: 1px solid #fde047;">
-                            <span id="preview-{{ $key }}" class="sms-bubble-text small text-dark font-monospace d-block" style="font-size:0.75rem; line-height:1.45; white-space:pre-line;">
-                                Start typing...
-                            </span>
-                        </div>
-                        <div class="sms-bubble-time" style="color: #a16207;">
-                            <i class="fa-regular fa-clock me-1"></i>Draft updating...
-                        </div>
-                    </div>
-
-                    <!-- Save & Cancel Actions -->
-                    <div class="mt-auto d-flex gap-2">
-                        <button class="btn btn-secondary flex-fill rounded-3 fw-bold py-2.5 shadow-sm transition-all" 
-                                onclick="saveInlineTemplate('{{ $key }}')" 
-                                id="save-btn-{{ $key }}" 
-                                disabled 
-                                style="font-size: 0.825rem; background: #94a3b8; border: none; pointer-events: none;">
-                            <span class="btn-text" id="btn-text-{{ $key }}"><i class="fa-solid fa-check me-1"></i> Up to Date</span>
-                            <span class="spinner-border spinner-border-sm d-none" id="spinner-{{ $key }}" role="status" aria-hidden="true"></span>
-                        </button>
-                        <button class="btn btn-light rounded-3 fw-bold py-2.5 px-3.5 transition-all" onclick="cancelInlineEdit('{{ $key }}')" style="font-size: 0.825rem; border: 2px solid #e2e8f0; background: #fff;">
-                            Cancel
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
     @endforeach
+</div>
+
+<!-- ================= GORGEOUS SLIDE-IN SIDEBAR ================= -->
+<div id="smsEditSidebar" class="sms-sidebar">
+    <div class="sms-sidebar-overlay" onclick="closeSmsSidebar()"></div>
+    <div class="sms-sidebar-panel">
+        <div class="sms-sidebar-header d-flex align-items-center justify-content-between p-4">
+            <div class="d-flex align-items-center gap-3">
+                <div class="sidebar-icon-circle">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-0 text-white" id="sidebar-title">Edit SMS Template</h5>
+                    <p class="small mb-0 text-white-50" id="sidebar-subtitle" style="font-size: 0.72rem; max-width: 320px; line-height: 1.3;"></p>
+                </div>
+            </div>
+            <button type="button" class="sidebar-close-btn d-flex align-items-center justify-content-center" onclick="closeSmsSidebar()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="sms-sidebar-body p-4">
+            <!-- Textarea Editor -->
+            <div class="mb-4">
+                <label class="form-label fw-bold mb-2 text-dark d-flex align-items-center gap-2" style="font-size: 0.85rem;">
+                    <i class="fa-regular fa-message text-primary"></i> SMS Content <span class="text-danger">*</span>
+                </label>
+                <textarea class="form-control font-monospace border-2 rounded-3 p-3 shadow-none text-dark inline-editor-textarea"
+                          id="sidebar-textarea"
+                          rows="6"
+                          style="resize: none; font-size: 0.85rem; line-height: 1.45;"
+                          oninput="onSidebarInput()"></textarea>
+            </div>
+
+            <!-- Edit Stats Card -->
+            <div class="stats-card p-3 rounded-3 mb-4" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                <div class="d-flex justify-content-between text-muted mb-1.5" style="font-size: 0.725rem;">
+                    <span>Characters: <strong class="text-dark" id="sidebar-char-count">0</strong> / 160</span>
+                    <span id="sidebar-segment-count" class="fw-bold text-success">1 Segment</span>
+                </div>
+                <div class="progress" style="height: 5px; border-radius: 10px;">
+                    <div id="sidebar-progress-bar" class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <!-- Insert Placeholders Widget -->
+            <div class="mb-4">
+                <span class="d-block text-uppercase text-muted fw-bold mb-2" style="font-size: 0.625rem; letter-spacing: 0.5px;">
+                    <i class="fa-solid fa-wand-magic-sparkles text-primary me-1"></i> Click to Insert Placeholder:
+                </span>
+                <div class="d-flex flex-wrap gap-1.5" id="sidebar-placeholders-container">
+                    <!-- Dynamic buttons will be appended here -->
+                </div>
+            </div>
+
+            <!-- Live Phone Mockup Preview Bubble -->
+            <div class="sms-thread-container mb-4" style="background-color: #fffef2 !important; border: 1px solid #fef08a;">
+                <div class="sms-bubble-sender" style="color: #a16207; font-size: 0.65rem;">
+                    <i class="fa-solid fa-circle-notch fa-spin text-warning me-1"></i>UZAZI CLINIC • LIVE PREVIEW
+                </div>
+                <div class="sms-bubble" style="background: #fef9c3; border: 1px solid #fde047; max-width: 95%;">
+                    <span id="sidebar-preview" class="sms-bubble-text small text-dark font-monospace d-block" style="font-size:0.78rem; line-height:1.45; white-space:pre-line;">
+                        Start typing...
+                    </span>
+                </div>
+                <div class="sms-bubble-time" style="color: #a16207; font-size: 0.625rem;">
+                    <i class="fa-regular fa-clock me-1"></i>Draft updating...
+                </div>
+            </div>
+        </div>
+
+        <div class="sms-sidebar-footer d-flex gap-2 p-4 border-top">
+            <button class="btn btn-secondary flex-fill rounded-3 fw-bold py-2.5 shadow-sm transition-all" 
+                    id="sidebar-save-btn"
+                    onclick="saveSidebarTemplate()"
+                    disabled
+                    style="font-size: 0.85rem; background: #94a3b8; border: none; pointer-events: none;">
+                <span class="btn-text" id="sidebar-save-text"><i class="fa-solid fa-check me-1"></i> Up to Date</span>
+                <span class="spinner-border spinner-border-sm d-none" id="sidebar-spinner" role="status" aria-hidden="true"></span>
+            </button>
+            <button class="btn btn-light rounded-3 fw-bold py-2.5 px-4 transition-all" onclick="closeSmsSidebar()" style="font-size: 0.85rem; border: 2px solid #e2e8f0; background: #fff;">
+                Cancel
+            </button>
+        </div>
+    </div>
 </div>
 
 @push('js')
