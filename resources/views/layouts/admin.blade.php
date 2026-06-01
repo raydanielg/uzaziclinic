@@ -192,6 +192,7 @@
             z-index: 1001;
         }
     </style>
+    @include('partials.dashboard-styles')
 </head>
 <body>
 
