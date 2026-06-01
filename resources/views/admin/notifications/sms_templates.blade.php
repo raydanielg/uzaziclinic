@@ -42,12 +42,12 @@
                 <!-- Header (Always visible) -->
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div class="d-flex align-items-center gap-2.5">
-                        <div class="icon-circle" style="background: {{ $iconBg }}; width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white;">
+                        <div class="icon-circle" style="background: {{ $iconBg }}; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.15);">
                             <i class="fa-solid {{ $icon }} fs-5"></i>
                         </div>
                         <div>
                             <h6 class="fw-bold mb-1 text-dark text-truncate" style="font-size: 0.95rem; max-width: 170px;">{{ $template['title'] }}</h6>
-                            <span class="badge bg-light text-dark border fw-semibold px-2 py-0.5 rounded-pill" style="font-size: 0.65rem;">
+                            <span class="badge bg-soft-indigo fw-semibold px-2.5 py-1 rounded-pill" style="font-size: 0.65rem; color: #4f46e5; background-color: #f5f3ff;">
                                 {{ strtoupper(str_replace('sms_template_', '', $key)) }}
                             </span>
                         </div>
@@ -71,18 +71,26 @@
 
                 <!-- VIEW CONTAINER -->
                 <div class="view-container flex-grow-1 d-flex flex-column" id="view-container-{{ $key }}">
-                    <!-- Text Preview Area -->
-                    <div class="bg-light p-3 rounded-3 border mb-3 flex-grow-1" style="min-height: 120px; max-height: 180px; overflow-y: auto; background-color: #fafbfd !important;">
-                        <small class="text-dark font-monospace fw-medium d-block" style="white-space: pre-line; line-height: 1.5; font-size: 0.8rem;">
-                            "{{ $template['value'] }}"
-                        </small>
+                    <!-- SMS Chat Bubble Preview -->
+                    <div class="sms-thread-container mb-3 flex-grow-1">
+                        <div class="sms-bubble-sender">
+                            <i class="fa-solid fa-circle-check text-primary me-1"></i>UZAZI CLINIC
+                        </div>
+                        <div class="sms-bubble">
+                            <span class="sms-bubble-text text-dark font-monospace" style="font-size: 0.8rem; line-height: 1.5; white-space: pre-line;">
+                                {!! preg_replace('/\[(.*?)\]/', '<span class="sample-val-highlight">$1</span>', $template['value']) !!}
+                            </span>
+                        </div>
+                        <div class="sms-bubble-time">
+                            <i class="fa-solid fa-check-double text-primary me-1"></i>Delivered • Just now
+                        </div>
                     </div>
 
                     <!-- Progress Stats -->
                     <div class="mb-3">
                         <div class="d-flex justify-content-between small text-muted mb-1" style="font-size: 0.7rem;">
-                            <span>Characters: <strong class="text-dark">{{ $textLen }}</strong></span>
-                            <span>Segments: <strong class="text-{{ $barColor }}">{{ $segmentLabel }}</strong></span>
+                            <span><i class="fa-regular fa-file-lines me-1"></i> Characters: <strong class="text-dark">{{ $textLen }}</strong></span>
+                            <span><i class="fa-regular fa-clone me-1"></i> Segments: <strong class="text-{{ $barColor }}">{{ $segmentLabel }}</strong></span>
                         </div>
                         <div class="progress" style="height: 5px; border-radius: 10px;">
                             <div class="progress-bar bg-{{ $barColor }}" role="progressbar" style="width: {{ $charPercent }}%;"></div>
@@ -101,10 +109,10 @@
 
                     <!-- View Action Buttons -->
                     <div class="mt-auto d-flex gap-2">
-                        <button class="btn btn-primary flex-fill rounded-3 fw-bold py-2" onclick="startInlineEdit('{{ $key }}')" style="background: linear-gradient(135deg, #6366f1, #4f46e5); border: none; font-size: 0.825rem;">
+                        <button class="btn btn-primary flex-fill rounded-3 fw-bold py-2.5 shadow-sm transition-all" onclick="startInlineEdit('{{ $key }}')" style="background: linear-gradient(135deg, #6366f1, #4f46e5); border: none; font-size: 0.825rem;">
                             <i class="fa-solid fa-pen-to-square me-1"></i> Edit Template
                         </button>
-                        <button class="btn btn-outline-danger rounded-3 py-2 px-3 reset-template" data-key="{{ $key }}" data-title="{{ $template['title'] }}" title="Reset to Default" style="font-size: 0.825rem;">
+                        <button class="btn btn-outline-danger rounded-3 py-2.5 px-3 reset-template border-2" data-key="{{ $key }}" data-title="{{ $template['title'] }}" title="Reset to Default" style="font-size: 0.825rem;">
                             <i class="fa-solid fa-rotate-left"></i>
                         </button>
                     </div>
@@ -113,8 +121,8 @@
                 <!-- EDIT CONTAINER (Hidden by default) -->
                 <div class="edit-container flex-grow-1 d-none flex-column" id="edit-container-{{ $key }}">
                     <!-- Textarea Editor -->
-                    <div class="mb-3">
-                        <textarea class="form-control font-monospace border-2 rounded-3 p-3 shadow-none text-dark"
+                    <div class="mb-3 position-relative">
+                        <textarea class="form-control font-monospace border-2 rounded-3 p-3 shadow-none text-dark inline-editor-textarea"
                                   id="textarea-{{ $key }}"
                                   rows="5"
                                   style="resize: none; font-size: 0.825rem; border-color: #cbd5e1; background: #fff; line-height: 1.45;"
@@ -137,32 +145,37 @@
                         <span class="d-block text-uppercase text-muted fw-bold mb-1.5" style="font-size: 0.6rem; letter-spacing: 0.5px;">Click to Insert Placeholder:</span>
                         <div class="d-flex flex-wrap gap-1.5">
                             @foreach($template['placeholders'] as $ph)
-                            <button type="button" class="btn btn-xs py-1 px-2.5 font-monospace rounded-3 bg-white text-primary border" 
-                                    style="font-size: 0.68rem; font-weight: 600; border-color: #6366f1;"
+                            <button type="button" class="btn btn-xs ph-insert-button rounded-3 bg-white border font-monospace transition-all" 
+                                    style="font-size: 0.68rem; font-weight: 600; border-color: #6366f1; color: #4338ca; padding: 4px 10px;"
                                     onclick="insertPlaceholder('{{ $key }}', '{{ $ph }}')">
-                                + [{{ $ph }}]
+                                <i class="fa-solid fa-plus small me-1"></i>[{{ $ph }}]
                             </button>
                             @endforeach
                         </div>
                     </div>
 
-                    <!-- Live Sample Preview -->
-                    <div class="p-3 rounded-3 mb-3 flex-grow-1" style="background:#fefce8; border:1px solid #fde68a; min-height: 70px; overflow-y: auto; max-height: 120px;">
-                        <span class="fw-bold text-uppercase d-block mb-1" style="font-size:0.6rem; letter-spacing:0.5px; color:#92400e;">
-                            <i class="fa-regular fa-eye me-1"></i> Live Preview:
-                        </span>
-                        <div id="preview-{{ $key }}" class="small" style="font-size:0.75rem; line-height:1.45; color:#78350f; white-space:pre-line;">
-                            Start typing...
+                    <!-- Live Sample Preview Bubble Mockup -->
+                    <div class="sms-thread-container mb-3 flex-grow-1" style="background-color: #fffef2 !important; border: 1px solid #fef08a;">
+                        <div class="sms-bubble-sender" style="color: #a16207;">
+                            <i class="fa-solid fa-circle-notch fa-spin text-warning me-1"></i>UZAZI CLINIC • LIVE PREVIEW
+                        </div>
+                        <div class="sms-bubble" style="background: #fef9c3; border: 1px solid #fde047;">
+                            <span id="preview-{{ $key }}" class="sms-bubble-text small text-dark font-monospace d-block" style="font-size:0.75rem; line-height:1.45; white-space:pre-line;">
+                                Start typing...
+                            </span>
+                        </div>
+                        <div class="sms-bubble-time" style="color: #a16207;">
+                            <i class="fa-regular fa-clock me-1"></i>Draft updating...
                         </div>
                     </div>
 
                     <!-- Save & Cancel Actions -->
                     <div class="mt-auto d-flex gap-2">
-                        <button class="btn btn-success flex-fill rounded-3 fw-bold py-2" onclick="saveInlineTemplate('{{ $key }}')" id="save-btn-{{ $key }}" style="font-size: 0.825rem;">
+                        <button class="btn btn-success flex-fill rounded-3 fw-bold py-2.5 shadow-sm transition-all" onclick="saveInlineTemplate('{{ $key }}')" id="save-btn-{{ $key }}" style="font-size: 0.825rem; background: linear-gradient(135deg, #10b981, #059669); border: none;">
                             <span class="btn-text" id="btn-text-{{ $key }}"><i class="fa-regular fa-floppy-disk me-1"></i> Save Changes</span>
                             <span class="spinner-border spinner-border-sm d-none" id="spinner-{{ $key }}" role="status" aria-hidden="true"></span>
                         </button>
-                        <button class="btn btn-light rounded-3 fw-bold py-2 px-3.5" onclick="cancelInlineEdit('{{ $key }}')" style="font-size: 0.825rem; border: 1px solid #cbd5e1;">
+                        <button class="btn btn-light rounded-3 fw-bold py-2.5 px-3.5 transition-all" onclick="cancelInlineEdit('{{ $key }}')" style="font-size: 0.825rem; border: 2px solid #e2e8f0; background: #fff;">
                             Cancel
                         </button>
                     </div>
