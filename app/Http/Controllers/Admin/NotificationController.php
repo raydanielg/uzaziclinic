@@ -274,10 +274,10 @@ Uzazi Clinic Team',
                 'default' => 'Karibu Uzazi Clinic! Asante kwa kujiunga nasi. Patient ID yako ni: [patient_ID]. Tuna furaha kukuhudumia. Kwa msaada piga simu: +255 678 233 736.',
             ],
             'sms_template_confirmation' => [
-                'default' => 'Habari [patient_name] (ID: [patient_ID]), umefanikiwa ku-book appointment na Dr. [doctor_name] kwa tarehe [appointment_date] saa [appointment_time]. Tafadhali fika mapema. Asante.',
+                'default' => 'Karibu [patient_name]! Booking ID: [booking_id]. Tarehe: [appointment_date], Saa: [appointment_time]. Tafadhali fika mapema. Asante.',
             ],
             'sms_template_reminder' => [
-                'default' => 'Kumbuka [patient_name] (ID: [patient_ID]): Unakaribia appointment yako na Dr. [doctor_name] kesho tarehe [appointment_date] saa [appointment_time]. Tafadhali fika mapema. Asante.',
+                'default' => 'Kumbuka [patient_name]! Unakaribia miadi yako kesho tarehe [appointment_date] saa [appointment_time]. Tafadhali fika mapema. Asante.',
             ],
             'sms_template_service_info' => [
                 'default' => 'Asante kwa kuja Uzazi Clinic. Patient ID yako ni: [patient_ID]. Leo utapata huduma ya: [service_name]. Tuna furaha kukuhudumia.',
@@ -286,13 +286,13 @@ Uzazi Clinic Team',
                 'default' => 'Asante [patient_name] (ID: [patient_ID]) kwa huduma ya [service_name]. Tafadhali lipa TSh [amount]. NAMBA ZA MALIPO: JINA: [account_name]. Tigo/Yas: [tigo_yas]. Mixx By Yas/Tigo Pesa: [tigo_pesa]. M-PESA: [mpesa]. CRDB BANK: [crdb_bank]. Ukishalipia Tuma majina Yako Na uthibitisho wa Muamala wako hapa Mpendwa.',
             ],
             'sms_template_payment_confirmation' => [
-                'default' => 'Asante [patient_name] (ID: [patient_ID]). Malipo yako ya TSh [amount] yamepokelewa. Tunakushukuru kwa kutumia huduma zetu.',
+                'default' => 'Asante [patient_name] (ID: [patient_ID]). Umelipa TSh [amount] kwa [payment_type]. Tunakushukuru kwa kutumia huduma zetu.',
             ],
             'sms_template_payment_with_appointment' => [
                 'default' => 'Karibu Uzazi Clinic! [patient_name] (ID: [patient_ID]), malipo yako ya TSh [amount] yamepokelewa. Asante! Miadi yako inayofuata ni tarehe [next_appointment_date] na Dr. [doctor_name]. Tafadhali fika mapema. Maswali: +255 678 233 736.',
             ],
             'sms_template_lab_directions' => [
-                'default' => 'Habari [patient_name] ([queue_number]), tafadhali nenda Idara ya [lab_section] kwa vipimo vyako. Ukishamaliza rudi mapokezi. — Uzazi Clinic.',
+                'default' => 'Habari [patient_name] ([queue_number]), tafadhali nende Idara ya [lab_section] kwa vipimo vyako. Ukishamaliza rudi mapokezi. — Uzazi Clinic.',
             ],
         ];
 

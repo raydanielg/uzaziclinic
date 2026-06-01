@@ -121,7 +121,7 @@ class NextSMSService
      */
     public function sendAppointmentConfirmation($phone, $patientName, $patientId, $doctorName, $appointmentDate, $appointmentTime)
     {
-        $template = \App\Models\Setting::get('sms_template_confirmation', "Habari [patient_name] (ID: [patient_ID]), umefanikiwa ku-book appointment na Dr. [doctor_name] kwa tarehe [appointment_date] saa [appointment_time]. Tafadhali fika mapema. Asante.");
+        $template = \App\Models\Setting::get('sms_template_confirmation', "Habari [patient_name] (ID: [patient_ID]), umefanikiwa ku-book appointment tarehe [appointment_date] saa [appointment_time]. Fika mapema. Asante.");
         
         $message = $this->replacePlaceholders($template, [
             'patient_name' => $patientName,
@@ -139,7 +139,7 @@ class NextSMSService
      */
     public function sendAppointmentReminder($phone, $patientName, $patientId, $doctorName, $appointmentDate, $appointmentTime)
     {
-        $template = \App\Models\Setting::get('sms_template_reminder', "Kumbuka [patient_name] (ID: [patient_ID]): Unakaribia appointment yako na Dr. [doctor_name] kesho tarehe [appointment_date] saa [appointment_time]. Tafadhali fika mapema. Asante.");
+        $template = \App\Models\Setting::get('sms_template_reminder', "Kumbuka [patient_name] (ID: [patient_ID]): Unakaribia appointment yako kesho tarehe [appointment_date] saa [appointment_time]. Fika mapema. Asante.");
         
         $message = $this->replacePlaceholders($template, [
             'patient_name' => $patientName,
@@ -238,7 +238,7 @@ class NextSMSService
     {
         $template = \App\Models\Setting::get(
             'sms_template_payment_with_appointment',
-            "Karibu Uzazi Clinic! [patient_name] (ID: [patient_ID]), malipo yako ya TSh [amount] yamepokelewa. Asante! Miadi yako inayofuata ni tarehe [next_appointment_date] na Dr. [doctor_name]. Tafadhali fika mapema. Maswali: +255 678 233 736."
+            "Karibu Uzazi Clinic! [patient_name] (ID: [patient_ID]), malipo yako ya TSh [amount] yamepokelewa. Asante! Miadi yako inayofuata ni tarehe [next_appointment_date]. Fika mapema. Maswali: +255 678 233 736."
         );
 
         $message = $this->replacePlaceholders($template, [
