@@ -159,16 +159,16 @@ Uzazi Clinic Team',
                 'placeholders' => ['patient_name', 'patient_ID']
             ],
             'sms_template_confirmation' => [
-                'title' => 'Appointment Confirmation',
-                'default' => 'Habari [patient_name] (ID: [patient_ID]), umefanikiwa ku-book appointment na Dr. [doctor_name] kwa tarehe [appointment_date] saa [appointment_time]. Tafadhali fika mapema. Asante.',
-                'description' => 'Sent automatically when an appointment is booked on the website or reception.',
-                'placeholders' => ['patient_name', 'patient_ID', 'doctor_name', 'appointment_date', 'appointment_time']
+                'title' => 'Appointment Confirmation (Welcome)',
+                'default' => 'Karibu [patient_name]! Booking ID: [booking_id]. Tarehe: [appointment_date], Saa: [appointment_time]. Tafadhali fika mapema. Asante.',
+                'description' => 'Sent when appointment is booked. Includes Booking ID, Date, Time only (under 160 chars).',
+                'placeholders' => ['patient_name', 'booking_id', 'appointment_date', 'appointment_time']
             ],
             'sms_template_reminder' => [
                 'title' => 'Appointment Reminder',
-                'default' => 'Kumbuka [patient_name] (ID: [patient_ID]): Unakaribia appointment yako na Dr. [doctor_name] kesho tarehe [appointment_date] saa [appointment_time]. Tafadhali fika mapema. Asante.',
-                'description' => 'Sent to remind a patient about an upcoming appointment.',
-                'placeholders' => ['patient_name', 'patient_ID', 'doctor_name', 'appointment_date', 'appointment_time']
+                'default' => 'Kumbuka [patient_name]! Unakaribia miadi yako kesho tarehe [appointment_date] saa [appointment_time]. Tafadhali fika mapema. Asante.',
+                'description' => 'Sent to remind patient about upcoming appointment.',
+                'placeholders' => ['patient_name', 'appointment_date', 'appointment_time']
             ],
             'sms_template_service_info' => [
                 'title' => 'Service Info (Returning Patient)',
@@ -183,10 +183,10 @@ Uzazi Clinic Team',
                 'placeholders' => ['patient_name', 'patient_ID', 'amount', 'service_name', 'account_name', 'tigo_yas', 'tigo_pesa', 'mpesa', 'crdb_bank']
             ],
             'sms_template_payment_confirmation' => [
-                'title' => 'Payment Confirmation (Receipt)',
-                'default' => 'Asante [patient_name] (ID: [patient_ID]). Malipo yako ya TSh [amount] yamepokelewa. Tunakushukuru kwa kutumia huduma zetu.',
-                'description' => 'Sent when payment is confirmed (no next appointment scheduled).',
-                'placeholders' => ['patient_name', 'patient_ID', 'amount']
+                'title' => 'Payment Confirmation (Vipimo au Dose)',
+                'default' => 'Asante [patient_name] (ID: [patient_ID]). Umelipa TSh [amount] kwa [payment_type]. Tunakushukuru kwa kutumia huduma zetu.',
+                'description' => 'Sent when payment is confirmed for lab tests (Vipimo) or medicine (Dose).',
+                'placeholders' => ['patient_name', 'patient_ID', 'amount', 'payment_type']
             ],
             'sms_template_payment_with_appointment' => [
                 'title' => 'Payment Done + Next Appointment (Main SMS)',
