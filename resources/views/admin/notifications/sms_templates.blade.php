@@ -117,51 +117,40 @@
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-// Reset template to default value
-function resetTemplate(key, title) {
-    Swal.fire({
-        title: 'Reset Template?',
-        text: 'This will reset "' + title + '" to its default message. This action cannot be undone.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#dc2626',
-        cancelButtonColor: '#6b7280',
-        confirmButtonText: 'Yes, Reset It',
-        cancelButtonText: 'Cancel'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            fetch('{{ route("admin.notifications.smsTemplates.reset") }}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ key: key })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Reset Complete',
-                        text: 'Template has been reset to default',
-                        confirmButtonColor: '#3b82f6'
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
-                    throw new Error(data.message || 'Failed to reset template');
-                }
-            })
-            .catch(error => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: error.message || 'Failed to reset template',
-                    confirmButtonColor: '#dc2626'
-                });
-            });
+// Toggle template enabled/disabled
+function toggleTemplate(key, enabled) {
+    fetch('{{ route("admin.notifications.smsTemplates.toggle") }}', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ key: key, enabled: enabled })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update label
+            const label = document.querySelector('label[for="toggle_' + key + '"]');
+            if (label) {
+                label.textContent = enabled ? 'Enabled' : 'Disabled';
+            }
+        } else {
+            throw new Error(data.message || 'Failed to toggle template');
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message || 'Failed to toggle template',
+            confirmButtonColor: '#dc2626'
+        });
+        // Revert toggle
+        const toggle = document.getElementById('toggle_' + key);
+        if (toggle) {
+            toggle.checked = !enabled;
         }
     });
 }

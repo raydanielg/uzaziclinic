@@ -210,7 +210,8 @@ Uzazi Clinic Team',
                 'description' => $meta['description'],
                 'placeholders' => $meta['placeholders'],
                 'default' => $meta['default'],
-                'value' => Setting::get($key, $meta['default'])
+                'value' => Setting::get($key, $meta['default']),
+                'enabled' => Setting::get($key . '_enabled', true)
             ];
         }
 
@@ -279,6 +280,21 @@ Uzazi Clinic Team',
             'success' => false,
             'message' => 'Template not found'
         ], 404);
+    }
+
+    public function toggleSmsTemplate(Request $request)
+    {
+        $request->validate([
+            'key' => 'required|string',
+            'enabled' => 'required|boolean'
+        ]);
+
+        Setting::set($request->key . '_enabled', $request->enabled, 'sms');
+
+        return response()->json([
+            'success' => true,
+            'message' => $request->enabled ? 'SMS Template enabled successfully!' : 'SMS Template disabled successfully!'
+        ]);
     }
 
     public function updateEmailTemplate(Request $request)
