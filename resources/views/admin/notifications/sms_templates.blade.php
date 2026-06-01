@@ -456,13 +456,13 @@ document.querySelectorAll('.reset-template').forEach(btn => {
 
 <style>
     .sms-card {
-        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
         background: #ffffff;
-        border: 1px solid #f1f5f9;
+        border: 1px solid #e2e8f0;
     }
     .sms-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08) !important;
+        transform: translateY(-6px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02) !important;
     }
     .sample-val-highlight {
         display: inline-block;
@@ -484,6 +484,77 @@ document.querySelectorAll('.reset-template').forEach(btn => {
     .form-check-input:checked {
         background-color: #10b981 !important;
         border-color: #10b981 !important;
+    }
+
+    /* ===== SMS CHAT BUBBLE STYLES ===== */
+    .sms-thread-container {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+    .sms-bubble-sender {
+        font-size: 0.65rem;
+        font-weight: 800;
+        color: #64748b;
+        margin-bottom: 6px;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+    }
+    .sms-bubble {
+        background-color: #e2e8f0;
+        border-radius: 16px;
+        border-top-left-radius: 4px;
+        padding: 10px 14px;
+        color: #1e293b;
+        font-size: 0.8rem;
+        max-width: 90%;
+        position: relative;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        align-self: flex-start;
+    }
+    .sms-bubble-time {
+        font-size: 0.625rem;
+        color: #94a3b8;
+        margin-top: 6px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+    }
+
+    /* ===== TEXTAREA & INTERACTIVE BUTTONS ===== */
+    .inline-editor-textarea {
+        border: 2px solid #cbd5e1;
+        transition: all 0.25s ease;
+        background-color: #fff;
+    }
+    .inline-editor-textarea:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15) !important;
+        background-color: #fff;
+    }
+    .ph-insert-button {
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .ph-insert-button:hover {
+        background-color: #6366f1 !important;
+        color: #fff !important;
+        border-color: #6366f1 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
+    }
+    .ph-insert-button:active {
+        transform: translateY(0);
+    }
+
+    /* Transitions */
+    .transition-all {
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 </style>
 @endpush
