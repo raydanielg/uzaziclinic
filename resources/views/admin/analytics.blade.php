@@ -3,163 +3,256 @@
 @section('page_title', 'Analytics Dashboard')
 
 @push('css')
-    <!-- Additional Styles for Apex Charts -->
-    <link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.44.0/dist/apexcharts.min.css" rel="stylesheet">
 @endpush
 
 @section('content')
-<div class="row">
-    <div class="col-lg-6 animate__animated animate__fadeInLeft">
-        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-            <h4 class="card-title mb-4">Patient Admission Trend</h4>
-            <div id="line_chart_datalabel" class="apex-charts" dir="ltr"></div>
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <h4 class="fw-bold mb-0"><i class="fa-solid fa-chart-line me-2 text-primary"></i>Analytics Dashboard</h4>
+            <p class="text-muted small mb-0">Uzazi Clinic — Takwimu za Kweli</p>
+        </div>
+        <div class="col-auto">
+            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-2">
+                <i class="fa-solid fa-clock me-1"></i>{{ now()->format('d M Y') }}
+            </span>
         </div>
     </div>
-    <div class="col-lg-6 animate__animated animate__fadeInRight">
-        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-            <h4 class="card-title mb-4">Department Revenue Distribution</h4>
-            <div id="column_chart" class="apex-charts" dir="ltr"></div>
-        </div>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-lg-6 animate__animated animate__fadeInUp">
-        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-            <h4 class="card-title mb-4">Hospital Bed Occupancy</h4>
-            <div id="bar_chart" class="apex-charts" dir="ltr"></div>
+    <!-- Key Metrics Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3 p-3 h-100" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-white bg-opacity-20 rounded-2 p-3">
+                        <i class="fa-solid fa-users text-white fs-4"></i>
+                    </div>
+                    <div class="text-white">
+                        <div class="small text-white-50">Wagonjwa Jumla</div>
+                        <div class="fw-bold fs-4">{{ number_format($totalPatients) }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3 p-3 h-100" style="background:linear-gradient(135deg,#10b981,#059669);">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-white bg-opacity-20 rounded-2 p-3">
+                        <i class="fa-solid fa-user-doctor text-white fs-4"></i>
+                    </div>
+                    <div class="text-white">
+                        <div class="small text-white-50">Madaktari</div>
+                        <div class="fw-bold fs-4">{{ $totalDoctors }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3 p-3 h-100" style="background:linear-gradient(135deg,#f59e0b,#d97706);">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-white bg-opacity-20 rounded-2 p-3">
+                        <i class="fa-solid fa-calendar-check text-white fs-4"></i>
+                    </div>
+                    <div class="text-white">
+                        <div class="small text-white-50">Miadi Jumla</div>
+                        <div class="fw-bold fs-4">{{ number_format($totalAppointments) }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3 p-3 h-100" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-white bg-opacity-20 rounded-2 p-3">
+                        <i class="fa-solid fa-money-bill-wave text-white fs-4"></i>
+                    </div>
+                    <div class="text-white">
+                        <div class="small text-white-50">Mapato (TZS)</div>
+                        <div class="fw-bold fs-4">{{ number_format($totalRevenue) }}</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-lg-6 animate__animated animate__fadeInUp">
-        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-            <h4 class="card-title mb-4">Patient Satisfaction Index</h4>
-            <div id="mixed_chart" class="apex-charts" dir="ltr"></div>
-        </div>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-lg-6 animate__animated animate__fadeInUp">
-        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-            <h4 class="card-title mb-4">Patient Age Groups</h4>
-            <div id="radial_chart" class="apex-charts" dir="ltr"></div>
+    <!-- Today's Stats -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-3 p-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small">Wagonjwa Leo</div>
+                        <div class="fw-bold fs-3 text-primary">{{ $todayPatients }}</div>
+                    </div>
+                    <div class="bg-primary-subtle text-primary rounded-2 p-3">
+                        <i class="fa-solid fa-day-calendar fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-3 p-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small">Mapato Leo (TZS)</div>
+                        <div class="fw-bold fs-3 text-success">{{ number_format($todayRevenue) }}</div>
+                    </div>
+                    <div class="bg-success-subtle text-success rounded-2 p-3">
+                        <i class="fa-solid fa-coins fs-4"></i>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-lg-6 animate__animated animate__fadeInUp">
-        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-            <h4 class="card-title mb-4">Emergency vs Routine Visits</h4>
-            <div id="pie_chart" class="apex-charts" dir="ltr"></div>
+
+    <!-- Charts Row 1 -->
+    <div class="row g-3 mb-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-3 p-4">
+                <h6 class="fw-bold mb-3"><i class="fa-solid fa-chart-area me-2 text-primary"></i>Mwenendo wa Wagonjwa (Miezi 6)</h6>
+                <div id="patientsTrendChart" style="height:300px;"></div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-3 p-4">
+                <h6 class="fw-bold mb-3"><i class="fa-solid fa-venus-mars me-2 text-primary"></i>Wagonjwa Kulingana na Jinsia</h6>
+                <div id="genderChart" style="height:300px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 2 -->
+    <div class="row g-3 mb-4">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-3 p-4">
+                <h6 class="fw-bold mb-3"><i class="fa-solid fa-list-check me-2 text-primary"></i>Aina za Miadi</h6>
+                <div id="typeChart" style="height:280px;"></div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-3 p-4">
+                <h6 class="fw-bold mb-3"><i class="fa-solid fa-route me-2 text-primary"></i>Hali ya Wagonjwa (Workflow)</h6>
+                <div id="stageChart" style="height:280px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 3 -->
+    <div class="row g-3 mb-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-3 p-4">
+                <h6 class="fw-bold mb-3"><i class="fa-solid fa-chart-line me-2 text-success"></i>Mapato Kwa Mwezi (Miezi 6)</h6>
+                <div id="revenueChart" style="height:300px;"></div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-3 p-4">
+                <h6 class="fw-bold mb-3"><i class="fa-solid fa-trophy me-2 text-warning"></i>Madaktari 5 Bora</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm table-borderless mb-0">
+                        <tbody>
+                            @forelse($topDoctors as $idx => $doc)
+                            <tr>
+                                <td><span class="badge bg-{{ $idx === 0 ? 'warning' : 'light' }} text-{{ $idx === 0 ? 'dark' : 'muted' }} fw-bold">{{ $idx + 1 }}</span></td>
+                                <td class="fw-semibold">{{ $doc->display_name }}</td>
+                                <td class="text-end text-muted">{{ $doc->appointments_count }} miadi</td>
+                            </tr>
+                            @empty
+                            <tr><td colspan="3" class="text-center text-muted small py-3">Hakuna data</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 @endsection
 
 @push('scripts')
-    <!-- Apex Charts JS -->
-    <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.44.0/dist/apexcharts.min.js"></script>
     <script>
-        // Patient Admission Trend (Line Chart with Data Labels)
-        var options = {
-            chart: { height: 380, type: 'line', zoom: { enabled: false }, toolbar: { show: false } },
-            colors: ['#365cf5', '#10b981'],
-            dataLabels: { enabled: true },
-            stroke: { width: [3, 3], curve: 'straight' },
-            series: [
-                { name: "Male Patients", data: [28, 29, 33, 36, 32, 32, 33] },
-                { name: "Female Patients", data: [12, 11, 14, 18, 17, 13, 13] }
-            ],
-            title: { text: 'Daily Admissions', align: 'left', style: { fontWeight: '500' } },
-            grid: { row: { colors: ['transparent', 'transparent'], opacity: 0.5 }, borderColor: '#f1f1f1' },
-            markers: { style: 'inverted', size: 6 },
-            xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'], title: { text: 'Month' } },
-            yaxis: { title: { text: 'Count' }, min: 5, max: 40 },
-            legend: { position: 'top', horizontalAlign: 'right', floating: true, offsetTop: -25, offsetLeft: -5 }
-        };
-        var chart = new Chart(document.querySelector("#line_chart_datalabel"), options);
-        chart.render();
+        // PHP data to JS
+        const monthlyPatients = @json($monthlyPatients);
+        const genderStats = @json($genderStats);
+        const typeStats = @json($typeStats);
+        const stageStats = @json($stageStats);
+        const monthlyRevenue = @json($monthlyRevenue);
 
-        // Department Revenue Distribution (Column Chart)
-        var options = {
-            chart: { height: 350, type: 'bar', toolbar: { show: false } },
-            plotOptions: { bar: { horizontal: false, columnWidth: '45%', endingShape: 'rounded' } },
+        // Patients Trend Chart
+        const patientsTrendOptions = {
+            series: [{
+                name: 'Wagonjwa',
+                data: monthlyPatients.map(m => m.count)
+            }],
+            chart: { height: 300, type: 'area', toolbar: { show: false } },
+            colors: ['#3b82f6'],
+            fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.1, stops: [0, 90, 100] } },
             dataLabels: { enabled: false },
-            stroke: { show: true, width: 2, colors: ['transparent'] },
-            series: [
-                { name: 'Revenue', data: [46, 57, 59, 54, 62, 58, 63, 60, 66] },
-                { name: 'Expenses', data: [74, 83, 102, 97, 86, 106, 93, 114, 94] }
-            ],
-            xaxis: { categories: ['Maternity', 'Pediatrics', 'Dental', 'Lab', 'Pharmacy', 'General', 'ICU', 'Radiology', 'Surgery'] },
-            yaxis: { title: { text: 'TSh (Millions)' } },
-            fill: { opacity: 1 },
-            colors: ['#365cf5', '#f1f1f1'],
-            tooltip: { y: { formatter: function (val) { return "TSh " + val + " Millions" } } }
+            stroke: { curve: 'smooth', width: 2 },
+            xaxis: { categories: monthlyPatients.map(m => m.month) },
+            yaxis: { title: { text: 'Idadi' } },
+            tooltip: { y: { formatter: (val) => val + ' wagonjwa' } }
         };
-        var chart = new Chart(document.querySelector("#column_chart"), options);
-        chart.render();
+        new ApexCharts(document.querySelector("#patientsTrendChart"), patientsTrendOptions).render();
 
-        // Hospital Bed Occupancy (Bar Chart)
-        var options = {
-            chart: { height: 350, type: 'bar', toolbar: { show: false } },
-            plotOptions: { bar: { horizontal: true } },
+        // Gender Chart
+        const genderOptions = {
+            series: genderStats.map(g => g.count),
+            labels: genderStats.map(g => g.gender === 'male' ? 'Wanaume' : g.gender === 'female' ? 'Wanawake' : 'Wengine'),
+            chart: { type: 'donut', height: 300 },
+            colors: ['#3b82f6', '#ec4899', '#6b7280'],
+            plotOptions: { pie: { donut: { size: '70%' } } },
             dataLabels: { enabled: false },
-            series: [{ data: [380, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380] }],
+            legend: { position: 'bottom' }
+        };
+        new ApexCharts(document.querySelector("#genderChart"), genderOptions).render();
+
+        // Appointment Types Chart
+        const typeOptions = {
+            series: typeStats.map(t => t.count),
+            labels: typeStats.map(t => t.type || 'General'),
+            chart: { type: 'pie', height: 280 },
+            colors: ['#10b981', '#f59e0b', '#3b82f6', '#8b5cf6', '#ef4444'],
+            legend: { position: 'bottom' }
+        };
+        new ApexCharts(document.querySelector("#typeChart"), typeOptions).render();
+
+        // Stage Workflow Chart
+        const stageLabels = {
+            'with_doctor': 'Kwa Daktari',
+            'awaiting_lab': 'Kwenye Lab',
+            'lab_complete': 'Matokeo Lab',
+            'awaiting_pharmacy': 'Kwenye Pharmacy',
+            'done': 'Imekamilika'
+        };
+        const stageOptions = {
+            series: stageStats.map(s => s.count),
+            labels: stageStats.map(s => stageLabels[s.current_stage] || s.current_stage),
+            chart: { type: 'bar', height: 280, toolbar: { show: false } },
+            plotOptions: { bar: { borderRadius: 4, columnWidth: '50%' } },
+            colors: ['#3b82f6', '#f59e0b', '#10b981', '#8b5cf6', '#6b7280'],
+            dataLabels: { enabled: false },
+            xaxis: { categories: stageStats.map(s => stageLabels[s.current_stage] || s.current_stage) }
+        };
+        new ApexCharts(document.querySelector("#stageChart"), stageOptions).render();
+
+        // Revenue Chart
+        const revenueOptions = {
+            series: [{
+                name: 'Mapato (TZS)',
+                data: monthlyRevenue.map(m => m.total)
+            }],
+            chart: { height: 300, type: 'bar', toolbar: { show: false } },
+            plotOptions: { bar: { borderRadius: 4, columnWidth: '60%' } },
             colors: ['#10b981'],
-            xaxis: { categories: ['ICU', 'General Ward', 'Maternity', 'Pediatrics', 'Surgery', 'Dental', 'Radiology', 'Emergency', 'VIP Ward', 'Total Beds'] }
+            dataLabels: { enabled: false },
+            xaxis: { categories: monthlyRevenue.map(m => m.month) },
+            yaxis: { labels: { formatter: (val) => (val / 1000000).toFixed(1) + 'M' }, title: { text: 'TZS (Millions)' } },
+            tooltip: { y: { formatter: (val) => 'TZS ' + (val).toLocaleString() } }
         };
-        var chart = new Chart(document.querySelector("#bar_chart"), options);
-        chart.render();
-
-        // Patient Satisfaction Index (Mixed Chart)
-        var options = {
-            chart: { height: 350, type: 'line', toolbar: { show: false } },
-            series: [
-                { name: 'Patient Feedback', type: 'column', data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30] },
-                { name: 'Satisfaction Score', type: 'area', data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43] },
-                { name: 'Admin Response', type: 'line', data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39] }
-            ],
-            stroke: { width: [0, 2, 5], curve: 'smooth' },
-            plotOptions: { bar: { columnWidth: '50%' } },
-            fill: { opacity: [0.85, 0.25, 1], gradient: { inverseColors: false, shade: 'light', type: "vertical", opacityFrom: 0.85, opacityTo: 0.55, stops: [0, 100, 100, 100] } },
-            labels: ['01/01/2026', '02/01/2026', '03/01/2026', '04/01/2026', '05/01/2026', '06/01/2026', '07/01/2026', '08/01/2026', '09/01/2026', '10/01/2026', '11/01/2026'],
-            markers: { size: 0 },
-            xaxis: { type: 'datetime' },
-            yaxis: { title: { text: 'Score' } },
-            tooltip: { shared: true, intersect: false, y: { formatter: function (y) { if (typeof y !== "undefined") { return y.toFixed(0) + " points"; } return y; } } },
-            colors: ['#365cf5', '#10b981', '#f59e0b']
-        };
-        var chart = new Chart(document.querySelector("#mixed_chart"), options);
-        chart.render();
-
-        // Patient Age Groups (Radial Chart)
-        var options = {
-            chart: { height: 370, type: 'radialBar' },
-            plotOptions: {
-                radialBar: {
-                    dataLabels: {
-                        name: { fontSize: '22px' },
-                        value: { fontSize: '16px' },
-                        total: { show: true, label: 'Average Age', formatter: function (w) { return 42 } }
-                    }
-                }
-            },
-            series: [44, 55, 67, 83],
-            labels: ['0-18 Years', '19-40 Years', '41-60 Years', '60+ Years'],
-            colors: ['#365cf5', '#10b981', '#f59e0b', '#ef4444']
-        };
-        var chart = new Chart(document.querySelector("#radial_chart"), options);
-        chart.render();
-
-        // Emergency vs Routine Visits (Pie Chart)
-        var options = {
-            chart: { height: 320, type: 'pie' },
-            series: [44, 55, 13, 33],
-            labels: ['Emergency', 'Routine Checkup', 'Follow-up', 'Specialist Consultation'],
-            colors: ["#365cf5", "#10b981", "#ebeff2", "#f59e0b"],
-            legend: { show: true, position: 'bottom', horizontalAlign: 'center', verticalAlign: 'middle', floating: false, fontSize: '14px', offsetX: 0 },
-            responsive: [{ breakpoint: 600, options: { chart: { height: 240 }, legend: { show: false } } }]
-        };
-        var chart = new Chart(document.querySelector("#pie_chart"), options);
-        chart.render();
+        new ApexCharts(document.querySelector("#revenueChart"), revenueOptions).render();
     </script>
 @endpush
