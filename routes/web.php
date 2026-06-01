@@ -390,6 +390,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/sms-templates', [App\Http\Controllers\Admin\NotificationController::class, 'smsTemplates'])->name('smsTemplates');
         Route::post('/sms-templates/update', [App\Http\Controllers\Admin\NotificationController::class, 'updateSmsTemplate'])->name('smsTemplates.update');
         Route::post('/sms-templates/reset', [App\Http\Controllers\Admin\NotificationController::class, 'resetSmsTemplate'])->name('smsTemplates.reset');
+        Route::post('/sms-templates/toggle', [App\Http\Controllers\Admin\NotificationController::class, 'toggleSmsTemplate'])->name('smsTemplates.toggle');
         Route::post('/email-templates/update', [App\Http\Controllers\Admin\NotificationController::class, 'updateEmailTemplate'])->name('emailTemplates.update');
     });
 });
