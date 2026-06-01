@@ -601,11 +601,11 @@ document.addEventListener('DOMContentLoaded', function() {
     .sms-editor-overlay {
         position: absolute;
         inset: 0;
-        background: rgba(15, 23, 42, 0.6);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
         opacity: 0;
-        transition: opacity 0.35s ease;
+        transition: opacity 0.4s ease;
     }
     .sms-editor-sidebar.active .sms-editor-overlay {
         opacity: 1;
@@ -615,15 +615,15 @@ document.addEventListener('DOMContentLoaded', function() {
         position: absolute;
         top: 0;
         right: 0;
-        width: 520px;
+        width: 560px;
         max-width: 100vw;
         height: 100%;
-        background: #ffffff;
-        box-shadow: -8px 0 30px rgba(0, 0, 0, 0.15);
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        box-shadow: -12px 0 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05);
         display: flex;
         flex-direction: column;
         transform: translateX(100%);
-        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .sms-editor-sidebar.active .sms-editor-panel {
         transform: translateX(0);
@@ -633,41 +633,67 @@ document.addEventListener('DOMContentLoaded', function() {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 1.25rem 1.5rem;
-        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        padding: 1.5rem 1.75rem;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
         flex-shrink: 0;
+        position: relative;
+        overflow: hidden;
+    }
+    .sms-editor-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        animation: shimmer 3s infinite;
+    }
+    @keyframes shimmer {
+        0%, 100% { transform: translateX(-20%) rotate(0deg); }
+        50% { transform: translateX(20%) rotate(5deg); }
     }
     .editor-icon {
-        width: 42px;
-        height: 42px;
+        width: 48px;
+        height: 48px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 12px;
-        font-size: 1.2rem;
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 14px;
+        font-size: 1.4rem;
         color: #fff;
         flex-shrink: 0;
-        backdrop-filter: blur(8px);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        position: relative;
+        z-index: 1;
     }
     .editor-close {
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
         display: flex;
         align-items: center;
         justify-content: center;
         background: rgba(255, 255, 255, 0.2);
-        border: none;
-        border-radius: 10px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
         color: #fff;
-        font-size: 1.3rem;
+        font-size: 1.4rem;
         cursor: pointer;
-        transition: all 0.2s;
-        backdrop-filter: blur(8px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(12px);
+        position: relative;
+        z-index: 1;
     }
     .editor-close:hover {
         background: rgba(255, 255, 255, 0.35);
-        transform: rotate(90deg);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: rotate(90deg) scale(1.1);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+    .editor-close:active {
+        transform: rotate(90deg) scale(0.95);
     }
 
     .sms-editor-body {
@@ -675,23 +701,72 @@ document.addEventListener('DOMContentLoaded', function() {
         overflow-y: auto;
         overflow-x: hidden;
         background: #fcfcfd;
+        padding: 1.75rem;
     }
-    .sms-editor-body::-webkit-scrollbar { width: 4px; }
-    .sms-editor-body::-webkit-scrollbar-track { background: transparent; }
-    .sms-editor-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+    .sms-editor-body::-webkit-scrollbar { width: 6px; }
+    .sms-editor-body::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 99px; }
+    .sms-editor-body::-webkit-scrollbar-thumb { 
+        background: linear-gradient(180deg, #6366f1, #a855f7); 
+        border-radius: 99px; 
+    }
+    .sms-editor-body::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #4f46e5, #9333ea);
+    }
 
     .sms-editor-footer {
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        gap: 0.75rem;
-        padding: 1rem 1.5rem;
+        gap: 1rem;
+        padding: 1.25rem 1.75rem;
         border-top: 1px solid #e2e8f0;
-        background: #ffffff;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
         flex-shrink: 0;
+        position: relative;
+    }
+    .sms-editor-footer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #6366f1, transparent);
+        opacity: 0.3;
     }
     .sms-editor-footer .btn {
-        min-width: 130px;
+        min-width: 140px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .sms-editor-footer .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+    .sms-editor-footer .btn:active {
+        transform: translateY(0);
+    }
+
+    /* Enhanced form elements in sidebar */
+    .sms-editor-body .form-control {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 1rem;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background: #ffffff;
+    }
+    .sms-editor-body .form-control:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        background: #ffffff;
+    }
+    .sms-editor-body .form-label {
+        font-weight: 600;
+        color: #1e293b;
+        font-size: 0.9rem;
     }
 
     /* Mobile responsiveness */
@@ -700,18 +775,29 @@ document.addEventListener('DOMContentLoaded', function() {
             width: 100vw;
         }
         .sms-editor-header {
-            padding: 1rem 1.25rem;
+            padding: 1.25rem 1.5rem;
+        }
+        .editor-icon {
+            width: 42px;
+            height: 42px;
+            font-size: 1.2rem;
+        }
+        .editor-close {
+            width: 36px;
+            height: 36px;
+            font-size: 1.2rem;
         }
         .sms-editor-body {
-            padding-left: 0 !important;
-            padding-right: 0 !important;
+            padding: 1.25rem 1.5rem;
         }
         .sms-editor-footer {
-            padding: 0.875rem 1.25rem;
+            padding: 1rem 1.5rem;
+            gap: 0.75rem;
         }
         .sms-editor-footer .btn {
             flex: 1;
             min-width: 0;
+            padding: 0.75rem 1rem;
         }
     }
 </style>
