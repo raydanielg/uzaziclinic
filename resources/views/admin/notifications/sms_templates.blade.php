@@ -498,11 +498,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <style>
     .tracking-wide { letter-spacing: 0.5px; }
-
     .icon-circle {
         width: 40px; height: 40px;
         display: flex; align-items: center; justify-content: center;
-        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
         color: #fff; border-radius: 12px; font-size: 1.1rem;
         flex-shrink: 0;
     }
@@ -514,13 +513,12 @@ document.addEventListener('DOMContentLoaded', function() {
         transform: translateY(-4px);
         box-shadow: 0 12px 24px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
     }
-
     .preview-tabs .nav-pills .nav-link {
         color: #64748b; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px;
         font-size: 0.7rem; font-weight: 500; transition: all 0.2s;
     }
     .preview-tabs .nav-pills .nav-link.active {
-        background: #2563eb; color: #fff; border-color: #2563eb;
+        background: #6366f1; color: #fff; border-color: #6366f1;
     }
     .preview-tabs .nav-pills .nav-link:hover:not(.active) {
         background: #e2e8f0;
@@ -533,10 +531,8 @@ document.addEventListener('DOMContentLoaded', function() {
         background: #fefce8; border-color: #fde68a;
     }
     .preview-sample small { color: #78350f !important; }
-
     .progress { background-color: #e2e8f0; border-radius: 99px; }
     .progress-bar { border-radius: 99px; transition: width 0.3s ease; }
-
     .ph-badge {
         display: inline-block;
         background: #eef2ff; color: #4338ca;
@@ -549,52 +545,175 @@ document.addEventListener('DOMContentLoaded', function() {
     .ph-badge:hover {
         background: #4338ca; color: #fff; border-color: #4338ca;
     }
-
     .badge.bg-soft-success { background-color: #dcfce7 !important; color: #16a34a !important; }
     .badge.bg-soft-warning { background-color: #fef3c7 !important; color: #d97706 !important; }
     .badge.bg-soft-danger { background-color: #fee2e2 !important; color: #dc2626 !important; }
-
     .btn-outline-danger {
         border-color: #e2e8f0; color: #94a3b8; transition: all 0.2s;
     }
     .btn-outline-danger:hover {
         background-color: #fef2f2; border-color: #fecaca; color: #dc2626;
     }
-
     .form-check-input:checked { background-color: #16a34a; border-color: #16a34a; }
     .card .form-check-label { font-size: 0.6rem; color: #64748b; }
-
     .ph-insert-btn {
-        border: 2px solid #3b82f6; background: #eff6ff; color: #1d4ed8;
+        border: 2px solid #6366f1; background: #eef2ff; color: #4338ca;
         font-family: 'Courier New', monospace; font-size: 0.85rem; font-weight: 600;
         padding: 6px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s;
         margin: 4px; display: inline-block;
     }
     .ph-insert-btn:hover {
-        background: #3b82f6; color: #fff; border-color: #2563eb;
-        transform: translateY(-2px); box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+        background: #6366f1; color: #fff; border-color: #4f46e5;
+        transform: translateY(-2px); box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
     }
-    .ph-insert-btn:active {
-        transform: translateY(0); box-shadow: none;
-    }
-
+    .ph-insert-btn:active { transform: translateY(0); box-shadow: none; }
     .sample-val {
         display: inline; background: #fef9c3; color: #92400e; padding: 0 3px; border-radius: 3px;
         border-bottom: 1px dashed #f59e0b;
     }
-
     .live-preview { max-height: 120px; overflow-y: auto; }
-
     .stats-card {
         background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px;
     }
-
     .preview-box::-webkit-scrollbar { width: 3px; }
     .preview-box::-webkit-scrollbar-track { background: transparent; }
     .preview-box::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
     .live-preview::-webkit-scrollbar { width: 3px; }
     .live-preview::-webkit-scrollbar-track { background: transparent; }
     .live-preview::-webkit-scrollbar-thumb { background: #d4a017; border-radius: 99px; }
+
+    /* ===== SMS EDITOR SIDEBAR ===== */
+    .sms-editor-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        visibility: hidden;
+        pointer-events: none;
+    }
+    .sms-editor-sidebar.active {
+        visibility: visible;
+        pointer-events: all;
+    }
+
+    .sms-editor-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        opacity: 0;
+        transition: opacity 0.35s ease;
+    }
+    .sms-editor-sidebar.active .sms-editor-overlay {
+        opacity: 1;
+    }
+
+    .sms-editor-panel {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 520px;
+        max-width: 100vw;
+        height: 100%;
+        background: #ffffff;
+        box-shadow: -8px 0 30px rgba(0, 0, 0, 0.15);
+        display: flex;
+        flex-direction: column;
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .sms-editor-sidebar.active .sms-editor-panel {
+        transform: translateX(0);
+    }
+
+    .sms-editor-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem 1.5rem;
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        flex-shrink: 0;
+    }
+    .editor-icon {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        font-size: 1.2rem;
+        color: #fff;
+        flex-shrink: 0;
+        backdrop-filter: blur(8px);
+    }
+    .editor-close {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        font-size: 1.3rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        backdrop-filter: blur(8px);
+    }
+    .editor-close:hover {
+        background: rgba(255, 255, 255, 0.35);
+        transform: rotate(90deg);
+    }
+
+    .sms-editor-body {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background: #fcfcfd;
+    }
+    .sms-editor-body::-webkit-scrollbar { width: 4px; }
+    .sms-editor-body::-webkit-scrollbar-track { background: transparent; }
+    .sms-editor-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+
+    .sms-editor-footer {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #e2e8f0;
+        background: #ffffff;
+        flex-shrink: 0;
+    }
+    .sms-editor-footer .btn {
+        min-width: 130px;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 576px) {
+        .sms-editor-panel {
+            width: 100vw;
+        }
+        .sms-editor-header {
+            padding: 1rem 1.25rem;
+        }
+        .sms-editor-body {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+        .sms-editor-footer {
+            padding: 0.875rem 1.25rem;
+        }
+        .sms-editor-footer .btn {
+            flex: 1;
+            min-width: 0;
+        }
+    }
 </style>
 @endpush
 @endsection
