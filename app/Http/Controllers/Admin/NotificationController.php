@@ -263,7 +263,7 @@ Uzazi Clinic Team',
                 'default' => 'Karibu Uzazi Clinic! [patient_name] (ID: [patient_ID]), malipo yako ya TSh [amount] yamepokelewa. Asante! Miadi yako inayofuata ni tarehe [next_appointment_date] na Dr. [doctor_name]. Tafadhali fika mapema. Maswali: +255 678 233 736.',
             ],
             'sms_template_lab_directions' => [
-                'default' => 'Habari [patient_name] ([queue_number]), tafadhali nende Idara ya [lab_section] kwa vipimo vyako. Ukishamaliza rudi mapokezi. — Uzazi Clinic.',
+                'default' => 'Habari [patient_name] ([queue_number]), tafadhali nenda Idara ya [lab_section] kwa vipimo vyako. Ukishamaliza rudi mapokezi. — Uzazi Clinic.',
             ],
         ];
 
