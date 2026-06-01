@@ -100,25 +100,36 @@
                             @endif
                         </td>
                         <td class="small text-muted">{{ $v->type ?? 'General' }}</td>
-                        <td><span class="status-badge {{ $v->stage_badge }}">{{ $v->stage_label }}</span></td>
+                        <td>
+                            @php preg_match('/\[Lab: ([^\]]+)\]/', $v->notes ?? '', $lm); @endphp
+                            <span class="status-badge {{ $v->stage_badge }}">{{ $v->stage_label }}</span>
+                            @if($v->current_stage === 'awaiting_lab' && !empty($lm[1]))
+                            <br><small class="fw-semibold text-amber"><i class="fa-solid fa-flask me-1"></i>{{ $lm[1] }}</small>
+                            @endif
+                        </td>
                         <td class="small text-muted">{{ $v->appointment_date->format('H:i') }}</td>
                         <td class="text-end pe-3">
-                            <div class="btn-group">
+                            <div class="d-flex gap-1 justify-content-end flex-wrap">
                                 @if(!in_array($v->status, ['cancelled','completed']))
-                                <button class="btn btn-sm btn-light rounded-2" onclick="changeDoctor({{ $v->id }}, {{ $v->doctor_id ?? 'null' }})" title="Change Doctor">
-                                    <i class="fa-solid fa-user-doctor text-blue"></i>
-                                </button>
-                                <button class="btn btn-sm btn-light rounded-2" onclick="openPayment({{ $v->id }}, '{{ $v->patient->display_name ?? 'N/A' }}', '{{ $v->patient->patient_number ?? 'N/A' }}')" title="Payment & Discharge">
-                                    <i class="fa-solid fa-credit-card text-green"></i>
-                                </button>
-                                <button class="btn btn-sm btn-light rounded-2 cancel-visit" data-id="{{ $v->id }}" title="Cancel">
-                                    <i class="fa-solid fa-xmark text-rose"></i>
-                                </button>
+                                    @if($v->current_stage === 'with_doctor')
+                                    <button class="btn btn-sm btn-light rounded-2" onclick="changeDoctor({{ $v->id }}, {{ $v->doctor_id ?? 'null' }})" title="Badilisha Daktari">
+                                        <i class="fa-solid fa-user-doctor text-blue"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-warning rounded-2" onclick="openSendToLab({{ $v->id }}, '{{ addslashes($v->patient->display_name ?? 'N/A') }}')" title="Peleka Lab">
+                                        <i class="fa-solid fa-flask" style="color:#fff"></i>
+                                    </button>
+                                    @endif
+                                    <button class="btn btn-sm btn-success rounded-2" onclick="openPayment({{ $v->id }}, '{{ addslashes($v->patient->display_name ?? 'N/A') }}', '{{ $v->patient->patient_number ?? 'N/A' }}')" title="Lipia &amp; Ruhusu">
+                                        <i class="fa-solid fa-money-bill-wave" style="color:#fff"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-light rounded-2 cancel-visit" data-id="{{ $v->id }}" title="Futa">
+                                        <i class="fa-solid fa-xmark text-rose"></i>
+                                    </button>
                                 @else
-                                <button class="btn btn-sm btn-light rounded-2" onclick="viewMedicalDetails({{ $v->id }}, '{{ $v->patient->display_name ?? 'N/A' }}', '{{ $v->patient->patient_number ?? 'N/A' }}')" title="View Medical Details">
-                                    <i class="fa-solid fa-file-medical text-primary"></i>
-                                </button>
-                                <span class="badge bg-success">Completed</span>
+                                    <button class="btn btn-sm btn-light rounded-2" onclick="viewMedicalDetails({{ $v->id }}, '{{ addslashes($v->patient->display_name ?? 'N/A') }}', '{{ $v->patient->patient_number ?? 'N/A' }}')" title="Angalia Taarifa">
+                                        <i class="fa-solid fa-file-medical text-primary"></i>
+                                    </button>
+                                    <span class="badge bg-success rounded-2">Imekamilika</span>
                                 @endif
                             </div>
                         </td>
@@ -289,18 +300,7 @@
                                 </tr>
                             </thead>
                             <tbody id="receiptServices">
-                                <tr>
-                                    <td>Doctor Consultation</td>
-                                    <td class="text-end">5,000</td>
-                                </tr>
-                                <tr>
-                                    <td>Laboratory Tests</td>
-                                    <td class="text-end">15,000</td>
-                                </tr>
-                                <tr>
-                                    <td>Medication</td>
-                                    <td class="text-end">25,000</td>
-                                </tr>
+                                <tr class="text-muted"><td colspan="2" class="text-center small py-3">Hakuna huduma zilizochaguliwa</td></tr>
                             </tbody>
                             <tfoot>
                                 <tr class="table-dark">
@@ -311,22 +311,38 @@
                         </table>
                     </div>
 
-                    <!-- Payment Details -->
-                    <div class="row mb-4">
-                        <div class="col-6">
-                            <label class="small text-muted">Payment Method:</label>
-                            <div class="fw-bold" id="receiptPaymentMethod">-</div>
-                        </div>
-                        <div class="col-6">
-                            <label class="small text-muted">Amount Paid:</label>
-                            <div class="fw-bold text-success" id="receiptAmountPaid">-</div>
+                    <!-- Cash Payment Banner -->
+                    <div class="p-3 rounded-3 mb-3" style="background:linear-gradient(135deg,#16a34a,#15803d);">
+                        <div class="d-flex align-items-center gap-3">
+                            <i class="fa-solid fa-money-bill-wave text-white fs-4"></i>
+                            <div>
+                                <div class="fw-bold text-white fs-5" id="receiptAmountPaid">-</div>
+                                <div class="text-white-50 small">MALIPO YA PESA TASLIMU — Uzazi Clinic</div>
+                            </div>
                         </div>
                     </div>
 
+                    <!-- Next appointment box (shown only if set) -->
+                    <div id="receiptNextApptBox" style="display:none;" class="p-3 rounded-3 border border-primary-subtle mb-3" style="background:#eff6ff;">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-calendar-check text-primary fs-5"></i>
+                            <div>
+                                <div class="small text-primary fw-semibold">Miadi Inayofuata</div>
+                                <div class="fw-bold" id="receiptNextAppt">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SMS sent notice -->
+                    <div id="receiptSmsRow" class="alert alert-success border-0 d-flex align-items-center gap-2 py-2 mb-3" style="display:none!important;">
+                        <i class="fa-solid fa-message-sms"></i>
+                        <small>SMS ya uthibitisho imetumwa kwa mgonjwa.</small>
+                    </div>
+
                     <!-- Footer -->
-                    <div class="text-center mt-4 pt-3 border-top">
-                        <p class="small text-muted mb-1">Thank you for choosing Uzazi Clinic</p>
-                        <p class="small text-muted mb-0">Get well soon!</p>
+                    <div class="text-center mt-3 pt-3 border-top">
+                        <p class="small text-muted mb-1">Asante kwa kuchagua Uzazi Clinic</p>
+                        <p class="small text-muted mb-0">Tupaze afya njema! · +255 678 233 736</p>
                     </div>
                 </div>
             </div>
@@ -342,112 +358,129 @@
 
 <!-- Payment Modal -->
 <div class="modal fade" id="paymentModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content border-0 shadow">
-            <div class="modal-header border-0 bg-success text-white">
-                <h6 class="modal-title fw-bold"><i class="fa-solid fa-credit-card me-2"></i>Payment & Discharge</h6>
+            <div class="modal-header border-0 py-3" style="background:linear-gradient(135deg,#16a34a,#15803d);">
+                <div>
+                    <h6 class="modal-title fw-bold text-white mb-0"><i class="fa-solid fa-money-bill-wave me-2"></i>Lipia &amp; Ruhusu Mgonjwa</h6>
+                    <small class="text-white-50">Malipo ya Pesa Taslimu (Cash) Pekee</small>
+                </div>
                 <button type="button" class="btn-close btn-close-white btn-sm" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4">
                 <input type="hidden" id="paymentVisitId">
-                
-                <!-- Patient Info -->
-                <div class="alert alert-info border-0 d-flex align-items-center gap-3 mb-4">
-                    <div class="user-avatar bg-white text-success" style="width:50px;height:50px;font-size:1.2rem">
-                        <i class="fa-solid fa-user"></i>
+
+                <!-- Patient banner -->
+                <div class="d-flex align-items-center gap-3 mb-4 p-3 rounded-3" style="background:#f0fdf4;border:1px solid #bbf7d0;">
+                    <div class="user-avatar bg-success text-white" style="width:48px;height:48px;font-size:1.2rem;">
+                        <i class="fa-solid fa-user-nurse"></i>
                     </div>
-                    <div>
-                        <div class="fw-bold" id="paymentPatientName">Patient Name</div>
-                        <div class="small text-muted" id="paymentPatientNumber">PT-001</div>
+                    <div class="flex-grow-1">
+                        <div class="fw-bold fs-6" id="paymentPatientName">-</div>
+                        <div class="text-muted small" id="paymentPatientNumber">-</div>
                     </div>
+                    <span class="badge px-3 py-2 fw-bold" style="background:#16a34a;font-size:.8rem;">
+                        <i class="fa-solid fa-money-bill-wave me-1"></i>CASH
+                    </span>
                 </div>
 
-                <!-- Services Received -->
-                <div class="mb-4">
-                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-list-check me-2"></i>Select Services</h6>
-                    <div id="servicesCheckboxes" class="mb-3">
+                <!-- Huduma za Kliniki -->
+                <div class="mb-3">
+                    <h6 class="fw-semibold mb-2 small text-uppercase text-muted"><i class="fa-solid fa-list-check me-1"></i>Chagua Huduma Zilizotumiwa</h6>
+                    <div class="row g-2 mb-3" id="servicesCheckboxes">
                         @foreach($services as $service)
-                        <div class="form-check mb-2">
-                            <input class="form-check-input service-checkbox" type="checkbox" 
-                                   value="{{ $service->id }}" 
-                                   data-price="{{ $service->price }}" 
-                                   data-name="{{ $service->name }}"
-                                   id="service_{{ $service->id }}">
-                            <label class="form-check-label" for="service_{{ $service->id }}">
-                                {{ $service->name }} - TZS {{ number_format($service->price, 2) }}
+                        <div class="col-md-6">
+                            <label class="d-flex align-items-center gap-2 p-2 rounded-2 border service-check-card" style="cursor:pointer;transition:.15s;">
+                                <input class="form-check-input service-checkbox m-0 flex-shrink-0" type="checkbox"
+                                       value="{{ $service->id }}"
+                                       data-price="{{ $service->price }}"
+                                       data-name="{{ $service->name }}">
+                                <span class="flex-grow-1 small fw-semibold">{{ $service->name }}</span>
+                                <span class="badge bg-success-subtle text-success text-nowrap">TZS {{ number_format($service->price) }}</span>
                             </label>
                         </div>
                         @endforeach
                     </div>
+
+                    <!-- Custom item entry -->
+                    <div class="p-3 rounded-3 mb-3" style="background:#f9fafb;border:1px dashed #d1d5db;">
+                        <div class="fw-semibold small mb-2 text-muted"><i class="fa-solid fa-plus-circle me-1 text-success"></i>Ongeza Bidhaa / Dawa / Huduma Nyingine</div>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <input type="text" id="customItemName" class="form-control form-control-sm" placeholder="Jina (mfano: Dawa ya malaria)">
+                            </div>
+                            <div class="col-4">
+                                <input type="number" id="customItemPrice" class="form-control form-control-sm" placeholder="Bei TZS" min="0">
+                            </div>
+                            <div class="col-2">
+                                <button type="button" id="addCustomItemBtn" class="btn btn-success btn-sm w-100" title="Ongeza">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Items table -->
                     <div class="table-responsive">
-                        <table class="table table-sm">
-                            <thead>
+                        <table class="table table-sm table-borderless mb-0">
+                            <thead style="background:#f0fdf4;">
                                 <tr>
-                                    <th>Service</th>
-                                    <th class="text-end">Cost (TZS)</th>
+                                    <th class="small px-2">Huduma / Bidhaa</th>
+                                    <th class="text-end small px-2">Kiasi (TZS)</th>
+                                    <th style="width:32px;"></th>
                                 </tr>
                             </thead>
                             <tbody id="servicesList">
-                                <tr class="text-muted">
-                                    <td colspan="2" class="text-center">Select services above</td>
-                                </tr>
+                                <tr class="text-muted"><td colspan="3" class="text-center small py-2">Chagua huduma hapo juu...</td></tr>
                             </tbody>
                             <tfoot>
-                                <tr class="table-success">
-                                    <th class="fw-bold">Total</th>
-                                    <th class="text-end fw-bold" id="totalCost">TZS 0</th>
+                                <tr style="background:#15803d;color:#fff;">
+                                    <th class="fw-bold px-2">JUMLA YA MALIPO</th>
+                                    <th class="text-end fw-bold px-2" id="totalCost">TZS 0</th>
+                                    <th></th>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
 
-                <!-- Payment Method -->
-                <div class="mb-4">
-                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-wallet me-2"></i>Payment Method</h6>
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <label class="form-check-label small fw-bold mb-2 d-block">Select Method</label>
-                            <div class="btn-group w-100" role="group">
-                                <input type="radio" class="btn-check" name="paymentMethod" id="payCash" value="cash" checked>
-                                <label class="btn btn-outline-success" for="payCash">
-                                    <i class="fa-solid fa-money-bill-wave me-1"></i>Cash
-                                </label>
-                                
-                                <input type="radio" class="btn-check" name="paymentMethod" id="payBank" value="bank">
-                                <label class="btn btn-outline-success" for="payBank">
-                                    <i class="fa-solid fa-building-columns me-1"></i>Bank
-                                </label>
-                                
-                                <input type="radio" class="btn-check" name="paymentMethod" id="payMobile" value="mobile">
-                                <label class="btn btn-outline-success" for="payMobile">
-                                    <i class="fa-solid fa-mobile-screen me-1"></i>Mobile
-                                </label>
+                <!-- Cash payment section -->
+                <div class="p-3 rounded-3 mb-3" style="background:linear-gradient(135deg,#16a34a,#15803d);">
+                    <div class="text-white fw-bold mb-2 small"><i class="fa-solid fa-hand-holding-dollar me-2"></i>PESA ZILIZOPOKELEWA (CASH)</div>
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-7">
+                            <div class="input-group">
+                                <span class="input-group-text fw-bold bg-white">TZS</span>
+                                <input type="number" id="amountReceived" class="form-control fw-bold" placeholder="0" min="0" style="font-size:1.1rem;">
                             </div>
                         </div>
-                        <div class="col-md-8">
-                            <label class="form-label small fw-bold">Payment Details</label>
-                            <input type="text" id="paymentDetails" class="form-control" placeholder="Enter payment reference or notes...">
+                        <div class="col-md-5" id="changeBox" style="display:none;">
+                            <div class="text-white-50 small">Chenji ya Kurudisha</div>
+                            <div class="fw-bold text-white fs-5">TZS <span id="changeValue">0</span></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Amount Received -->
-                <div class="mb-4">
-                    <label class="form-label small fw-bold">Amount Received</label>
-                    <div class="input-group">
-                        <span class="input-group-text">TZS</span>
-                        <input type="number" id="amountReceived" class="form-control" placeholder="Enter amount">
+                <!-- Reference (optional) -->
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Namba ya Risiti (hiari)</label>
+                    <input type="text" id="paymentDetails" class="form-control form-control-sm" placeholder="mfano: 2026-0045">
+                </div>
+
+                <!-- Next appointment -->
+                <div class="p-3 rounded-3" style="background:#eff6ff;border:1px solid #bfdbfe;">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="fa-solid fa-calendar-plus text-primary"></i>
+                        <span class="fw-semibold small text-primary">Miadi Inayofuata <span class="fw-normal text-muted">(SMS itatumwa mgonjwa)</span></span>
                     </div>
-                    <div id="changeAmount" class="mt-2 text-success fw-bold" style="display:none">
-                        Change: TZS <span id="changeValue">0</span>
-                    </div>
+                    <input type="date" id="nextAppointmentDate" class="form-control form-control-sm" min="{{ date('Y-m-d') }}">
+                    <p class="text-muted mt-1 mb-0" style="font-size:.73rem;"><i class="fa-solid fa-circle-info me-1"></i>Ukiweka tarehe, SMS itatumwa na tarehe ya miadi na daktari.</p>
                 </div>
             </div>
-            <div class="modal-footer border-0">
-                <button class="btn btn-light rounded-1" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn btn-success rounded-1 px-4" id="processPaymentBtn">
-                    <i class="fa-solid fa-check-circle me-2"></i>Process Payment & Discharge
+            <div class="modal-footer border-0 pt-0">
+                <button class="btn btn-light rounded-2" data-bs-dismiss="modal">Funga</button>
+                <button class="btn fw-bold rounded-2 px-4" id="processPaymentBtn" style="background:#16a34a;color:#fff;">
+                    <i class="fa-solid fa-check-circle me-2"></i>Thibitisha Malipo ya Cash
                 </button>
             </div>
         </div>
@@ -478,6 +511,62 @@
             <div class="modal-footer border-0">
                 <button class="btn btn-light rounded-1" data-bs-dismiss="modal">Cancel</button>
                 <button class="btn btn-primary rounded-1 px-4" id="confirmChangeDoctorBtn"><i class="fa-solid fa-exchange-alt me-2"></i>Change Doctor</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Send to Lab Modal -->
+<div class="modal fade" id="sendToLabModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 py-3" style="background:linear-gradient(135deg,#d97706,#b45309);">
+                <div>
+                    <h6 class="modal-title fw-bold text-white mb-0"><i class="fa-solid fa-flask me-2"></i>Peleka Mgonjwa Lab</h6>
+                    <small class="text-white-50">Chagua sehemu ya lab na utume SMS</small>
+                </div>
+                <button type="button" class="btn-close btn-close-white btn-sm" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <input type="hidden" id="labVisitId">
+
+                <div class="d-flex align-items-center gap-2 mb-3 p-2 rounded-3" style="background:#fffbeb;border:1px solid #fde68a;">
+                    <i class="fa-solid fa-user-circle text-amber fs-5"></i>
+                    <span class="fw-semibold small" id="labPatientName">-</span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold small">Sehemu ya Lab <span class="text-danger">*</span></label>
+                    <select id="labSectionSelect" class="form-select" required>
+                        <option value="">-- Chagua Sehemu --</option>
+                        <option value="Haematology (Vipimo vya Damu)">🩸 Haematology — Vipimo vya Damu</option>
+                        <option value="Biochemistry (Kemikali za Mwili)">🧪 Biochemistry — Kemikali za Mwili</option>
+                        <option value="Microbiology (Viumbe Vidogo)">🦠 Microbiology — Viumbe Vidogo / Utambuzi</option>
+                        <option value="Urinalysis (Vipimo vya Mkojo)">💧 Urinalysis — Vipimo vya Mkojo</option>
+                        <option value="Ultrasound / Radiolojia">📡 Ultrasound / Radiolojia</option>
+                        <option value="Kipimo cha Mimba">🤰 Kipimo cha Mimba</option>
+                        <option value="HIV / TB Screening">🔬 HIV / TB Screening</option>
+                        <option value="Shinikizo la Damu & Dalili">❤️ Shinikizo la Damu &amp; Dalili za Muhimu</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold small">Maelezo ya Ziada <span class="text-muted fw-normal">(hiari)</span></label>
+                    <textarea id="labNotes" rows="2" class="form-control form-control-sm" placeholder="Vipimo maalum, maagizo ya daktari..."></textarea>
+                </div>
+
+                <div class="form-check form-switch p-3 rounded-3" style="background:#fffbeb;border:1px solid #fde68a;">
+                    <input class="form-check-input" type="checkbox" id="sendLabSms" checked>
+                    <label class="form-check-label small fw-semibold" for="sendLabSms">
+                        <i class="fa-solid fa-message me-1 text-amber"></i>Tuma SMS kwa mgonjwa na maelekezo ya lab
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button class="btn btn-light rounded-2" data-bs-dismiss="modal">Funga</button>
+                <button class="btn fw-bold rounded-2 px-4" id="confirmSendToLabBtn" style="background:#d97706;color:#fff;">
+                    <i class="fa-solid fa-flask me-2"></i>Peleka Lab
+                </button>
             </div>
         </div>
     </div>
@@ -613,6 +702,7 @@
 $(function () {
     const CSRF = '{{ csrf_token() }}';
     let searchTimer = null;
+    let customItems = [];
 
     // ─── Step 1a: Search existing patient ───────────────────
     $('#patientSearch').on('input', function () {
@@ -841,112 +931,207 @@ $(function () {
         // Reset form
         $('#amountReceived').val('');
         $('#paymentDetails').val('');
-        $('#changeAmount').hide();
+        $('#nextAppointmentDate').val('');
+        $('#changeBox').hide();
+        customItems = [];
         $('.service-checkbox').prop('checked', false);
         updateServicesTable();
     };
 
-    // Update services table based on checkboxes
-    function updateServicesTable() {
-        const selectedServices = [];
-        let total = 0;
-        
-        $('.service-checkbox:checked').each(function() {
-            const name = $(this).data('name');
-            const price = parseFloat($(this).data('price'));
-            selectedServices.push({ name, price });
-            total += price;
-        });
-        
-        if (selectedServices.length === 0) {
-            $('#servicesList').html('<tr class="text-muted"><td colspan="2" class="text-center">Select services above</td></tr>');
-        } else {
-            let html = selectedServices.map(s => `
-                <tr>
-                    <td>${s.name}</td>
-                    <td class="text-end">${number_format(s.price, 2)}</td>
-                </tr>
-            `).join('');
-            $('#servicesList').html(html);
-        }
-        
-        $('#totalCost').text('TZS ' + number_format(total, 2));
-    }
-
     // Number format helper
     function number_format(num, decimals) {
-        return num.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+        return num.toLocaleString('en-US', { minimumFractionDigits: decimals ?? 0, maximumFractionDigits: decimals ?? 0 });
     }
+
+    // Update the full items table (DB services + custom items)
+    function updateServicesTable() {
+        const rows = [];
+        let total = 0;
+
+        // DB-backed checkboxes
+        $('.service-checkbox:checked').each(function() {
+            const name  = $(this).data('name');
+            const price = parseFloat($(this).data('price')) || 0;
+            rows.push({ name, price, custom: false });
+            total += price;
+        });
+
+        // Custom items
+        customItems.forEach((item, idx) => {
+            rows.push({ name: item.name, price: item.price, custom: true, idx });
+            total += item.price;
+        });
+
+        if (rows.length === 0) {
+            $('#servicesList').html('<tr class="text-muted"><td colspan="3" class="text-center small py-2">Chagua huduma hapo juu...</td></tr>');
+        } else {
+            $('#servicesList').html(rows.map(r => `
+                <tr>
+                    <td class="px-2 small">${r.name}</td>
+                    <td class="text-end px-2 small">${number_format(r.price)}</td>
+                    <td class="px-1">${r.custom ? `<button type="button" class="btn btn-sm btn-light p-0 px-1 remove-custom" data-idx="${r.idx}" title="Ondoa"><i class="fa-solid fa-xmark text-rose" style="font-size:.7rem"></i></button>` : ''}</td>
+                </tr>`).join(''));
+        }
+        $('#totalCost').text('TZS ' + number_format(total));
+        recalcChange();
+    }
+
+    // Remove custom item
+    $(document).on('click', '.remove-custom', function() {
+        customItems.splice($(this).data('idx'), 1);
+        updateServicesTable();
+    });
+
+    // Add custom item button
+    $('#addCustomItemBtn').on('click', function() {
+        const name  = $('#customItemName').val().trim();
+        const price = parseFloat($('#customItemPrice').val()) || 0;
+        if (!name) return Swal.fire('Taja Jina', 'Andika jina la huduma/bidhaa kwanza.', 'warning');
+        if (price <= 0) return Swal.fire('Bei Sahihi', 'Weka bei zaidi ya 0.', 'warning');
+        customItems.push({ name, price });
+        $('#customItemName').val('');
+        $('#customItemPrice').val('');
+        updateServicesTable();
+    });
 
     // Service checkbox change handler
     $(document).on('change', '.service-checkbox', function() {
         updateServicesTable();
     });
 
-    // Calculate change
-    $('#amountReceived').on('input', function() {
+    // Recalculate change
+    function recalcChange() {
         const totalText = $('#totalCost').text().replace('TZS ', '').replace(/,/g, '');
-        const total = parseFloat(totalText) || 0;
-        const received = parseFloat($(this).val()) || 0;
-        const change = received - total;
-        
-        if (change >= 0) {
-            $('#changeValue').text(number_format(change, 2));
-            $('#changeAmount').show();
+        const total     = parseFloat(totalText) || 0;
+        const received  = parseFloat($('#amountReceived').val()) || 0;
+        const change    = received - total;
+        if (received > 0 && change >= 0) {
+            $('#changeValue').text(number_format(change));
+            $('#changeBox').show();
         } else {
-            $('#changeAmount').hide();
+            $('#changeBox').hide();
         }
-    });
+    }
+
+    // Calculate change on input
+    $('#amountReceived').on('input', recalcChange);
 
     $('#processPaymentBtn').on('click', function() {
-        const visitId = $('#paymentVisitId').val();
-        const paymentMethod = $('input[name="paymentMethod"]:checked').val();
-        const paymentDetails = $('#paymentDetails').val();
+        const visitId        = $('#paymentVisitId').val();
         const amountReceived = $('#amountReceived').val();
-        
-        if (!amountReceived) {
-            return Swal.fire('Warning', 'Please enter amount received', 'warning');
+        const nextAppt       = $('#nextAppointmentDate').val();
+        const ref            = $('#paymentDetails').val();
+
+        if (!amountReceived || parseFloat(amountReceived) <= 0) {
+            return Swal.fire('Taja Kiasi', 'Weka jumla ya pesa zilizopokelewa.', 'warning');
         }
-        
+
+        const totalText = $('#totalCost').text().replace('TZS ', '').replace(/,/g, '');
+        const total     = parseFloat(totalText) || 0;
+        if (total > 0 && parseFloat(amountReceived) < total) {
+            return Swal.fire('Haitoshi', `Kiasi kilichowekwa (TZS ${number_format(parseFloat(amountReceived))}) ni kidogo kuliko jumla (TZS ${number_format(total)}).`, 'warning');
+        }
+
         const $btn = $(this).prop('disabled', true);
-        $btn.html('<i class="fa-solid fa-spinner fa-spin me-2"></i>Processing...');
-        
+        $btn.html('<i class="fa-solid fa-spinner fa-spin me-2"></i>Inashughulikiwa...');
+
         $.post('{{ route("receptionist.visits.payment") }}', {
-            _token: CSRF,
-            visit_id: visitId,
-            payment_method: paymentMethod,
-            payment_details: paymentDetails,
-            amount_received: amountReceived
+            _token:           CSRF,
+            visit_id:         visitId,
+            payment_method:   'cash',
+            payment_details:  ref,
+            amount_received:  amountReceived,
+            next_appointment: nextAppt || null
         }).done(function(r) {
             if (r.success) {
-                // Hide payment modal
                 bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
-                
+
                 // Populate receipt
-                $('#receiptDate').text(new Date().toLocaleDateString());
+                const d = new Date();
+                $('#receiptDate').text(d.toLocaleDateString('sw-TZ', { day:'2-digit', month:'short', year:'numeric' }));
                 $('#receiptNumber').text('RCP-' + Date.now().toString().slice(-8));
                 $('#receiptPatientName').text($('#paymentPatientName').text());
                 $('#receiptPatientNumber').text($('#paymentPatientNumber').text());
-                $('#receiptComplaint').text(r.data?.complaint || 'General Consultation');
-                $('#receiptDiagnosis').text(r.data?.diagnosis || 'Completed consultation');
-                $('#receiptPaymentMethod').text(r.data?.payment_method || 'Cash');
-                $('#receiptAmountPaid').text('TZS ' + (r.data?.amount_received || '0').toLocaleString());
-                
-                // Copy services from payment modal to receipt
-                $('#receiptServices').html($('#servicesList').html());
+                $('#receiptComplaint').text(r.data?.complaint || '—');
+                $('#receiptDiagnosis').text(r.data?.diagnosis || '—');
+
+                // Copy itemized services (remove action column for receipt)
+                const rows = [];
+                $('.service-checkbox:checked').each(function() {
+                    rows.push(`<tr><td>${$(this).data('name')}</td><td class="text-end">${number_format(parseFloat($(this).data('price')))}</td></tr>`);
+                });
+                customItems.forEach(ci => {
+                    rows.push(`<tr><td>${ci.name}</td><td class="text-end">${number_format(ci.price)}</td></tr>`);
+                });
+                $('#receiptServices').html(rows.length ? rows.join('') : '<tr><td colspan="2" class="text-muted text-center small">—</td></tr>');
                 $('#receiptTotal').text($('#totalCost').text());
-                
-                // Show receipt modal
+
+                // Cash amount paid
+                $('#receiptAmountPaid').text('TZS ' + number_format(parseFloat(amountReceived)));
+
+                // Next appointment
+                if (nextAppt) {
+                    const nd = new Date(nextAppt);
+                    $('#receiptNextAppt').text(nd.toLocaleDateString('sw-TZ', { weekday:'long', day:'numeric', month:'long', year:'numeric' }));
+                    $('#receiptNextApptBox').show();
+                } else {
+                    $('#receiptNextApptBox').hide();
+                }
+
+                // Reset and show receipt
+                $('#nextAppointmentDate').val('');
+                customItems = [];
+                updateServicesTable();
                 const receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'));
                 receiptModal.show();
             } else {
-                Swal.fire('Error', r.message, 'error');
+                Swal.fire('Hitilafu', r.message, 'error');
             }
         }).fail(function(xhr) {
-            Swal.fire('Error', xhr.responseJSON?.message ?? 'Failed', 'error');
+            Swal.fire('Hitilafu', xhr.responseJSON?.message ?? 'Imeshindwa', 'error');
         }).always(function() {
             $btn.prop('disabled', false);
-            $btn.html('<i class="fa-solid fa-check-circle me-2"></i>Process Payment & Discharge');
+            $btn.html('<i class="fa-solid fa-check-circle me-2"></i>Thibitisha Malipo ya Cash');
+        });
+    });
+
+    // ─── Send to Lab ────────────────────────────────────────
+    window.openSendToLab = function(visitId, patientName) {
+        $('#labVisitId').val(visitId);
+        $('#labPatientName').text(patientName);
+        $('#labSectionSelect').val('');
+        $('#labNotes').val('');
+        $('#sendLabSms').prop('checked', true);
+        new bootstrap.Modal(document.getElementById('sendToLabModal')).show();
+    };
+
+    $('#confirmSendToLabBtn').on('click', function() {
+        const visitId    = $('#labVisitId').val();
+        const labSection = $('#labSectionSelect').val();
+        if (!labSection) return Swal.fire('Chagua Sehemu', 'Tafadhali chagua sehemu ya lab.', 'warning');
+
+        const $btn = $(this).prop('disabled', true);
+        $btn.html('<i class="fa-solid fa-spinner fa-spin me-2"></i>Inapeleka...');
+
+        $.post('{{ route("receptionist.visits.send-to-lab") }}', {
+            _token:      CSRF,
+            visit_id:    visitId,
+            lab_section: labSection,
+            lab_notes:   $('#labNotes').val(),
+            send_sms:    $('#sendLabSms').is(':checked') ? 1 : 0
+        }).done(function(r) {
+            if (r.success) {
+                bootstrap.Modal.getInstance(document.getElementById('sendToLabModal')).hide();
+                Swal.fire({ icon: 'success', title: r.message, text: 'SMS imetumwa mgonjwa.', timer: 2000, showConfirmButton: false })
+                    .then(() => location.reload());
+            } else {
+                Swal.fire('Hitilafu', r.message, 'error');
+            }
+        }).fail(function(xhr) {
+            Swal.fire('Hitilafu', xhr.responseJSON?.message ?? 'Imeshindwa', 'error');
+        }).always(function() {
+            $btn.prop('disabled', false);
+            $btn.html('<i class="fa-solid fa-flask me-2"></i>Peleka Lab');
         });
     });
 

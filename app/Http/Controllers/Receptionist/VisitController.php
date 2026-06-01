@@ -8,6 +8,7 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\NextSMSService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -196,6 +197,49 @@ class VisitController extends Controller
                 'message' => 'Imeshindwa kupeleka kwa daktari: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+    /* ──────────────────────────────────────────────────────────
+     * Send patient to a Lab section (route: POST /visits/send-to-lab)
+     * Changes stage to AWAITING_LAB and optionally sends SMS
+     * ────────────────────────────────────────────────────────── */
+    public function sendToLab(Request $request)
+    {
+        $data = $request->validate([
+            'visit_id'    => 'required|exists:appointments,id',
+            'lab_section' => 'required|string|max:100',
+            'lab_notes'   => 'nullable|string|max:500',
+            'send_sms'    => 'nullable|boolean',
+        ]);
+
+        $appointment = Appointment::with(['patient', 'doctor'])->findOrFail($data['visit_id']);
+
+        $labTag   = '[Lab: ' . $data['lab_section'] . ']';
+        $labNotes = !empty($data['lab_notes']) ? ' — ' . $data['lab_notes'] : '';
+
+        $appointment->update([
+            'current_stage' => Appointment::STAGE_AWAITING_LAB,
+            'notes'         => trim(($appointment->notes ? $appointment->notes . "\n" : '') . $labTag . $labNotes),
+        ]);
+
+        // Optional SMS to patient
+        if (!empty($data['send_sms']) && $appointment->patient?->phone) {
+            try {
+                (new NextSMSService())->sendLabDirections(
+                    $appointment->patient->phone,
+                    $appointment->patient->display_name,
+                    $data['lab_section'],
+                    $appointment->queue_number
+                );
+            } catch (\Throwable $e) {
+                \Log::error('SMS sendToLab failed', ['error' => $e->getMessage()]);
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => "Mgonjwa amepelekwa: {$data['lab_section']}",
+        ]);
     }
 
     /* ──────────────────────────────────────────────────────────

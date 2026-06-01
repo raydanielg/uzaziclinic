@@ -77,11 +77,42 @@ class NextSMSService
     }
 
     /**
+     * Helper to replace placeholders in templates
+     */
+    private function replacePlaceholders($template, $data)
+    {
+        $search = [];
+        $replace = [];
+        foreach ($data as $key => $value) {
+            $search[] = '[' . $key . ']';
+            $search[] = '[' . strtoupper($key) . ']';
+            $search[] = '[' . strtolower($key) . ']';
+            $search[] = '{' . $key . '}';
+            $search[] = '{' . strtoupper($key) . '}';
+            $search[] = '{' . strtolower($key) . '}';
+            
+            $replace[] = $value;
+            $replace[] = $value;
+            $replace[] = $value;
+            $replace[] = $value;
+            $replace[] = $value;
+            $replace[] = $value;
+        }
+        return str_replace($search, $replace, $template);
+    }
+
+    /**
      * Send welcome SMS to new patient
      */
     public function sendWelcomeMessage($phone, $patientName, $patientId)
     {
-        $message = "Karibu Uzazi Clinic! Asante kwa kujiunga nasi. Patient ID yako ni: PT-{$patientId}. Tuna furaha kukuhudumia. Kwa msaada piga simu: 255XXXXXXXX.";
+        $template = \App\Models\Setting::get('sms_template_welcome', "Karibu Uzazi Clinic! Asante kwa kujiunga nasi. Patient ID yako ni: [patient_ID]. Tuna furaha kukuhudumia. Kwa msaada piga simu: +255 678 233 736.");
+        
+        $message = $this->replacePlaceholders($template, [
+            'patient_name' => $patientName,
+            'patient_id' => "PT-{$patientId}",
+        ]);
+        
         return $this->send($phone, $message);
     }
 
@@ -90,7 +121,16 @@ class NextSMSService
      */
     public function sendAppointmentConfirmation($phone, $patientName, $patientId, $doctorName, $appointmentDate, $appointmentTime)
     {
-        $message = "Habari {$patientName} (ID: PT-{$patientId}), umefanikiwa ku-book appointment na Dr. {$doctorName} kwa tarehe {$appointmentDate} saa {$appointmentTime}. Tafadhali fika mapema. Asante.";
+        $template = \App\Models\Setting::get('sms_template_confirmation', "Habari [patient_name] (ID: [patient_ID]), umefanikiwa ku-book appointment na Dr. [doctor_name] kwa tarehe [appointment_date] saa [appointment_time]. Tafadhali fika mapema. Asante.");
+        
+        $message = $this->replacePlaceholders($template, [
+            'patient_name' => $patientName,
+            'patient_id' => "PT-{$patientId}",
+            'doctor_name' => $doctorName,
+            'appointment_date' => $appointmentDate,
+            'appointment_time' => $appointmentTime,
+        ]);
+        
         return $this->send($phone, $message);
     }
 
@@ -99,7 +139,16 @@ class NextSMSService
      */
     public function sendAppointmentReminder($phone, $patientName, $patientId, $doctorName, $appointmentDate, $appointmentTime)
     {
-        $message = "Kumbuka {$patientName} (ID: PT-{$patientId}): Unakaribia appointment yako na Dr. {$doctorName} kesho tarehe {$appointmentDate} saa {$appointmentTime}. Tafadhali fika mapema. Asante.";
+        $template = \App\Models\Setting::get('sms_template_reminder', "Kumbuka [patient_name] (ID: [patient_ID]): Unakaribia appointment yako na Dr. [doctor_name] kesho tarehe [appointment_date] saa [appointment_time]. Tafadhali fika mapema. Asante.");
+        
+        $message = $this->replacePlaceholders($template, [
+            'patient_name' => $patientName,
+            'patient_id' => "PT-{$patientId}",
+            'doctor_name' => $doctorName,
+            'appointment_date' => $appointmentDate,
+            'appointment_time' => $appointmentTime,
+        ]);
+        
         return $this->send($phone, $message);
     }
 
@@ -108,7 +157,13 @@ class NextSMSService
      */
     public function sendServiceInfo($phone, $serviceName, $patientId)
     {
-        $message = "Asante kwa kuja Uzazi Clinic. Patient ID yako ni: PT-{$patientId}. Leo utapata huduma ya: {$serviceName}. Tuna furaha kukuhudumia.";
+        $template = \App\Models\Setting::get('sms_template_service_info', "Asante kwa kuja Uzazi Clinic. Patient ID yako ni: [patient_ID]. Leo utapata huduma ya: [service_name]. Tuna furaha kukuhudumia.");
+        
+        $message = $this->replacePlaceholders($template, [
+            'patient_id' => "PT-{$patientId}",
+            'service_name' => $serviceName,
+        ]);
+        
         return $this->send($phone, $message);
     }
 
@@ -122,9 +177,20 @@ class NextSMSService
         $tigoPesa = env('PAYMENT_TIGO_PESA', '0678233736');
         $mpesa = env('PAYMENT_MPESA', '0767825843');
         $crdbBank = env('PAYMENT_CRDB_BANK', '0152537335900');
-        $whatsappNumber = env('PAYMENT_WHATSAPP_NUMBER', '255712345678');
 
-        $message = "Asante {$patientName} (ID: PT-{$patientId}) kwa huduma ya {$serviceName}. Tafadhali lipa TSh {$amount}. NAMBA ZA MALIPO: JINA: {$accountName}. Tigo/Yas: {$tigoYas}. Mixx By Yas/Tigo Pesa: {$tigoPesa}. M-PESA: {$mpesa}. CRDB BANK: {$crdbBank}. Ukishalipia Tuma majina Yako Na uthibitisho wa Muamala wako hapa Mpendwa.";
+        $template = \App\Models\Setting::get('sms_template_payment_request', "Asante [patient_name] (ID: [patient_ID]) kwa huduma ya [service_name]. Tafadhali lipa TSh [amount]. NAMBA ZA MALIPO: JINA: [account_name]. Tigo/Yas: [tigo_yas]. Mixx By Yas/Tigo Pesa: [tigo_pesa]. M-PESA: [mpesa]. CRDB BANK: [crdb_bank]. Ukishalipia Tuma majina Yako Na uthibitisho wa Muamala wako hapa Mpendwa.");
+
+        $message = $this->replacePlaceholders($template, [
+            'patient_name' => $patientName,
+            'patient_id' => "PT-{$patientId}",
+            'amount' => number_format($amount),
+            'service_name' => $serviceName,
+            'account_name' => $accountName,
+            'tigo_yas' => $tigoYas,
+            'tigo_pesa' => $tigoPesa,
+            'mpesa' => $mpesa,
+            'crdb_bank' => $crdbBank,
+        ]);
 
         return $this->send($phone, $message);
     }
@@ -134,7 +200,54 @@ class NextSMSService
      */
     public function sendPaymentConfirmation($phone, $patientName, $patientId, $amount)
     {
-        $message = "Asante {$patientName} (ID: PT-{$patientId}). Malipo yako ya TSh {$amount} yamepokelewa. Tunakushukuru kwa kutumia huduma zetu.";
+        $template = \App\Models\Setting::get('sms_template_payment_confirmation', "Asante [patient_name] (ID: [patient_ID]). Malipo yako ya TSh [amount] yamepokelewa. Tunakushukuru kwa kutumia huduma zetu.");
+
+        $message = $this->replacePlaceholders($template, [
+            'patient_name' => $patientName,
+            'patient_id' => "PT-{$patientId}",
+            'amount' => number_format($amount),
+        ]);
+
+        return $this->send($phone, $message);
+    }
+
+    /**
+     * Send lab section directions to patient via SMS
+     */
+    public function sendLabDirections($phone, $patientName, $labSection, $queueNumber)
+    {
+        $template = \App\Models\Setting::get(
+            'sms_template_lab_directions',
+            "Habari [patient_name] ([queue_number]), tafadhali nenda Idara ya [lab_section] kwa vipimo vyako. Ukishamaliza rudi mapokezi. — Uzazi Clinic."
+        );
+
+        $message = $this->replacePlaceholders($template, [
+            'patient_name' => $patientName,
+            'lab_section'  => $labSection,
+            'queue_number' => $queueNumber ?? 'N/A',
+        ]);
+
+        return $this->send($phone, $message);
+    }
+
+    /**
+     * Send combined payment confirmation + next appointment SMS
+     * This is the PRIMARY SMS sent after a patient pays at reception
+     */
+    public function sendPaymentWithAppointment($phone, $patientName, $patientId, $amount, $doctorName, $nextAppointmentDate)
+    {
+        $template = \App\Models\Setting::get(
+            'sms_template_payment_with_appointment',
+            "Karibu Uzazi Clinic! [patient_name] (ID: [patient_ID]), malipo yako ya TSh [amount] yamepokelewa. Asante! Miadi yako inayofuata ni tarehe [next_appointment_date] na Dr. [doctor_name]. Tafadhali fika mapema. Maswali: +255 678 233 736."
+        );
+
+        $message = $this->replacePlaceholders($template, [
+            'patient_name'          => $patientName,
+            'patient_id'            => "PT-{$patientId}",
+            'amount'                => $amount,
+            'doctor_name'           => $doctorName,
+            'next_appointment_date' => $nextAppointmentDate,
+        ]);
 
         return $this->send($phone, $message);
     }

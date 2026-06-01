@@ -515,28 +515,6 @@ class DashboardController extends Controller
 
             DB::commit();
 
-            // Send SMS notification (non-blocking)
-            try {
-                $smsService = new NextSMSService();
-                
-                // Check if this is a returning patient (phone exists in patients table)
-                $existingPatient = Patient::where('phone', $request->phone)->where('id', '!=', $patient->id)->first();
-                
-                if ($existingPatient) {
-                    // Returning patient - send service info
-                    $smsService->sendServiceInfo($request->phone, 'huduma ya afya', $patient->id);
-                } else {
-                    // New patient - send welcome message
-                    $smsService->sendWelcomeMessage($request->phone, $request->name, $patient->id);
-                }
-            } catch (\Exception $e) {
-                // Log SMS error but don't fail the registration
-                \Log::error('SMS sending failed during patient registration', [
-                    'error' => $e->getMessage(),
-                    'patient_id' => $patient->id,
-                ]);
-            }
-
             return response()->json([
                 'success' => true,
                 'message' => 'Mgonjwa ameshajiliwa kwa mafanikio!',
@@ -822,30 +800,81 @@ class DashboardController extends Controller
     {
         try {
             $request->validate([
-                'visit_id' => 'required|exists:appointments,id',
-                'payment_method' => 'required|in:cash,bank,mobile',
-                'payment_details' => 'nullable|string|max:500',
-                'amount_received' => 'required|numeric|min:0',
+                'visit_id'         => 'required|exists:appointments,id',
+                'payment_method'   => 'required|in:cash,bank,mobile',
+                'payment_details'  => 'nullable|string|max:500',
+                'amount_received'  => 'required|numeric|min:0',
+                'next_appointment' => 'nullable|date|after_or_equal:today',
             ]);
 
-            $appointment = Appointment::findOrFail($request->visit_id);
-            
-            // Update appointment status to completed and record payment
+            $appointment = Appointment::with(['patient', 'doctor'])->findOrFail($request->visit_id);
+
+            // Update appointment status and record payment info
             $appointment->update([
-                'status' => 'completed',
-                'prescription' => 'Payment Method: ' . $request->payment_method . 
-                                "\nAmount Received: TZS " . number_format($request->amount_received) .
-                                "\nDetails: " . ($request->payment_details ?? 'N/A')
+                'status'       => 'completed',
+                'prescription' => 'Payment Method: ' . $request->payment_method .
+                                  "\nAmount Received: TZS " . number_format($request->amount_received) .
+                                  "\nDetails: " . ($request->payment_details ?? 'N/A') .
+                                  ($request->next_appointment ? "\nNext Appointment: " . $request->next_appointment : '')
             ]);
+
+            // Create next appointment if given
+            $nextAppointment = null;
+            if ($request->next_appointment) {
+                $nextAppointment = Appointment::create([
+                    'patient_id'       => $appointment->patient_id,
+                    'doctor_id'        => $appointment->doctor_id,
+                    'appointment_date' => $request->next_appointment . ' 08:00:00',
+                    'status'           => 'pending',
+                    'type'             => $appointment->type ?? 'Follow-up',
+                    'notes'            => 'Follow-up appointment after payment on ' . now()->format('d M Y'),
+                ]);
+            }
+
+            // Send combined SMS: payment confirmation + next appointment date
+            try {
+                $patient = $appointment->patient;
+                $doctor  = $appointment->doctor;
+
+                if ($patient && $patient->phone) {
+                    $smsService = new NextSMSService();
+
+                    if ($request->next_appointment) {
+                        $nextDate = \Carbon\Carbon::parse($request->next_appointment)->format('d M Y');
+                        $smsService->sendPaymentWithAppointment(
+                            $patient->phone,
+                            $patient->name ?? $patient->user->name ?? 'Mama',
+                            $patient->id,
+                            number_format($request->amount_received),
+                            $doctor ? ($doctor->display_name ?? 'Daktari') : 'Daktari',
+                            $nextDate
+                        );
+                    } else {
+                        $smsService->sendPaymentConfirmation(
+                            $patient->phone,
+                            $patient->name ?? $patient->user->name ?? 'Mama',
+                            $patient->id,
+                            $request->amount_received
+                        );
+                    }
+                }
+            } catch (\Exception $smsEx) {
+                \Log::error('SMS failed after payment', [
+                    'error' => $smsEx->getMessage(),
+                    'appointment_id' => $appointment->id,
+                ]);
+            }
 
             return response()->json([
                 'success' => true,
-                'message' => 'Payment processed successfully! Patient discharged.',
+                'message' => 'Malipo yameshughulikiwa! Mgonjwa ameruhusiwa. SMS imetumwa.',
                 'data' => [
-                    'complaint' => $appointment->symptoms ?? 'General Consultation',
-                    'diagnosis' => $appointment->diagnosis ?? 'Completed consultation',
-                    'payment_method' => ucfirst($request->payment_method),
-                    'amount_received' => $request->amount_received,
+                    'complaint'              => $appointment->symptoms ?? 'General Consultation',
+                    'diagnosis'              => $appointment->diagnosis ?? 'Completed consultation',
+                    'payment_method'         => ucfirst($request->payment_method),
+                    'amount_received'        => $request->amount_received,
+                    'next_appointment'       => $request->next_appointment,
+                    'next_appointment_id'    => $nextAppointment?->id,
                 ]
             ]);
         } catch (\Exception $e) {

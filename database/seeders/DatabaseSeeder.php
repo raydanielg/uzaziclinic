@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             DoctorSeeder::class,
             ServiceSeeder::class,
+            PatientSeeder::class,
+            SmsTemplateSeeder::class,
             BlogSeeder::class,
         ]);
     }

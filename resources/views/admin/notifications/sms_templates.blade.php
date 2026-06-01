@@ -1,40 +1,273 @@
 @extends('admin.notifications.layout')
 
-@section('notification_title', 'SMS Templates')
-@section('notification_subtitle', 'Short and effective SMS messages for quick updates')
+@section('notification_title', 'SMS Templates Management')
+@section('notification_subtitle', 'Manage automated reproductive health and payment SMS templates with dynamic placeholders')
 
 @section('notification_content')
 <div class="row g-4">
-    <div class="col-md-6">
-        <div class="card border border-light rounded-1 p-3 bg-light shadow-none">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="badge bg-secondary rounded-1 small">ID: SMS_REMIND</span>
-                <span class="small text-muted">160 Characters Max</span>
-            </div>
-            <h6 class="fw-bold mb-2 text-primary">Appointment Reminder</h6>
-            <div class="bg-white p-3 rounded-1 border border-light mb-3">
-                <p class="small mb-0 italic text-muted">"Dear [name], just a reminder of your appointment at Uzazi Clinic tomorrow at [time]. See you then!"</p>
-            </div>
-            <div class="text-end">
-                <button class="btn btn-sm btn-light rounded-1 border-0"><i class="fa-solid fa-pencil me-1"></i> Edit</button>
+    @foreach($realTemplates as $key => $template)
+    <div class="col-md-6 col-lg-4">
+        <div class="card border border-light shadow-sm rounded-4 h-100 d-flex flex-column" style="background-color: #fdfdfd; transition: transform 0.2s; border-left: 4px solid #16a34a !important;">
+            <div class="card-body p-4 d-flex flex-column h-100">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-1.5 small fw-bold">Active</span>
+                    <span class="small text-muted fw-semibold">ID: {{ strtoupper(str_replace('sms_template_', '', $key)) }}</span>
+                </div>
+                
+                <h5 class="fw-bold text-dark mb-2" style="font-size: 1.1rem;">{{ $template['title'] }}</h5>
+                <p class="text-muted small mb-3 flex-grow-0" style="line-height: 1.4; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                    {{ $template['description'] }}
+                </p>
+
+                <div class="bg-white p-3 rounded-3 border border-gray-100 mb-3 flex-grow-1" style="min-height: 100px; max-height: 150px; overflow-y: auto; background-color: #fafbfc !important;">
+                    <p class="small mb-0 text-dark fw-medium italic" style="white-space: pre-line; line-height: 1.5; font-family: 'Courier New', Courier, monospace;">"{{ $template['value'] }}"</p>
+                </div>
+
+                <div class="mt-auto">
+                    <div class="mb-3">
+                        <span class="form-label d-block mb-1.5 fs-xs fw-bold text-uppercase text-muted" style="font-size: 0.7rem; letter-spacing: 0.5px;">Placeholders:</span>
+                        <div class="d-flex flex-wrap gap-1">
+                            @foreach($template['placeholders'] as $ph)
+                            <span class="badge bg-light text-dark border border-gray-200 rounded-pill font-monospace" style="font-size: 0.72rem; padding: 2px 8px;">[{{ $ph }}]</span>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <button class="btn btn-sm btn-outline-success rounded-3 w-100 fw-bold py-2" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#editSmsModal" 
+                            data-key="{{ $key }}"
+                            data-title="{{ $template['title'] }}"
+                            data-description="{{ $template['description'] }}"
+                            data-value="{{ $template['value'] }}"
+                            data-placeholders='@json($template['placeholders'])'>
+                        <i class="fa-solid fa-pencil me-1.5"></i> Edit Template
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+    @endforeach
+</div>
 
-    <div class="col-md-6">
-        <div class="card border border-light rounded-1 p-3 bg-light shadow-none">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="badge bg-secondary rounded-1 small">ID: SMS_PAY</span>
-                <span class="small text-muted">160 Characters Max</span>
+<!-- Edit SMS Template Modal -->
+<div class="modal fade" id="editSmsModal" tabindex="-1" aria-labelledby="editSmsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0 pb-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="modal-title fw-bold text-dark" id="editSmsModalLabel">Edit SMS Template</h5>
+                    <p class="text-muted small mb-0" id="smsModalDescription"></p>
+                </div>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <h6 class="fw-bold mb-2 text-success">Payment Receipt</h6>
-            <div class="bg-white p-3 rounded-1 border border-light mb-3">
-                <p class="small mb-0 italic text-muted">"Hi [name], payment of [amount] received for Invoice #[id]. Thank you for choosing Uzazi Clinic."</p>
-            </div>
-            <div class="text-end">
-                <button class="btn btn-sm btn-light rounded-1 border-0"><i class="fa-solid fa-pencil me-1"></i> Edit</button>
-            </div>
+            <form id="editSmsForm">
+                @csrf
+                <input type="hidden" name="key" id="smsTemplateKey">
+                
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold mb-2 text-dark">SMS Content *</label>
+                        <textarea class="form-control font-monospace border-2 rounded-3 p-3 shadow-none" 
+                                  name="value" 
+                                  id="smsTemplateValue" 
+                                  rows="6" 
+                                  style="resize: vertical; font-size: 0.95rem; border-color: #e5e7eb; transition: border-color 0.2s;" 
+                                  required></textarea>
+                    </div>
+
+                    <!-- Insert Placeholders Widget -->
+                    <div class="mb-3 bg-light p-3 rounded-3 border">
+                        <span class="form-label d-block mb-2 fw-bold text-dark text-uppercase small" style="font-size: 0.75rem;"><i class="fa-solid fa-wand-magic-sparkles text-success me-1"></i> Quick Insert Placeholders</span>
+                        <p class="text-muted small mb-2">Click on any placeholder below to insert it at your cursor's current position:</p>
+                        <div class="d-flex flex-wrap gap-1.5" id="placeholdersContainer">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Live word & segment count -->
+                    <div class="d-flex justify-content-between align-items-center bg-gray-50 p-2 rounded-2 border border-gray-100 text-muted small">
+                        <div>
+                            Characters: <span id="charCount" class="fw-bold text-dark">0</span>
+                        </div>
+                        <div>
+                            Estimated Segments: <span id="segmentCount" class="fw-bold text-success">1 Segment</span> (160 chars max per segment)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer border-0 pb-4 px-4 pt-0 d-flex gap-2">
+                    <button type="button" class="btn btn-light rounded-3 fw-bold px-4 py-2.5" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" id="saveTemplateBtn" class="btn btn-success rounded-3 fw-bold px-4 py-2.5">
+                        <span class="btn-text">Save Changes</span>
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
+@push('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editModal = document.getElementById('editSmsModal');
+    const placeholdersContainer = document.getElementById('placeholdersContainer');
+    const templateValueInput = document.getElementById('smsTemplateValue');
+    const charCountEl = document.getElementById('charCount');
+    const segmentCountEl = document.getElementById('segmentCount');
+    
+    // Live count updates
+    function updateCounts() {
+        const text = templateValueInput.value;
+        const len = text.length;
+        charCountEl.textContent = len;
+        
+        // SMS segment logic: 1st segment is 160. Multipart SMS segment is 153 chars.
+        let segments = 1;
+        if (len > 160) {
+            segments = Math.ceil(len / 153);
+        }
+        segmentCountEl.textContent = segments + (segments === 1 ? ' Segment' : ' Segments');
+        
+        if (len > 160) {
+            segmentCountEl.classList.remove('text-success');
+            segmentCountEl.classList.add('text-warning');
+        } else {
+            segmentCountEl.classList.remove('text-warning');
+            segmentCountEl.classList.add('text-success');
+        }
+    }
+    
+    templateValueInput.addEventListener('input', updateCounts);
+
+    if (editModal) {
+        editModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const key = button.getAttribute('data-key');
+            const title = button.getAttribute('data-title');
+            const description = button.getAttribute('data-description');
+            const value = button.getAttribute('data-value');
+            const placeholders = JSON.parse(button.getAttribute('data-placeholders'));
+            
+            // Populate modal fields
+            document.getElementById('editSmsModalLabel').textContent = 'Edit: ' + title;
+            document.getElementById('smsModalDescription').textContent = description;
+            document.getElementById('smsTemplateKey').value = key;
+            templateValueInput.value = value;
+            
+            // Generate quick-insert placeholder buttons
+            placeholdersContainer.innerHTML = '';
+            placeholders.forEach(ph => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'btn btn-xs btn-outline-dark font-monospace rounded-pill text-dark border-gray-300 hover-bg-success hover-text-white transition';
+                btn.style.fontSize = '0.75rem';
+                btn.style.padding = '3px 10px';
+                btn.style.margin = '2px';
+                btn.textContent = '[' + ph + ']';
+                
+                btn.addEventListener('click', function() {
+                    // Insert at current cursor position in textarea
+                    const startPos = templateValueInput.selectionStart;
+                    const endPos = templateValueInput.selectionEnd;
+                    const text = templateValueInput.value;
+                    const placeholderText = '[' + ph + ']';
+                    
+                    templateValueInput.value = text.substring(0, startPos) + placeholderText + text.substring(endPos);
+                    templateValueInput.focus();
+                    templateValueInput.selectionStart = templateValueInput.selectionEnd = startPos + placeholderText.length;
+                    
+                    updateCounts();
+                });
+                
+                placeholdersContainer.appendChild(btn);
+            });
+            
+            updateCounts();
+        });
+    }
+
+    // Handle form submit via AJAX
+    const editForm = document.getElementById('editSmsForm');
+    if (editForm) {
+        editForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('saveTemplateBtn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const spinner = submitBtn.querySelector('.spinner-border');
+            
+            btnText.classList.add('d-none');
+            spinner.classList.remove('d-none');
+            submitBtn.disabled = true;
+            
+            const formData = new FormData(editForm);
+            
+            fetch('{{ route("admin.notifications.smsTemplates.update") }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: data.message,
+                        confirmButtonColor: '#16a34a'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Update Failed',
+                        text: data.message || 'Something went wrong.',
+                        confirmButtonColor: '#16a34a'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while saving the template. Please try again.',
+                    confirmButtonColor: '#16a34a'
+                });
+            })
+            .finally(() => {
+                btnText.classList.remove('d-none');
+                spinner.classList.add('d-none');
+                submitBtn.disabled = false;
+            });
+        });
+    }
+});
+</script>
+
+<style>
+    .btn-xs {
+        padding: 0.15rem 0.4rem;
+        font-size: 0.75rem;
+    }
+    .hover-bg-success:hover {
+        background-color: #16a34a !important;
+        border-color: #16a34a !important;
+    }
+    .hover-text-white:hover {
+        color: white !important;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+    }
+</style>
+@endpush
 @endsection

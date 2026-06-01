@@ -210,6 +210,7 @@ Route::middleware(['auth', 'role:receptionist'])->prefix('receptionist')->name('
         Route::get('/search-patient',              [App\Http\Controllers\Receptionist\VisitController::class, 'searchPatient'])->name('search');
         Route::post('/register-patient',           [App\Http\Controllers\Receptionist\VisitController::class, 'registerPatient'])->name('register');
         Route::post('/send-to-doctor',             [App\Http\Controllers\Receptionist\VisitController::class, 'sendToDoctor'])->name('send');
+        Route::post('/send-to-lab',                [App\Http\Controllers\Receptionist\VisitController::class, 'sendToLab'])->name('send-to-lab');
         Route::post('/change-doctor',              [App\Http\Controllers\Receptionist\DashboardController::class, 'changeDoctor'])->name('change-doctor');
         Route::post('/complete',                   [App\Http\Controllers\Receptionist\DashboardController::class, 'markVisitCompleted'])->name('complete');
         Route::post('/payment',                    [App\Http\Controllers\Receptionist\DashboardController::class, 'processPayment'])->name('payment');
@@ -387,5 +388,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/history', [App\Http\Controllers\Admin\NotificationController::class, 'history'])->name('history');
         Route::get('/email-templates', [App\Http\Controllers\Admin\NotificationController::class, 'emailTemplates'])->name('emailTemplates');
         Route::get('/sms-templates', [App\Http\Controllers\Admin\NotificationController::class, 'smsTemplates'])->name('smsTemplates');
+        Route::post('/sms-templates/update', [App\Http\Controllers\Admin\NotificationController::class, 'updateSmsTemplate'])->name('smsTemplates.update');
     });
 });

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 @include('partials.dashboard-styles')
 
 @section('content')
