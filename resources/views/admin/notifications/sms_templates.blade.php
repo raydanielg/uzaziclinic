@@ -247,41 +247,76 @@ function renderPreviewText(text) {
     return rendered || '<span style="color:#94a3b8;font-style:italic;">Start typing to see preview...</span>';
 }
 
-// Start Editing inline
-function startInlineEdit(key) {
-    document.getElementById('view-container-' + key).classList.add('d-none');
-    document.getElementById('edit-container-' + key).classList.remove('d-none');
+// Open offcanvas sidebar
+function openEditSidebar(key, title, description, value, placeholdersJson) {
+    activeTemplateKey = key;
+    activeOriginalValue = value;
+
+    document.getElementById('sidebar-title').textContent = title;
+    document.getElementById('sidebar-subtitle').textContent = description;
     
-    // Auto-focus the textarea
-    const textarea = document.getElementById('textarea-' + key);
-    textarea.focus();
-    
-    // Run counts initially
-    updateInlineCounts(key);
+    const textarea = document.getElementById('sidebar-textarea');
+    textarea.value = value;
+    textarea.setAttribute('data-original', value);
+
+    // Build Placeholders Buttons
+    const placeholders = JSON.parse(placeholdersJson);
+    const container = document.getElementById('sidebar-placeholders-container');
+    container.innerHTML = '';
+
+    placeholders.forEach(ph => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn btn-xs ph-insert-button rounded-3 bg-white border font-monospace transition-all';
+        btn.style.fontSize = '0.68rem';
+        btn.style.fontWeight = '600';
+        btn.style.borderColor = '#6366f1';
+        btn.style.color = '#4338ca';
+        btn.style.padding = '4px 10px';
+        btn.innerHTML = `<i class="fa-solid fa-plus small me-1"></i>[${ph}]`;
+        
+        btn.onclick = function() {
+            const startPos = textarea.selectionStart;
+            const endPos = textarea.selectionEnd;
+            const phText = '[' + ph + ']';
+            textarea.value = textarea.value.substring(0, startPos) + phText + textarea.value.substring(endPos);
+            textarea.focus();
+            textarea.selectionStart = textarea.selectionEnd = startPos + phText.length;
+            onSidebarInput();
+        };
+
+        container.appendChild(btn);
+    });
+
+    onSidebarInput();
+
+    // Show sidebar
+    document.getElementById('smsEditSidebar').classList.add('active');
+    document.body.style.overflow = 'hidden'; // block main page scroll
 }
 
-// Cancel Editing inline
-function cancelInlineEdit(key) {
-    document.getElementById('edit-container-' + key).classList.add('d-none');
-    document.getElementById('view-container-' + key).classList.remove('d-none');
+// Close sidebar drawer
+function closeSmsSidebar() {
+    document.getElementById('smsEditSidebar').classList.remove('active');
+    document.body.style.overflow = '';
 }
 
-// Live counts & previews
-function updateInlineCounts(key) {
-    const textarea = document.getElementById('textarea-' + key);
-    const charCountEl = document.getElementById('char-count-' + key);
-    const segmentCountEl = document.getElementById('segment-count-' + key);
-    const progressBar = document.getElementById('progress-bar-' + key);
-    const previewBox = document.getElementById('preview-' + key);
-    const saveBtn = document.getElementById('save-btn-' + key);
-    const btnText = document.getElementById('btn-text-' + key);
+// Triggered on keyboard input or placeholder click inside sidebar
+function onSidebarInput() {
+    const textarea = document.getElementById('sidebar-textarea');
+    const charCountEl = document.getElementById('sidebar-char-count');
+    const segmentCountEl = document.getElementById('sidebar-segment-count');
+    const progressBar = document.getElementById('sidebar-progress-bar');
+    const previewBox = document.getElementById('sidebar-preview');
+    const saveBtn = document.getElementById('sidebar-save-btn');
+    const btnText = document.getElementById('sidebar-save-text');
 
     if (!textarea) return;
 
     const len = textarea.value.length;
     charCountEl.textContent = len;
 
-    // SMS Segment count
+    // SMS Segment calculation
     let segments = 1;
     if (len > 160) segments = Math.ceil(len / 153);
     segmentCountEl.textContent = segments + (segments === 1 ? ' Segment' : ' Segments');
@@ -290,7 +325,7 @@ function updateInlineCounts(key) {
     progressBar.style.width = pct + '%';
     progressBar.className = 'progress-bar';
 
-    // Color code segment
+    // Color progress bar depending on segment counts
     if (pct > 90) {
         progressBar.classList.add('bg-danger');
         segmentCountEl.className = 'fw-bold text-danger';
@@ -302,11 +337,11 @@ function updateInlineCounts(key) {
         segmentCountEl.className = 'fw-bold text-success';
     }
 
-    // Render Preview
+    // Render Preview with real-time samples
     previewBox.innerHTML = renderPreviewText(textarea.value);
 
-    // Detect Changes & Update Button state
-    const isChanged = (textarea.value !== textarea.getAttribute('data-original'));
+    // Detect Changes and modify Button layout dynamically!
+    const isChanged = (textarea.value !== activeOriginalValue);
     if (saveBtn && btnText) {
         if (isChanged) {
             saveBtn.disabled = false;
@@ -326,38 +361,21 @@ function updateInlineCounts(key) {
     }
 }
 
-// Insert Placeholders in textareas
-function insertPlaceholder(key, ph) {
-    const textarea = document.getElementById('textarea-' + key);
-    if (!textarea) return;
+// Send standard, bulletproof FormData POST to save changes
+function saveSidebarTemplate() {
+    const textarea = document.getElementById('sidebar-textarea');
+    const saveBtn = document.getElementById('sidebar-save-btn');
+    const btnText = document.getElementById('sidebar-save-text');
+    const spinner = document.getElementById('sidebar-spinner');
 
-    const startPos = textarea.selectionStart;
-    const endPos = textarea.selectionEnd;
-    const phText = '[' + ph + ']';
-
-    textarea.value = textarea.value.substring(0, startPos) + phText + textarea.value.substring(endPos);
-    textarea.focus();
-    textarea.selectionStart = textarea.selectionEnd = startPos + phText.length;
-    
-    updateInlineCounts(key);
-}
-
-// Save Template inline
-function saveInlineTemplate(key) {
-    const textarea = document.getElementById('textarea-' + key);
-    const saveBtn = document.getElementById('save-btn-' + key);
-    const btnText = document.getElementById('btn-text-' + key);
-    const spinner = document.getElementById('spinner-' + key);
-
-    if (!textarea || !saveBtn) return;
+    if (!textarea || !saveBtn || !activeTemplateKey) return;
 
     btnText.classList.add('d-none');
     spinner.classList.remove('d-none');
     saveBtn.disabled = true;
 
-    // Use FormData for standard, bulletproof Laravel POST parsing
     const formData = new FormData();
-    formData.append('key', key);
+    formData.append('key', activeTemplateKey);
     formData.append('value', textarea.value);
 
     fetch('/admin/notifications/sms-templates/update', {
@@ -376,7 +394,7 @@ function saveInlineTemplate(key) {
                 title: 'Template Updated!',
                 text: data.message,
                 confirmButtonColor: '#6366f1',
-                timer: 2000
+                timer: 1800
             }).then(() => {
                 window.location.reload();
             });
@@ -418,7 +436,6 @@ function toggleTemplate(key, enabled) {
         if (data.success) {
             if (label) label.textContent = enabled ? 'Active' : 'Off';
             
-            // Success micro-toast
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
@@ -446,7 +463,7 @@ function toggleTemplate(key, enabled) {
     });
 }
 
-// Reset template defaults
+// Reset template defaults with secure validation
 document.querySelectorAll('.reset-template').forEach(btn => {
     btn.addEventListener('click', function() {
         const key = this.getAttribute('data-key');
@@ -574,7 +591,90 @@ document.querySelectorAll('.reset-template').forEach(btn => {
         align-items: center;
     }
 
-    /* ===== TEXTAREA & INTERACTIVE BUTTONS ===== */
+    /* ===== SLIDE-IN SIDEBAR DRAWER ===== */
+    .sms-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1050;
+        visibility: hidden;
+        pointer-events: none;
+    }
+    .sms-sidebar.active {
+        visibility: visible;
+        pointer-events: all;
+    }
+    .sms-sidebar-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+    .sms-sidebar.active .sms-sidebar-overlay {
+        opacity: 1;
+    }
+    .sms-sidebar-panel {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 480px;
+        max-width: 100vw;
+        height: 100%;
+        background: #ffffff;
+        box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
+        display: flex;
+        flex-direction: column;
+        transform: translateX(100%);
+        transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .sms-sidebar.active .sms-sidebar-panel {
+        transform: translateX(0);
+    }
+    .sms-sidebar-header {
+        background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+        color: #fff;
+    }
+    .sidebar-icon-circle {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 1.1rem;
+    }
+    .sidebar-close-btn {
+        width: 34px;
+        height: 34px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+    }
+    .sidebar-close-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: rotate(90deg);
+    }
+    .sms-sidebar-body {
+        flex: 1;
+        overflow-y: auto;
+    }
+    .sms-sidebar-footer {
+        background: #f8fafc;
+    }
+
+    /* Form elements in sidebar */
     .inline-editor-textarea {
         border: 2px solid #cbd5e1;
         transition: all 0.25s ease;
@@ -583,7 +683,6 @@ document.querySelectorAll('.reset-template').forEach(btn => {
     .inline-editor-textarea:focus {
         border-color: #6366f1;
         box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15) !important;
-        background-color: #fff;
     }
     .ph-insert-button {
         box-shadow: 0 1px 2px rgba(0,0,0,0.05);
@@ -598,8 +697,6 @@ document.querySelectorAll('.reset-template').forEach(btn => {
     .ph-insert-button:active {
         transform: translateY(0);
     }
-
-    /* Transitions */
     .transition-all {
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
