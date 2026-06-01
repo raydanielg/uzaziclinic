@@ -528,12 +528,17 @@ document.addEventListener('DOMContentLoaded', function() {
     .card .form-check-label { font-size: 0.6rem; color: #64748b; }
 
     .ph-insert-btn {
-        border: 1px solid #c7d2fe; background: #eef2ff; color: #4338ca;
-        font-family: 'Courier New', monospace; font-size: 0.72rem; font-weight: 500;
-        padding: 3px 10px; border-radius: 20px; cursor: pointer; transition: all 0.15s;
+        border: 2px solid #3b82f6; background: #eff6ff; color: #1d4ed8;
+        font-family: 'Courier New', monospace; font-size: 0.85rem; font-weight: 600;
+        padding: 6px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s;
+        margin: 4px; display: inline-block;
     }
     .ph-insert-btn:hover {
-        background: #4338ca; color: #fff; border-color: #4338ca;
+        background: #3b82f6; color: #fff; border-color: #2563eb;
+        transform: translateY(-2px); box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+    }
+    .ph-insert-btn:active {
+        transform: translateY(0); box-shadow: none;
     }
 
     .sample-val {
