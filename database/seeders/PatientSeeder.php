@@ -169,6 +169,7 @@ class PatientSeeder extends Seeder
         // Also check if 'patient@afyacare.com' (Jane Patient from AdminSeeder) exists and lacks a Patient card
         $jane = User::where('email', 'patient@afyacare.com')->first();
         if ($jane) {
+            $janeEmergencyContact = substr('0712345670 (Spouse)', 0, 20);
             Patient::updateOrCreate(
                 ['user_id' => $jane->id],
                 [
@@ -178,7 +179,7 @@ class PatientSeeder extends Seeder
                     'blood_group' => 'O+',
                     'allergies' => 'None',
                     'medical_history' => 'Default seed patient record. Seeking general consultation.',
-                    'emergency_contact' => '0712345670 (Spouse)',
+                    'emergency_contact' => $janeEmergencyContact,
                     'status' => 'active',
                 ]
             );
