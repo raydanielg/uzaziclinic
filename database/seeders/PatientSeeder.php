@@ -148,6 +148,9 @@ class PatientSeeder extends Seeder
             }
 
             // Create Patient record
+            // Ensure emergency_contact is truncated to fit 20-character column limit
+            $emergencyContact = substr($data['emergency_contact'], 0, 20);
+            
             Patient::updateOrCreate(
                 ['user_id' => $user->id],
                 [
@@ -157,7 +160,7 @@ class PatientSeeder extends Seeder
                     'blood_group' => $data['blood_group'],
                     'allergies' => $data['allergies'],
                     'medical_history' => $data['medical_history'],
-                    'emergency_contact' => $data['emergency_contact'],
+                    'emergency_contact' => $emergencyContact,
                     'status' => 'active',
                 ]
             );
