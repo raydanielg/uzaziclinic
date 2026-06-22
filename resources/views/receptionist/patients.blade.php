@@ -45,8 +45,17 @@
                         </thead>
                         <tbody>
                             @forelse($patients as $patient)
+                            @php
+                                $profile = $patient->patient;
+                                $patientId = $profile->id ?? $patient->id;
+                                $patientName = $patient->name;
+                                $patientPhone = $patient->phone ?? $profile->phone ?? 'N/A';
+                                $patientGender = $profile->gender ?? 'N/A';
+                                $patientRegistered = $patient->created_at->format('d M Y');
+                                $patientStatus = $patient->status ?? 'active';
+                            @endphp
                             <tr>
-                                <td class="ps-4 fw-bold text-primary">#PT-{{ str_pad($patient->id, 4, '0', STR_PAD_LEFT) }}</td>
+                                <td class="ps-4 fw-bold text-primary">#PT-{{ str_pad($patientId, 4, '0', STR_PAD_LEFT) }}</td>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3"
@@ -54,18 +63,18 @@
                                             <i class="fa-solid fa-user text-muted small"></i>
                                         </div>
                                         <div>
-                                            <div class="fw-semibold">{{ $patient->name }}</div>
+                                            <div class="fw-semibold">{{ $patientName }}</div>
                                             <small class="text-muted">{{ $patient->email }}</small>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="small">{{ $patient->phone ?? 'N/A' }}</td>
-                                <td class="small text-muted">{{ ucfirst($patient->gender ?? 'N/A') }}</td>
-                                <td class="small text-muted">{{ $patient->created_at->format('d M Y') }}</td>
+                                <td class="small">{{ $patientPhone }}</td>
+                                <td class="small text-muted">{{ ucfirst($patientGender) }}</td>
+                                <td class="small text-muted">{{ $patientRegistered }}</td>
                                 <td>
-                                    <span class="badge bg-{{ ($patient->status ?? 'active') === 'active' ? 'success' : 'secondary' }}-subtle 
-                                        text-{{ ($patient->status ?? 'active') === 'active' ? 'success' : 'secondary' }} rounded-pill">
-                                        {{ ucfirst($patient->status ?? 'Active') }}
+                                    <span class="badge bg-{{ $patientStatus === 'active' ? 'success' : 'secondary' }}-subtle 
+                                        text-{{ $patientStatus === 'active' ? 'success' : 'secondary' }} rounded-pill">
+                                        {{ ucfirst($patientStatus) }}
                                     </span>
                                 </td>
                                 <td class="text-end pe-4">
@@ -73,10 +82,10 @@
                                         <button class="btn btn-sm btn-outline-primary rounded-2 me-1" onclick="viewPatient({{ $patient->id }})" title="View">
                                             <i class="fa-solid fa-eye"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-outline-warning rounded-2 me-1" onclick="resendSMS({{ $patient->id }}, '{{ $patient->name }}')" title="Resend SMS">
+                                        <button class="btn btn-sm btn-outline-warning rounded-2 me-1" onclick="resendSMS({{ $patient->id }}, '{{ addslashes($patientName) }}')" title="Resend SMS">
                                             <i class="fa-solid fa-sms"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-outline-success rounded-2 me-1" onclick="sendToDoctor({{ $patient->id }})" title="Send to Doctor">
+                                        <button class="btn btn-sm btn-outline-success rounded-2 me-1" onclick="sendToDoctor({{ $patientId }}, '{{ addslashes($patientName) }}', '{{ $patientPhone }}', '{{ $patientGender }}', '{{ $patientRegistered }}', '{{ $patientStatus }}')" title="Send to Doctor">
                                             <i class="fa-solid fa-user-doctor"></i>
                                         </button>
                                         <button class="btn btn-sm btn-outline-secondary rounded-2" onclick="editPatient({{ $patient->id }})" title="Edit">
@@ -191,28 +200,63 @@
 
 <!-- Send to Doctor Modal -->
 <div class="modal fade" id="sendToDoctorModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header border-0 bg-success text-white">
-                <h5 class="modal-title fw-bold"><i class="fa-solid fa-user-doctor me-2"></i>Send to Doctor</h5>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
+            <div class="modal-header border-0 bg-gradient-success text-white" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%);">
+                <div class="d-flex align-items-center">
+                    <div class="bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 44px; height: 44px;">
+                        <i class="fa-solid fa-user-doctor fs-5"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold mb-0">Send Patient to Doctor</h5>
+                        <small class="text-white text-opacity-75">Select doctor and confirm referral</small>
+                    </div>
+                </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body p-4">
+            <div class="modal-body p-0">
                 <input type="hidden" id="sendPatientId">
-                <div class="mb-3">
-                    <label class="form-label small fw-bold">Select Doctor</label>
-                    <select class="form-select" id="doctorSelect" required>
-                        <option value="">Loading doctors...</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label small fw-bold">Notes (Optional)</label>
-                    <textarea class="form-control" id="sendNotes" rows="3" placeholder="Add any notes for the doctor..."></textarea>
+                <div class="row g-0">
+                    <!-- Patient Info Card -->
+                    <div class="col-md-5 bg-light p-4 border-end">
+                        <h6 class="fw-bold text-muted text-uppercase mb-3" style="font-size: 0.7rem; letter-spacing: 1px;">
+                            <i class="fa-solid fa-id-card me-1"></i> Patient Details
+                        </h6>
+                        <div id="sendPatientInfo" class="text-center">
+                            <div class="spinner-border text-success spinner-border-sm" role="status"></div>
+                            <small class="d-block text-muted mt-2">Loading patient...</small>
+                        </div>
+                    </div>
+                    <!-- Doctor Selection -->
+                    <div class="col-md-7 p-4">
+                        <h6 class="fw-bold text-muted text-uppercase mb-3" style="font-size: 0.7rem; letter-spacing: 1px;">
+                            <i class="fa-solid fa-stethoscope me-1"></i> Doctor Selection
+                        </h6>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Select Doctor <span class="text-danger">*</span></label>
+                            <select class="form-select form-select-lg border-0 bg-light" id="doctorSelect" required style="border-radius: 12px;">
+                                <option value="">Loading doctors...</option>
+                            </select>
+                            <small class="text-muted">Choose the doctor to handle this patient</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Chief Complaint / Notes</label>
+                            <textarea class="form-control border-0 bg-light" id="sendNotes" rows="4" placeholder="Describe symptoms, reason for visit, or any notes for the doctor..." style="border-radius: 12px;"></textarea>
+                        </div>
+                        <div class="alert alert-light border-0 bg-success bg-opacity-10 text-success rounded-3 mb-0">
+                            <i class="fa-solid fa-circle-info me-2"></i>
+                            <small>The patient will be added to the doctor's queue with a generated queue number (e.g., Q001).</small>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer border-0">
-                <button class="btn btn-light rounded-1" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn btn-success rounded-1 px-4" id="confirmSendBtn"><i class="fa-solid fa-paper-plane me-2"></i>Send to Doctor</button>
+            <div class="modal-footer border-0 bg-light px-4 py-3">
+                <button class="btn btn-light rounded-2 fw-semibold" data-bs-dismiss="modal">
+                    <i class="fa-solid fa-xmark me-2"></i>Cancel
+                </button>
+                <button class="btn btn-success rounded-2 px-4 fw-bold shadow-sm" id="confirmSendBtn" style="background: linear-gradient(135deg, #059669, #10b981); border: none;">
+                    <i class="fa-solid fa-paper-plane me-2"></i>Send to Doctor
+                </button>
             </div>
         </div>
     </div>
@@ -512,7 +556,7 @@ function resendSMS(patientId, patientName) {
 }
 
 // Send to doctor functionality
-function sendToDoctor(patientId) {
+function sendToDoctor(patientId, patientName, patientPhone, patientGender, patientRegistered, patientStatus) {
     console.log('Send to doctor called with patient ID:', patientId);
     
     const modalElement = document.getElementById('sendToDoctorModal');
@@ -523,9 +567,68 @@ function sendToDoctor(patientId) {
     
     const modal = new bootstrap.Modal(modalElement);
     const doctorSelect = document.getElementById('doctorSelect');
+    const patientInfo = document.getElementById('sendPatientInfo');
     
     document.getElementById('sendPatientId').value = patientId;
+    document.getElementById('sendNotes').value = '';
     doctorSelect.innerHTML = '<option value="">Loading doctors...</option>';
+    
+    // Render patient info card
+    const genderIcon = patientGender === 'male' ? 'fa-mars text-primary' : patientGender === 'female' ? 'fa-venus text-danger' : 'fa-user text-muted';
+    const genderLabel = patientGender ? patientGender.charAt(0).toUpperCase() + patientGender.slice(1) : 'N/A';
+    const statusBadge = patientStatus === 'active' 
+        ? '<span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-1">Active</span>'
+        : '<span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-3 py-1">' + (patientStatus ? patientStatus.charAt(0).toUpperCase() + patientStatus.slice(1) : 'Unknown') + '</span>';
+    
+    patientInfo.innerHTML = `
+        <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+            <div class="card-body p-3 text-center">
+                <div class="mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border: 2px solid #10b981;">
+                    <i class="fa-solid fa-user-injured fs-2" style="color: #059669;"></i>
+                </div>
+                <h5 class="fw-bold mb-1" style="color: #1e293b;">${patientName}</h5>
+                <div class="mb-2">${statusBadge}</div>
+                <div class="text-start mt-3">
+                    <div class="d-flex align-items-center mb-2 p-2 rounded-3" style="background: rgba(16,185,129,0.06);">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 28px; height: 28px; background: #fff; border: 1px solid rgba(16,185,129,0.15);">
+                            <i class="fa-solid fa-id-card text-success small"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted d-block" style="font-size: 0.65rem;">Patient ID</small>
+                            <small class="fw-semibold" style="color: #334155;">#PT-${String(patientId).padStart(4, '0')}</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-2 p-2 rounded-3" style="background: rgba(59,130,246,0.06);">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 28px; height: 28px; background: #fff; border: 1px solid rgba(59,130,246,0.15);">
+                            <i class="fa-solid fa-phone text-primary small"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted d-block" style="font-size: 0.65rem;">Phone</small>
+                            <small class="fw-semibold" style="color: #334155;">${patientPhone || 'N/A'}</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-2 p-2 rounded-3" style="background: rgba(236,72,153,0.06);">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 28px; height: 28px; background: #fff; border: 1px solid rgba(236,72,153,0.15);">
+                            <i class="fa-solid ${genderIcon} small"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted d-block" style="font-size: 0.65rem;">Gender</small>
+                            <small class="fw-semibold" style="color: #334155;">${genderLabel}</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center p-2 rounded-3" style="background: rgba(245,158,11,0.06);">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 28px; height: 28px; background: #fff; border: 1px solid rgba(245,158,11,0.15);">
+                            <i class="fa-solid fa-calendar-days text-warning small"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted d-block" style="font-size: 0.65rem;">Registered</small>
+                            <small class="fw-semibold" style="color: #334155;">${patientRegistered}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
     
     modal.show();
     
@@ -545,7 +648,7 @@ function sendToDoctor(patientId) {
             console.log('Doctors data received:', data);
             if (data.success && data.doctors) {
                 doctorSelect.innerHTML = '<option value="">Select a doctor</option>' +
-                    data.doctors.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+                    data.doctors.map(d => `<option value="${d.id}">${d.name}${d.queue_count ? ' (' + d.queue_count + ' in queue)' : ''}</option>`).join('');
             } else {
                 doctorSelect.innerHTML = '<option value="">No doctors available</option>';
                 if (data.message) {

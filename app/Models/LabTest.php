@@ -14,11 +14,16 @@ class LabTest extends Model
         'doctor_id',
         'technician_id',
         'test_name',
+        'name',
+        'category',
+        'sample_type',
         'test_type',
         'result',
         'status',
         'notes',
         'cost',
+        'price',
+        'turnaround_time',
     ];
 
     protected $casts = [

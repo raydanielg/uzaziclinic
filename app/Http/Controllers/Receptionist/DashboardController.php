@@ -165,7 +165,10 @@ class DashboardController extends Controller
 
     public function patients()
     {
-        $patients = User::whereHas('role', function($q) { $q->where('name', 'customer'); })->latest()->paginate(15);
+        $patients = User::whereHas('role', function($q) { $q->where('name', 'customer'); })
+            ->with('patient')
+            ->latest()
+            ->paginate(15);
         return view('receptionist.patients', compact('patients'));
     }
 
@@ -686,49 +689,51 @@ class DashboardController extends Controller
                 'notes' => $request->notes
             ]);
 
-            $request->validate([
+            $data = $request->validate([
                 'patient_id' => 'required|exists:patients,id',
                 'doctor_id' => 'required|exists:doctors,id',
                 'notes' => 'nullable|string|max:500',
             ]);
 
-            $patient = Patient::findOrFail($request->patient_id);
-            $doctor = Doctor::findOrFail($request->doctor_id);
+            DB::beginTransaction();
 
-            \Log::info('Patient and doctor found', [
-                'patient' => $patient->id,
-                'doctor' => $doctor->id
-            ]);
+            $patient = Patient::findOrFail($data['patient_id']);
+            $doctor = Doctor::findOrFail($data['doctor_id']);
 
-            if (!$patient) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Patient profile not found'
-                ], 404);
-            }
+            // Generate today's queue number (Q001, Q002, ...)
+            $todayCount = Appointment::whereDate('appointment_date', today())->count();
+            $queueNumber = 'Q' . str_pad((string) ($todayCount + 1), 3, '0', STR_PAD_LEFT);
 
-            if (!$doctor) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Doctor profile not found'
-                ], 404);
-            }
-
-            // Create an appointment
             $appointment = Appointment::create([
-                'patient_id' => $patient->id,
-                'doctor_id' => $doctor->id,
-                'appointment_date' => now()->addMinutes(30),
-                'status' => 'pending',
-                'symptoms' => $request->notes,
+                'patient_id'       => $patient->id,
+                'doctor_id'        => $doctor->id,
+                'appointment_date' => now(),
+                'status'           => 'confirmed',
+                'current_stage'    => Appointment::STAGE_WITH_DOCTOR,
+                'type'             => 'General Consultation',
+                'chief_complaint'  => $data['notes'] ?? null,
+                'symptoms'         => $data['notes'] ?? null,
+                'notes'            => $data['notes'] ?? null,
+                'queue_number'     => $queueNumber,
+                'received_by'      => auth()->id(),
             ]);
+
+            DB::commit();
+
+            \Log::info('Appointment created', ['appointment_id' => $appointment->id]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Patient sent to doctor successfully!',
-                'appointment_id' => $appointment->id
+                'message' => "Patient sent to doctor successfully ({$queueNumber}).",
+                'appointment_id' => $appointment->id,
+                'data' => $appointment->load(['patient', 'doctor'])
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            \Log::error('Failed to send patient to doctor', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to send patient to doctor: ' . $e->getMessage()

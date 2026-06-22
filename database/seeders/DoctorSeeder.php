@@ -91,11 +91,19 @@ class DoctorSeeder extends Seeder
                 if (!$existingUser->doctor) {
                     Doctor::create([
                         'user_id' => $existingUser->id,
+                        'name' => $doctorData['name'],
                         'specialization' => $doctorData['specialization'],
                         'license_number' => $doctorData['license_number'],
                         'bio' => $doctorData['bio'],
+                        'status' => 'active',
                     ]);
                     $this->command->info("Created doctor profile: {$doctorData['name']}");
+                } else {
+                    // Update existing doctor profile with name and status
+                    $existingUser->doctor->update([
+                        'name' => $doctorData['name'],
+                        'status' => 'active',
+                    ]);
                 }
                 
                 continue;
@@ -114,9 +122,11 @@ class DoctorSeeder extends Seeder
             // Create doctor profile
             Doctor::create([
                 'user_id' => $user->id,
+                'name' => $doctorData['name'],
                 'specialization' => $doctorData['specialization'],
                 'license_number' => $doctorData['license_number'],
                 'bio' => $doctorData['bio'],
+                'status' => 'active',
             ]);
 
             $this->command->info("Doctor created: {$doctorData['name']}");

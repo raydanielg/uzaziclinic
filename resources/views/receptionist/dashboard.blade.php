@@ -24,59 +24,70 @@
             </div>
         </div>
 
-        {{-- Stat Cards --}}
-        <div class="row g-3 mb-4">
-            <div class="col-xl-3 col-md-6 anim-2">
+        {{-- Stat Cards - 6 in one row on desktop --}}
+        <div class="row g-2 mb-4">
+            <div class="col-xl-2 col-md-4 col-6 anim-2">
                 <div class="stat-card-modern stat-card-blue h-100">
-                    <div class="card-body d-flex align-items-center gap-3">
-                        <div class="stat-icon stat-card-blue"><i class="fa-solid fa-calendar-day"></i></div>
+                    <div class="card-body d-flex align-items-center gap-2" style="padding: 1rem 0.85rem;">
+                        <div class="stat-icon stat-card-blue" style="width:44px;height:44px;font-size:1.1rem;"><i class="fa-solid fa-calendar-day"></i></div>
                         <div>
-                            <div class="stat-label">Today's Appointments</div>
-                            <div class="stat-value" data-count="{{ $stats['today_appointments'] }}">0</div>
+                            <div class="stat-label" style="font-size:0.65rem;">Today's Appointments</div>
+                            <div class="stat-value" style="font-size:1.5rem;" data-count="{{ $stats['today_appointments'] }}">0</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6 anim-3">
+            <div class="col-xl-2 col-md-4 col-6 anim-3">
                 <div class="stat-card-modern stat-card-green h-100">
-                    <div class="card-body d-flex align-items-center gap-3">
-                        <div class="stat-icon stat-card-green"><i class="fa-solid fa-clock"></i></div>
+                    <div class="card-body d-flex align-items-center gap-2" style="padding: 1rem 0.85rem;">
+                        <div class="stat-icon stat-card-green" style="width:44px;height:44px;font-size:1.1rem;"><i class="fa-solid fa-clock"></i></div>
                         <div>
-                            <div class="stat-label">Pending Appointments</div>
-                            <div class="stat-value" data-count="{{ $stats['pending_appointments'] }}">0</div>
+                            <div class="stat-label" style="font-size:0.65rem;">Pending</div>
+                            <div class="stat-value" style="font-size:1.5rem;" data-count="{{ $stats['pending_appointments'] }}">0</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6 anim-4">
+            <div class="col-xl-2 col-md-4 col-6 anim-4">
                 <div class="stat-card-modern stat-card-cyan h-100">
-                    <div class="card-body d-flex align-items-center gap-3">
-                        <div class="stat-icon stat-card-cyan"><i class="fa-solid fa-user-doctor"></i></div>
+                    <div class="card-body d-flex align-items-center gap-2" style="padding: 1rem 0.85rem;">
+                        <div class="stat-icon stat-card-cyan" style="width:44px;height:44px;font-size:1.1rem;"><i class="fa-solid fa-user-doctor"></i></div>
                         <div>
-                            <div class="stat-label">Active Doctors</div>
-                            <div class="stat-value" data-count="{{ $stats['active_doctors'] }}">0</div>
+                            <div class="stat-label" style="font-size:0.65rem;">Active Doctors</div>
+                            <div class="stat-value" style="font-size:1.5rem;" data-count="{{ $stats['active_doctors'] }}">0</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6 anim-5">
+            <div class="col-xl-2 col-md-4 col-6 anim-5">
                 <div class="stat-card-modern stat-card-amber h-100">
-                    <div class="card-body d-flex align-items-center gap-3">
-                        <div class="stat-icon stat-card-amber"><i class="fa-solid fa-users"></i></div>
+                    <div class="card-body d-flex align-items-center gap-2" style="padding: 1rem 0.85rem;">
+                        <div class="stat-icon stat-card-amber" style="width:44px;height:44px;font-size:1.1rem;"><i class="fa-solid fa-users"></i></div>
                         <div>
-                            <div class="stat-label">Total Patients</div>
-                            <div class="stat-value" data-count="{{ $stats['total_patients'] }}">0</div>
+                            <div class="stat-label" style="font-size:0.65rem;">Total Patients</div>
+                            <div class="stat-value" style="font-size:1.5rem;" data-count="{{ $stats['total_patients'] }}">0</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6 anim-6">
-                <div class="stat-card-modern stat-card-rose h-100">
-                    <div class="card-body d-flex align-items-center gap-3">
-                        <div class="stat-icon stat-card-rose"><i class="fa-solid fa-money-bill-wave"></i></div>
+            <div class="col-xl-2 col-md-4 col-6 anim-6">
+                <div class="stat-card-modern stat-card-green-soft h-100">
+                    <div class="card-body d-flex align-items-center gap-2" style="padding: 1rem 0.85rem;">
+                        <div class="stat-icon stat-card-green" style="width:44px;height:44px;font-size:1.1rem;"><i class="fa-solid fa-check-double"></i></div>
                         <div>
-                            <div class="stat-label">Pending Payments</div>
-                            <div class="stat-value" data-count="{{ $stats['pending_payments'] }}">0</div>
+                            <div class="stat-label" style="font-size:0.65rem;">Completed Today</div>
+                            <div class="stat-value" style="font-size:1.5rem;" data-count="{{ $stats['completed_appointments'] }}">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-md-4 col-6 anim-7">
+                <div class="stat-card-modern stat-card-rose h-100">
+                    <div class="card-body d-flex align-items-center gap-2" style="padding: 1rem 0.85rem;">
+                        <div class="stat-icon stat-card-rose" style="width:44px;height:44px;font-size:1.1rem;"><i class="fa-solid fa-money-bill-wave"></i></div>
+                        <div>
+                            <div class="stat-label" style="font-size:0.65rem;">Pending Payments</div>
+                            <div class="stat-value" style="font-size:1.5rem;" data-count="{{ $stats['pending_payments'] }}">0</div>
                         </div>
                     </div>
                 </div>

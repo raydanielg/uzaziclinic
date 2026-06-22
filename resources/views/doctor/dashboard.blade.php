@@ -8,7 +8,7 @@
         {{-- Hero --}}
         <div class="row mb-4 anim-1">
             <div class="col-12">
-                <div class="dash-hero-card" style="background: linear-gradient(135deg, #0f4c75 0%, #1b6ca8 100%);">
+                <div class="dash-hero-card" style="background: linear-gradient(135deg, #0f4c3a 0%, #166534 100%);">
                     <div class="hero-icon"><i class="fa-solid fa-stethoscope"></i></div>
                     <div class="d-flex align-items-center gap-3 mb-2">
                         <div class="user-avatar bg-white bg-opacity-20 text-white fs-5">
@@ -92,6 +92,11 @@
                                 @forelse($recent_appointments as $appointment)
                                 @php
                                     $pName = $appointment->user->name ?? 'N/A';
+                                    $statusText = match($appointment->status ?? 'pending') {
+                                        'completed' => 'Completed',
+                                        'cancelled' => 'Cancelled',
+                                        default     => 'Pending',
+                                    };
                                     $sc = match($appointment->status ?? 'pending') {
                                         'completed' => ['bg-green-soft text-green','fa-check-double'],
                                         'cancelled' => ['bg-rose-soft text-rose','fa-circle-xmark'],
@@ -113,7 +118,7 @@
                                         <div class="text-muted" style="font-size:.7rem">{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('d M Y') }}</div>
                                     </td>
                                     <td class="text-center">
-                                        <span class="status-badge {{ $sc[0] }}"><i class="fa-solid {{ $sc[1] }} me-1"></i>{{ ucfirst($appointment->status ?? 'pending') }}</span>
+                                        <span class="status-badge {{ $sc[0] }}"><i class="fa-solid {{ $sc[1] }} me-1"></i>{{ $statusText }}</span>
                                     </td>
                                     <td class="text-end pe-3">
                                         <div class="dropdown">

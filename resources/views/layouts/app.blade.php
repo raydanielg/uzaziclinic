@@ -67,7 +67,7 @@
                                         <hr class="dropdown-divider">
                                         <a class="dropdown-item py-2 text-danger" href="{{ route('logout') }}"
                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            <i class="fa-solid fa-right-from-bracket me-2"></i> {{ __('Logout') }}
+                                            <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
                                         </a>
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                             @csrf
@@ -95,15 +95,15 @@
 
     <style>
         .main-content {
-            margin-left: 260px;
+            margin-left: 270px;
             min-height: 100vh;
-            transition: all 0.3s;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .content-body {
             padding: 20px;
         }
         @media (max-width: 991.98px) {
-            .sidebar { margin-left: -260px; }
+            .sidebar { margin-left: -270px; }
             .sidebar.active { margin-left: 0; }
             .main-content { margin-left: 0; }
         }
@@ -153,45 +153,47 @@
                 }
             });
 
-            @if (session('status'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: "{{ session('status') }}",
-                    confirmButtonColor: '#166534',
-                });
-            @endif
+            @if (!request()->routeIs('login'))
+                @if (session('status'))
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: "{{ session('status') }}",
+                        confirmButtonColor: '#166534',
+                    });
+                @endif
 
-            @if (session('success'))
-                Toast.fire({
-                    icon: 'success',
-                    title: "{{ session('success') }}"
-                });
-            @endif
+                @if (session('success'))
+                    Toast.fire({
+                        icon: 'success',
+                        title: "{{ session('success') }}"
+                    });
+                @endif
 
-            @if (session('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: "{{ session('error') }}",
-                    confirmButtonColor: '#166534',
-                });
-            @endif
+                @if (session('error'))
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: "{{ session('error') }}",
+                        confirmButtonColor: '#166534',
+                    });
+                @endif
 
-            @if ($errors->any())
-                @php
-                    $errorList = "<ul>";
-                    foreach ($errors->all() as $error) {
-                        $errorList .= "<li>$error</li>";
-                    }
-                    $errorList .= "</ul>";
-                @endphp
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    html: '{!! $errorList !!}',
-                    confirmButtonColor: '#166534',
-                });
+                @if ($errors->any())
+                    @php
+                        $errorList = "<ul>";
+                        foreach ($errors->all() as $error) {
+                            $errorList .= "<li>$error</li>";
+                        }
+                        $errorList .= "</ul>";
+                    @endphp
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        html: '{!! $errorList !!}',
+                        confirmButtonColor: '#166534',
+                    });
+                @endif
             @endif
         });
     </script>

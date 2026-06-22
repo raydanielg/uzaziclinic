@@ -51,7 +51,7 @@ class ConsultationController extends Controller
         $queue = Appointment::with(['patient.user'])
             ->forDoctor($doctorId)
             ->inQueue()
-            ->orderByRaw("FIELD(current_stage, 'lab_complete', 'with_doctor')")
+            ->orderByRaw("CASE current_stage WHEN 'lab_complete' THEN 0 WHEN 'with_doctor' THEN 1 ELSE 2 END")
             ->orderBy('appointment_date')
             ->get();
 

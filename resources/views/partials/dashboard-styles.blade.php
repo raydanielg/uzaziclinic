@@ -62,6 +62,8 @@
 .stat-card-violet::after    { background: #8b5cf6; }
 .stat-card-cyan .stat-icon  { background: rgba(6,182,212,.13); color: #06b6d4; }
 .stat-card-cyan::after      { background: #06b6d4; }
+.stat-card-green-soft .stat-icon { background: rgba(16,185,129,.08); color: #059669; }
+.stat-card-green-soft::after    { background: #10b981; }
 
 /* Gradient Header Card */
 .dash-hero-card {
@@ -203,6 +205,7 @@
 .anim-4 { animation: fadeSlideUp 0.5s 0.3s ease both; }
 .anim-5 { animation: fadeSlideUp 0.5s 0.4s ease both; }
 .anim-6 { animation: fadeSlideUp 0.5s 0.5s ease both; }
+.anim-7 { animation: fadeSlideUp 0.5s 0.6s ease both; }
 
 /* Counter animation */
 .counter-value { transition: all 0.3s; }

@@ -11990,7 +11990,7 @@ textarea.form-control-lg {
   align-items: center;
   justify-content: center;
   padding: 2rem 1rem;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), var(--auth-bg, linear-gradient(135deg, #0f172a, #14532d));
+  background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.6)), var(--auth-bg, linear-gradient(135deg, #0f172a, #14532d));
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -12001,8 +12001,8 @@ textarea.form-control-lg {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(1px);
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
 }
 
 .auth-card {
