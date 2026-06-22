@@ -50,22 +50,13 @@ class AlterEmergencyContactLength extends Migration
             // Re-enable foreign keys
             DB::statement('PRAGMA foreign_keys = ON');
         } else {
-            Schema::table('patients', function (Blueprint $table) {
-                $table->string('emergency_contact', 255)->nullable()->change();
-            });
+            // MySQL/PostgreSQL: use raw SQL instead of change() to avoid Doctrine DBAL issues
+            DB::statement('ALTER TABLE patients MODIFY COLUMN emergency_contact VARCHAR(255) NULL');
         }
     }
 
     public function down()
     {
-        $driver = DB::getDriverName();
-        
-        if ($driver === 'sqlite') {
-            // Skip - complex to reverse
-        } else {
-            Schema::table('patients', function (Blueprint $table) {
-                $table->string('emergency_contact', 20)->nullable()->change();
-            });
-        }
+        // Skip - reverting column length is rarely needed
     }
 }
