@@ -168,5 +168,34 @@ class AdminSeeder extends Seeder
         foreach ($users as $userData) {
             User::firstOrCreate(['email' => $userData['email']], $userData);
         }
+
+        // Create role-specific profiles
+        $doctorUser = User::where('email', 'doctor@afyacare.com')->first();
+        if ($doctorUser) {
+            \App\Models\Doctor::firstOrCreate(
+                ['user_id' => $doctorUser->id],
+                [
+                    'user_id' => $doctorUser->id,
+                    'name' => $doctorUser->name,
+                    'specialization' => 'General Practitioner',
+                    'license_number' => 'MD-TZ-' . rand(10000, 99999),
+                    'status' => 'active',
+                ]
+            );
+        }
+
+        $patientUser = User::where('email', 'patient@afyacare.com')->first();
+        if ($patientUser) {
+            \App\Models\Patient::firstOrCreate(
+                ['user_id' => $patientUser->id],
+                [
+                    'user_id' => $patientUser->id,
+                    'name' => $patientUser->name,
+                    'phone' => '2557123456' . rand(10, 99),
+                    'gender' => 'female',
+                    'status' => 'active',
+                ]
+            );
+        }
     }
 }
