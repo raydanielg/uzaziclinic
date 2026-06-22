@@ -265,7 +265,7 @@ class BlogSeeder extends Seeder
         ];
 
         foreach ($posts as $post) {
-            Blog::create($post);
+            Blog::firstOrCreate(['slug' => $post['slug']], $post);
             $this->command->info("Blog post created: {$post['title']}");
         }
 
