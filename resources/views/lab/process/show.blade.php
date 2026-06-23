@@ -184,15 +184,27 @@ $(function () {
     $('#resultsForm').on('submit', function (e) {
         e.preventDefault();
         const $btn = $(this).find('button[type=submit]').prop('disabled', true);
-        $.post(`{{ url('lab/process') }}/${reqId}/complete`, $(this).serialize() + '&_token=' + CSRF)
-            .done(r => {
+        const formData = new FormData(this);
+        formData.append('_token', CSRF);
+        $.ajax({
+            url: `{{ url('lab/process') }}/${reqId}/complete`,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(r) {
                 if (r.success) {
                     Swal.fire({icon:'success',title:r.message,timer:1600,showConfirmButton:false})
                         .then(() => location.href = '{{ route('lab.process.index') }}');
                 }
-            })
-            .fail(xhr => Swal.fire('Error', xhr.responseJSON?.message ?? 'Failed', 'error'))
-            .always(() => $btn.prop('disabled', false));
+            },
+            error: function(xhr) {
+                Swal.fire('Error', xhr.responseJSON?.message ?? 'Failed', 'error');
+            },
+            complete: function() {
+                $btn.prop('disabled', false);
+            }
+        });
     });
 
     // ─── Cancel Request ───────────────────────────────────────

@@ -71,6 +71,11 @@ class LabRequest extends Model
         return $this->belongsTo(User::class, 'technician_id');
     }
 
+    public function resultFiles()
+    {
+        return $this->hasMany(LabResultFile::class, 'lab_request_id');
+    }
+
     /* ── Scopes ─────────────────────────────────────────────── */
     public function scopePending($q)    { return $q->where('status', self::STATUS_PENDING); }
     public function scopeProcessing($q) { return $q->where('status', self::STATUS_PROCESSING); }
