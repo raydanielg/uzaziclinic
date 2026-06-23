@@ -394,3 +394,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::post('/email-templates/update', [App\Http\Controllers\Admin\NotificationController::class, 'updateEmailTemplate'])->name('emailTemplates.update');
     });
 });
+
+/* ── Shared file access (any authenticated staff) ── */
+Route::middleware(['auth'])->prefix('shared')->name('shared.')->group(function () {
+    Route::get('/patient-files/{file}/download',   [App\Http\Controllers\SharedFileController::class, 'downloadPatientFile'])->name('patient-files.download');
+    Route::get('/patient-files/{file}/view',         [App\Http\Controllers\SharedFileController::class, 'viewPatientFile'])->name('patient-files.view');
+    Route::get('/lab-result-files/{file}/download', [App\Http\Controllers\SharedFileController::class, 'downloadLabResultFile'])->name('lab-result-files.download');
+    Route::get('/lab-result-files/{file}/view',      [App\Http\Controllers\SharedFileController::class, 'viewLabResultFile'])->name('lab-result-files.view');
+});
+
