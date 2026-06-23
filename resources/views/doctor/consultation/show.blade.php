@@ -50,7 +50,7 @@
             </div>
 
             {{-- Vitals --}}
-            <div class="card border-0 shadow-sm anim-2">
+            <div class="card border-0 shadow-sm mb-4 anim-2">
                 <div class="card-header py-3">
                     <h6 class="mb-0 fw-bold"><i class="fa-solid fa-heart-pulse me-2 text-rose"></i>Vitals</h6>
                 </div>
@@ -92,6 +92,17 @@
                             <i class="fa-solid fa-floppy-disk me-1"></i>Hifadhi Vitals
                         </button>
                     </form>
+                </div>
+            </div>
+
+            {{-- Patient Files (shared across roles) --}}
+            <div class="card border-0 shadow-sm anim-2">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold"><i class="fa-solid fa-folder-open me-2 text-blue"></i>Faili za Mgonjwa</h6>
+                    <span class="badge bg-blue-soft text-blue">{{ $patientFiles->count() }}</span>
+                </div>
+                <div class="card-body">
+                    @include('partials.file-gallery', ['files' => $patientFiles, 'type' => 'patient'])
                 </div>
             </div>
         </div>
