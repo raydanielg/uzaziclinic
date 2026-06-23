@@ -80,11 +80,23 @@ class ConsultationController extends Controller
             'prescriptions.items',
         ]);
 
+        // Load patient files (shared across roles)
+        $patientId = $appointment->patient->id ?? null;
+        $patientFiles = $patientId
+            ? PatientFile::where('patient_id', $patientId)->with('uploadedBy')->latest()->get()
+            : collect();
+
+        // Load lab result files for this appointment's lab requests
+        $labRequestIds = $appointment->labRequests->pluck('id');
+        $labResultFiles = $labRequestIds->isNotEmpty()
+            ? LabResultFile::whereIn('lab_request_id', $labRequestIds)->with('uploadedBy')->latest()->get()
+            : collect();
+
         $availableTests = LabTest::orderBy('test_name')->get();
         $medicines      = Medicine::where('quantity', '>', 0)->orderBy('name')->get();
 
         return view('doctor.consultation.show', compact(
-            'appointment', 'availableTests', 'medicines'
+            'appointment', 'availableTests', 'medicines', 'patientFiles', 'labResultFiles'
         ));
     }
 

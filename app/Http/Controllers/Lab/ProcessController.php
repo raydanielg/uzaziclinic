@@ -40,7 +40,7 @@ class ProcessController extends Controller
 
     public function show(LabRequest $labRequest)
     {
-        $labRequest->load(['patient', 'doctor', 'appointment.patient.user']);
+        $labRequest->load(['patient', 'doctor', 'appointment.patient.user', 'resultFiles.uploadedBy']);
         return view('lab.process.show', compact('labRequest'));
     }
 
