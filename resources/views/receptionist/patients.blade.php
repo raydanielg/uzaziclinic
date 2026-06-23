@@ -352,19 +352,27 @@ function viewPatient(id) {
                 const appointments = data.data.appointments || [];
                 const stats = data.data.stats || {};
                 
-                let filesHtml = files.length > 0 
-                    ? files.map(f => `
-                        <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded mb-2">
-                            <div>
-                                <small class="fw-semibold">${f.file_name}</small>
-                                <br><small class="text-muted">${f.file_type_label} • ${f.file_size}</small>
+                let filesHtml = files.length > 0
+                    ? files.map(f => {
+                        const isImg = (f.file_type === 'image' || /\.(jpg|jpeg|png)$/i.test(f.file_name));
+                        const isPdf = f.file_type === 'pdf' || f.file_name.endsWith('.pdf');
+                        const icon  = isImg ? 'fa-image' : (isPdf ? 'fa-file-pdf' : 'fa-file');
+                        const color = isImg ? 'text-green' : (isPdf ? 'text-rose' : 'text-blue');
+                        return `
+                        <div class="d-flex align-items-center gap-2 p-2 rounded-2 border mb-2">
+                            <div class="flex-shrink-0"><i class="fa-solid ${icon} ${color} fs-4"></i></div>
+                            <div class="flex-grow-1 min-width-0">
+                                <div class="fw-semibold small text-truncate">${f.file_name}</div>
+                                <div class="text-muted" style="font-size:.7rem">${f.file_type_label || f.file_type} • ${f.file_size}</div>
                             </div>
-                            <a href="{{ route('receptionist.files.download', ':file') }}".replace(':file', f.id) class="btn btn-sm btn-primary">
-                                <i class="fa-solid fa-download"></i>
-                            </a>
+                            <div class="flex-shrink-0 d-flex gap-1">
+                                <a href="/shared/patient-files/${f.id}/view" target="_blank" class="btn btn-sm btn-light rounded-2" title="View"><i class="fa-solid fa-eye text-blue"></i></a>
+                                <a href="/shared/patient-files/${f.id}/download" class="btn btn-sm btn-light rounded-2" title="Download"><i class="fa-solid fa-download text-green"></i></a>
+                            </div>
                         </div>
-                    `).join('')
-                    : '<p class="text-muted small">No files uploaded</p>';
+                        `;
+                    }).join('')
+                    : '<p class="text-muted small text-center py-3"><i class="fa-solid fa-folder-open opacity-25 d-block mb-2 fs-4"></i>No files uploaded</p>';
                 
                 let appointmentsHtml = appointments.length > 0
                     ? appointments.map(a => `
