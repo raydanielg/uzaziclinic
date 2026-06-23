@@ -157,6 +157,19 @@
                 </div>
             </div>
 
+            {{-- Lab Result Files (shared from lab) --}}
+            @if($labResultFiles->isNotEmpty())
+            <div class="card border-0 shadow-sm mb-4 anim-2">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold"><i class="fa-solid fa-file-pdf me-2 text-rose"></i>Matokeo ya Lab (Faili)</h6>
+                    <span class="badge bg-rose-soft text-rose">{{ $labResultFiles->count() }}</span>
+                </div>
+                <div class="card-body">
+                    @include('partials.file-gallery', ['files' => $labResultFiles, 'type' => 'lab'])
+                </div>
+            </div>
+            @endif
+
             {{-- Prescriptions --}}
             <div class="card border-0 shadow-sm mb-4 anim-2">
                 <div class="card-header py-3 d-flex justify-content-between align-items-center">

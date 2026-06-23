@@ -82,6 +82,19 @@
             </div>
             @endif
 
+            {{-- Uploaded Result Files (if any) --}}
+            @if($labRequest->resultFiles->isNotEmpty())
+            <div class="card border-0 shadow-sm mb-4 anim-2">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold"><i class="fa-solid fa-images me-2 text-green"></i>Uploaded Result Files</h6>
+                    <span class="badge bg-green-soft text-green">{{ $labRequest->resultFiles->count() }}</span>
+                </div>
+                <div class="card-body">
+                    @include('partials.file-gallery', ['files' => $labRequest->resultFiles, 'type' => 'lab'])
+                </div>
+            </div>
+            @endif
+
             {{-- Results Form --}}
             <div class="card border-0 shadow-sm anim-2">
                 <div class="card-header py-3">
