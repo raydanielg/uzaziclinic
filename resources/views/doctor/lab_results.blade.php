@@ -54,7 +54,11 @@
 $(document).ready(function() {
     $('#resultsTable').DataTable({
         pageLength: 10,
-        language: { search: "", searchPlaceholder: "Search results..." }
+        language: {
+            search: "",
+            searchPlaceholder: "Search results...",
+            emptyTable: '<div class="text-center py-5 text-muted"><i class="fa-solid fa-file-circle-xmark fs-1 opacity-25 mb-3 d-block"></i>No completed lab results found.</div>'
+        }
     });
 });
 </script>
