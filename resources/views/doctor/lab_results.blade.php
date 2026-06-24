@@ -26,7 +26,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($completed_results ?? [] as $result)
+                        @foreach($completed_results ?? [] as $result)
                         <tr>
                             <td class="ps-4">
                                 <div class="fw-bold">{{ $result->updated_at->format('M d, Y') }}</div>
@@ -41,14 +41,7 @@
                                 </button>
                             </td>
                         </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="text-center py-5 text-muted">
-                                <i class="fa-solid fa-file-circle-xmark fs-1 opacity-25 mb-3 d-block"></i>
-                                No completed lab results found.
-                            </td>
-                        </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
