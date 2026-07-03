@@ -107,6 +107,16 @@
                                 <option value="terminated" {{ $employee->status === 'terminated' ? 'selected' : '' }}>Terminated</option>
                             </select>
                         </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold">System Role <span class="text-danger">*</span></label>
+                            <select name="role_id" class="form-select" required>
+                                <option value="">Select Role</option>
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->id }}" {{ $employee->user->role_id == $role->id ? 'selected' : '' }}>{{ ucfirst(str_replace('_', ' ', $role->name)) }}</option>
+                                @endforeach
+                            </select>
+                            <div class="form-text small">Role determines dashboard access and permissions.</div>
+                        </div>
                         <div class="col-12">
                             <label class="form-label small fw-bold">Notes</label>
                             <textarea name="notes" class="form-control" rows="3">{{ $employee->notes }}</textarea>
