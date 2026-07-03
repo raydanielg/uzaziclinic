@@ -19,7 +19,7 @@
                             <h4 class="mb-0 fw-bold">Karibu, {{ Auth::user()->name }}</h4>
                         </div>
                     </div>
-                    <p class="mb-0 opacity-75 small">{{ now()->format('l, d F Y') }} &bull; Maagizo leo: <strong>{{ $stats['today_prescriptions'] }}</strong> &bull; Dawa Chache: <strong>{{ $stats['low_stock'] }}</strong></p>
+                    <p class="mb-0 opacity-75 small">{{ now()->format('l, d F Y') }} &bull; Maagizo Yanayosubiri: <strong>{{ $stats['pending_prescriptions'] }}</strong> &bull; Maagizo Leo: <strong>{{ $stats['today_prescriptions'] }}</strong> &bull; Dawa Chache: <strong>{{ $stats['low_stock'] }}</strong></p>
                 </div>
             </div>
         </div>
