@@ -23,7 +23,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($prescriptions as $p)
+                        @foreach($prescriptions as $p)
                         <tr>
                             <td class="ps-4">
                                 <div class="fw-bold">{{ $p->created_at->format('M d, Y') }}</div>
@@ -41,11 +41,7 @@
                                 </a>
                             </td>
                         </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="text-center py-5 text-muted">No pending prescriptions found.</td>
-                        </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
