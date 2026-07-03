@@ -77,6 +77,28 @@ $(document).ready(function() {
         paging: false,
         language: { search: "", searchPlaceholder: "Search inventory..." }
     });
+
+    $('.delete-form').on('submit', function(e) {
+        e.preventDefault();
+        var form = this;
+        var name = $(form).data('name');
+
+        Swal.fire({
+            title: 'Delete Medicine?',
+            text: 'You are about to delete "' + name + '". This action cannot be undone.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
 });
 </script>
 @endpush
