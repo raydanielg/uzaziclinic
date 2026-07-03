@@ -106,22 +106,36 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <input type="checkbox" name="items[{{ $item->id }}][dispense]" class="form-check-input dispense-check" checked>
-                                            <input type="hidden" name="items[{{ $item->id }}][id]" value="{{ $item->id }}">
+                                            @if($prescription->status === App\Models\Prescription::STATUS_PENDING)
+                                                <input type="checkbox" name="items[{{ $item->id }}][dispense]" class="form-check-input dispense-check" checked>
+                                                <input type="hidden" name="items[{{ $item->id }}][id]" value="{{ $item->id }}">
+                                            @else
+                                                <span class="badge {{ $item->dispensed ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary' }} rounded-1">
+                                                    {{ $item->dispensed ? 'Imetolewa' : 'Haijatolewa' }}
+                                                </span>
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
-                        <button type="submit" class="btn btn-success fw-semibold w-100 mt-3">
-                            <i class="fa-solid fa-check me-2"></i>Toa Dawa Zilizochaguliwa
-                        </button>
+                        @if($prescription->status === App\Models\Prescription::STATUS_PENDING)
+                            <button type="submit" class="btn btn-success fw-semibold w-100 mt-3">
+                                <i class="fa-solid fa-check me-2"></i>Toa Dawa Zilizochaguliwa
+                            </button>
+                        @else
+                            <div class="alert alert-light border mt-3 mb-0 text-center">
+                                <i class="fa-solid fa-circle-info me-2 text-warning"></i>
+                                Prescription hii tayari imeshughulikiwa ({{ ucfirst($prescription->status) }}).
+                            </div>
+                        @endif
                     </form>
                 </div>
             </div>
 
             {{-- Cancel Button --}}
+            @if($prescription->status === App\Models\Prescription::STATUS_PENDING)
             <div class="card border-0 shadow-sm anim-2">
                 <div class="card-body">
                     <button class="btn btn-outline-danger w-100" id="cancelBtn">
@@ -129,6 +143,7 @@
                     </button>
                 </div>
             </div>
+            @endif
         </div>
     </div>
 </div>
