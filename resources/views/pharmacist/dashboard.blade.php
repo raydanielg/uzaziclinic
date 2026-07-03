@@ -121,7 +121,7 @@
                                     </td>
                                     <td class="small text-muted">{{ $presc->created_at->format('d M Y') }}</td>
                                     <td class="text-end pe-3">
-                                        <a href="{{ route('pharmacist.prescriptions.dispense', $presc->id) }}"
+                                        <a href="{{ route('pharmacist.dispense.show', $presc) }}"
                                             class="btn btn-sm fw-semibold px-3 rounded-2" style="background:#7c3aed;color:#fff">
                                             Toa Dawa
                                         </a>
@@ -129,7 +129,7 @@
                                 </tr>
                                 @empty
                                 <tr><td colspan="5" class="text-center py-5 text-muted">
-                                    <i class="fa-solid fa-prescription-bottle fs-2 opacity-25 d-block mb-2"></i>Hakuna maagizo
+                                    <i class="fa-solid fa-prescription-bottle fs-2 opacity-25 d-block mb-2"></i>Hakuna maagizo yanayosubiri
                                 </td></tr>
                                 @endforelse
                             </tbody>
