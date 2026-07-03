@@ -104,6 +104,11 @@
                     </a>
                 </li>
                 <li class="nav-item mb-1">
+                    <a class="nav-link {{ Request::is('admin/test-types*') ? 'active' : '' }}" href="{{ route('admin.test-types.index') }}">
+                        <i class="fa-solid fa-vial me-2 text-warning"></i> Test Types
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
                     <a class="nav-link {{ Request::is('admin/lab/results') ? 'active' : '' }}" href="{{ route('admin.lab.results') }}">
                         <i class="fa-solid fa-vial-circle-check me-2 text-success"></i> Test Results
                     </a>
