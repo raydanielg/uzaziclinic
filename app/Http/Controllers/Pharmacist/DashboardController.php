@@ -139,6 +139,11 @@ class DashboardController extends Controller
         return view('pharmacist.prescription_history', compact('history'));
     }
 
+    public function dispense($id)
+    {
+        return redirect()->route('pharmacist.dispense.show', $id);
+    }
+
     public function onlineOrders()
     {
         $pending_orders = Order::with('user')->where('status', 'pending')->get();
