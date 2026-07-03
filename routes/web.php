@@ -275,6 +275,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/create', [App\Http\Controllers\Admin\DoctorController::class, 'create'])->name('create');
         Route::post('/', [App\Http\Controllers\Admin\DoctorController::class, 'store'])->name('store');
         Route::post('/from-user/{user}', [App\Http\Controllers\Admin\DoctorController::class, 'createProfileFromUser'])->name('from-user');
+        Route::get('/{doctor}', [App\Http\Controllers\Admin\DoctorController::class, 'show'])->name('show');
+        Route::get('/{doctor}/edit', [App\Http\Controllers\Admin\DoctorController::class, 'edit'])->name('edit');
+        Route::put('/{doctor}', [App\Http\Controllers\Admin\DoctorController::class, 'update'])->name('update');
+        Route::delete('/{doctor}', [App\Http\Controllers\Admin\DoctorController::class, 'destroy'])->name('destroy');
         Route::get('/schedules', [App\Http\Controllers\Admin\DoctorController::class, 'schedules'])->name('schedules');
         Route::get('/specializations', [App\Http\Controllers\Admin\DoctorController::class, 'specializations'])->name('specializations');
     });
