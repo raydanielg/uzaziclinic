@@ -517,18 +517,8 @@
                 {{-- Prescriptions Section --}}
                 <li class="nav-item-header mt-3 mb-1 small text-muted text-uppercase fw-bold px-3" style="font-size: 0.65rem; letter-spacing: 1px;">Prescriptions</li>
                 <li class="nav-item mb-1">
-                    <a class="nav-link {{ Request::is('pharmacist/dispense') ? 'active' : '' }}" href="{{ route('pharmacist.dispense.index') }}">
+                    <a class="nav-link {{ Request::is('pharmacist/dispense*') ? 'active' : '' }}" href="{{ route('pharmacist.dispense.index') }}">
                         <i class="fa-solid fa-pills me-2 text-danger"></i> Kutolea Dawa (Dispense)
-                    </a>
-                </li>
-                <li class="nav-item mb-1">
-                    <a class="nav-link {{ Request::is('pharmacist/prescriptions') && !Request::is('pharmacist/prescriptions/history') ? 'active' : '' }}" href="{{ route('pharmacist.prescriptions') }}">
-                        <i class="fa-solid fa-file-prescription me-2 text-danger"></i> Pending Prescriptions (Old)
-                    </a>
-                </li>
-                <li class="nav-item mb-1">
-                    <a class="nav-link" href="#">
-                        <i class="fa-solid fa-file-medical me-2 text-primary"></i> Process Prescription
                     </a>
                 </li>
                 <li class="nav-item mb-1">

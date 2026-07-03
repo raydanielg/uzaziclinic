@@ -76,8 +76,12 @@
                         </td>
                     </tr>
                     @empty
-                    <tr><td colspan="6" class="text-center py-5 text-muted">
-                        <i class="fa-solid fa-pills fs-2 opacity-25 d-block mb-2"></i>Hakuna prescription pending
+                    <tr><td colspan="6" class="text-center py-5">
+                        <i class="fa-solid fa-pills fs-2 opacity-25 d-block mb-2 text-muted"></i>
+                        <p class="text-muted mb-2">Hakuna prescription zinazosubiri kutolewa dawa.</p>
+                        <a href="{{ route('pharmacist.prescriptions.history') }}" class="btn btn-sm btn-light rounded-2 px-3">
+                            <i class="fa-solid fa-clock-rotate-left me-1"></i>Angalia History
+                        </a>
                     </td></tr>
                     @endforelse
                 </tbody>
