@@ -88,8 +88,8 @@
             <div class="col-lg-8 anim-5">
                 <div class="dash-table-card h-100">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0 fw-bold"><i class="fa-solid fa-receipt me-2 text-violet"></i>Maagizo ya Hivi Karibuni</h6>
-                        <a href="{{ route('pharmacist.prescriptions') }}" class="btn btn-sm btn-light fw-semibold px-3">Zote</a>
+                        <h6 class="mb-0 fw-bold"><i class="fa-solid fa-receipt me-2 text-violet"></i>Maagizo Yanayosubiri</h6>
+                        <a href="{{ route('pharmacist.dispense.index') }}" class="btn btn-sm btn-light fw-semibold px-3">Zote</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table align-middle mb-0">
