@@ -26,7 +26,7 @@
 
         {{-- Stat Cards --}}
         <div class="row g-3 mb-4">
-            <div class="col-xl-3 col-md-6 anim-2">
+            <div class="col-xl col-md-6 anim-2">
                 <div class="stat-card-modern stat-card-violet h-100">
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="stat-icon stat-card-violet"><i class="fa-solid fa-pills"></i></div>
@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6 anim-3">
+            <div class="col-xl col-md-6 anim-3">
                 <div class="stat-card-modern stat-card-rose h-100">
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="stat-icon stat-card-rose"><i class="fa-solid fa-triangle-exclamation"></i></div>
@@ -48,7 +48,18 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6 anim-4">
+            <div class="col-xl col-md-6 anim-4">
+                <div class="stat-card-modern stat-card-amber h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <div class="stat-icon stat-card-amber"><i class="fa-solid fa-clock"></i></div>
+                        <div>
+                            <div class="stat-label">Maagizo Yanayosubiri</div>
+                            <div class="stat-value" data-count="{{ $stats['pending_prescriptions'] }}">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl col-md-6 anim-5">
                 <div class="stat-card-modern stat-card-green h-100">
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="stat-icon stat-card-green"><i class="fa-solid fa-file-prescription"></i></div>
@@ -59,12 +70,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6 anim-5">
+            <div class="col-xl col-md-6 anim-6">
                 <div class="stat-card-modern stat-card-cyan h-100">
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="stat-icon stat-card-cyan"><i class="fa-solid fa-cart-flatbed"></i></div>
                         <div>
-                            <div class="stat-label">Maagizo Yanayosubiri</div>
+                            <div class="stat-label">Maagizo Ya Wateja</div>
                             <div class="stat-value" data-count="{{ $stats['pending_orders'] }}">0</div>
                         </div>
                     </div>
