@@ -15,11 +15,6 @@ class TestTypeController extends Controller
         return view('admin.test_types.index', compact('testTypes', 'categories'));
     }
 
-    public function create()
-    {
-        return view('admin.test_types.create');
-    }
-
     public function store(Request $request)
     {
         $request->validate([
