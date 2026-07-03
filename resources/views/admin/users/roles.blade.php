@@ -36,7 +36,13 @@
                             <i class="fa-solid fa-ellipsis-vertical"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-2">
-                            <li><a class="dropdown-item text-danger" href="javascript:void(0)" onclick="confirmDeleteRole({{ $role->id }}, '{{ $role->name }}')">
+                            <li>
+                                <a class="dropdown-item" href="javascript:void(0)" onclick="showEditRoleModal({{ $role->id }}, '{{ addslashes($role->name) }}')">
+                                    <i class="fa-solid fa-pen-to-square me-2 small text-primary"></i> Edit Name
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="javascript:void(0)" onclick="confirmDeleteRole({{ $role->id }}, '{{ addslashes($role->name) }}')">
                                 <i class="fa-solid fa-trash-can me-2 small"></i> Delete Role
                             </a></li>
                         </ul>
@@ -105,26 +111,16 @@
     }
 
     function showNewRoleModal() {
-        Swal.fire({
-            title: 'Create New Role',
-            input: 'text',
-            inputLabel: 'Role Name',
-            inputPlaceholder: 'e.g. Supervisor',
-            showCancelButton: true,
-            confirmButtonText: 'Create',
-            confirmButtonColor: '#6366f1',
-            preConfirm: (name) => {
-                if (!name) {
-                    Swal.showValidationMessage('Role name is required')
-                }
-                return name;
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Future implementation: Add AJAX call to create role
-                Swal.fire('Info', 'Role creation will be implemented in the next update.', 'info');
-            }
-        });
+        const modal = new bootstrap.Modal(document.getElementById('createRoleModal'));
+        modal.show();
+    }
+
+    function showEditRoleModal(id, name) {
+        const form = document.getElementById('editRoleForm');
+        form.action = `/admin/users/roles/${id}/name`;
+        document.getElementById('editRoleName').value = name;
+        const modal = new bootstrap.Modal(document.getElementById('editRoleModal'));
+        modal.show();
     }
 
     @if(session('success'))
@@ -134,6 +130,64 @@
         Swal.fire({ icon: 'error', title: 'Error!', text: "{{ session('error') }}", timer: 3000, showConfirmButton: false });
     @endif
 </script>
+
+<!-- Create Role Modal -->
+<div class="modal fade" id="createRoleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-4">
+            <form action="{{ route('admin.users.roles.store') }}" method="POST">
+                @csrf
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold text-primary"><i class="fa-solid fa-user-shield me-2"></i>Create New Role</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted text-uppercase">Role Name</label>
+                        <input type="text" name="name" class="form-control rounded-2 border-light bg-light shadow-none" placeholder="e.g. Supervisor" required>
+                    </div>
+                    <div class="permission-list border rounded-3 p-3" style="max-height: 250px; overflow-y: auto;">
+                        <p class="small fw-bold text-muted text-uppercase mb-2">Permissions</p>
+                        @foreach($availablePermissions as $key => $label)
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input shadow-none" type="checkbox" name="permissions[]" value="{{ $key }}" id="new_perm_{{ $key }}">
+                            <label class="form-check-label small text-dark ms-2 cursor-pointer" for="new_perm_{{ $key }}">{{ $label }}</label>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light rounded-2 px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-2 px-4 fw-bold">Create Role</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Role Name Modal -->
+<div class="modal fade" id="editRoleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-4">
+            <form id="editRoleForm" action="" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold text-primary"><i class="fa-solid fa-pen-to-square me-2"></i>Edit Role Name</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Role Name</label>
+                    <input type="text" name="name" id="editRoleName" class="form-control rounded-2 border-light bg-light shadow-none" required>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light rounded-2 px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-2 px-4 fw-bold">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endpush
 
 <style>
