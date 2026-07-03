@@ -13,13 +13,6 @@
             </a>
         </div>
 
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show rounded-1" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
         <div class="card border-0 shadow-sm rounded-4 p-4">
             <div class="table-responsive">
                 <table class="table table-hover align-middle border-0" id="inventoryTable">
@@ -57,7 +50,7 @@
                                 <a href="{{ route('pharmacist.medicines.edit', $med) }}" class="btn btn-sm btn-light rounded-1 border-0" title="Edit">
                                     <i class="fa-solid fa-edit text-primary"></i>
                                 </a>
-                                <form action="{{ route('pharmacist.medicines.destroy', $med) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this medicine?');">
+                                <form action="{{ route('pharmacist.medicines.destroy', $med) }}" method="POST" class="d-inline delete-form" data-name="{{ $med->name }}">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-light rounded-1 border-0" title="Delete">
