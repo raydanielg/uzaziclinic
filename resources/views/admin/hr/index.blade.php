@@ -183,20 +183,55 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
+    $('#staffTable').DataTable({
+        paging: false,
+        info: false,
+        responsive: true,
+        language: {
+            emptyTable: 'No staff found'
+        }
+    });
+
     $('#filterDepartment, #filterStatus').on('change', function() {
         const dept = $('#filterDepartment').val();
         const status = $('#filterStatus').val();
-        
+
         $('tbody tr').each(function() {
             const rowDept = $(this).data('department');
             const rowStatus = $(this).data('status');
-            
+
             let show = true;
             if (dept && rowDept !== dept) show = false;
             if (status && rowStatus !== status) show = false;
-            
+
             $(this).toggle(show);
         });
+    });
+
+    $(document).on('click', '.delete-staff-btn', function() {
+        const btn = $(this);
+        const name = btn.data('name');
+        const form = btn.closest('form');
+        if (window.Swal) {
+            Swal.fire({
+                title: 'Futa staff?',
+                text: 'Unauhakika wa kufuta ' + name + '?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e11d48',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ndiyo, Futa',
+                cancelButtonText: 'Ghairi'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        } else {
+            if (confirm('Unauhakika wa kufuta ' + name + '?')) {
+                form.submit();
+            }
+        }
     });
 });
 </script>
