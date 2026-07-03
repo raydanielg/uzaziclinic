@@ -60,7 +60,8 @@ class HRController extends Controller
 
     public function create()
     {
-        return view('admin.hr.create');
+        $roles = Role::whereNotIn('name', ['admin', 'customer'])->orderBy('name')->get();
+        return view('admin.hr.create', compact('roles'));
     }
 
     public function store(Request $request)
