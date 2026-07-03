@@ -139,6 +139,28 @@ class UserController extends Controller
         return view('admin.users.roles', compact('roles', 'availablePermissions'));
     }
 
+    public function storeRole(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:roles,name',
+            'permissions' => 'nullable|array',
+        ]);
+
+        $permissions = [];
+        if ($request->has('permissions')) {
+            foreach ($request->permissions as $perm) {
+                $permissions[$perm] = true;
+            }
+        }
+
+        $role = Role::create([
+            'name' => $request->name,
+            'permissions' => $permissions,
+        ]);
+
+        return redirect()->back()->with('success', 'Role created successfully!');
+    }
+
     public function updateRole(Request $request, Role $role)
     {
         $request->validate([
@@ -158,9 +180,21 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Role permissions updated successfully!');
     }
 
+    public function updateRoleName(Request $request, Role $role)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:roles,name,'.$role->id,
+        ]);
+
+        $role->name = $request->name;
+        $role->save();
+
+        return redirect()->back()->with('success', 'Role name updated successfully!');
+    }
+
     public function destroyRole(Role $role)
     {
-        if ($role->users_count > 0) {
+        if ($role->users()->count() > 0) {
             return redirect()->back()->with('error', 'Cannot delete role that has active users!');
         }
 
