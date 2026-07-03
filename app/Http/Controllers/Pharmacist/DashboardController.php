@@ -56,6 +56,65 @@ class DashboardController extends Controller
         return view('pharmacist.add_medicine', compact('categories'));
     }
 
+    public function storeMedicine(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'category' => 'required|string',
+            'quantity' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
+            'expiry_date' => 'required|date',
+            'description' => 'nullable|string',
+        ]);
+
+        Medicine::create([
+            'name' => $request->name,
+            'category' => $request->category,
+            'quantity' => $request->quantity,
+            'price' => $request->price,
+            'expiry_date' => $request->expiry_date,
+            'description' => $request->description,
+            'status' => 'active',
+        ]);
+
+        return redirect()->route('pharmacist.inventory')->with('success', 'Medicine added successfully.');
+    }
+
+    public function editMedicine(Medicine $medicine)
+    {
+        $categories = ['Antibiotics', 'Analgesics', 'Antipyretics', 'Antivirals', 'Supplements'];
+        return view('pharmacist.edit_medicine', compact('medicine', 'categories'));
+    }
+
+    public function updateMedicine(Request $request, Medicine $medicine)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'category' => 'required|string',
+            'quantity' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
+            'expiry_date' => 'required|date',
+            'description' => 'nullable|string',
+        ]);
+
+        $medicine->update([
+            'name' => $request->name,
+            'category' => $request->category,
+            'quantity' => $request->quantity,
+            'price' => $request->price,
+            'expiry_date' => $request->expiry_date,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('pharmacist.inventory')->with('success', 'Medicine updated successfully.');
+    }
+
+    public function deleteMedicine(Medicine $medicine)
+    {
+        $medicine->delete();
+        return redirect()->route('pharmacist.inventory')->with('success', 'Medicine deleted successfully.');
+    }
+
     public function stockMove()
     {
         $medicines = Medicine::all();

@@ -127,6 +127,9 @@ Route::middleware(['auth', 'role:pharmacist'])->prefix('pharmacist')->name('phar
     Route::get('/inventory', [App\Http\Controllers\Pharmacist\DashboardController::class, 'inventory'])->name('inventory');
     Route::get('/medicines/create', [App\Http\Controllers\Pharmacist\DashboardController::class, 'createMedicine'])->name('medicines.create');
     Route::post('/medicines/store', [App\Http\Controllers\Pharmacist\DashboardController::class, 'storeMedicine'])->name('medicines.store');
+    Route::get('/medicines/{medicine}/edit', [App\Http\Controllers\Pharmacist\DashboardController::class, 'editMedicine'])->name('medicines.edit');
+    Route::put('/medicines/{medicine}', [App\Http\Controllers\Pharmacist\DashboardController::class, 'updateMedicine'])->name('medicines.update');
+    Route::delete('/medicines/{medicine}', [App\Http\Controllers\Pharmacist\DashboardController::class, 'deleteMedicine'])->name('medicines.destroy');
     Route::get('/stock-move', [App\Http\Controllers\Pharmacist\DashboardController::class, 'stockMove'])->name('stock-move');
     Route::get('/prescriptions', [App\Http\Controllers\Pharmacist\DashboardController::class, 'prescriptions'])->name('prescriptions');
     Route::get('/prescriptions/history', [App\Http\Controllers\Pharmacist\DashboardController::class, 'prescriptionHistory'])->name('prescriptions.history');
