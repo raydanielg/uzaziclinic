@@ -319,6 +319,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/reports', [App\Http\Controllers\Admin\LabController::class, 'reports'])->name('reports');
     });
 
+    // Test Types Management
+    Route::prefix('test-types')->name('test-types.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\TestTypeController::class, 'index'])->name('index');
+        Route::post('/', [App\Http\Controllers\Admin\TestTypeController::class, 'store'])->name('store');
+        Route::put('/{testType}', [App\Http\Controllers\Admin\TestTypeController::class, 'update'])->name('update');
+        Route::delete('/{testType}', [App\Http\Controllers\Admin\TestTypeController::class, 'destroy'])->name('destroy');
+    });
+
     // Medical Services
     Route::prefix('medical')->name('medical.')->group(function () {
         Route::get('/prescriptions', [App\Http\Controllers\Admin\MedicalServiceController::class, 'prescriptions'])->name('prescriptions');
