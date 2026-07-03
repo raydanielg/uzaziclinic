@@ -54,7 +54,12 @@
 $(document).ready(function() {
     $('#prescriptionsTable').DataTable({
         pageLength: 10,
-        language: { search: "", searchPlaceholder: "Filter prescriptions..." }
+        language: {
+            search: "",
+            searchPlaceholder: "Filter prescriptions...",
+            emptyTable: "No pending prescriptions found.",
+            zeroRecords: "No matching prescriptions found."
+        }
     });
 });
 </script>
