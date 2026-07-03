@@ -127,7 +127,9 @@ class HRController extends Controller
 
     public function edit(Employee $employee)
     {
-        return view('admin.hr.edit', compact('employee'));
+        $employee->load('user');
+        $roles = Role::whereNotIn('name', ['admin', 'customer'])->orderBy('name')->get();
+        return view('admin.hr.edit', compact('employee', 'roles'));
     }
 
     public function update(Request $request, Employee $employee)
@@ -145,6 +147,7 @@ class HRController extends Controller
             'position' => 'nullable|string|max:255',
             'hire_date' => 'nullable|date',
             'status' => 'required|in:active,inactive,on_leave,terminated',
+            'role_id' => 'required|exists:roles,id',
             'notes' => 'nullable|string',
         ]);
 
@@ -163,6 +166,17 @@ class HRController extends Controller
             'status' => $request->status,
             'notes' => $request->notes,
         ]);
+
+        // Update linked user account
+        if ($employee->user) {
+            $employee->user->update([
+                'name' => $request->first_name . ' ' . $request->last_name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'role_id' => $request->role_id,
+                'status' => $request->status === 'active' ? 'active' : 'inactive',
+            ]);
+        }
 
         return redirect()->route('admin.hr.index')->with('success', 'Employee updated successfully!');
     }
