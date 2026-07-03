@@ -25,6 +25,7 @@ class Appointment extends Model
     ];
 
     protected $fillable = [
+        'booking_id',
         'patient_id',
         'doctor_id',
         'appointment_date',
@@ -41,6 +42,17 @@ class Appointment extends Model
         'prescription',
         'completed_at',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($appointment) {
+            if (empty($appointment->booking_id)) {
+                $appointment->booking_id = 'APT-' . strtoupper(uniqid());
+            }
+        });
+    }
 
     protected $casts = [
         'appointment_date' => 'datetime',

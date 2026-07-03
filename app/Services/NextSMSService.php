@@ -119,9 +119,9 @@ class NextSMSService
     /**
      * Send appointment confirmation SMS
      */
-    public function sendAppointmentConfirmation($phone, $patientName, $patientId, $doctorName, $appointmentDate, $appointmentTime)
+    public function sendAppointmentConfirmation($phone, $patientName, $patientId, $doctorName, $appointmentDate, $appointmentTime, $bookingId = null)
     {
-        $template = \App\Models\Setting::get('sms_template_confirmation', "Habari [patient_name] (ID: [patient_ID]), umefanikiwa ku-book appointment tarehe [appointment_date] saa [appointment_time]. Fika mapema. Asante.");
+        $template = \App\Models\Setting::get('sms_template_confirmation', "Karibu Uzazi Clinic! [patient_name] (ID: [patient_ID]), umefanikiwa ku-book appointment. Booking ID: [booking_id]. Tarehe: [appointment_date], Saa: [appointment_time]. Fika mapema. Asante.");
         
         $message = $this->replacePlaceholders($template, [
             'patient_name' => $patientName,
@@ -129,6 +129,7 @@ class NextSMSService
             'doctor_name' => $doctorName,
             'appointment_date' => $appointmentDate,
             'appointment_time' => $appointmentTime,
+            'booking_id' => $bookingId ?? 'N/A',
         ]);
         
         return $this->send($phone, $message);
