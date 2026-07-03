@@ -42,7 +42,7 @@ class DispenseController extends Controller
 
     public function complete(Request $request, Prescription $prescription)
     {
-        if ($prescription->status !== Prescription::STATUS_PENDING) {
+        if (!$prescription->isPending()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Prescription hii tayari imeshughulikiwa.',
@@ -119,7 +119,7 @@ class DispenseController extends Controller
 
     public function cancel(Prescription $prescription)
     {
-        if ($prescription->status !== Prescription::STATUS_PENDING) {
+        if (!$prescription->isPending()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Hii haiwezi kufutwa tena.',
