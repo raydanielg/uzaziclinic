@@ -43,8 +43,10 @@ class AppointmentBookingController extends Controller
 
             // Check if patient exists by phone
             $patient = Patient::where('phone', $request->phone)->first();
+            $isNewPatient = false;
 
             if (!$patient) {
+                $isNewPatient = true;
                 // Auto-register new patient
                 $user = User::create([
                     'name' => $request->name,
@@ -92,15 +94,23 @@ class AppointmentBookingController extends Controller
                 'notes' => 'Booked via website - Service: ' . $request->service_type,
             ]);
 
-            // Send SMS confirmation
+            $appointment->refresh();
             $smsService = new NextSMSService();
+
+            // Send welcome message to new patients
+            if ($isNewPatient) {
+                $smsService->sendWelcomeMessage($patient->phone, $patient->name, $patient->id);
+            }
+
+            // Send appointment confirmation with booking ID
             $smsService->sendAppointmentConfirmation(
                 $patient->phone,
                 $patient->name,
                 $patient->id,
                 $doctor->display_name ?? 'Doctor',
                 $appointmentDateTime->format('d M Y'),
-                $appointmentDateTime->format('H:i')
+                $appointmentDateTime->format('H:i'),
+                $appointment->booking_id
             );
 
             DB::commit();
@@ -109,7 +119,9 @@ class AppointmentBookingController extends Controller
                 'success' => true,
                 'message' => 'Appointment booked successfully! You will receive an SMS confirmation shortly.',
                 'appointment_id' => $appointment->id,
-                'patient_id' => $patient->id
+                'booking_id' => $appointment->booking_id,
+                'patient_id' => $patient->id,
+                'is_new_patient' => $isNewPatient,
             ]);
 
         } catch (\Exception $e) {
