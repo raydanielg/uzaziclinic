@@ -254,7 +254,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::put('/{user}/role', [App\Http\Controllers\Admin\UserController::class, 'updateUserRole'])->name('role.update');
         Route::delete('/{user}', [App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('destroy');
         Route::get('/roles', [App\Http\Controllers\Admin\UserController::class, 'roles'])->name('roles');
+        Route::post('/roles', [App\Http\Controllers\Admin\UserController::class, 'storeRole'])->name('roles.store');
         Route::put('/roles/{role}', [App\Http\Controllers\Admin\UserController::class, 'updateRole'])->name('roles.update');
+        Route::put('/roles/{role}/name', [App\Http\Controllers\Admin\UserController::class, 'updateRoleName'])->name('roles.name.update');
         Route::delete('/roles/{role}', [App\Http\Controllers\Admin\UserController::class, 'destroyRole'])->name('roles.destroy');
         Route::get('/logs', [App\Http\Controllers\Admin\UserController::class, 'logs'])->name('logs');
     });
