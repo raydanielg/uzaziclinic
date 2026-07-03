@@ -183,7 +183,11 @@ class HRController extends Controller
 
     public function destroy(Employee $employee)
     {
+        $user = $employee->user;
         $employee->delete();
+        if ($user) {
+            $user->delete();
+        }
         return redirect()->route('admin.hr.index')->with('success', 'Employee deleted successfully!');
     }
 }
