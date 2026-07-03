@@ -132,10 +132,12 @@ class DashboardController extends Controller
 
     public function prescriptionHistory()
     {
-        $history = Prescription::with('patient', 'doctor')
-            ->where('status', 'dispensed')
-            ->latest()
+        $history = Prescription::with(['patient', 'doctor', 'items.medicine', 'pharmacist'])
+            ->whereIn('status', [Prescription::STATUS_DISPENSED, Prescription::STATUS_CANCELLED])
+            ->orderByDesc('dispensed_at')
+            ->orderByDesc('updated_at')
             ->get();
+
         return view('pharmacist.prescription_history', compact('history'));
     }
 
