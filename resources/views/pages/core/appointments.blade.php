@@ -134,16 +134,32 @@ document.getElementById('appointmentPageForm').addEventListener('submit', functi
     .then(response => response.json())
     .then(data => {
         if (data.success) {
+            const welcome = data.is_new_patient ? '<p class="small text-muted mb-3">Karibu Uzazi Clinic! Umejiunga kama mteja mpya.</p>' : '';
+            const bookingHtml = `
+                <div class="text-center">
+                    <div class="mb-3">
+                        <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">
+                            <i class="fa-solid fa-check-circle me-1"></i> Appointment Booked
+                        </span>
+                    </div>
+                    ${welcome}
+                    <div class="p-3 bg-light rounded-3 border border-success border-opacity-25 mb-3">
+                        <div class="small text-muted text-uppercase fw-bold">Booking ID</div>
+                        <div class="fs-3 fw-bold text-success tracking-wide">${data.booking_id ?? 'N/A'}</div>
+                    </div>
+                    <p class="small text-muted mb-0">Tuma SMS ukitangazia appointment yako umehifadhiwa. Fika mapema!</p>
+                </div>
+            `;
             if (window.Swal) {
                 Swal.fire({
                     icon: 'success',
-                    title: 'Appointment Booked!',
-                    text: data.message,
+                    title: 'Karibu Uzazi Clinic!',
+                    html: bookingHtml,
                     confirmButtonColor: '#16a34a',
-                    timer: 4000
+                    confirmButtonText: 'Asante'
                 });
             } else {
-                alert('Appointment booked successfully! You will receive SMS confirmation.');
+                alert('Appointment booked successfully! Booking ID: ' + (data.booking_id ?? 'N/A'));
             }
             form.reset();
         } else {
