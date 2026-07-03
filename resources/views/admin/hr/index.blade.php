@@ -51,7 +51,7 @@
         {{-- Table --}}
         <div class="dash-table-card anim-3">
             <div class="card-header d-flex align-items-center justify-content-between">
-                <h6 class="mb-0 fw-bold"><i class="fa-solid fa-users me-2 text-blue"></i>All Employees</h6>
+                <h6 class="mb-0 fw-bold"><i class="fa-solid fa-users me-2 text-blue"></i>All Staff</h6>
                 <div class="d-flex gap-2">
                     <select id="filterDepartment" class="form-select form-select-sm" style="width:150px">
                         <option value="">All Departments</option>
@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table align-middle mb-0">
+                <table class="table align-middle mb-0" id="staffTable">
                     <thead>
                         <tr>
                             <th class="ps-3">Employee #</th>
@@ -83,6 +83,7 @@
                             <th>Phone</th>
                             <th>Department</th>
                             <th>Position</th>
+                            <th>Role</th>
                             <th>Status</th>
                             <th class="text-end pe-3">Actions</th>
                         </tr>
@@ -94,8 +95,6 @@
                                 {{ $staff['employee_number'] }}
                                 @if($staff['type'] === 'doctor')
                                     <span class="badge bg-green-soft text-green ms-1" style="font-size:0.65rem">DR</span>
-                                @elseif($staff['type'] === 'nurse')
-                                    <span class="badge bg-pink-soft text-pink ms-1" style="font-size:0.65rem">NR</span>
                                 @endif
                             </td>
                             <td>
@@ -105,6 +104,12 @@
                             <td class="small">{{ $staff['phone'] }}</td>
                             <td class="small">{{ ucfirst($staff['department']) }}</td>
                             <td class="small text-muted">{{ $staff['position'] ?? 'N/A' }}</td>
+                            <td>
+                                <span class="badge bg-violet-soft text-violet" style="font-size:0.7rem">
+                                    <i class="fa-solid fa-id-badge me-1"></i>
+                                    {{ ucfirst(str_replace('_', ' ', $staff['role'] ?? 'N/A')) }}
+                                </span>
+                            </td>
                             <td>
                                 @php
                                     $statusColors = [
@@ -133,10 +138,10 @@
                                     <a href="{{ route('admin.hr.edit', $staff['id']) }}" class="btn btn-sm btn-light me-1 rounded-2" title="Edit">
                                         <i class="fa-solid fa-pen text-amber"></i>
                                     </a>
-                                    <form action="{{ route('admin.hr.destroy', $staff['id']) }}" method="POST" class="d-inline">
+                                    <form action="{{ route('admin.hr.destroy', $staff['id']) }}" method="POST" class="d-inline delete-staff-form">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-light rounded-2" title="Delete" onclick="return confirm('Are you sure you want to delete this employee?')">
+                                        <button type="button" class="btn btn-sm btn-light rounded-2 delete-staff-btn" title="Delete" data-name="{{ $staff['name'] }}">
                                             <i class="fa-solid fa-trash text-rose"></i>
                                         </button>
                                     </form>
@@ -147,16 +152,19 @@
                                     <a href="{{ route('admin.doctors.edit', $staff['id']) }}" class="btn btn-sm btn-light me-1 rounded-2" title="Edit">
                                         <i class="fa-solid fa-pen text-amber"></i>
                                     </a>
-                                @else
-                                    <span class="text-muted small" title="Manage via User Accounts">
-                                        <i class="fa-solid fa-user-gear text-secondary"></i>
-                                    </span>
+                                    <form action="{{ route('admin.doctors.destroy', $staff['id']) }}" method="POST" class="d-inline delete-staff-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-sm btn-light rounded-2 delete-staff-btn" title="Delete" data-name="{{ $staff['name'] }}">
+                                            <i class="fa-solid fa-trash text-rose"></i>
+                                        </button>
+                                    </form>
                                 @endif
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="text-center py-5 text-muted">
+                            <td colspan="9" class="text-center py-5 text-muted">
                                 <i class="fa-solid fa-users-slash fs-2 d-block mb-2 opacity-25"></i>
                                 No staff found
                             </td>
