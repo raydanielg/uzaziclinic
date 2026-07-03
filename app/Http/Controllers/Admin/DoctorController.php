@@ -71,6 +71,66 @@ class DoctorController extends Controller
         return redirect()->route('admin.doctors.index')->with('success', 'Doctor created successfully!');
     }
 
+    public function show(Doctor $doctor)
+    {
+        $doctor->load('user');
+        return view('admin.doctors.show', compact('doctor'));
+    }
+
+    public function edit(Doctor $doctor)
+    {
+        $doctor->load('user');
+        return view('admin.doctors.edit', compact('doctor'));
+    }
+
+    public function update(Request $request, Doctor $doctor)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . ($doctor->user_id ?? 0)],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'specialization' => ['nullable', 'string', 'max:255'],
+            'license_number' => ['nullable', 'string', 'max:255'],
+            'status' => ['required', 'in:active,inactive'],
+            'bio' => ['nullable', 'string'],
+        ]);
+
+        $doctor->update([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'specialization' => $request->specialization,
+            'license_number' => $request->license_number,
+            'status' => $request->status,
+            'bio' => $request->bio,
+        ]);
+
+        if ($doctor->user) {
+            $userData = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'status' => $request->status,
+            ];
+            if ($request->filled('password')) {
+                $userData['password'] = Hash::make($request->password);
+            }
+            $doctor->user->update($userData);
+        }
+
+        return redirect()->route('admin.doctors.index')->with('success', 'Doctor updated successfully!');
+    }
+
+    public function destroy(Doctor $doctor)
+    {
+        $user = $doctor->user;
+        $doctor->delete();
+        if ($user) {
+            $user->delete();
+        }
+        return redirect()->route('admin.doctors.index')->with('success', 'Doctor deleted successfully!');
+    }
+
     public function createProfileFromUser(User $user)
     {
         $doctorRoleId = Role::where('name', 'doctor')->value('id');
