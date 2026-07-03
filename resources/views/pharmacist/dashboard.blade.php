@@ -102,21 +102,21 @@
                             </tr></thead>
                             <tbody>
                                 @forelse($recent_prescriptions as $presc)
-                                @php $qty = $presc->medicine->quantity ?? 0; @endphp
+                                @php $firstItem = $presc->items->first(); $stock = $firstItem?->medicine?->quantity ?? 0; @endphp
                                 <tr>
                                     <td class="ps-3">
                                         <div class="d-flex align-items-center gap-2">
-                                            <div class="user-avatar bg-violet-soft text-violet">{{ strtoupper(substr($presc->patient->name ?? 'P',0,1)) }}</div>
+                                            <div class="user-avatar bg-violet-soft text-violet">{{ strtoupper(substr($presc->patient->display_name ?? 'P',0,1)) }}</div>
                                             <div>
-                                                <div class="fw-semibold small">{{ $presc->patient->name ?? 'N/A' }}</div>
+                                                <div class="fw-semibold small">{{ $presc->patient->display_name ?? 'N/A' }}</div>
                                                 <div class="text-muted" style="font-size:.7rem">#PT-{{ $presc->patient_id }}</div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="small fw-semibold">Dkt. {{ $presc->doctor->name ?? 'N/A' }}</td>
+                                    <td class="small fw-semibold">Dkt. {{ $presc->doctor->display_name ?? 'N/A' }}</td>
                                     <td>
-                                        <span class="status-badge {{ $qty > 0 ? 'bg-green-soft text-green' : 'bg-rose-soft text-rose' }}">
-                                            {{ $qty }} {{ $presc->medicine->unit ?? 'pcs' }}
+                                        <span class="status-badge {{ $stock > 0 ? 'bg-green-soft text-green' : 'bg-rose-soft text-rose' }}">
+                                            {{ $stock }} {{ $firstItem?->medicine?->unit ?? 'pcs' }}
                                         </span>
                                     </td>
                                     <td class="small text-muted">{{ $presc->created_at->format('d M Y') }}</td>
