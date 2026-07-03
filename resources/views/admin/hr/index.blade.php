@@ -7,28 +7,28 @@
         {{-- Header --}}
         <div class="row mb-4 anim-1">
             <div class="col">
-                <h4 class="fw-bold mb-0">Human Resources</h4>
-                <p class="text-muted small mb-0">Manage employees and staff information</p>
+                <h4 class="fw-bold mb-0">Staff Management</h4>
+                <p class="text-muted small mb-0">Manage all clinic staff (doctors and employees)</p>
             </div>
             <div class="col-auto">
                 <a href="{{ route('admin.hr.create') }}" class="btn btn-primary rounded-2 shadow-sm px-4">
-                    <i class="fa-solid fa-user-plus me-2"></i>Add Employee
+                    <i class="fa-solid fa-user-plus me-2"></i>Add Staff
                 </a>
             </div>
         </div>
 
         {{-- Quick Stats --}}
         <div class="row g-3 mb-4 anim-2">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="stat-card-modern stat-card-blue">
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="stat-icon stat-card-blue"><i class="fa-solid fa-users"></i></div>
                         <div><div class="stat-label">Total Staff</div>
-                        <div class="stat-value">{{ $allStaff->total() }}</div></div>
+                        <div class="stat-value">{{ \App\Models\Doctor::count() + \App\Models\Employee::count() }}</div></div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="stat-card-modern stat-card-green">
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="stat-icon stat-card-green"><i class="fa-solid fa-user-doctor"></i></div>
@@ -37,16 +37,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="stat-card-modern stat-card-amber">
-                    <div class="card-body d-flex align-items-center gap-3">
-                        <div class="stat-icon stat-card-amber"><i class="fa-solid fa-user-nurse"></i></div>
-                        <div><div class="stat-label">Nurses</div>
-                        <div class="stat-value">{{ \App\Models\User::whereHas('role', fn($q) => $q->where('name', 'nurse'))->count() }}</div></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="stat-card-modern stat-card-cyan">
                     <div class="card-body d-flex align-items-center gap-3">
                         <div class="stat-icon stat-card-cyan"><i class="fa-solid fa-user-tie"></i></div>
