@@ -8,10 +8,17 @@
                 <h4 class="fw-bold mb-0 text-dark">Medicine Inventory</h4>
                 <p class="text-muted small">Manage your pharmacy stock and medicine records.</p>
             </div>
-            <button class="btn btn-primary rounded-1 px-4 shadow-sm border-0 fw-bold">
+            <a href="{{ route('pharmacist.medicines.create') }}" class="btn btn-primary rounded-1 px-4 shadow-sm border-0 fw-bold">
                 <i class="fa-solid fa-plus me-2"></i> Add Medicine
-            </button>
+            </a>
         </div>
+
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show rounded-1" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
         <div class="card border-0 shadow-sm rounded-4 p-4">
             <div class="table-responsive">
@@ -47,8 +54,16 @@
                                 {{ \Carbon\Carbon::parse($med->expiry_date)->format('M d, Y') }}
                             </td>
                             <td class="text-end pe-4">
-                                <button class="btn btn-sm btn-light rounded-1 border-0"><i class="fa-solid fa-edit text-primary"></i></button>
-                                <button class="btn btn-sm btn-light rounded-1 border-0"><i class="fa-solid fa-trash text-danger"></i></button>
+                                <a href="{{ route('pharmacist.medicines.edit', $med) }}" class="btn btn-sm btn-light rounded-1 border-0" title="Edit">
+                                    <i class="fa-solid fa-edit text-primary"></i>
+                                </a>
+                                <form action="{{ route('pharmacist.medicines.destroy', $med) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this medicine?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-light rounded-1 border-0" title="Delete">
+                                        <i class="fa-solid fa-trash text-danger"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         @endforeach
