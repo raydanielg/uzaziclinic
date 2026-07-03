@@ -38,11 +38,6 @@ class TestTypeController extends Controller
         return redirect()->route('admin.test-types.index')->with('success', 'Test type created successfully!');
     }
 
-    public function edit(TestType $testType)
-    {
-        return view('admin.test_types.edit', compact('testType'));
-    }
-
     public function update(Request $request, TestType $testType)
     {
         $request->validate([
