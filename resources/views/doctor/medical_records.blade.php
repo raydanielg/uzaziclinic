@@ -26,7 +26,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($medical_records ?? [] as $record)
+                        @foreach($medical_records ?? [] as $record)
                         <tr>
                             <td class="ps-4">{{ $record->created_at->format('M d, Y') }}</td>
                             <td class="fw-bold text-dark">{{ $record->patient->name ?? 'N/A' }}</td>
@@ -36,14 +36,7 @@
                                 <button class="btn btn-sm btn-light rounded-1 text-primary border-0"><i class="fa-solid fa-eye me-1"></i> View</button>
                             </td>
                         </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="text-center py-5 text-muted">
-                                <i class="fa-solid fa-folder-open fs-1 opacity-25 mb-3 d-block"></i>
-                                No medical records found.
-                            </td>
-                        </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
