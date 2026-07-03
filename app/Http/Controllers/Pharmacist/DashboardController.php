@@ -25,7 +25,7 @@ class DashboardController extends Controller
         ];
 
         $low_stock_items = Medicine::where('quantity', '<=', 10)->limit(5)->get();
-        $recent_prescriptions = Prescription::with('patient', 'doctor')
+        $recent_prescriptions = Prescription::with(['patient', 'doctor', 'items.medicine'])
             ->pending()
             ->latest()
             ->limit(5)
