@@ -79,6 +79,7 @@ class HRController extends Controller
             'position' => 'nullable|string|max:255',
             'hire_date' => 'nullable|date',
             'status' => 'required|in:active,inactive,on_leave,terminated',
+            'role_id' => 'required|exists:roles,id',
             'notes' => 'nullable|string',
         ]);
 
@@ -87,7 +88,18 @@ class HRController extends Controller
         $lastNumber = $lastEmployee ? (int)substr($lastEmployee->employee_number, -4) : 0;
         $employeeNumber = 'EMP-' . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
 
+        // Create user account for login
+        $user = User::create([
+            'name' => $request->first_name . ' ' . $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make('password123'),
+            'role_id' => $request->role_id,
+            'status' => $request->status === 'active' ? 'active' : 'inactive',
+        ]);
+
         Employee::create([
+            'user_id' => $user->id,
             'employee_number' => $employeeNumber,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
