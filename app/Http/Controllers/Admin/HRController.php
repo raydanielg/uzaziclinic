@@ -8,13 +8,14 @@ use App\Models\Employee;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Doctor;
+use Illuminate\Support\Facades\Hash;
 
 class HRController extends Controller
 {
     public function index()
     {
         // Get regular employees
-        $regularEmployees = Employee::with('user')->get()->map(function($employee) {
+        $regularEmployees = Employee::with('user.role')->get()->map(function($employee) {
             return [
                 'id' => $employee->id,
                 'type' => 'employee',
@@ -25,12 +26,13 @@ class HRController extends Controller
                 'department' => $employee->department,
                 'position' => $employee->position,
                 'status' => $employee->status,
+                'role' => $employee->user->role->name ?? 'N/A',
                 'created_at' => $employee->created_at,
             ];
         });
 
         // Get doctors
-        $doctors = Doctor::with('user')->get()->map(function($doctor) {
+        $doctors = Doctor::with('user.role')->get()->map(function($doctor) {
             return [
                 'id' => $doctor->id,
                 'type' => 'doctor',
@@ -41,35 +43,15 @@ class HRController extends Controller
                 'department' => 'medical',
                 'position' => $doctor->specialization ?? 'Doctor',
                 'status' => $doctor->status,
+                'role' => $doctor->user->role->name ?? 'doctor',
                 'created_at' => $doctor->created_at,
             ];
         });
 
-        // Get nurses (users with nurse role)
-        $nurseRole = Role::where('name', 'nurse')->first();
-        $nurses = [];
-        if ($nurseRole) {
-            $nurses = User::where('role_id', $nurseRole->id)->get()->map(function($nurse) {
-                return [
-                    'id' => $nurse->id,
-                    'type' => 'nurse',
-                    'employee_number' => 'NUR-' . str_pad($nurse->id, 4, '0', STR_PAD_LEFT),
-                    'name' => $nurse->name,
-                    'email' => $nurse->email,
-                    'phone' => $nurse->phone ?? 'N/A',
-                    'department' => 'nursing',
-                    'position' => 'Nurse',
-                    'status' => $nurse->status ?? 'active',
-                    'created_at' => $nurse->created_at,
-                ];
-            });
-        }
-
-        // Combine all staff
+        // Combine all staff (employees + doctors)
         $allStaff = collect()
             ->concat($regularEmployees)
             ->concat($doctors)
-            ->concat($nurses)
             ->sortByDesc('created_at')
             ->paginate(15);
 
