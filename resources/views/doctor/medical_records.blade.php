@@ -89,7 +89,12 @@
 $(document).ready(function() {
     $('#recordsTable').DataTable({
         pageLength: 10,
-        language: { search: "", searchPlaceholder: "Search records..." }
+        language: {
+            search: "",
+            searchPlaceholder: "Search records...",
+            emptyTable: "No medical records found.",
+            zeroRecords: "No matching records found."
+        }
     });
 });
 </script>
