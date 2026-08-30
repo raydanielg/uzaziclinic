@@ -952,7 +952,7 @@ $(function () {
         $('.service-checkbox:checked').each(function() {
             const name  = $(this).data('name');
             const price = parseFloat($(this).data('price')) || 0;
-            rows.push({ name, price, custom: false });
+            rows.push({ name, price, custom: false, id: $(this).val() });
             total += price;
         });
 
@@ -965,16 +965,28 @@ $(function () {
         if (rows.length === 0) {
             $('#servicesList').html('<tr class="text-muted"><td colspan="3" class="text-center small py-2">Chagua huduma hapo juu...</td></tr>');
         } else {
-            $('#servicesList').html(rows.map(r => `
+            $('#servicesList').html(rows.map((r, i) => `
                 <tr>
                     <td class="px-2 small">${r.name}</td>
-                    <td class="text-end px-2 small">${number_format(r.price)}</td>
+                    <td class="px-2 small" style="min-width:120px;">
+                        <input type="number" class="form-control form-control-sm price-input text-end fw-bold" value="${r.price}" min="0" step="1" data-row="${i}" data-custom="${r.custom}" data-idx="${r.idx ?? ''}" data-svc-id="${r.id ?? ''}" data-name="${r.name}" style="padding:.2rem .4rem;">
+                    </td>
                     <td class="px-1">${r.custom ? `<button type="button" class="btn btn-sm btn-light p-0 px-1 remove-custom" data-idx="${r.idx}" title="Ondoa"><i class="fa-solid fa-xmark text-rose" style="font-size:.7rem"></i></button>` : ''}</td>
                 </tr>`).join(''));
         }
         $('#totalCost').text('TZS ' + number_format(total));
         recalcChange();
     }
+
+    // Recalculate total when a price is edited
+    $(document).on('input', '.price-input', function() {
+        let total = 0;
+        $('.price-input').each(function() {
+            total += parseFloat($(this).val()) || 0;
+        });
+        $('#totalCost').text('TZS ' + number_format(total));
+        recalcChange();
+    });
 
     // Remove custom item
     $(document).on('click', '.remove-custom', function() {
@@ -1032,16 +1044,33 @@ $(function () {
             return Swal.fire('Haitoshi', `Kiasi kilichowekwa (TZS ${number_format(parseFloat(amountReceived))}) ni kidogo kuliko jumla (TZS ${number_format(total)}).`, 'warning');
         }
 
+        // Collect services with adjusted prices from input fields
+        const services = [];
+        $('.price-input').each(function() {
+            const name  = $(this).data('name');
+            const price = parseFloat($(this).val()) || 0;
+            if (name && price >= 0) {
+                services.push({ name, price });
+            }
+        });
+
         const $btn = $(this).prop('disabled', true);
         $btn.html('<i class="fa-solid fa-spinner fa-spin me-2"></i>Inashughulikiwa...');
 
-        $.post('{{ route("receptionist.visits.payment") }}', {
-            _token:           CSRF,
-            visit_id:         visitId,
-            payment_method:   'cash',
-            payment_details:  ref,
-            amount_received:  amountReceived,
-            next_appointment: nextAppt || null
+        $.ajax({
+            url: '{{ route("receptionist.visits.payment") }}',
+            method: 'POST',
+            data: JSON.stringify({
+                _token:           CSRF,
+                visit_id:         visitId,
+                payment_method:   'cash',
+                payment_details:  ref,
+                amount_received:  amountReceived,
+                next_appointment: nextAppt || null,
+                services:         services
+            }),
+            contentType: 'application/json',
+            headers: { 'X-CSRF-TOKEN': CSRF }
         }).done(function(r) {
             if (r.success) {
                 bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
@@ -1055,13 +1084,12 @@ $(function () {
                 $('#receiptComplaint').text(r.data?.complaint || '—');
                 $('#receiptDiagnosis').text(r.data?.diagnosis || '—');
 
-                // Copy itemized services (remove action column for receipt)
+                // Copy itemized services with adjusted prices
                 const rows = [];
-                $('.service-checkbox:checked').each(function() {
-                    rows.push(`<tr><td>${$(this).data('name')}</td><td class="text-end">${number_format(parseFloat($(this).data('price')))}</td></tr>`);
-                });
-                customItems.forEach(ci => {
-                    rows.push(`<tr><td>${ci.name}</td><td class="text-end">${number_format(ci.price)}</td></tr>`);
+                $('.price-input').each(function() {
+                    const name  = $(this).data('name');
+                    const price = parseFloat($(this).val()) || 0;
+                    rows.push(`<tr><td>${name}</td><td class="text-end">${number_format(price)}</td></tr>`);
                 });
                 $('#receiptServices').html(rows.length ? rows.join('') : '<tr><td colspan="2" class="text-muted text-center small">—</td></tr>');
                 $('#receiptTotal').text($('#totalCost').text());

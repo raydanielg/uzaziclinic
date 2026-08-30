@@ -173,4 +173,82 @@ class DashboardController extends Controller
             return back()->with('error', 'Failed to load payments');
         }
     }
+
+    public function editPayment($paymentId)
+    {
+        try {
+            $payment = Payment::with(['patient', 'appointment'])->find($paymentId);
+
+            if (!$payment) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Payment not found'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'payment' => [
+                    'id'           => $payment->id,
+                    'patient_name' => $payment->patient->name ?? 'N/A',
+                    'patient_id'   => $payment->patient_id,
+                    'amount'       => $payment->amount,
+                    'service_name' => $payment->service_name ?? '',
+                    'method'       => $payment->method ?? 'cash',
+                    'status'       => $payment->status,
+                    'reference'    => $payment->reference ?? '',
+                    'paid_at'      => $payment->paid_at ? $payment->paid_at->format('d M Y, H:i') : null,
+                    'created_at'   => $payment->created_at->format('d M Y'),
+                ]
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Edit payment error', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load payment: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function updatePayment(Request $request, $paymentId)
+    {
+        try {
+            $payment = Payment::find($paymentId);
+
+            if (!$payment) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Payment not found'
+                ], 404);
+            }
+
+            $validated = $request->validate([
+                'amount'       => 'required|numeric|min:0',
+                'service_name' => 'nullable|string|max:500',
+                'method'       => 'required|in:cash,bank,mobile,bank_transfer',
+                'status'       => 'required|in:paid,pending,cancelled',
+                'reference'    => 'nullable|string|max:500',
+            ]);
+
+            $payment->update([
+                'amount'       => $validated['amount'],
+                'service_name' => $validated['service_name'] ?? $payment->service_name,
+                'method'       => $validated['method'],
+                'status'       => $validated['status'],
+                'reference'    => $validated['reference'] ?? null,
+                'paid_at'      => $validated['status'] === 'paid' ? ($payment->paid_at ?? now()) : null,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Payment updated successfully!'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Update payment error', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update payment: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

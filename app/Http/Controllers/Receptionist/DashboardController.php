@@ -9,6 +9,7 @@ use App\Models\Patient;
 use App\Models\PatientFile;
 use App\Models\Doctor;
 use App\Models\User;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Services\NextSMSService;
@@ -810,17 +811,42 @@ class DashboardController extends Controller
                 'payment_details'  => 'nullable|string|max:500',
                 'amount_received'  => 'required|numeric|min:0',
                 'next_appointment' => 'nullable|date|after_or_equal:today',
+                'services'         => 'nullable|array',
+                'services.*.name'  => 'nullable|string|max:255',
+                'services.*.price' => 'nullable|numeric|min:0',
             ]);
 
             $appointment = Appointment::with(['patient', 'doctor'])->findOrFail($request->visit_id);
 
-            // Update appointment status and record payment info
+            // Build service name string from selected services + custom items
+            $serviceNames = [];
+            if ($request->has('services') && is_array($request->services)) {
+                foreach ($request->services as $svc) {
+                    if (!empty($svc['name'])) {
+                        $serviceNames[] = $svc['name'];
+                    }
+                }
+            }
+            $serviceNameStr = implode(', ', $serviceNames) ?: 'General Consultation';
+
+            DB::beginTransaction();
+
+            // Create proper Payment record
+            $payment = Payment::create([
+                'appointment_id' => $appointment->id,
+                'patient_id'     => $appointment->patient_id,
+                'user_id'        => auth()->id(),
+                'amount'         => $request->amount_received,
+                'service_name'   => $serviceNameStr,
+                'method'         => $request->payment_method,
+                'status'         => 'paid',
+                'paid_at'        => now(),
+                'reference'      => $request->payment_details ?? null,
+            ]);
+
+            // Update appointment status
             $appointment->update([
-                'status'       => 'completed',
-                'prescription' => 'Payment Method: ' . $request->payment_method .
-                                  "\nAmount Received: TZS " . number_format($request->amount_received) .
-                                  "\nDetails: " . ($request->payment_details ?? 'N/A') .
-                                  ($request->next_appointment ? "\nNext Appointment: " . $request->next_appointment : '')
+                'status' => 'completed',
             ]);
 
             // Create next appointment if given
@@ -835,6 +861,8 @@ class DashboardController extends Controller
                     'notes'            => 'Follow-up appointment after payment on ' . now()->format('d M Y'),
                 ]);
             }
+
+            DB::commit();
 
             // Send combined SMS: payment confirmation + next appointment date
             try {
@@ -874,15 +902,18 @@ class DashboardController extends Controller
                 'success' => true,
                 'message' => 'Malipo yameshughulikiwa! Mgonjwa ameruhusiwa. SMS imetumwa.',
                 'data' => [
+                    'payment_id'             => $payment->id,
                     'complaint'              => $appointment->symptoms ?? 'General Consultation',
                     'diagnosis'              => $appointment->diagnosis ?? 'Completed consultation',
                     'payment_method'         => ucfirst($request->payment_method),
                     'amount_received'        => $request->amount_received,
+                    'service_name'           => $serviceNameStr,
                     'next_appointment'       => $request->next_appointment,
                     'next_appointment_id'    => $nextAppointment?->id,
                 ]
             ]);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to process payment: ' . $e->getMessage()
@@ -894,17 +925,15 @@ class DashboardController extends Controller
     {
         try {
             $appointment = Appointment::with(['doctor', 'patient'])->findOrFail($request->visit_id);
-            
-            // Extract payment info from prescription
-            $prescription = $appointment->prescription ?? '';
+
+            // Fetch payment info from payments table
+            $payment = Payment::where('appointment_id', $appointment->id)->latest()->first();
             $paymentMethod = 'N/A';
             $amountPaid = 0;
-            
-            if (preg_match('/Payment Method: (\w+)/', $prescription, $matches)) {
-                $paymentMethod = ucfirst($matches[1]);
-            }
-            if (preg_match('/Amount Received: TZS ([\d,]+)/', $prescription, $matches)) {
-                $amountPaid = (int)str_replace(',', '', $matches[1]);
+
+            if ($payment) {
+                $paymentMethod = ucfirst($payment->method ?? 'N/A');
+                $amountPaid = (float) $payment->amount;
             }
 
             return response()->json([
